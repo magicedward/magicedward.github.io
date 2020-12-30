@@ -17,7 +17,7 @@
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="http://edward.org.cn/2020/12/30/%E9%9F%B3%E8%A7%86%E9%A2%91%E6%A0%BC%E5%BC%8F%E5%B0%81%E8%A3%85%E5%8E%9F%E7%90%86/img/4.png">
 <meta property="article:published_time" content="2020-12-30T10:33:11.000Z">
-<meta property="article:modified_time" content="2020-12-30T10:33:35.091Z">
+<meta property="article:modified_time" content="2020-12-30T11:16:24.647Z">
 <meta property="article:author" content="Edward">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="http://edward.org.cn/2020/12/30/%E9%9F%B3%E8%A7%86%E9%A2%91%E6%A0%BC%E5%BC%8F%E5%B0%81%E8%A3%85%E5%8E%9F%E7%90%86/img/4.png">
@@ -177,7 +177,7 @@
     <div class="article-entry" itemprop="articleBody">
       
         <h3 id="视频解码基础01-封裝格式"><a href="#视频解码基础01-封裝格式" class="headerlink" title="视频解码基础01-封裝格式"></a>视频解码基础01-封裝格式</h3><p>​        我们播放的视频文件一般都是用一种<strong>封装格式</strong>封装起来的，封装格式的作用是什么呢？一般视频文件里不光有视频，还有音频，封装格式的作用就是把视频和音频打包起来。 所以我们先要<strong>解封装格式</strong>，看有哪些视频流和哪些音频流，此时的音频流和视频流都还是<strong>压缩数据</strong>，不能直接用于显示的，这就需要<strong>解码</strong>。下面是播放一个视频文件时的流程图。</p>
-<p><img src="img/4.png" alt="1"></p>
+<p><img src="img/4.png" alt="img"></p>
 <p>FFmpeg  视频文件  是一个容器  (视频流（H264）  音频流(aac))</p>
 <h4 id="二、视频文件封装格式"><a href="#二、视频文件封装格式" class="headerlink" title="二、视频文件封装格式"></a>二、视频文件封装格式</h4><p>封装格式（也叫容器），就是将已经编码压缩好的视频轨和音频轨按照一定的格式放到一个文件中，也就是说仅仅是一个外壳，或者大家把它当成一个放视频轨和音频轨的文件夹也可以。说得通俗点，视频轨相当于饭，而音频轨相当于菜，封装格式就是一个碗，或者一个锅，用来盛放饭菜的容器。 下面是几种常用的 <strong>视频文件后缀类型</strong> 与其相对应的 <strong>封装格式</strong>。</p>
 <table>
