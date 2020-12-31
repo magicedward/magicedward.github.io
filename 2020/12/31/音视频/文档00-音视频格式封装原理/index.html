@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"edward.org.cn","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="视频解码基础01-封裝格式​        我们播放的视频文件一般都是用一种封装格式封装起来的，封装格式的作用是什么呢？一般视频文件里不光有视频，还有音频，封装格式的作用就是把视频和音频打包起来。 所以我们先要解封装格式，看有哪些视频流和哪些音频流，此时的音频流和视频流都还是压缩数据，不能直接用于显示的，这就需要解码。下面是播放一个视频文件时的流程图。  FFmpeg  视频文件  是一个容器">
+<meta property="og:type" content="article">
+<meta property="og:title" content="00-音视频格式封装原理">
+<meta property="og:url" content="http://edward.org.cn/2020/12/31/%E9%9F%B3%E8%A7%86%E9%A2%91/%E6%96%87%E6%A1%A300-%E9%9F%B3%E8%A7%86%E9%A2%91%E6%A0%BC%E5%BC%8F%E5%B0%81%E8%A3%85%E5%8E%9F%E7%90%86/index.html">
+<meta property="og:site_name" content="点点滴滴">
+<meta property="og:description" content="视频解码基础01-封裝格式​        我们播放的视频文件一般都是用一种封装格式封装起来的，封装格式的作用是什么呢？一般视频文件里不光有视频，还有音频，封装格式的作用就是把视频和音频打包起来。 所以我们先要解封装格式，看有哪些视频流和哪些音频流，此时的音频流和视频流都还是压缩数据，不能直接用于显示的，这就需要解码。下面是播放一个视频文件时的流程图。  FFmpeg  视频文件  是一个容器">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://edward.org.cn/img/4.png">
+<meta property="article:published_time" content="2020-12-31T02:38:42.000Z">
+<meta property="article:modified_time" content="2020-12-31T02:47:53.342Z">
+<meta property="article:author" content="Edward">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://edward.org.cn/img/4.png">
+
+<link rel="canonical" href="http://edward.org.cn/2020/12/31/%E9%9F%B3%E8%A7%86%E9%A2%91/%E6%96%87%E6%A1%A300-%E9%9F%B3%E8%A7%86%E9%A2%91%E6%A0%BC%E5%BC%8F%E5%B0%81%E8%A3%85%E5%8E%9F%E7%90%86/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>00-音视频格式封装原理 | 点点滴滴</title>
+  
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?a92ed22eafce466e7a7b17546bb0dc6f";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">点点滴滴</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://edward.org.cn/2020/12/31/%E9%9F%B3%E8%A7%86%E9%A2%91/%E6%96%87%E6%A1%A300-%E9%9F%B3%E8%A7%86%E9%A2%91%E6%A0%BC%E5%BC%8F%E5%B0%81%E8%A3%85%E5%8E%9F%E7%90%86/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/avatar.gif">
+      <meta itemprop="name" content="Edward">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="点点滴滴">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          00-音视频格式封装原理
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2020-12-31 10:38:42 / 修改时间：10:47:53" itemprop="dateCreated datePublished" datetime="2020-12-31T10:38:42+08:00">2020-12-31</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h3 id="视频解码基础01-封裝格式"><a href="#视频解码基础01-封裝格式" class="headerlink" title="视频解码基础01-封裝格式"></a>视频解码基础01-封裝格式</h3><p>​        我们播放的视频文件一般都是用一种<strong>封装格式</strong>封装起来的，封装格式的作用是什么呢？一般视频文件里不光有视频，还有音频，封装格式的作用就是把视频和音频打包起来。 所以我们先要<strong>解封装格式</strong>，看有哪些视频流和哪些音频流，此时的音频流和视频流都还是<strong>压缩数据</strong>，不能直接用于显示的，这就需要<strong>解码</strong>。下面是播放一个视频文件时的流程图。</p>
+<p><img src="/img/4.png" alt="1"></p>
+<p>FFmpeg  视频文件  是一个容器  (视频流（H264）  音频流(aac))</p>
+<h4 id="二、视频文件封装格式"><a href="#二、视频文件封装格式" class="headerlink" title="二、视频文件封装格式"></a>二、视频文件封装格式</h4><p>封装格式（也叫容器），就是将已经编码压缩好的视频轨和音频轨按照一定的格式放到一个文件中，也就是说仅仅是一个外壳，或者大家把它当成一个放视频轨和音频轨的文件夹也可以。说得通俗点，视频轨相当于饭，而音频轨相当于菜，封装格式就是一个碗，或者一个锅，用来盛放饭菜的容器。 下面是几种常用的 <strong>视频文件后缀类型</strong> 与其相对应的 <strong>封装格式</strong>。</p>
+<table>
+<thead>
+<tr>
+<th>视频文件格式</th>
+<th>视频封装格式</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>.avi</strong></td>
+<td>AVI（Audio Video Interleaved）</td>
+</tr>
+<tr>
+<td><strong>.wmv、.asf</strong></td>
+<td>WMV（Windows Media Video）</td>
+</tr>
+<tr>
+<td><strong>.mpg、.mpeg、.vob、.dat、.3gp、.mp4</strong></td>
+<td>MPEG（Moving Picture Experts Group）</td>
+</tr>
+<tr>
+<td><strong>.mkv</strong></td>
+<td>Matroska</td>
+</tr>
+<tr>
+<td><strong>.rm、.rmvb</strong></td>
+<td>Real Video</td>
+</tr>
+<tr>
+<td><strong>.mov</strong></td>
+<td>QuickTime File Format</td>
+</tr>
+<tr>
+<td><strong>.flv</strong></td>
+<td>Flash Video</td>
+</tr>
+</tbody></table>
+<h4 id="三、-音视频编码方式简介"><a href="#三、-音视频编码方式简介" class="headerlink" title="三、 音视频编码方式简介"></a>三、 音视频编码方式简介</h4><h5 id="1、视频编码方式"><a href="#1、视频编码方式" class="headerlink" title="1、视频编码方式"></a>1、视频编码方式</h5><ul>
+<li><strong>视频编码的作用：</strong> 将视频像素数据（<strong>RGB，YUV</strong> 等）压缩成视频码流，从而降低视频的数据量。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th><strong>HEVC（H.265）</strong></th>
+<th><strong>MPEG/ITU-T</strong></th>
+<th>2013</th>
+<th>研发中</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>名称</td>
+<td>推出机构</td>
+<td>推出时间</td>
+<td>目前使用领域</td>
+</tr>
+<tr>
+<td><strong>H.264</strong></td>
+<td><strong>MPEG/ITU-T</strong></td>
+<td>2003</td>
+<td>各个领域</td>
+</tr>
+<tr>
+<td><strong>MPEG4</strong></td>
+<td><strong>MPEG</strong></td>
+<td>2001</td>
+<td>不温不火</td>
+</tr>
+<tr>
+<td><strong>MPEG2</strong></td>
+<td><strong>MPEG</strong></td>
+<td>1994</td>
+<td>数字电视</td>
+</tr>
+<tr>
+<td><strong>VP9</strong></td>
+<td>Google</td>
+<td>2013</td>
+<td>研发中</td>
+</tr>
+<tr>
+<td><strong>VP8</strong></td>
+<td>Google</td>
+<td>2008</td>
+<td>不普及</td>
+</tr>
+<tr>
+<td><strong>VC-1</strong></td>
+<td>Microsoft Inc.</td>
+<td>2006</td>
+<td>微软平台</td>
+</tr>
+</tbody></table>
+<h3 id=""><a href="#" class="headerlink" title=""></a></h3><h4 id="四-音频编码方式"><a href="#四-音频编码方式" class="headerlink" title="四, 音频编码方式"></a>四, 音频编码方式</h4><p><strong>音频编码的作用：</strong> 将音频采样数据（<strong>PCM</strong> 等）压缩成音频码流，从而降低音频的数据量。 常用的音频编码方式有以下几种：</p>
+<table>
+<thead>
+<tr>
+<th>名称</th>
+<th>推出机构</th>
+<th>推出时间</th>
+<th>目前使用领域</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>AAC</strong></td>
+<td><strong>MPEG</strong></td>
+<td>1997</td>
+<td>各个领域（新）</td>
+</tr>
+<tr>
+<td><strong>MP3</strong></td>
+<td><strong>MPEG</strong></td>
+<td>1993</td>
+<td>各个领域（旧）</td>
+</tr>
+<tr>
+<td><strong>WMV</strong></td>
+<td><strong>Microsoft Inc.</strong></td>
+<td>1999</td>
+<td>微软平台</td>
+</tr>
+<tr>
+<td><strong>AC-3</strong></td>
+<td><strong>Dolby Inc.</strong></td>
+<td>1992</td>
+<td>电影</td>
+</tr>
+</tbody></table>
+<h5 id="1-MP3"><a href="#1-MP3" class="headerlink" title="1  MP3"></a>1  MP3</h5><p><strong>MP3</strong>，英文全称 <strong>MPEG-1 or MPEG-2 Audio Layer III</strong>，是曾经非常流行的一种数字音频编码和有损压缩格式，它被设计来大幅降低音频数据量。它是在 <strong>1991</strong> 年，由位于德国埃尔朗根的研究组织 <strong>Fraunhofer-Gesellschaft</strong> 的一组工程师发明和标准化的。<strong>MP3</strong> 的普及，曾对音乐产业造成极大的冲击与影响。</p>
+<h5 id="2-AAC"><a href="#2-AAC" class="headerlink" title="2 AAC"></a>2 AAC</h5><p><strong>AAC</strong>，英文全称 <strong>Advanced Audio Coding</strong>，是由 <strong>Fraunhofer IIS</strong>、杜比实验室、<strong>AT&amp;T</strong>、<strong>Sony</strong> 等公司共同开发，在 <strong>1997</strong> 年推出的基于 <strong>MPEG-2</strong> 的音频编码技术。<strong>2000</strong> 年，<strong>MPEG-4</strong> 标准出现后，<strong>AAC</strong> 重新集成了其特性，加入了 <strong>SBR</strong> 技术和 <strong>PS</strong> 技术，为了区别于传统的 <strong>MPEG-2 AAC</strong> 又称为 <strong>MPEG-4 AAC</strong>。 <strong>AAC</strong> 比 <strong>MP3</strong> 有更高的压缩比，同样大小的音频文件，<strong>AAC</strong> 的音质更高。</p>
+<h5 id="3-WMA"><a href="#3-WMA" class="headerlink" title="3 WMA"></a>3 WMA</h5><p><strong>WMA</strong>，英文全称 <strong>Windows Media Audio</strong>，由微软公司开发的一种数字音频压缩格式，本身包括有损和无损压缩格式。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/12/31/%E9%9F%B3%E8%A7%86%E9%A2%91/%E6%96%87%E6%A1%A301-%E8%A7%86%E9%A2%91%E5%8E%8B%E7%BC%A9%E5%8E%9F%E7%90%86/" rel="prev" title="01-视频压缩原理">
+      <i class="fa fa-chevron-left"></i> 01-视频压缩原理
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A7%86%E9%A2%91%E8%A7%A3%E7%A0%81%E5%9F%BA%E7%A1%8001-%E5%B0%81%E8%A3%9D%E6%A0%BC%E5%BC%8F"><span class="nav-number">1.</span> <span class="nav-text">视频解码基础01-封裝格式</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BA%8C%E3%80%81%E8%A7%86%E9%A2%91%E6%96%87%E4%BB%B6%E5%B0%81%E8%A3%85%E6%A0%BC%E5%BC%8F"><span class="nav-number">1.1.</span> <span class="nav-text">二、视频文件封装格式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%B8%89%E3%80%81-%E9%9F%B3%E8%A7%86%E9%A2%91%E7%BC%96%E7%A0%81%E6%96%B9%E5%BC%8F%E7%AE%80%E4%BB%8B"><span class="nav-number">1.2.</span> <span class="nav-text">三、 音视频编码方式简介</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#1%E3%80%81%E8%A7%86%E9%A2%91%E7%BC%96%E7%A0%81%E6%96%B9%E5%BC%8F"><span class="nav-number">1.2.1.</span> <span class="nav-text">1、视频编码方式</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link"><span class="nav-number">2.</span> <span class="nav-text"></span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%9B%9B-%E9%9F%B3%E9%A2%91%E7%BC%96%E7%A0%81%E6%96%B9%E5%BC%8F"><span class="nav-number">2.1.</span> <span class="nav-text">四, 音频编码方式</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#1-MP3"><span class="nav-number">2.1.1.</span> <span class="nav-text">1  MP3</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#2-AAC"><span class="nav-number">2.1.2.</span> <span class="nav-text">2 AAC</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#3-WMA"><span class="nav-number">2.1.3.</span> <span class="nav-text">3 WMA</span></a></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Edward"
+      src="/uploads/avatar.gif">
+  <p class="site-author-name" itemprop="name">Edward</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">8</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Edward</span>
+</div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
