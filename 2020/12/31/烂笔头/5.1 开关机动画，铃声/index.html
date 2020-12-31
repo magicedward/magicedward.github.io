@@ -1,0 +1,1351 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"edward.org.cn","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="diff –git a&#x2F;cmds&#x2F;bootanimation&#x2F;BootAnimation.cpp b&#x2F;cmds&#x2F;bootanimation&#x2F;BootAnimation.cpp index df87c26..6a183c4 100644 — a&#x2F;cmds&#x2F;bootanimation&#x2F;BootAnimation.cpp +++ b&#x2F;cmds&#x2F;bootanimation&#x2F;BootAnimation.cp">
+<meta property="og:type" content="article">
+<meta property="og:title" content="5">
+<meta property="og:url" content="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/5.1%20%E5%BC%80%E5%85%B3%E6%9C%BA%E5%8A%A8%E7%94%BB%EF%BC%8C%E9%93%83%E5%A3%B0/index.html">
+<meta property="og:site_name" content="点点滴滴">
+<meta property="og:description" content="diff –git a&#x2F;cmds&#x2F;bootanimation&#x2F;BootAnimation.cpp b&#x2F;cmds&#x2F;bootanimation&#x2F;BootAnimation.cpp index df87c26..6a183c4 100644 — a&#x2F;cmds&#x2F;bootanimation&#x2F;BootAnimation.cpp +++ b&#x2F;cmds&#x2F;bootanimation&#x2F;BootAnimation.cp">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-12-31T06:48:00.797Z">
+<meta property="article:modified_time" content="2020-01-16T04:37:33.281Z">
+<meta property="article:author" content="Edward">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/5.1%20%E5%BC%80%E5%85%B3%E6%9C%BA%E5%8A%A8%E7%94%BB%EF%BC%8C%E9%93%83%E5%A3%B0/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>5 | 点点滴滴</title>
+  
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?a92ed22eafce466e7a7b17546bb0dc6f";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">点点滴滴</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/5.1%20%E5%BC%80%E5%85%B3%E6%9C%BA%E5%8A%A8%E7%94%BB%EF%BC%8C%E9%93%83%E5%A3%B0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/avatar.gif">
+      <meta itemprop="name" content="Edward">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="点点滴滴">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          5
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-12-31 14:48:00" itemprop="dateCreated datePublished" datetime="2020-12-31T14:48:00+08:00">2020-12-31</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-01-16 12:37:33" itemprop="dateModified" datetime="2020-01-16T12:37:33+08:00">2020-01-16</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%83%82%E7%AC%94%E5%A4%B4/" itemprop="url" rel="index"><span itemprop="name">烂笔头</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/5.1%20%E5%BC%80%E5%85%B3%E6%9C%BA%E5%8A%A8%E7%94%BB%EF%BC%8C%E9%93%83%E5%A3%B0/" class="post-meta-item leancloud_visitors" data-flag-title="5" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>diff –git a/cmds/bootanimation/BootAnimation.cpp b/cmds/bootanimation/BootAnimation.cpp</p>
+<p>index df87c26..6a183c4 100644</p>
+<p>— a/cmds/bootanimation/BootAnimation.cpp</p>
+<p>+++ b/cmds/bootanimation/BootAnimation.cpp</p>
+<p>@@ -60,13 +60,15 @@</p>
+<p> #include &quot;BootAnimation.h&quot;</p>
+<p> #include &quot;AudioPlayer.h&quot;</p>
+<p> #include &lt;media/mediaplayer.h&gt;</p>
+<p>+#include &lt;media/AudioSystem.h&gt;</p>
+<p>+#include &lt;media/IMediaHTTPService.h&gt;</p>
+<p> #define OEM_BOOTANIMATION_FILE &quot;/oem/media/bootanimation.zip&quot;</p>
+<p> #define SYSTEM_BOOTANIMATION_FILE &quot;/system/media/bootanimation.zip&quot;</p>
+<p> #define SYSTEM_ENCRYPTED_BOOTANIMATION_FILE &quot;/system/media/bootanimation-encrypted.zip&quot;</p>
+<p> #define EXIT_PROP_NAME &quot;service.bootanim.exit&quot;</p>
+<p> #define FIXED_ONE 1</p>
+<p>-</p>
+<p>+#define BOOTMUSIC_FILE &quot;/system/media/audio/boot.ogg&quot;</p>
+<p> #define USER_BOOTANIMATION_FILE &quot;/data/local/bootanimation.zip&quot;</p>
+<p> #define USER_SHUTDOWN_ANIMATION_FILE &quot;/data/local/shutdownanimation.zip&quot;</p>
+<p>@@ -103,7 +105,7 @@ BootAnimation::BootAnimation(bool shutdown) : Thread(false), mZip(NULL)</p>
+<p>     status_t status = SurfaceComposerClient::getDisplayInfo(dtoken, &amp;dinfo);</p>
+<p>     ALOGD(&quot;DISPLAY,W-H: %d-%d, ori: %d&quot;, dinfo.w, dinfo.h, dinfo.orientation);</p>
+<ul>
+<li>   if (mShutdown) {</li>
+</ul>
+<ul>
+<li>   if (0) {</li>
+</ul>
+<p>            bool vertical = </p>
+<p>             dinfo.orientation == 0 </p>
+<p>             || dinfo.orientation == 2 ;</p>
+<p>@@ -298,7 +300,7 @@ status_t BootAnimation::readyToRun() {</p>
+<p>     int curWidth = dinfo.w;</p>
+<p>     int curHeight = dinfo.h;</p>
+<ul>
+<li>   if (mShutdown) {</li>
+</ul>
+<ul>
+<li>   if (0) {</li>
+</ul>
+<p>            if (dinfo.orientation % 2 == 0) {</p>
+<p>                    curWidth = dinfo.h;</p>
+<p>                    curHeight = dinfo.w;</p>
+<p>@@ -494,12 +496,27 @@ void BootAnimation::getTexCoordinate() {</p>
+<p>        }</p>
+<p> }</p>
+<p>+void BootAnimation::playMusic()</p>
+<p>+{</p>
+<ul>
+<li><p> sp&lt;MediaPlayer&gt; mp = new MediaPlayer();</p>
+</li>
+<li><p>   if ((0 == access(BOOTMUSIC_FILE, F_OK)) &amp;&amp; mp != NULL) {</p>
+</li>
+<li><p>       mp-&gt;setDataSource(NULL,BOOTMUSIC_FILE, NULL);</p>
+</li>
+<li><p>       mp-&gt;prepare();</p>
+</li>
+<li><p>       mp-&gt;start();</p>
+</li>
+<li><p>              ALOGE(&quot; play boot sounds: %s&quot;, BOOTMUSIC_FILE);</p>
+</li>
+<li><p>   }</p>
+</li>
+</ul>
+<p>+}</p>
+<p>+</p>
+<p> bool BootAnimation::android()</p>
+<p> {</p>
+<p>     initTexture(&amp;mAndroid[0], mAssets, &quot;images/android-logo-mask.png&quot;); // texture_object_mask</p>
+<p>     initTexture(&amp;mAndroid[1], mAssets, &quot;images/android-logo-shine.png&quot;);</p>
+<p>     mBMPWidth = mTexWidth = mBMPHeight = mTexHeight = 1;</p>
+<p>     getTexCoordinate();</p>
+<ul>
+<li><p>// to add startup music</p>
+</li>
+<li><p>   #ifdef BOOTMUSIC_FILE</p>
+</li>
+<li><p>   playMusic();</p>
+</li>
+<li><p>   #endif</p>
+</li>
+</ul>
+<p>     // clear screen</p>
+<p>     glShadeModel(GL_FLAT);</p>
+<p>@@ -720,6 +737,9 @@ bool BootAnimation::readFile(const char* name, String8&amp; outString)</p>
+<p> bool BootAnimation::movie()</p>
+<p> {</p>
+<p>     String8 desString;</p>
+<ul>
+<li><p>      #ifdef BOOTMUSIC_FILE</p>
+</li>
+<li><p>   playMusic();</p>
+</li>
+<li><p>   #endif</p>
+</li>
+</ul>
+<p>     if (!readFile(&quot;desc.txt&quot;, desString)) {</p>
+<p>         return false;</p>
+<p>diff –git a/cmds/bootanimation/BootAnimation.h b/cmds/bootanimation/BootAnimation.h</p>
+<p>index 5663dba..77a177e 100644</p>
+<p>— a/cmds/bootanimation/BootAnimation.h</p>
+<p>+++ b/cmds/bootanimation/BootAnimation.h</p>
+<p>@@ -89,7 +89,7 @@ private:</p>
+<p>     bool movie();</p>
+<p>     void getTexCoordinate();</p>
+<p>     void checkExit();</p>
+<ul>
+<li>   </li>
+</ul>
+<ul>
+<li>   void playMusic();</li>
+</ul>
+<p>     /**</p>
+<p>      * 返回给定 fd 的文件的大小.</p>
+<p>      */</p>
+<p>diff –git a/services/core/java/com/android/server/power/ShutdownThread.java b/services/core/java/com/android/server/pow</p>
+<p>index e4a9b19..26c7af8 100644</p>
+<p>— a/services/core/java/com/android/server/power/ShutdownThread.java</p>
+<p>+++ b/services/core/java/com/android/server/power/ShutdownThread.java</p>
+<p>@@ -46,9 +46,13 @@ import android.os.storage.IMountShutdownObserver;</p>
+<p> import com.android.internal.telephony.ITelephony;</p>
+<p> import com.android.server.pm.PackageManagerService;</p>
+<p>-</p>
+<p>+import android.os.ServiceManager;</p>
+<p> import android.util.Log;</p>
+<p>+import android.media.MediaPlayer;</p>
+<p>+import java.io.File;</p>
+<p>+import java.io.IOException;</p>
+<p> import android.view.WindowManager;</p>
+<p>+import android.view.IWindowManager;</p>
+<p> public final class ShutdownThread extends Thread {</p>
+<p>     // constants</p>
+<p>@@ -78,7 +82,10 @@ public final class ShutdownThread extends Thread {</p>
+<p>     // static instance of this thread</p>
+<p>     private static final ShutdownThread sInstance = new ShutdownThread();</p>
+<p>-</p>
+<ul>
+<li><p>      </p>
+</li>
+<li><p>      // if has Shutdown Animation set this to ture</p>
+</li>
+<li><p>   private static boolean mHasAnimation;</p>
+</li>
+<li><p>      </p>
+</li>
+</ul>
+<p>     private static final AudioAttributes VIBRATION_ATTRIBUTES = new AudioAttributes.Builder()</p>
+<p>             .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)</p>
+<p>             .setUsage(AudioAttributes.USAGE_ASSISTANCE_SONIFICATION)</p>
+<p>@@ -96,6 +103,22 @@ public final class ShutdownThread extends Thread {</p>
+<p>     private ShutdownThread() {</p>
+<p>     }</p>
+<ul>
+<li><p>   private static void playMusic() {</p>
+</li>
+<li><p>      MediaPlayer mp = new MediaPlayer();</p>
+</li>
+<li><p>      try {</p>
+</li>
+<li><p>              File file = new File(&quot;system/media/audio/shutdown.ogg&quot;);</p>
+</li>
+<li><p>              if (file.exists()) {</p>
+</li>
+<li><p>                  mp.setDataSource(&quot;system/media/audio/shutdown.ogg&quot;);</p>
+</li>
+<li><p>                  mp.prepare();</p>
+</li>
+<li><p>                  mp.start();</p>
+</li>
+<li><p>                      Log.d(&quot;edward&quot;,&quot;play shutdown.ogg&quot;);</p>
+</li>
+<li><p>              }</p>
+</li>
+<li><p>      }catch (IllegalArgumentException e) {</p>
+</li>
+<li><p>              e.printStackTrace();</p>
+</li>
+<li><p>      }catch (IOException e) {</p>
+</li>
+<li><p>              e.printStackTrace();</p>
+</li>
+<li><p>      }</p>
+</li>
+<li><p>   }</p>
+</li>
+</ul>
+<p>     /**</p>
+<p>      * Request a clean shutdown, waiting for subsystems to clean up their</p>
+<p>@@ -108,6 +131,8 @@ public final class ShutdownThread extends Thread {</p>
+<p>     public static void shutdown(final Context context, boolean confirm) {</p>
+<p>         mReboot = false;</p>
+<p>         mRebootSafeMode = false;</p>
+<ul>
+<li><p>              mHasAnimation = (new File(&quot;/system/media/shutdownanimation.zip&quot;).exists()</p>
+</li>
+<li><p>                           || new File(&quot;/data/local/shutdownanimation.zip&quot;).exists());</p>
+</li>
+</ul>
+<p>         shutdownInner(context, confirm);</p>
+<p>     }</p>
+<p>@@ -132,6 +157,15 @@ public final class ShutdownThread extends Thread {</p>
+<p>         Log.d(TAG, &quot;Notifying thread to start shutdown longPressBehavior=&quot; + longPressBehavior);</p>
+<p>         if (confirm) {</p>
+<ul>
+<li><p>                          if (mHasAnimation) {</p>
+</li>
+<li><p>              try {</p>
+</li>
+<li><p>                    IWindowManager wm = IWindowManager.Stub.asInterface(</p>
+</li>
+<li><p>                              ServiceManager.getService(Context.WINDOW_SERVICE));</p>
+</li>
+<li><p>                    wm.freezeRotation(0);//wm.getRotation()</p>
+</li>
+<li><p>              } catch (Exception e) {</p>
+</li>
+</ul>
+<p>+</p>
+<ul>
+<li><p>              }</p>
+</li>
+<li><p>           }</p>
+</li>
+</ul>
+<p>             final CloseDialogReceiver closer = new CloseDialogReceiver(context);</p>
+<p>             if (sConfirmDialog != null) {</p>
+<p>                 sConfirmDialog.dismiss();</p>
+<p>@@ -147,13 +181,37 @@ public final class ShutdownThread extends Thread {</p>
+<p>                             beginShutdownSequence(context);</p>
+<p>                         }</p>
+<p>                     })</p>
+<ul>
+<li>                   .setNegativeButton(com.android.internal.R.string.no, null)</li>
+</ul>
+<ul>
+<li><p>                   .setNegativeButton(com.android.internal.R.string.no, new DialogInterface.OnClickListener() {</p>
+</li>
+<li><p>                      public void onClick(DialogInterface dialog, int which) {</p>
+</li>
+<li><p>                          if (mHasAnimation) {</p>
+</li>
+<li><p>                              try {</p>
+</li>
+<li><p>                                    IWindowManager wm = IWindowManager.Stub.asInterface(</p>
+</li>
+<li><p>                                         ServiceManager.getService(Context.WINDOW_SERVICE)</p>
+</li>
+<li><p>                                      );</p>
+</li>
+<li><p>                                    wm.thawRotation();</p>
+</li>
+<li><p>                              } catch (Exception e) {</p>
+</li>
+</ul>
+<p>+</p>
+<ul>
+<li><p>                              }</p>
+</li>
+<li><p>                          }</p>
+</li>
+<li><p>                      }</p>
+</li>
+<li><p>                   })</p>
+</li>
+<li><p>                                      </p>
+</li>
+<li><p>                                      </p>
+</li>
+</ul>
+<p>                     .create();</p>
+<p>             closer.dialog = sConfirmDialog;</p>
+<p>             sConfirmDialog.setOnDismissListener(closer);</p>
+<p>             sConfirmDialog.getWindow().setType(WindowManager.LayoutParams.TYPE_KEYGUARD_DIALOG);</p>
+<p>             sConfirmDialog.show();</p>
+<p>         } else {</p>
+<ul>
+<li><p>      if (mHasAnimation) {</p>
+</li>
+<li><p>              try {</p>
+</li>
+<li><p>                    IWindowManager wm = IWindowManager.Stub.asInterface(</p>
+</li>
+<li><p>                              ServiceManager.getService(Context.WINDOW_SERVICE));</p>
+</li>
+<li><p>                    wm.freezeRotation(0);</p>
+</li>
+<li><p>              } catch (Exception e) {</p>
+</li>
+</ul>
+<p>+</p>
+<ul>
+<li><p>              }</p>
+</li>
+<li><p>           }</p>
+</li>
+</ul>
+<p>             beginShutdownSequence(context);</p>
+<p>         }</p>
+<p>     }</p>
+<p>@@ -217,7 +275,23 @@ public final class ShutdownThread extends Thread {</p>
+<p>             }</p>
+<p>             sIsStarted = true;</p>
+<p>         }</p>
+<ul>
+<li><p>          final IActivityManager am =</p>
+</li>
+<li><p>           ActivityManagerNative.asInterface(ServiceManager.checkService(&quot;activity&quot;));</p>
+</li>
+<li><p>       if (am != null) {</p>
+</li>
+<li><p>           int[] pids = new int[1];</p>
+</li>
+<li><p>           try {</p>
+</li>
+<li><p>               am.killPids(pids, &quot;Shutdown system&quot;, true);</p>
+</li>
+<li><p>           } catch (RemoteException e) {</p>
+</li>
+<li><p>           }</p>
+</li>
+<li><p>       }</p>
+</li>
+<li><p>      boolean mShowShutdownAnim = new File(&quot;/system/media/shutdownanimation.zip&quot;).exists()</p>
+</li>
+<li><p>                                  || new File(&quot;/data/local/shutdownanimation.zip&quot;).exists();</p>
+</li>
+<li><p>      if (mShowShutdownAnim){</p>
+</li>
+<li><p>              android.os.SystemProperties.set(&quot;ctl.start&quot;, &quot;shutdownanim&quot;);</p>
+</li>
+<li><p>              playMusic();</p>
+</li>
+<li><p>      } else {</p>
+</li>
+<li><p>              </p>
+</li>
+</ul>
+<p>         // throw up an indeterminate system dialog to indicate radio is</p>
+<p>         // shutting down.</p>
+<p>         ProgressDialog pd = new ProgressDialog(context);</p>
+<p>@@ -228,7 +302,7 @@ public final class ShutdownThread extends Thread {</p>
+<p>         pd.getWindow().setType(WindowManager.LayoutParams.TYPE_KEYGUARD_DIALOG);</p>
+<p>         pd.show();</p>
+<p>-</p>
+<ul>
+<li>      }</li>
+</ul>
+<p>         sInstance.mContext = context;</p>
+<p>         sInstance.mPowerManager = (PowerManager)context.getSystemService(Context.POWER_SERVICE);</p>
+<p>@@ -261,7 +335,9 @@ public final class ShutdownThread extends Thread {</p>
+<p>         // start the thread that initiates shutdown</p>
+<p>         sInstance.mHandler = new Handler() {</p>
+<p>         };</p>
+<ul>
+<li>       sInstance.start();</li>
+</ul>
+<ul>
+<li><p>       sInstance.start(); </p>
+</li>
+<li><p>      </p>
+</li>
+<li><p>              </p>
+</li>
+</ul>
+<p>     }</p>
+<p>     void actionDone() {</p>
+<p>@@ -305,9 +381,7 @@ public final class ShutdownThread extends Thread {</p>
+<p>         // First send the high-level shut down broadcast.</p>
+<p>         mActionDone = false;</p>
+<ul>
+<li><p>       Intent intent = new Intent(Intent.ACTION_SHUTDOWN);</p>
+</li>
+<li><p>       intent.addFlags(Intent.FLAG_RECEIVER_FOREGROUND);</p>
+</li>
+<li><p>       mContext.sendOrderedBroadcastAsUser(intent,</p>
+</li>
+</ul>
+<ul>
+<li>       mContext.sendOrderedBroadcastAsUser(new Intent(Intent.ACTION_SHUTDOWN),</li>
+</ul>
+<p>                 UserHandle.ALL, null, br, mHandler, 0, null, null);</p>
+<p>         final long endTime = SystemClock.elapsedRealtime() + MAX_BROADCAST_TIME;</p>
+<p>@@ -527,6 +601,17 @@ public final class ShutdownThread extends Thread {</p>
+<p>             }</p>
+<p>         }</p>
+<ul>
+<li><p>                 if (mHasAnimation) {</p>
+</li>
+<li><p>                              try {</p>
+</li>
+<li><p>                                    IWindowManager wm = IWindowManager.Stub.asInterface(</p>
+</li>
+<li><p>                                         ServiceManager.getService(Context.WINDOW_SERVICE)</p>
+</li>
+<li><p>                                      );</p>
+</li>
+<li><p>                                    wm.thawRotation();</p>
+</li>
+<li><p>                              } catch (Exception e) {</p>
+</li>
+</ul>
+<p>+</p>
+<ul>
+<li><p>                              }</p>
+</li>
+<li><p>                          }   </p>
+</li>
+<li><p>              </p>
+</li>
+</ul>
+<p>         // Shutdown power</p>
+<p>         Log.i(TAG, &quot;Performing low-level shutdown…&quot;);</p>
+<p>         PowerManagerService.lowLevelShutdown();</p>
+<p>(END)</p>
+<p>若不要影响原来的方向，需要记录下面这些值来操作。</p>
+<p>int userRotation = Settings.System.getIntForUser(resolver,</p>
+<p>                    Settings.System.USER_ROTATION, Surface.ROTATION_0,</p>
+<p>                    UserHandle.USER_CURRENT);</p>
+<p>int userRotationMode = Settings.System.getIntForUser(resolver,</p>
+<p>                    Settings.System.ACCELEROMETER_ROTATION, 0, UserHandle.USER_CURRENT) != 0 ?</p>
+<p>                            WindowManagerPolicy.USER_ROTATION_FREE :</p>
+<p>                                    WindowManagerPolicy.USER_ROTATION_LOCKED;</p>
+<p>4.4,关机动画，锁定方向，关背光</p>
+<p>#backlight</p>
+<p>    chown system system /sys/class/backlight/rk28_bl/brightness</p>
+<p>    chown root system /sys/class/backlight/rk28_bl/bl_power</p>
+<p>    chmod 0664 /sys/class/backlight/rk28_bl/bl_power</p>
+<hr>
+<p>diff –git a/cmds/bootanimation/BootAnimation.cpp b/cmds/bootanimation/BootAnimation.cpp</p>
+<p>index 68dc6a2..31fe0cd 100644</p>
+<p>— a/cmds/bootanimation/BootAnimation.cpp</p>
+<p>+++ b/cmds/bootanimation/BootAnimation.cpp</p>
+<p>@@ -90,7 +90,7 @@ BootAnimation::BootAnimation(bool shutdown) : Thread(false)</p>
+<p>     DisplayInfo dinfo;</p>
+<p>     status_t status = SurfaceComposerClient::getDisplayInfo(dtoken, &amp;dinfo);</p>
+<p>     ALOGD(&quot;DISPLAY,W-H: %d-%d, ori: %d&quot;, dinfo.w, dinfo.h,dinfo.orientation);</p>
+<ul>
+<li>   if (mShutdown) {</li>
+</ul>
+<p>+if (0){//}mShutdown) {</p>
+<p>            bool vertical=dinfo.orientation==0 || dinfo.orientation==2 ;</p>
+<p>            if(vertical){</p>
+<p>                    mReverseAxis =false;</p>
+<p>@@ -266,7 +266,7 @@ status_t BootAnimation::readyToRun() {</p>
+<p>     int curWidth = dinfo.w;</p>
+<p>     int curHeight = dinfo.h;</p>
+<ul>
+<li>   if (mShutdown) {</li>
+</ul>
+<ul>
+<li>   if (0){//}mShutdown) {</li>
+</ul>
+<p>            if (dinfo.orientation % 2 == 0) {</p>
+<p>                    curWidth = dinfo.h;</p>
+<p>                    curHeight = dinfo.w;</p>
+<p>diff –git a/services/java/com/android/server/power/ShutdownThread.java b/services/java/com/android/server/power/ShutdownThread.java</p>
+<p>index 88a27f5..31ddca1 100644</p>
+<p>— a/services/java/com/android/server/power/ShutdownThread.java</p>
+<p>+++ b/services/java/com/android/server/power/ShutdownThread.java</p>
+<p>@@ -42,12 +42,21 @@ import android.os.Vibrator;</p>
+<p> import android.os.SystemVibrator;</p>
+<p> import android.os.storage.IMountService;</p>
+<p> import android.os.storage.IMountShutdownObserver;</p>
+<p>+import android.os.ServiceManager;</p>
+<p> import com.android.internal.telephony.ITelephony;</p>
+<p> import android.util.Log;</p>
+<p>+import android.media.MediaPlayer;</p>
+<p>+import java.io.File;</p>
+<p>+import java.io.IOException;</p>
+<p> import android.view.WindowManager;</p>
+<p>+import android.view.IWindowManager;</p>
+<p>+import android.provider.Settings;</p>
+<p>+import android.view.WindowManagerPolicy;</p>
+<p>+import android.view.Surface;</p>
+<p>+import java.io.RandomAccessFile;</p>
+<p> public final class ShutdownThread extends Thread {</p>
+<p>     // constants</p>
+<p>     private static final String TAG = &quot;ShutdownThread&quot;;</p>
+<p>@@ -76,6 +85,8 @@ public final class ShutdownThread extends Thread {</p>
+<p>     // static instance of this thread</p>
+<p>     private static final ShutdownThread sInstance = new ShutdownThread();</p>
+<ul>
+<li><p>   // if has Shutdown Animation set this to ture</p>
+</li>
+<li><p>   private static boolean mHasAnimation;</p>
+</li>
+</ul>
+<p>     private final Object mActionDoneSync = new Object();</p>
+<p>     private boolean mActionDone;</p>
+<p>@@ -84,11 +95,44 @@ public final class ShutdownThread extends Thread {</p>
+<p>     private PowerManager.WakeLock mCpuWakeLock;</p>
+<p>     private PowerManager.WakeLock mScreenWakeLock;</p>
+<p>     private Handler mHandler;</p>
+<p>-</p>
+<ul>
+<li><p>      </p>
+</li>
+<li><p>      private static int userRotationMode ;</p>
+</li>
+<li><p>      private static int userRotation ;</p>
+</li>
+</ul>
+<p>     private static AlertDialog sConfirmDialog;</p>
+<p>     private ShutdownThread() {</p>
+<p>     }</p>
+<p>+</p>
+<ul>
+<li><p>   private static void playMusic() {</p>
+</li>
+<li><p>      MediaPlayer mp = new MediaPlayer();</p>
+</li>
+<li><p>      try {</p>
+</li>
+<li><p>              File file = new File(&quot;system/media/audio/shutdown.ogg&quot;);</p>
+</li>
+<li><p>              if (file.exists()) {</p>
+</li>
+<li><p>                  mp.setDataSource(&quot;system/media/audio/shutdown.ogg&quot;);</p>
+</li>
+<li><p>                  mp.prepare();</p>
+</li>
+<li><p>                  mp.start();</p>
+</li>
+<li><p>              }</p>
+</li>
+<li><p>      }catch (IllegalArgumentException e) {</p>
+</li>
+<li><p>              e.printStackTrace();</p>
+</li>
+<li><p>      }catch (IOException e) {</p>
+</li>
+<li><p>              e.printStackTrace();</p>
+</li>
+<li><p>      }</p>
+</li>
+<li><p>   }</p>
+</li>
+<li><p>              </p>
+</li>
+<li><p>   private static void TurnOffScreen(){ </p>
+</li>
+<li><p>                                                  </p>
+</li>
+<li><p>          File HdmiFile =new File(&quot;/sys/class/backlight/rk28_bl/bl_power&quot;);                    </p>
+</li>
+<li><p>              try {</p>
+</li>
+<li><p>              RandomAccessFile rdf = null;</p>
+</li>
+<li><p>              rdf = new RandomAccessFile(HdmiFile, &quot;rw&quot;);</p>
+</li>
+<li><p>              rdf.writeBytes(&quot;1&quot;);             </p>
+</li>
+<li><p>              } catch (Exception e) {</p>
+</li>
+<li><p>                      Log.e(TAG, &quot;Exception&quot;+e);</p>
+</li>
+<li><p>                      }</p>
+</li>
+<li><p>                                                                         </p>
+</li>
+<li><p>      }                                                          </p>
+</li>
+<li><p>                                                                        </p>
+</li>
+<li><p>                                                                      </p>
+</li>
+</ul>
+<p>     /**</p>
+<p>      * Request a clean shutdown, waiting for subsystems to clean up their</p>
+<p>@@ -101,6 +145,8 @@ public final class ShutdownThread extends Thread {</p>
+<p>     public static void shutdown(final Context context, boolean confirm) {</p>
+<p>         mReboot = false;</p>
+<p>         mRebootSafeMode = false;</p>
+<ul>
+<li><p>       mHasAnimation = (new File(&quot;/system/media/shutdownanimation.zip&quot;).exists()</p>
+</li>
+<li><p>                           || new File(&quot;/data/local/shutdownanimation.zip&quot;).exists());</p>
+</li>
+</ul>
+<p>         shutdownInner(context, confirm);</p>
+<p>     }</p>
+<p>@@ -125,6 +171,25 @@ public final class ShutdownThread extends Thread {</p>
+<p>         Log.d(TAG, &quot;Notifying thread to start shutdown longPressBehavior=&quot; + longPressBehavior);</p>
+<p>         if (confirm) {</p>
+<ul>
+<li><p>          if (mHasAnimation) {</p>
+</li>
+<li><p>              </p>
+</li>
+<li><p>       userRotationMode = Settings.System.getIntForUser(context.getContentResolver(),</p>
+</li>
+<li><p>                   Settings.System.ACCELEROMETER_ROTATION, 0, UserHandle.USER_CURRENT) != 0 ?</p>
+</li>
+<li><p>                           WindowManagerPolicy.USER_ROTATION_FREE :</p>
+</li>
+<li><p>                                   WindowManagerPolicy.USER_ROTATION_LOCKED;</p>
+</li>
+<li><p>                                                                      </p>
+</li>
+<li><p>       userRotation = Settings.System.getIntForUser(context.getContentResolver(),</p>
+</li>
+<li><p>                   Settings.System.USER_ROTATION, Surface.ROTATION_0,</p>
+</li>
+<li><p>                   UserHandle.USER_CURRENT);</p>
+</li>
+<li><p>              </p>
+</li>
+<li><p>              try {</p>
+</li>
+<li><p>                    IWindowManager wm = IWindowManager.Stub.asInterface(</p>
+</li>
+<li><p>                              ServiceManager.getService(Context.WINDOW_SERVICE));                                             </p>
+</li>
+<li><p>                      wm.freezeRotation(0);//wm.getRotation());                       </p>
+</li>
+<li><p>              } catch (Exception e) {</p>
+</li>
+</ul>
+<p>+</p>
+<ul>
+<li><p>              }</p>
+</li>
+<li><p>           }</p>
+</li>
+</ul>
+<p>             final CloseDialogReceiver closer = new CloseDialogReceiver(context);</p>
+<p>             if (sConfirmDialog != null) {</p>
+<p>                 sConfirmDialog.dismiss();</p>
+<p>@@ -139,7 +204,25 @@ public final class ShutdownThread extends Thread {</p>
+<p>                             beginShutdownSequence(context);</p>
+<p>                         }</p>
+<p>                     })</p>
+<ul>
+<li>                   .setNegativeButton(com.android.internal.R.string.no, null)</li>
+</ul>
+<ul>
+<li><p>                   .setNegativeButton(com.android.internal.R.string.no, new DialogInterface.OnClickListener() {</p>
+</li>
+<li><p>                      public void onClick(DialogInterface dialog, int which) {</p>
+</li>
+<li><p>                          if (mHasAnimation) {</p>
+</li>
+<li><p>                              try {</p>
+</li>
+<li><p>                                    IWindowManager wm = IWindowManager.Stub.asInterface(</p>
+</li>
+<li><p>                                         ServiceManager.getService(Context.WINDOW_SERVICE)</p>
+</li>
+<li><p>                                      );</p>
+</li>
+<li><p>                                    //wm.thawRotation();</p>
+</li>
+<li><p>                                        if(userRotationMode == WindowManagerPolicy.USER_ROTATION_FREE){       </p>
+</li>
+<li><p>                                                      wm.thawRotation();</p>
+</li>
+<li><p>                                              }else{</p>
+</li>
+<li><p>                                                  wm.freezeRotation(userRotation);                                            </p>
+</li>
+<li><p>                                              }       </p>
+</li>
+<li><p>                              } catch (Exception e) {</p>
+</li>
+</ul>
+<p>+</p>
+<ul>
+<li><p>                              }</p>
+</li>
+<li><p>                          }</p>
+</li>
+<li><p>                      }</p>
+</li>
+<li><p>                   })</p>
+</li>
+</ul>
+<p>                     .create();</p>
+<p>             closer.dialog = sConfirmDialog;</p>
+<p>             sConfirmDialog.setOnDismissListener(closer);</p>
+<p>@@ -210,6 +293,22 @@ public final class ShutdownThread extends Thread {</p>
+<p>             sIsStarted = true;</p>
+<p>         }</p>
+<ul>
+<li><p>       final IActivityManager am =</p>
+</li>
+<li><p>           ActivityManagerNative.asInterface(ServiceManager.checkService(&quot;activity&quot;));</p>
+</li>
+<li><p>       if (am != null) {</p>
+</li>
+<li><p>           int[] pids = new int[1];</p>
+</li>
+<li><p>           try {</p>
+</li>
+<li><p>               am.killPids(pids, &quot;Shutdown system&quot;, true);</p>
+</li>
+<li><p>           } catch (RemoteException e) {</p>
+</li>
+<li><p>           }</p>
+</li>
+<li><p>       }</p>
+</li>
+</ul>
+<p>+</p>
+<ul>
+<li><p>      boolean mShowShutdownAnim = new File(&quot;/system/media/shutdownanimation.zip&quot;).exists()</p>
+</li>
+<li><p>                                  || new File(&quot;/data/local/shutdownanimation.zip&quot;).exists();</p>
+</li>
+<li><p>      if (mShowShutdownAnim){</p>
+</li>
+<li><p>              android.os.SystemProperties.set(&quot;ctl.start&quot;, &quot;shutdownanim&quot;);</p>
+</li>
+<li><p>              playMusic();</p>
+</li>
+<li><p>      } else {</p>
+</li>
+</ul>
+<p>         // throw up an indeterminate system dialog to indicate radio is</p>
+<p>         // shutting down.</p>
+<p>         ProgressDialog pd = new ProgressDialog(context);</p>
+<p>@@ -220,6 +319,7 @@ public final class ShutdownThread extends Thread {</p>
+<p>         pd.getWindow().setType(WindowManager.LayoutParams.TYPE_KEYGUARD_DIALOG);</p>
+<p>         pd.show();</p>
+<ul>
+<li>      }</li>
+</ul>
+<p>         sInstance.mContext = context;</p>
+<p>         sInstance.mPowerManager = (PowerManager)context.getSystemService(Context.POWER_SERVICE);</p>
+<p>@@ -297,9 +397,7 @@ public final class ShutdownThread extends Thread {</p>
+<p>         // First send the high-level shut down broadcast.</p>
+<p>         mActionDone = false;</p>
+<ul>
+<li><p>       Intent intent = new Intent(Intent.ACTION_SHUTDOWN);</p>
+</li>
+<li><p>       intent.addFlags(Intent.FLAG_RECEIVER_FOREGROUND);</p>
+</li>
+<li><p>       mContext.sendOrderedBroadcastAsUser(intent,</p>
+</li>
+</ul>
+<ul>
+<li>       mContext.sendOrderedBroadcastAsUser(new Intent(Intent.ACTION_SHUTDOWN),</li>
+</ul>
+<p>                 UserHandle.ALL, null, br, mHandler, 0, null, null);</p>
+<p>         final long endTime = SystemClock.elapsedRealtime() + MAX_BROADCAST_TIME;</p>
+<p>@@ -492,8 +590,11 @@ public final class ShutdownThread extends Thread {</p>
+<p>     public static void rebootOrShutdown(boolean reboot, String reason) {</p>
+<p>         if (reboot) {</p>
+<p>             Log.i(TAG, &quot;Rebooting, reason: &quot; + reason);</p>
+<ul>
+<li><p>           PowerManagerService.lowLevelReboot(reason);</p>
+</li>
+<li><p>           Log.e(TAG, &quot;Reboot failed, will attempt shutdown instead&quot;);</p>
+</li>
+</ul>
+<ul>
+<li><p>           try {</p>
+</li>
+<li><p>               PowerManagerService.lowLevelReboot(reason);</p>
+</li>
+<li><p>           } catch (Exception e) {</p>
+</li>
+<li><p>               Log.e(TAG, &quot;Reboot failed, will attempt shutdown instead&quot;, e);</p>
+</li>
+<li><p>           }</p>
+</li>
+</ul>
+<p>         } else if (SHUTDOWN_VIBRATE_MS &gt; 0) {</p>
+<p>             // vibrate before shutting down</p>
+<p>             Vibrator vibrator = new SystemVibrator();</p>
+<p>@@ -510,6 +611,23 @@ public final class ShutdownThread extends Thread {</p>
+<p>             } catch (InterruptedException unused) {</p>
+<p>             }</p>
+<p>         }</p>
+<ul>
+<li><p>              </p>
+</li>
+<li><p>                      TurnOffScreen();//turn off screen before freeRotation .</p>
+</li>
+<li><p>                      try {</p>
+</li>
+<li><p>                                    IWindowManager wm = IWindowManager.Stub.asInterface(</p>
+</li>
+<li><p>                                         ServiceManager.getService(Context.WINDOW_SERVICE));                                     </p>
+</li>
+<li><p>                                    </p>
+</li>
+<li><p>                                              if(userRotationMode == WindowManagerPolicy.USER_ROTATION_FREE){ </p>
+</li>
+<li><p>                                                      wm.thawRotation();</p>
+</li>
+<li><p>                                              }else{</p>
+</li>
+<li><p>                                                  wm.freezeRotation(userRotation);                                            </p>
+</li>
+<li><p>                                              }                                       </p>
+</li>
+<li><p>                                      </p>
+</li>
+<li><p>                              } catch (Exception e) {</p>
+</li>
+</ul>
+<p>+</p>
+<ul>
+<li><p>                              }</p>
+</li>
+<li><p>              </p>
+</li>
+<li><p>      </p>
+</li>
+</ul>
+<p>         // Shutdown power</p>
+<p>         Log.i(TAG, &quot;Performing low-level shutdown…&quot;);</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/5.1%20SIM,%203G%20dongle%E6%98%BE%E7%A4%BA%E7%AC%A6%E5%8F%B7%E9%97%AE%E9%A2%98/" rel="prev" title="5">
+      <i class="fa fa-chevron-left"></i> 5
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/5.1%20%E9%94%81%E7%95%8C%E9%9D%A2%20%E9%94%81%E5%9B%BE%E6%A0%87/" rel="next" title="5">
+      5 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Edward"
+      src="/uploads/avatar.gif">
+  <p class="site-author-name" itemprop="name">Edward</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">570</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Edward</span>
+</div>
+
+        
+
+
+
+
+
+
+<script>
+  (function() {
+    function leancloudSelector(url) {
+      url = encodeURI(url);
+      return document.getElementById(url).querySelector('.leancloud-visitors-count');
+    }
+
+    function addCount(Counter) {
+      var visitors = document.querySelector('.leancloud_visitors');
+      var url = decodeURI(visitors.id);
+      var title = visitors.dataset.flagTitle;
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          if (results.length > 0) {
+            var counter = results[0];
+            leancloudSelector(url).innerText = counter.time + 1;
+            Counter('put', '/classes/Counter/' + counter.objectId, { time: { '__op': 'Increment', 'amount': 1 } })
+              .catch(error => {
+                console.error('Failed to save visitor count', error);
+              });
+          } else {
+              Counter('post', '/classes/Counter', { title, url, time: 1 })
+                .then(response => response.json())
+                .then(() => {
+                  leancloudSelector(url).innerText = 1;
+                })
+                .catch(error => {
+                  console.error('Failed to create', error);
+                });
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    function showTime(Counter) {
+      var visitors = document.querySelectorAll('.leancloud_visitors');
+      var entries = [...visitors].map(element => {
+        return decodeURI(element.id);
+      });
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url: { '$in': entries } })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          for (let url of entries) {
+            let target = results.find(item => item.url === url);
+            leancloudSelector(url).innerText = target ? target.time : 0;
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    let { app_id, app_key, server_url } = {"enable":true,"app_id":"wxYx0BX9gaKA3XC4LuO2of0v-gzGzoHsz","app_key":"LQMcs6IDIE4YAm10vMsn9IYq","server_url":"https://wxyx0bx9.lc-cn-n1-shared.com","security":false};
+    function fetchData(api_server) {
+      var Counter = (method, url, data) => {
+        return fetch(`${api_server}/1.1${url}`, {
+          method,
+          headers: {
+            'X-LC-Id'     : app_id,
+            'X-LC-Key'    : app_key,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data)
+        });
+      };
+      if (CONFIG.page.isPost) {
+        if (CONFIG.hostname !== location.hostname) return;
+        addCount(Counter);
+      } else if (document.querySelectorAll('.post-title-link').length >= 1) {
+        showTime(Counter);
+      }
+    }
+
+    let api_server = app_id.slice(-9) !== '-MdYXbMMI' ? server_url : `https://${app_id.slice(0, 8).toLowerCase()}.api.lncldglobal.com`;
+
+    if (api_server) {
+      fetchData(api_server);
+    } else {
+      fetch('https://app-router.leancloud.cn/2/route?appId=' + app_id)
+        .then(response => response.json())
+        .then(({ api_server }) => {
+          fetchData('https://' + api_server);
+        });
+    }
+  })();
+</script>
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

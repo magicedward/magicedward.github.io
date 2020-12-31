@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"edward.org.cn","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="Detailed Instructions The steps below describe how to configure makefiles for new mobile devices and products running Android. Create a company directory in &#x2F;&#x2F;vendor&#x2F;.   mkdir vendor&#x2F;&lt;company_name&amp;">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Detailed Instructions">
+<meta property="og:url" content="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/Detailed%20Instructions/index.html">
+<meta property="og:site_name" content="点点滴滴">
+<meta property="og:description" content="Detailed Instructions The steps below describe how to configure makefiles for new mobile devices and products running Android. Create a company directory in &#x2F;&#x2F;vendor&#x2F;.   mkdir vendor&#x2F;&lt;company_name&amp;">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-12-31T06:48:01.100Z">
+<meta property="article:modified_time" content="2020-01-16T04:37:32.445Z">
+<meta property="article:author" content="Edward">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/Detailed%20Instructions/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>Detailed Instructions | 点点滴滴</title>
+  
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?a92ed22eafce466e7a7b17546bb0dc6f";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">点点滴滴</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/Detailed%20Instructions/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/avatar.gif">
+      <meta itemprop="name" content="Edward">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="点点滴滴">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Detailed Instructions
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-12-31 14:48:01" itemprop="dateCreated datePublished" datetime="2020-12-31T14:48:01+08:00">2020-12-31</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-01-16 12:37:32" itemprop="dateModified" datetime="2020-01-16T12:37:32+08:00">2020-01-16</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%83%82%E7%AC%94%E5%A4%B4/" itemprop="url" rel="index"><span itemprop="name">烂笔头</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/Detailed%20Instructions/" class="post-meta-item leancloud_visitors" data-flag-title="Detailed Instructions" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>Detailed Instructions</p>
+<p>The steps below describe how to configure makefiles for new mobile devices and products running Android.</p>
+<p>Create a company directory in //vendor/.</p>
+<p>  mkdir vendor/&lt;company_name&gt;</p>
+<p>Create a products directory beneath the company directory you created in step 1.</p>
+<p>  mkdir vendor/&lt;company_name&gt;/products/</p>
+<p>Create a product-specific makefile, called vendor/&lt;company_name&gt;/products/&lt;first_product_name&gt;.mk, that includes at least the following code:</p>
+<p>  $(call inherit-product, $(SRC_TARGET_DIR)/product/generic.mk)<br>  #</p>
+<h1 id="Overrides"><a href="#Overrides" class="headerlink" title="Overrides"></a>Overrides</h1><p>  PRODUCT_NAME := &lt;first_product_name&gt;<br>  PRODUCT_DEVICE := &lt;board_name&gt;</p>
+<p>Additional product-specific variables can be added to this Product Definition file. In the products directory, create an AndroidProducts.mk file that point to (and is responsible for finding) the individual product make files.</p>
+<h1 id=""><a href="#" class="headerlink" title=""></a></h1><h1 id="This-file-should-set-PRODUCT-MAKEFILES-to-a-list-of-product-makefiles"><a href="#This-file-should-set-PRODUCT-MAKEFILES-to-a-list-of-product-makefiles" class="headerlink" title="This file should set PRODUCT_MAKEFILES to a list of product makefiles"></a>This file should set PRODUCT_MAKEFILES to a list of product makefiles</h1><h1 id="to-expose-to-the-build-system-LOCAL-DIR-will-already-be-set-to"><a href="#to-expose-to-the-build-system-LOCAL-DIR-will-already-be-set-to" class="headerlink" title="to expose to the build system.  LOCAL_DIR will already be set to"></a>to expose to the build system.  LOCAL_DIR will already be set to</h1><h1 id="the-directory-containing-this-file"><a href="#the-directory-containing-this-file" class="headerlink" title="the directory containing this file."></a>the directory containing this file.</h1><h1 id="-1"><a href="#-1" class="headerlink" title=""></a></h1><h1 id="This-file-may-not-rely-on-the-value-of-any-variable-other-than"><a href="#This-file-may-not-rely-on-the-value-of-any-variable-other-than" class="headerlink" title="This file may not rely on the value of any variable other than"></a>This file may not rely on the value of any variable other than</h1><h1 id="LOCAL-DIR-do-not-use-any-conditionals-and-do-not-look-up-the"><a href="#LOCAL-DIR-do-not-use-any-conditionals-and-do-not-look-up-the" class="headerlink" title="LOCAL_DIR; do not use any conditionals, and do not look up the"></a>LOCAL_DIR; do not use any conditionals, and do not look up the</h1><h1 id="value-of-any-variable-that-isn’t-set-in-this-file-or-in-a-file-that"><a href="#value-of-any-variable-that-isn’t-set-in-this-file-or-in-a-file-that" class="headerlink" title="value of any variable that isn’t set in this file or in a file that"></a>value of any variable that isn’t set in this file or in a file that</h1><h1 id="it-includes"><a href="#it-includes" class="headerlink" title="it includes."></a>it includes.</h1><h1 id="-2"><a href="#-2" class="headerlink" title=""></a></h1><p>  PRODUCT_MAKEFILES := <br>    $(LOCAL_DIR)/first_product_name.mk \</p>
+<p>Create a board-specific directory beneath your company directory that matches the PRODUCT_DEVICE variable &lt;board_name&gt; referenced in the product-specific make file above. This will include a make file that gets accessed by any product using this board.</p>
+<p>  mkdir vendor/&lt;company_name&gt;/&lt;board_name&gt;</p>
+<p>Create a BoardConfig.mk file in the directory created in the previous step (vendor/&lt;company_name&gt;/&lt;board_name&gt;). </p>
+<h1 id="These-definitions-override-the-defaults-in-config-config-make-for-lt-board-name-gt"><a href="#These-definitions-override-the-defaults-in-config-config-make-for-lt-board-name-gt" class="headerlink" title="These definitions override the defaults in config/config.make for &lt;board_name&gt;"></a>These definitions override the defaults in config/config.make for &lt;board_name&gt;</h1><h1 id="-3"><a href="#-3" class="headerlink" title=""></a></h1><h1 id="TARGET-NO-BOOTLOADER-false"><a href="#TARGET-NO-BOOTLOADER-false" class="headerlink" title="TARGET_NO_BOOTLOADER := false"></a>TARGET_NO_BOOTLOADER := false</h1><h1 id="TARGET-HARDWARE-3D-false"><a href="#TARGET-HARDWARE-3D-false" class="headerlink" title="TARGET_HARDWARE_3D := false"></a>TARGET_HARDWARE_3D := false</h1><h1 id="-4"><a href="#-4" class="headerlink" title=""></a></h1><p>  TARGET_USE_GENERIC_AUDIO := true</p>
+<p>If you wish to modify system properties, create a system.prop file in your &lt;board_name&gt; directory(vendor/&lt;company_name&gt;/&lt;board_name&gt;).</p>
+<h1 id="system-prop-for"><a href="#system-prop-for" class="headerlink" title="system.prop for"></a>system.prop for</h1><h1 id="This-overrides-settings-in-the-products-generic-system-prop-file"><a href="#This-overrides-settings-in-the-products-generic-system-prop-file" class="headerlink" title="This overrides settings in the products/generic/system.prop file"></a>This overrides settings in the products/generic/system.prop file</h1><h1 id="-5"><a href="#-5" class="headerlink" title=""></a></h1><h1 id="rild-libpath-system-lib-libreference-ril-so"><a href="#rild-libpath-system-lib-libreference-ril-so" class="headerlink" title="rild.libpath=/system/lib/libreference-ril.so"></a>rild.libpath=/system/lib/libreference-ril.so</h1><h1 id="rild-libargs-d-dev-ttyS0"><a href="#rild-libargs-d-dev-ttyS0" class="headerlink" title="rild.libargs=-d /dev/ttyS0"></a>rild.libargs=-d /dev/ttyS0</h1><p>Add a pointer to &lt;second_product_name&gt;.mk within products/AndroidProducts.mk.</p>
+<p>  PRODUCT_MAKEFILES := <br>    $(LOCAL_DIR)/first_product_name.mk <br>    $(LOCAL_DIR)/second_product_name.mk</p>
+<p>An Android.mk file must be included in vendor/&lt;company_name&gt;/&lt;board_name&gt; with at least the following code:</p>
+<h1 id="make-file-for-new-hardware-from"><a href="#make-file-for-new-hardware-from" class="headerlink" title="make file for new hardware  from"></a>make file for new hardware  from</h1><h1 id="-6"><a href="#-6" class="headerlink" title=""></a></h1><p>  LOCAL_PATH := $(call my-dir)<br>  #</p>
+<h1 id="this-is-here-to-use-the-pre-built-kernel"><a href="#this-is-here-to-use-the-pre-built-kernel" class="headerlink" title="this is here to use the pre-built kernel"></a>this is here to use the pre-built kernel</h1><p>  ifeq ($(TARGET_PREBUILT_KERNEL),)<br>  TARGET_PREBUILT_KERNEL := $(LOCAL_PATH)/kernel<br>  endif<br>  #<br>  file := $(INSTALLED_KERNEL_TARGET)<br>  ALL_PREBUILT += $(file)<br>  $(file): $(TARGET_PREBUILT_KERNEL) | $(ACP)<br>                $(transform-prebuilt-to-target)<br>  #</p>
+<h1 id="no-boot-loader-so-we-don’t-need-any-of-that-stuff"><a href="#no-boot-loader-so-we-don’t-need-any-of-that-stuff" class="headerlink" title="no boot loader, so we don’t need any of that stuff.."></a>no boot loader, so we don’t need any of that stuff..</h1><h1 id="-7"><a href="#-7" class="headerlink" title=""></a></h1><p>  LOCAL_PATH := vendor/&lt;company_name&gt;/&lt;board_name&gt;<br>  #<br>  include $(CLEAR_VARS)<br>  #</p>
+<h1 id="include-more-board-specific-stuff-here-Such-as-Audio-parameters"><a href="#include-more-board-specific-stuff-here-Such-as-Audio-parameters" class="headerlink" title="include more board specific stuff here? Such as Audio parameters."></a>include more board specific stuff here? Such as Audio parameters.</h1><h1 id="-8"><a href="#-8" class="headerlink" title=""></a></h1><p>To create a second product for the same board, create a second product-specific make file called vendor/company_name/products/&lt;second_product_name&gt;.mk that includes:</p>
+<p>  $(call inherit-product, $(SRC_TARGET_DIR)/product/generic.mk)<br>  #</p>
+<h1 id="Overrides-1"><a href="#Overrides-1" class="headerlink" title="Overrides"></a>Overrides</h1><p>  PRODUCT_NAME := &lt;second_product_name&gt;<br>  PRODUCT_DEVICE := &lt;board_name&gt;</p>
+<p>By now, you should have two new products, called &lt;first_product_name&gt; and &lt;second_product_name&gt; associated with &lt;company_name&gt;. To verify that a product is properly configured (&lt;first_product_name&gt;, for example), execute the following:</p>
+<p>  . build/envsetup.sh<br>  make PRODUCT-&lt;first_product_name&gt;-user</p>
+<p>You should find new build binaries located in /out/target/product/&lt;board_name&gt;.</p>
+<p>New Product File Tree</p>
+<p>The file tree below illustrates what your own system should look like after completing the steps above.</p>
+<p>&lt;company_name&gt;   &lt;board_name&gt;   Android.mk product_config.mk system.prop   products   AndroidProducts.mk &lt;first_product_name&gt;.mk &lt;second_product_name&gt;.mk      </p>
+<p>Product Definition Files</p>
+<p>Product-specific variables are defined in product definition files. A product definition file can inherit from other product definition files, thus reducing the need to copy and simplifying maintenance.</p>
+<p>Variables maintained in a product definition files include:</p>
+<p>Parameter  Description  Example </p>
+<p>PRODUCT_NAME End-user-visible name for the overall product. Appears in the &quot;About the phone&quot; info.  </p>
+<p>PRODUCT_MODEL End-user-visible name for the end product  </p>
+<p>PRODUCT_LOCALES A space-separated list of two-letter language code, two-letter country code pairs that describe several settings for the user, such as the UI language and time, date and currency formatting. The first locale listed in PRODUCT_LOCALES is is used if the locale has never been set before. en_GB de_DE es_ES fr_CA </p>
+<p>PRODUCT_PACKAGES Lists the APKs to install. Calendar Contacts </p>
+<p>PRODUCT_DEVICE Name of the industrial design dream </p>
+<p>PRODUCT_MANUFACTURER Name of the manufacturer acme </p>
+<p>PRODUCT_BRAND The brand (e.g., carrier) the software is customized for, if any  </p>
+<p>PRODUCT_PROPERTY_OVERRIDES List of property assignments in the format &quot;key=value&quot;  </p>
+<p>PRODUCT_COPY_FILES List of words like source_path:destination_path. The file at the source path should be copied to the destination path when building this product. The rules for the copy steps are defined in config/Makefile  </p>
+<p>PRODUCT_OTA_PUBLIC_KEYS List of OTA public keys for the product  </p>
+<p>PRODUCT_POLICY Indicate which policy this product should use  </p>
+<p>PRODUCT_PACKAGE_OVERLAYS Indicate whether to use default resources or add any product specific overlays vendor/acme/overlay </p>
+<p>PRODUCT_CONTRIBUTORS_FILE HTML file containing the contributors to the project.  </p>
+<p>PRODUCT_TAGS list of space-separated words for a given product  </p>
+<p>The snippet below illustrates a typical product definition file.</p>
+<p>$(call inherit-product, build/target/product/generic.mk)</p>
+<p>#Overrides<br>PRODUCT_NAME := MyDevice<br>PRODUCT_MANUFACTURER := acme<br>PRODUCT_BRAND := acme_us<br>PRODUCT_LOCALES := en_GB es_ES fr_FR<br>PRODUCT_PACKAGE_OVERLAYS := vendor/acme/overlay</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/del%20Google%20in%20Home%20button/" rel="prev" title="del Google in Home button">
+      <i class="fa fa-chevron-left"></i> del Google in Home button
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/DevicePolicyManager%20Device-admin/" rel="next" title="DevicePolicyManager Device-admin">
+      DevicePolicyManager Device-admin <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Overrides"><span class="nav-number">1.</span> <span class="nav-text">Overrides</span></a></li><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">2.</span> <span class="nav-text"></span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#This-file-should-set-PRODUCT-MAKEFILES-to-a-list-of-product-makefiles"><span class="nav-number">3.</span> <span class="nav-text">This file should set PRODUCT_MAKEFILES to a list of product makefiles</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#to-expose-to-the-build-system-LOCAL-DIR-will-already-be-set-to"><span class="nav-number">4.</span> <span class="nav-text">to expose to the build system.  LOCAL_DIR will already be set to</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#the-directory-containing-this-file"><span class="nav-number">5.</span> <span class="nav-text">the directory containing this file.</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#-1"><span class="nav-number">6.</span> <span class="nav-text"></span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#This-file-may-not-rely-on-the-value-of-any-variable-other-than"><span class="nav-number">7.</span> <span class="nav-text">This file may not rely on the value of any variable other than</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#LOCAL-DIR-do-not-use-any-conditionals-and-do-not-look-up-the"><span class="nav-number">8.</span> <span class="nav-text">LOCAL_DIR; do not use any conditionals, and do not look up the</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#value-of-any-variable-that-isn%E2%80%99t-set-in-this-file-or-in-a-file-that"><span class="nav-number">9.</span> <span class="nav-text">value of any variable that isn’t set in this file or in a file that</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#it-includes"><span class="nav-number">10.</span> <span class="nav-text">it includes.</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#-2"><span class="nav-number">11.</span> <span class="nav-text"></span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#These-definitions-override-the-defaults-in-config-config-make-for-lt-board-name-gt"><span class="nav-number">12.</span> <span class="nav-text">These definitions override the defaults in config&#x2F;config.make for &lt;board_name&gt;</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#-3"><span class="nav-number">13.</span> <span class="nav-text"></span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#TARGET-NO-BOOTLOADER-false"><span class="nav-number">14.</span> <span class="nav-text">TARGET_NO_BOOTLOADER :&#x3D; false</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#TARGET-HARDWARE-3D-false"><span class="nav-number">15.</span> <span class="nav-text">TARGET_HARDWARE_3D :&#x3D; false</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#-4"><span class="nav-number">16.</span> <span class="nav-text"></span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#system-prop-for"><span class="nav-number">17.</span> <span class="nav-text">system.prop for</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#This-overrides-settings-in-the-products-generic-system-prop-file"><span class="nav-number">18.</span> <span class="nav-text">This overrides settings in the products&#x2F;generic&#x2F;system.prop file</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#-5"><span class="nav-number">19.</span> <span class="nav-text"></span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#rild-libpath-system-lib-libreference-ril-so"><span class="nav-number">20.</span> <span class="nav-text">rild.libpath&#x3D;&#x2F;system&#x2F;lib&#x2F;libreference-ril.so</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#rild-libargs-d-dev-ttyS0"><span class="nav-number">21.</span> <span class="nav-text">rild.libargs&#x3D;-d &#x2F;dev&#x2F;ttyS0</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#make-file-for-new-hardware-from"><span class="nav-number">22.</span> <span class="nav-text">make file for new hardware  from</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#-6"><span class="nav-number">23.</span> <span class="nav-text"></span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#this-is-here-to-use-the-pre-built-kernel"><span class="nav-number">24.</span> <span class="nav-text">this is here to use the pre-built kernel</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#no-boot-loader-so-we-don%E2%80%99t-need-any-of-that-stuff"><span class="nav-number">25.</span> <span class="nav-text">no boot loader, so we don’t need any of that stuff..</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#-7"><span class="nav-number">26.</span> <span class="nav-text"></span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#include-more-board-specific-stuff-here-Such-as-Audio-parameters"><span class="nav-number">27.</span> <span class="nav-text">include more board specific stuff here? Such as Audio parameters.</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#-8"><span class="nav-number">28.</span> <span class="nav-text"></span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Overrides-1"><span class="nav-number">29.</span> <span class="nav-text">Overrides</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Edward"
+      src="/uploads/avatar.gif">
+  <p class="site-author-name" itemprop="name">Edward</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">570</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Edward</span>
+</div>
+
+        
+
+
+
+
+
+
+<script>
+  (function() {
+    function leancloudSelector(url) {
+      url = encodeURI(url);
+      return document.getElementById(url).querySelector('.leancloud-visitors-count');
+    }
+
+    function addCount(Counter) {
+      var visitors = document.querySelector('.leancloud_visitors');
+      var url = decodeURI(visitors.id);
+      var title = visitors.dataset.flagTitle;
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          if (results.length > 0) {
+            var counter = results[0];
+            leancloudSelector(url).innerText = counter.time + 1;
+            Counter('put', '/classes/Counter/' + counter.objectId, { time: { '__op': 'Increment', 'amount': 1 } })
+              .catch(error => {
+                console.error('Failed to save visitor count', error);
+              });
+          } else {
+              Counter('post', '/classes/Counter', { title, url, time: 1 })
+                .then(response => response.json())
+                .then(() => {
+                  leancloudSelector(url).innerText = 1;
+                })
+                .catch(error => {
+                  console.error('Failed to create', error);
+                });
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    function showTime(Counter) {
+      var visitors = document.querySelectorAll('.leancloud_visitors');
+      var entries = [...visitors].map(element => {
+        return decodeURI(element.id);
+      });
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url: { '$in': entries } })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          for (let url of entries) {
+            let target = results.find(item => item.url === url);
+            leancloudSelector(url).innerText = target ? target.time : 0;
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    let { app_id, app_key, server_url } = {"enable":true,"app_id":"wxYx0BX9gaKA3XC4LuO2of0v-gzGzoHsz","app_key":"LQMcs6IDIE4YAm10vMsn9IYq","server_url":"https://wxyx0bx9.lc-cn-n1-shared.com","security":false};
+    function fetchData(api_server) {
+      var Counter = (method, url, data) => {
+        return fetch(`${api_server}/1.1${url}`, {
+          method,
+          headers: {
+            'X-LC-Id'     : app_id,
+            'X-LC-Key'    : app_key,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data)
+        });
+      };
+      if (CONFIG.page.isPost) {
+        if (CONFIG.hostname !== location.hostname) return;
+        addCount(Counter);
+      } else if (document.querySelectorAll('.post-title-link').length >= 1) {
+        showTime(Counter);
+      }
+    }
+
+    let api_server = app_id.slice(-9) !== '-MdYXbMMI' ? server_url : `https://${app_id.slice(0, 8).toLowerCase()}.api.lncldglobal.com`;
+
+    if (api_server) {
+      fetchData(api_server);
+    } else {
+      fetch('https://app-router.leancloud.cn/2/route?appId=' + app_id)
+        .then(response => response.json())
+        .then(({ api_server }) => {
+          fetchData('https://' + api_server);
+        });
+    }
+  })();
+</script>
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

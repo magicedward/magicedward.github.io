@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"edward.org.cn","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="TFT-LCD常用的接口，TTL（RGB）、LVDS、EDP、MIPI,这篇我们大致说一下这些接口的信号组成已经基本原理。 一、TTL1、TTL接口概述TTL（Transistor Transistor Logic）即晶体管-晶体管逻辑，TTL电平信号由TTL器件产生。TTL器件是数字集成电路的一大门类，它采用双极型工艺制造，具有高速度、低功耗和品种多等特点。TTL接口属于并行方式传输数据的接口，">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android LCD(二)：LCD常用接口原理篇">
+<meta property="og:url" content="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/Android%20LCD(%E4%BA%8C)%EF%BC%9ALCD%E5%B8%B8%E7%94%A8%E6%8E%A5%E5%8F%A3%E5%8E%9F%E7%90%86%E7%AF%87/index.html">
+<meta property="og:site_name" content="点点滴滴">
+<meta property="og:description" content="TFT-LCD常用的接口，TTL（RGB）、LVDS、EDP、MIPI,这篇我们大致说一下这些接口的信号组成已经基本原理。 一、TTL1、TTL接口概述TTL（Transistor Transistor Logic）即晶体管-晶体管逻辑，TTL电平信号由TTL器件产生。TTL器件是数字集成电路的一大门类，它采用双极型工艺制造，具有高速度、低功耗和品种多等特点。TTL接口属于并行方式传输数据的接口，">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-12-31T06:48:00.872Z">
+<meta property="article:modified_time" content="2020-01-16T04:37:32.375Z">
+<meta property="article:author" content="Edward">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/Android%20LCD(%E4%BA%8C)%EF%BC%9ALCD%E5%B8%B8%E7%94%A8%E6%8E%A5%E5%8F%A3%E5%8E%9F%E7%90%86%E7%AF%87/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>Android LCD(二)：LCD常用接口原理篇 | 点点滴滴</title>
+  
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?a92ed22eafce466e7a7b17546bb0dc6f";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">点点滴滴</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/Android%20LCD(%E4%BA%8C)%EF%BC%9ALCD%E5%B8%B8%E7%94%A8%E6%8E%A5%E5%8F%A3%E5%8E%9F%E7%90%86%E7%AF%87/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/avatar.gif">
+      <meta itemprop="name" content="Edward">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="点点滴滴">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Android LCD(二)：LCD常用接口原理篇
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-12-31 14:48:00" itemprop="dateCreated datePublished" datetime="2020-12-31T14:48:00+08:00">2020-12-31</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-01-16 12:37:32" itemprop="dateModified" datetime="2020-01-16T12:37:32+08:00">2020-01-16</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%83%82%E7%AC%94%E5%A4%B4/" itemprop="url" rel="index"><span itemprop="name">烂笔头</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/Android%20LCD(%E4%BA%8C)%EF%BC%9ALCD%E5%B8%B8%E7%94%A8%E6%8E%A5%E5%8F%A3%E5%8E%9F%E7%90%86%E7%AF%87/" class="post-meta-item leancloud_visitors" data-flag-title="Android LCD(二)：LCD常用接口原理篇" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>TFT-LCD常用的接口，TTL（RGB）、LVDS、EDP、MIPI,这篇我们大致说一下这些接口的信号组成已经基本原理。</p>
+<p>一、TTL<br>1、TTL接口概述<br>TTL（Transistor Transistor Logic）即晶体管-晶体管逻辑，TTL电平信号由TTL器件产生。TTL器件是数字集成电路的一大门类，它采用双极型工艺制造，具有高速度、低功耗和品种多等特点。<br>TTL接口属于并行方式传输数据的接口，采用这种接口时，不必在液晶显示器的驱动板端和液晶面板端使用专用的接口电路，而是由驱动板主控芯片输出的TTL数据信号经电缆线直接传送到液晶面板的输人接口。</p>
+<p>由于TTL接口信号电压高、连线多、传输电缆长，因此，电路的抗干扰能力比较差，而且容易产生电磁干扰（EMI）。在实际应用中，TTL接口电路多用来驱动小尺寸（15in以下）或低分辨率的液晶面板。</p>
+<p>TTL最高像素时钟只有28MHz。<br>TTL是信号时TFT-LCD唯一能识别的信号，早期的数字处理芯片都是TTL的，也就是RGB直接输出到TFT-LCD。</p>
+<p>2、TTL接口的信号类型<br>驱动板TTL输出接口中一般包含RGB数据信号、时钟信号和控制信号这三大类信号。如下图所示：</p>
+<p>（1）RGB数据信号</p>
+<p>a、单通道TTL</p>
+<p>单通道6bit TTL输出接口<br>对于6bit单路TTL输出接口，共有18条RGB数据线，分别是R0～R5红基色数据6条，G0～G5绿基色数据6条，B0～B5蓝基色数据6条，共3<em>6=18条。由于基色RGB数据为18bit，因此，也称18位或18bitTTL接口。<br>单通道8bit TTL输出接口<br>对于8bit单路TTI，输出接口，共有24条RGB数据线，分别是R0～R7红基色数据8条，B0～B7绿基色数据8条，BO～B7蓝基色数据8条，共3</em>8=24条。由于基色RGB数据为24bit，因此，也称24位或24bitTTL接口。</p>
+<p>b、双通道TTL<br>双通道，也就是两组RGB数据，分为奇通道、偶通道，时钟有的也分为OCLK/ECLK,有的公用一个，我们示意图上画了两个，如下所示：</p>
+<p>双通道6bit TTL输出接口<br>对于6bit双路TTL，输出接口，共有36条RGB数据线，分别是奇路RGB数据线18条，偶路RGB数据线18条，3<em>6</em>2=36条。由于基色RGB数据为36bit，因此，也称36位或36bitTTL接口。<br>双通道8bit TTL输出接口<br>对于8bit双路TTL输出接口，共有48条RGB数据线，分别是奇路RGB数据线24条，偶路RGB数据线24条，3<em>8</em>2=48条。由于基色RGB数据为48bit，因此，也称48位或48bitTTL接口。</p>
+<p>（2）时钟信号<br>是指像素时钟信号，是传输数据和对数据信号进行读取的基准。在使用奇/偶像素双路方式传输RGB数据时，不同的输出接口使用像素时钟的方法有所不同。有的输出接口奇/偶像素双路数据共用一个像素时钟信号，有的输出接口奇/偶两路分别设置奇数像素数据时钟和偶数像素两个时钟信号，以适应不同液晶面板的需要。<br>（3）控制信号<br>控制信号包括数据使能信号（或有效显示数据选通信号）DE、行同步信号HS、场同步信号VS。</p>
+<p>二、LVDS</p>
+<p>1、LVDS接口概述<br>LVDS，即Low Voltage Differential Signaling，是一种低压差分信号技术接口。克服以TTL电平方式传输宽带高码率数据时功耗大、EMI电磁干扰大等缺点而研制的一种数字视频信号传输方式。LVDS输出接口利用非常低的电压摆幅（约350mV）在两条PCB走线或一对平衡电缆上通过差分进行数据的传输，即低压差分信号传输。采用LVDS输出接口，可以使得信号在差分PCB线或平衡电缆上以几百Mbit／s的速率传输，由于采用低压和低电流驱动方式，因此，实现了低噪声和低功耗。</p>
+<p>2、LVDS接口电路的组成<br>在液晶显示器中，LVDS接口电路包括两部分，即主板侧的LVDS输出接口电路（LVDS发送端）和液晶面板侧的LVDS输入接口电路（LVDS接收器）。LVDS发送端将TTL信号转换成LVDS信号，然后通过驱动板与液晶面板之间的柔性电缆（排线）将信号传送到液晶面板侧的LVDS接收端的LVDS解码IC中，LVDS接收器再将串行信号转换为TTL电平的并行信号，送往液晶屏时序控制与行列驱动电路。也就是其实TFT只识别TTL（RGB）信号。这部分我们做samsung的方案中用的比较多，因为samsung芯片没有LVDS输出，所以我们用LVDS接口的TFT-LCD的时候就要加一个（RGB-LVDS）转换芯片，这个后面我们重点说。</p>
+<p>3、LVDS接口的信号类型<br>LVDS信号有数据差分和时钟差分信号组成。如下图所示：</p>
+<p>（1）、单通道LVDS</p>
+<p>单通道6位数据（如果是6位的Y3M/P这组红色的线没有）</p>
+<p>有4组差分线，3组信号线，一组时钟线。Y0M、Y0P、Y1M、Y1P、Y2M、Y2P、CLKOUT_M、CLKOUT_P。</p>
+<p>单通道8位数据</p>
+<p>有5组差分线，4组信号线，一组时钟线。分别是Y0M、Y0P、Y1M、Y1P、Y2M、Y2P、Y3M、Y3P、CLKOUT_M、CLKOUT_P。</p>
+<p>（2）、双通道</p>
+<p> LVDS在传输分辨率较高的数据时，抗干扰能力比较强，可是1920X1080以上分辨率时，单路不堪重负，所以有双路接口出现。目的很简单，加快速度，增强抗干扰能力。<br>双通道6位数据<br>刚好是单通道的两倍，时钟也是两路，红色部分：Y3M、Y3P、Y3M1、Y3M1这两组信号不接。<br>双通道8位数据<br>和前面的比较类似。</p>
+<p>三、EDP<br>这个接口比较陌生，我接触到一个屏IPAD3的，用于高清屏，比如2048<em>1536，goole n10的分辨率2536</em>  也是用这个接口。</p>
+<p>(整理中…………)</p>
+<p>四、MIPI接口<br>这个我们公司有产品用，不过是其他平台的，不是我们调试 ，我也没接触过。只是过一下。感觉这类接口非常类似：比如LVDS、EDP、HDMI、MIPI，都是差分信息+差分时钟。</p>
+<p>(整理中…………)</p>
+<p>五、TTL（RGB）转换成LVDS  </p>
+<p>我们在项目中用到过两颗芯片：SN75LVDS83B 、THC63LVD827（可输出双路LVDS），以SN75LVDS83B来说明。</p>
+<p>1、SN75LVDS83B、主控、LVDS接口的LCD关系<br>如下图所示SN75LVDS83B的应用：</p>
+<p>其实就是：把三星芯片输出的TTL（RGB）信号转换成LVDS差分信号输出的LCD接收端。</p>
+<p>硬件的接口如下所示：</p>
+<p>2、SN75LVDS83B的参考电路<br>其实这部分要注意的是LCD的位数，你的屏是16bit、18bit、还是24bit的，不同位数的LCD有不同的硬件接线方法。如下图是samsung exynos4412提到的AP端，在不同位数输出时的接线图。</p>
+<p>（1）、24bitRGB 24bit lcd<br>注意到用到五组差分信号线，四组信号一组时钟。</p>
+<p>（2）、24bitRGB 18bit lcd<br>注意到用到四组差分信号线，三组信号一组时钟，Y3M、Y3P是NC的。AP端RGB的接线方式也不一样，6、7两个bit接地。</p>
+<p>如果按（1）中的接线方法（24bit输出），接上18bit的屏。18bit 屏RGB（纯色）信号显示正常，可是有画面、渐变的就不正常。为此跟硬件争论了好久，不过问题解决了就好。做技术实践是非常重要的一个环节，有些事认识上的误区，就会导致工作的失误。</p>
+<p>六、RGB转换成EDP<br>这个我们点过一个屏，不过分辨率太大，我们的系统非常卡，最后就停掉了。<br>线路图如下所示：</p>
+<p>示意图：</p>
+<p>edp 的信号和和lvds比较类似，不过多了一个HPD的信号。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/android%20keyevent%20%E6%A8%A1%E6%8B%9F%E6%8C%89%E9%94%AE/" rel="prev" title="android keyevent 模拟按键">
+      <i class="fa fa-chevron-left"></i> android keyevent 模拟按键
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/Android%20LCD(%E4%B8%89)%EF%BC%9ASamsung%20LCD%E6%8E%A5%E5%8F%A3%E7%AF%87/" rel="next" title="Android LCD(三)：Samsung LCD接口篇">
+      Android LCD(三)：Samsung LCD接口篇 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Edward"
+      src="/uploads/avatar.gif">
+  <p class="site-author-name" itemprop="name">Edward</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">570</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Edward</span>
+</div>
+
+        
+
+
+
+
+
+
+<script>
+  (function() {
+    function leancloudSelector(url) {
+      url = encodeURI(url);
+      return document.getElementById(url).querySelector('.leancloud-visitors-count');
+    }
+
+    function addCount(Counter) {
+      var visitors = document.querySelector('.leancloud_visitors');
+      var url = decodeURI(visitors.id);
+      var title = visitors.dataset.flagTitle;
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          if (results.length > 0) {
+            var counter = results[0];
+            leancloudSelector(url).innerText = counter.time + 1;
+            Counter('put', '/classes/Counter/' + counter.objectId, { time: { '__op': 'Increment', 'amount': 1 } })
+              .catch(error => {
+                console.error('Failed to save visitor count', error);
+              });
+          } else {
+              Counter('post', '/classes/Counter', { title, url, time: 1 })
+                .then(response => response.json())
+                .then(() => {
+                  leancloudSelector(url).innerText = 1;
+                })
+                .catch(error => {
+                  console.error('Failed to create', error);
+                });
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    function showTime(Counter) {
+      var visitors = document.querySelectorAll('.leancloud_visitors');
+      var entries = [...visitors].map(element => {
+        return decodeURI(element.id);
+      });
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url: { '$in': entries } })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          for (let url of entries) {
+            let target = results.find(item => item.url === url);
+            leancloudSelector(url).innerText = target ? target.time : 0;
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    let { app_id, app_key, server_url } = {"enable":true,"app_id":"wxYx0BX9gaKA3XC4LuO2of0v-gzGzoHsz","app_key":"LQMcs6IDIE4YAm10vMsn9IYq","server_url":"https://wxyx0bx9.lc-cn-n1-shared.com","security":false};
+    function fetchData(api_server) {
+      var Counter = (method, url, data) => {
+        return fetch(`${api_server}/1.1${url}`, {
+          method,
+          headers: {
+            'X-LC-Id'     : app_id,
+            'X-LC-Key'    : app_key,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data)
+        });
+      };
+      if (CONFIG.page.isPost) {
+        if (CONFIG.hostname !== location.hostname) return;
+        addCount(Counter);
+      } else if (document.querySelectorAll('.post-title-link').length >= 1) {
+        showTime(Counter);
+      }
+    }
+
+    let api_server = app_id.slice(-9) !== '-MdYXbMMI' ? server_url : `https://${app_id.slice(0, 8).toLowerCase()}.api.lncldglobal.com`;
+
+    if (api_server) {
+      fetchData(api_server);
+    } else {
+      fetch('https://app-router.leancloud.cn/2/route?appId=' + app_id)
+        .then(response => response.json())
+        .then(({ api_server }) => {
+          fetchData('https://' + api_server);
+        });
+    }
+  })();
+</script>
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

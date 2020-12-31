@@ -1,0 +1,919 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"edward.org.cn","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="2012-03-12： 1.进程API 进程是资源管理的最小单位 线程是程序执行的最小单位 根据进程在内核中不同的表现分类： 交互进程：该类进程是由shell控制和运行的，交互进程既可以在前台运行，也可以在后台运行。 批处理进程：该类进程不属于某个终端，它被提交到一个队列中以便顺序执行。 守护进程：该类进程在后台运行，它一般在linux启动时开始执行，系统关闭时才结束。 进程的执行模式分为用户模式">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Linux下进程与线程">
+<meta property="og:url" content="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/Linux%E4%B8%8B%E8%BF%9B%E7%A8%8B%E4%B8%8E%E7%BA%BF%E7%A8%8B/index.html">
+<meta property="og:site_name" content="点点滴滴">
+<meta property="og:description" content="2012-03-12： 1.进程API 进程是资源管理的最小单位 线程是程序执行的最小单位 根据进程在内核中不同的表现分类： 交互进程：该类进程是由shell控制和运行的，交互进程既可以在前台运行，也可以在后台运行。 批处理进程：该类进程不属于某个终端，它被提交到一个队列中以便顺序执行。 守护进程：该类进程在后台运行，它一般在linux启动时开始执行，系统关闭时才结束。 进程的执行模式分为用户模式">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-12-31T06:48:01.415Z">
+<meta property="article:modified_time" content="2020-01-16T04:37:32.242Z">
+<meta property="article:author" content="Edward">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/Linux%E4%B8%8B%E8%BF%9B%E7%A8%8B%E4%B8%8E%E7%BA%BF%E7%A8%8B/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>Linux下进程与线程 | 点点滴滴</title>
+  
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?a92ed22eafce466e7a7b17546bb0dc6f";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">点点滴滴</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/Linux%E4%B8%8B%E8%BF%9B%E7%A8%8B%E4%B8%8E%E7%BA%BF%E7%A8%8B/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/avatar.gif">
+      <meta itemprop="name" content="Edward">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="点点滴滴">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Linux下进程与线程
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-12-31 14:48:01" itemprop="dateCreated datePublished" datetime="2020-12-31T14:48:01+08:00">2020-12-31</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-01-16 12:37:32" itemprop="dateModified" datetime="2020-01-16T12:37:32+08:00">2020-01-16</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%83%82%E7%AC%94%E5%A4%B4/" itemprop="url" rel="index"><span itemprop="name">烂笔头</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/Linux%E4%B8%8B%E8%BF%9B%E7%A8%8B%E4%B8%8E%E7%BA%BF%E7%A8%8B/" class="post-meta-item leancloud_visitors" data-flag-title="Linux下进程与线程" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>2012-03-12：</p>
+<p>1.进程API</p>
+<p>进程是资源管理的最小单位</p>
+<p>线程是程序执行的最小单位</p>
+<p>根据进程在内核中不同的表现分类：</p>
+<p>交互进程：该类进程是由shell控制和运行的，交互进程既可以在前台运行，也可以在后台运行。</p>
+<p>批处理进程：该类进程不属于某个终端，它被提交到一个队列中以便顺序执行。</p>
+<p>守护进程：该类进程在后台运行，它一般在linux启动时开始执行，系统关闭时才结束。</p>
+<p>进程的执行模式分为用户模式和内核模式</p>
+<p>中断或系统调用可以使进程进入内核态。</p>
+<p>#include&lt;sys/types.h&gt;</p>
+<p>#include&lt;unistd.h&gt;</p>
+<p>pid_t fork(void); //父进程子进程各返回一次</p>
+<p>父：返回大于0的PID  子：返回0  出错返回-1</p>
+<p>数据段写时才复制</p>
+<p>exec 加载执行新的程序 执行完后替换原来进程的内容(除pid外)</p>
+<p>excl l表示列表，参数逐一列举，传入</p>
+<p>execvp p表示只给出文件名，系统查找环境变量PATH</p>
+<p>        v(vector) 表示将所有参数构造成指针数组</p>
+<p>excve   e表示当前进程使用环境变量</p>
+<p>子进程退出时，给父进程(或init)发信号</p>
+<p>.init 段代码：执行一遍就释放  –&gt;&gt; main</p>
+<p>int execve(const char <em>path,char</em>const avgv[],char*const envp[])//最终都使用这个 envp新的环境变量</p>
+<p>status 返回到僵尸态 //退出值 int 低8位有效</p>
+<p>void exit(int status); //调用退出处理函数，清理I/O缓冲</p>
+<p>void _exit(int status);//直接进入内核</p>
+<p>atexit(fun);//注册退出处理函数//退出前清空缓冲后执行</p>
+<p>//status 为null时，表示忽略子进程退出时的状态</p>
+<p>pid_t wait(int *status) //exit(0)返回的值放到这里的status的低8位中</p>
+<p>1.阻塞等待子进程退出  2.回收资源 </p>
+<p>pid_t waitpid(pid_t pid,int *status,int options);//返回结束的子进程的进程号</p>
+<p>pid&gt;0:  只等待进程为pid的子进程</p>
+<p>pid=-1: 等待全部子进程</p>
+<p>pid==0: 等待组ID为pid的子进程</p>
+<p>pid&lt;-1: 等待组ID为|pid|的子进程</p>
+<p>options: </p>
+<p> WNOHANG   :不阻塞，若没子进程结束时返回0</p>
+<p> WUNTRACED :若子进程暂停，返回其状态</p>
+<p> 0         : 阻塞父进程，等待子进程</p>
+<p>readelf -S xxx</p>
+<p>进程组的意义在于方便发送信号</p>
+<p>2012-03-13：</p>
+<p>linux守护进程 </p>
+<p>1.进程第1次fork,为进程调用setid作准备</p>
+<p>2.进程调用setsid,进程成为新的会话过程的领头进程</p>
+<p>3.忽略信号SIGHUP，第2次fork,使进程成为一个新的进程组的领导者。</p>
+<p>4.关闭所有的文件描述符。</p>
+<p>5.消除umask的影响</p>
+<p>6.修改守护进程的当前目录。</p>
+<p>7.重新定位标准I/O描述符。</p>
+<p>8.保证服务器的互斥运行。</p>
+<p>9.使用syslog来记录守护进程的错误信息</p>
+<p>pid_t pid;</p>
+<p>int max_fd, i;</p>
+<p>        //fork一个子进程，为setid()作准备</p>
+<p>pid = fork();</p>
+<p>if(pid &gt; 0)</p>
+<p>exit(0);</p>
+<p>//忽略信号SIGHUP，防止进程因控制终端关闭而被杀死</p>
+<p>signal(SIGHUP, SIG_IGN);</p>
+<p>//调用setsid(),让第一个进程不依赖控制终端运行</p>
+<p>setsid();</p>
+<p>//fork()第二个子进程，保证此守护进程不能打开终端文件而成为其控制终端</p>
+<p>pid = fork();</p>
+<p>if(pid &gt; 0)</p>
+<p>exit(0);</p>
+<p>//将守护进程从原来的组分离，防止任何信号进来  </p>
+<p>setpgrp();</p>
+<p>        //关闭所有打开文件描述符</p>
+<p>max_fd = sysconf(_SC_OPEN_MAX);</p>
+<p>for(i=0; i&lt;max_fd; i++)</p>
+<p>close(i);</p>
+<p>  //把umask设为0,消除umask的影响</p>
+<p>umask(0);</p>
+<p>//变更目录，防止被缷载</p>
+<p>chdir(&quot;/&quot;);</p>
+<p>umask(0):清除旧有的文件掩码</p>
+<p>最终的文件权限：mode &amp; ~umask</p>
+<p>void openlog(const char*ident,int option,int facility);</p>
+<p>ident:路径  option:LOG_PID LOG_CONS … facility:LOG_USER 指明进程类型</p>
+<p>void syslog(int priority,chnst char *fromat…);</p>
+<p>用户空间的守护进程 Klogd 用来从记录缓冲区获取内核消息</p>
+<p>klogd 将内核消息保存到系统日志文件  /var/log/message 中</p>
+<p>flock(int fd,int operation);//对整个文件锁定</p>
+<p>operation:</p>
+<p>LOCK_SH: 共享锁</p>
+<p>LOCK_EX: 互斥锁</p>
+<p>LOCK_UN: 解锁</p>
+<p>LOCK_NB: 不能获取锁时睡眠</p>
+<p>int fcntl(int fd,int cmd,struct flock *lock);//对文件部分锁定</p>
+<p>struct flock{</p>
+<p>…</p>
+<p>short I_type;</p>
+<p>short I_whence;</p>
+<p>off_t I_start;</p>
+<p>off_t I_len;</p>
+<p>off_t I_pid;</p>
+<p>…</p>
+<p>};</p>
+<p>I_type: F_RDLCK,F_WRLCK,F_UNLCK //分别为：共享锁、互斥锁、解锁</p>
+<p>进程间通信</p>
+<p>1.传统的进程间通信方式</p>
+<p>无名管道(pipe)、有名管道(fifo)、信号(signal)</p>
+<p>2.System V IPC</p>
+<p>共享内存(share memory)、消息队列(message queue)、信号灯(semaphore)</p>
+<p>3.BSD</p>
+<p>套接字(socket)</p>
+<p>读者写者模式：</p>
+<p>1.有写者，无数据，读阻塞。</p>
+<p>2.无写者，有数据，读，返回(有多少读多少)</p>
+<p> 无数据，读，返回0</p>
+<p>3.有读者，缓冲区满，写，阻塞。</p>
+<p> 缓冲区未满，写，返回写的字节数</p>
+<p>4.无读者，写操作会引发一个信号SIGPIPE</p>
+<p>无名管道：</p>
+<p>1.只能用于具有亲缘关系的进程间通信</p>
+<p>2.半双工的通信模式，具有固定的读端和写端(小端读，大端写）；</p>
+<p>3.管道是一种特殊的文件，可以使用文件IO如read、write</p>
+<p>#include&lt;unistd.h&gt;</p>
+<p>int pipe(int fd[2]); 成功0，出错-1    </p>
+<p>#include&lt;unistd.h&gt;</p>
+<p>#include&lt;fcntl.h&gt;</p>
+<p>#include&lt;sys/types.h&gt;</p>
+<p>int mkfifo(const char *filename,mode_t mode);</p>
+<p>2012-03-14：</p>
+<p>信号是软件层次上对中断机制的一种模拟，是一种异步通信的方式。</p>
+<p>用户进程对信号的响应方式：</p>
+<p>1.忽略信号：对信号不做任何处理(SIGKILL SIGSTOP 不可以忽略)</p>
+<p>2.捕捉信号：定义处理函数，当信号发生时，执行signal(int,fun())</p>
+<p>3.缺省操作：TERM CORE 一般为终止进程</p>
+<p>kill -l  //列出所有信号</p>
+<p>SIGHUP  1   终端结束时发出</p>
+<p>SIGINT  2   Ctrl-C</p>
+<p>SIGQUIT 3   Ctr-\</p>
+<p>SIGILL   4   执行非法指令</p>
+<p>SIGFPE  8   致命算术运算错误</p>
+<p>SIGKILL 9   用来立即终止程序</p>
+<p>SIGALRM 14  定时 alarm(2)</p>
+<p>SIGSTOP 19  Ctrl_Z</p>
+<p>SIGCHLD 17  子进程发变状态</p>
+<p>SIGABRT 6   用来结束进程</p>
+<p>void (*signal(int signum,void(*handler)(int)))(int);</p>
+<p>void signal(SIG,fun)// 注册(捕捉) 返回之前处理方法</p>
+<p>void fun(int) //处理方法</p>
+<p>signal(SIGxxx,SIG_INO);//忽略信号</p>
+<p>#include&lt;signal.h&gt;</p>
+<p>#include&lt;sys/type.h&gt;</p>
+<p>int kill(pid_t pid,int sig)//发送信号</p>
+<p>kill -s SIGINT 3122</p>
+<p>int raise(int sig) //向自己发信号</p>
+<p>#include&lt;unistd.h&gt;</p>
+<p>unsigned int alarm(uint seconds);</p>
+<p>int pause(void);</p>
+<p>//返回-1</p>
+<p>//收到一个非致命信号返回</p>
+<p>//收到一个已捕捉的致命信号返回</p>
+<p>int sigprocmask(int how, const sigset_t *set, sigset_t *oldset);//可以阻塞信号</p>
+<p>signal细节：</p>
+<p>1.默认下，信号的响应会嵌套。</p>
+<p>2.在未执行前收到多个信号，在进程恢复执行后依次响应这些信号。</p>
+<p>3.在信号的挂起队列中不存在相同的信号，相同的会丢弃</p>
+<p>4.挂起队列不被继承，但信号的阻塞掩码会被继承。</p>
+<p>//带参数信号</p>
+<p>sigaction()//注册</p>
+<p>sigqueue()//发送信号</p>
+<p>int sigaction(int signum, const struct sigaction *act,</p>
+<p>                     struct sigaction *oldact);</p>
+<p>struct sigaction {</p>
+<p>               void     (*sa_handler)(int);</p>
+<p>               void     (*sa_sigaction)(int, siginfo_t *, void *);</p>
+<p>               sigset_t   sa_mask;</p>
+<p>               int        sa_flags;</p>
+<p>               void     (*sa_restorer)(void);</p>
+<p>           };</p>
+<p>int sigqueue(pid_t pid, int sig, const union sigval value);</p>
+<p>    union sigval {</p>
+<p>               int   sival_int;</p>
+<p>               void *sival_ptr;</p>
+<p>           };</p>
+<p>2012-03-15：</p>
+<p>共享内存是一种最为高效的进程间通信方式，直接读写内存。</p>
+<p>步骤：</p>
+<p>1.创建/打开共享内存 shmget</p>
+<p>2.映射共享内存   shmat  //attaches</p>
+<p>3.撤销共享内存映射 shmdt  //detaches</p>
+<p>4.删除共享内存对象 shmctl //control  IPC_RMID(删除)</p>
+<p>ipcs -a //查看IPC对象</p>
+<p>-m : shared memory </p>
+<p>-q : message queues</p>
+<p>-s : semaphore arrays</p>
+<p>ipcrm -M key //根据key删除共享内存</p>
+<p>ipcrm -m id</p>
+<p>      …</p>
+<p>      -Q</p>
+<p>      -q</p>
+<p>#include&lt;sys/types.h&gt;</p>
+<p>#include&lt;sys/ipc.h&gt;</p>
+<p>#include&lt;sys/shm.h&gt;</p>
+<p>//打开共享内存  //返回共享内存段标识符</p>
+<p>int shmget(key_t key,int size ,int shmflg);</p>
+<p>//shmflg 权限位 0666|IPC_CREAT</p>
+<p>key:IPC_PRIVATE 或 ftok的返回值</p>
+<p>key_t ftok(path,int);</p>
+<p>system(&quot;ipcs -m&quot;);//在程序里执行shell命令</p>
+<p>//映射共享内存 返回映射后的地址</p>
+<p>void <em>shmat(int shmid,const void</em>shmaddr,int shmflg);</p>
+<p>//shmaddr 共享内存映射地址，NULL表示自动</p>
+<p>//shmflg SHM_RDONLY、  0 读写</p>
+<p>//shmid 要映射的共享内存标识符</p>
+<p>//撤销共享内存</p>
+<p>int shmdt(const void*shmaddr);</p>
+<p>//操作共享内存</p>
+<p>int shmctl(int shmid,int cmd,struct shmid_ds *buf);</p>
+<p>shmid:标识符 </p>
+<p>cmd:IPC_STAT IPC_SET IPC_RMID</p>
+<p>buf:指定IPC_STAT/IPC_SET时用以保存/设置属性</p>
+<p>消息队列：Message Queues</p>
+<p>int msgget(key_t key,int flag);//返回消息队列ID 错误-1</p>
+<p>//flag ：权限</p>
+<p>int msgsnd(int msqid,const void*msgp,size_t size,int flag);</p>
+<p>//msgp:指向消息的指针</p>
+<p>struct msgbuf{</p>
+<p>   long mtype //消息类型</p>
+<p>   char mtext[N] //消息正文</p>
+<p>}</p>
+<p>size :要发送消息正文字节数</p>
+<p>flag: IPC_NOWAIT 没发送完成也立即返回</p>
+<p>      0  发送完才返回</p>
+<p>//成功返回接收消息的长度 出错-1</p>
+<p>int mgsrcv(int msgid,void *msgp,size_t size,long msgtype,int flag);</p>
+<p>msgp:接收消息的缓冲区</p>
+<p>size:接收消息的字节数 </p>
+<p>msgtype:</p>
+<p>0: 接收消息队列中第一个消息</p>
+<p>&gt;0:接收第一个类型为msgtype的消息</p>
+<p>&lt;0:接收&gt;=msgtype绝对值的最小一个</p>
+<p>flag:0 若无消息，一直阻塞</p>
+<p>     IPC_NOWAIT：若没消息，立即返回ENOMSG</p>
+<p>int msgctl(int msgqid,int cmd,struct msgid_ds *buf);</p>
+<p>cmd:IPC_STAT 读取属性值，保存到buf</p>
+<p>    IPC_SET  取buf的值，设置消息队列属性</p>
+<p>    IPC_RMID: 删除消息队列</p>
+<p>信号灯(semaphore)也叫信号量，</p>
+<p>它是不同的进程间或一个给定进程内部不同线程间同步的机制。</p>
+<p>System V 信号灯：</p>
+<p>int semget(key_t key,int nsems,int semflg);</p>
+<p>int semop(int semid,struct *sembuf,size_t nops);</p>
+<p>semid:信号灯集ID</p>
+<p>struct sembuf{</p>
+<p>  short sem_num;  //要操作的信号灯ID</p>
+<p>  short sem_op;   //0 等待  1释放  -1分配</p>
+<p>  short sem_flg;  //0等待  IPC_NOWAIT(-1表示没资源) SEM_UNDO(撤消)</p>
+<p>};</p>
+<p>nops : 要操作的信号灯个数 多个时 定义为数组存储多个sembuf</p>
+<p>//设置某个信号灯的值</p>
+<p>int semctl(int semid,int semnum,int cmd …/<em>union semun arg</em>/);</p>
+<p>semnum:要修改的信号灯值</p>
+<p>cmd: GETVAL : 获取信号灯的值</p>
+<p>     SETVAL : 设置</p>
+<p>     IPC_RMID:删除</p>
+<p>互斥：sem.val=1  P、V不能同时操作   </p>
+<p>同步: sem.val=0  必须得V先操作P后操作</p>
+<p>引用pthread动态库</p>
+<p>gcc b.c -o b -lpthread</p>
+<p>5.线程API</p>
+<p>线程是指共享相同地址空间的多个任务</p>
+<p>共享一个进程的地址空间</p>
+<p>一个线程中多个线程共享资源：</p>
+<p>1.可执行的指令</p>
+<p>2.静态数据</p>
+<p>3.进程中打开的文件描述符</p>
+<p>4.信号处理函数</p>
+<p>5.当前工作目录</p>
+<p>6.用户ID</p>
+<p>7.用户组ID</p>
+<p>每个线程私有资源：</p>
+<p>1.线程TID</p>
+<p>2.PC和相关寄存器</p>
+<p>3.堆栈(栈)(局部变量，返回地址) 进程内可以互相访问</p>
+<p>4.错误号(errno)</p>
+<p>5.信号掩码和优先级</p>
+<p>6.执行状态和属性</p>
+<p>#include&lt;pthread.h&gt;</p>
+<p>int pthread_create(pthread_t <em>thread,const pthread_addr_t <em>attr,void</em>(<em>rountine)(void</em>),void</em>arg);</p>
+<p>thread:&amp;tid 存放tid</p>
+<p>attr:线程属性 NULL为缺省属性</p>
+<p>routine:线程的执行函数 执行后不返回</p>
+<p>arg:执行函数的参数</p>
+<p>int pthread_join(pthread_t thread,void **value_ptr)</p>
+<p>thread:要等待的线程</p>
+<p>value_ptr:指向线程返回的参数</p>
+<p>1.阻塞等待某个线程</p>
+<p>2.回收资源</p>
+<p>//退回当前线程</p>
+<p>int pthread_exit(void *value_ptr)</p>
+<p>value_ptr：线程退出时的返回值</p>
+<p>int pthread_cancel(pthread_t thread)</p>
+<p><strong><em>避免僵尸线程</em></strong></p>
+<p>1.jion()</p>
+<p>2.将线程分离，系统自动回收</p>
+<p>  a.以分离的状态创建</p>
+<p>  b.pthread_detach()</p>
+<p>  分离线程</p>
+<p>b. pthread_detach(pthread_t thread);</p>
+<p>a. pthread_attr_setdetachstate(pthread_attr_t *attr,int detachstate)；</p>
+<p>//detachstate:PTHREAD_CREATE_DETACHED  PTHREAD_CREATE_JOINABLE</p>
+<p>Posix Semaphore API</p>
+<p>#include&lt;semaphore.h&gt;</p>
+<p>int sem_init(sem_t *sem,int pshared,uint value)</p>
+<p>//sem:要初始化的信号量</p>
+<p>//pshared:  0:线程间  非0:进程间</p>
+<p>//value:信号量初值</p>
+<p>int sem_wait(sem_t *sem); //P操作</p>
+<p>int sem_post(sem_t *sem); //V操作</p>
+<p>int sem_trywait(sem_t *sem);</p>
+<p>int sem_getvalue(sem_t *sem,int *svalue);</p>
+<p>Posix Mutex API</p>
+<p>//初始化互斥锁</p>
+<p>int pthread_mutex_init(pthread_mutex_t *mutex,pthread_mutexattr_t *attr);</p>
+<p>//mutex:互斥锁</p>
+<p>//attr:互斥锁属性 NULL表示缺省属性</p>
+<p>int pthread_mutex_lock(pthread_mutex_t *mutex);</p>
+<p>int pthread_mutex_trylock(pthread_mutex_t *mutex);</p>
+<p>int pthread_mutex_unlock(pthread_mutex_t *mutex);</p>
+<p>gcc -DXXX 编译时定义宏</p>
+<p>while(condition)</p>
+<p>   pthread_cond_wait();//不满足则挂起等待</p>
+<p>int pthread_cond_wait(pthread_cond_t *restrict cond,pthread_mutex_t *restrict mutex);</p>
+<p>1.进入时自动解锁</p>
+<p>2.返回时加锁</p>
+<p>唤醒挂起线程</p>
+<p>pthread_cond_broadcast(pthread_cond_t *cond);</p>
+<p>pthread_cond_signal(pthread_cond_t *cond);</p>
+<p>读写锁</p>
+<p>int pthread_rwlock_wrlock(pthread_rwlock_t *rwlock);</p>
+<p>int pthread_rwlock_rdlock(pthread_rwlock_t *rwlock);</p>
+<p>int pthread_rwlock_tryrdlock(pthread_rwlock_t *rwlock);</p>
+<p>int pthread_rwlock_unlock(pthread_rmlock_t *rwlock);</p>
+<p>int pthread_rwlock_init(pthread_rwlock_t *restrict rwlock,</p>
+<p>              const pthread_rwlockattr_t *restrict attr);</p>
+<p>int pthread_rwlock_destroy(pthread_rwlock_t *rwlock);</p>
+<p>生产者/消费者 s1=0 s2=size</p>
+<p>加锁后不能睡眠，先P、V再加锁操作</p>
+<p>#include &lt;pthread.h&gt;</p>
+<p>int pthread_once(pthread_once_t *once_control,</p>
+<p>                 void (*init_routine)(void));</p>
+<p>   pthread_once_t once_control = PTHREAD_ONCE_INIT;</p>
+<p>exmaple:</p>
+<p> static int random_is_initialized = 0;</p>
+<p> extern int initialize_random();</p>
+<p>              int random_function()</p>
+<p>              {</p>
+<p>                  if (random_is_initialized == 0) {</p>
+<p>                      initialize_random();</p>
+<p>                      random_is_initialized = 1;</p>
+<p>                  }</p>
+<p>                  … /* Operations performed after initialization. */</p>
+<p>              }</p>
+<p>#include &lt;pthread.h&gt;</p>
+<p>static pthread_once_t random_is_initialized = PTHREAD_ONCE_INIT;</p>
+<p>extern int initialize_random();</p>
+<p>              int random_function()</p>
+<p>              {</p>
+<p>          (void) pthread_once(&amp;random_is_initialized, initialize_random);</p>
+<p>                  … /* Operations performed after initialization. */</p>
+<p>              }</p>
+<p>线程池 </p>
+<p>typedef struct </p>
+<p>{ </p>
+<p>pthread_mutex_t queue_lock; </p>
+<p>pthread_cond_t queue_ready; </p>
+<p>// all waiting tasks</p>
+<p>CThread_worker *queue_head; //任务队列</p>
+<p>bool shutdown; //pool state</p>
+<p>// containning all threads’s tid</p>
+<p>pthread_t *threadid; //等待线程</p>
+<p>// max active taks</p>
+<p>int max_thread_num;  //线程数</p>
+<p>// current waitting tasks</p>
+<p>int cur_queue_size; //任务数</p>
+<p>}CThread_pool;</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/Linux%E4%B8%8BSPI%E5%92%8CIIC%E9%A9%B1%E5%8A%A8%E5%9C%A8%E8%AE%BE%E5%A4%87%E6%A0%91%E4%B8%8A%E6%B7%BB%E5%8A%A0%E8%AE%BE%E5%A4%87%E4%BF%A1%E6%81%AF%E7%9A%84%E7%BC%96%E5%86%99%E6%96%B9%E6%B3%95/" rel="prev" title="Linux下SPI和IIC驱动在设备树上添加设备信息的编写方法">
+      <i class="fa fa-chevron-left"></i> Linux下SPI和IIC驱动在设备树上添加设备信息的编写方法
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/Linux%E4%B8%8B%E6%B7%BB%E5%8A%A0adb%20%E8%AE%BE%E5%A4%87/" rel="next" title="Linux下添加adb 设备">
+      Linux下添加adb 设备 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Edward"
+      src="/uploads/avatar.gif">
+  <p class="site-author-name" itemprop="name">Edward</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">570</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Edward</span>
+</div>
+
+        
+
+
+
+
+
+
+<script>
+  (function() {
+    function leancloudSelector(url) {
+      url = encodeURI(url);
+      return document.getElementById(url).querySelector('.leancloud-visitors-count');
+    }
+
+    function addCount(Counter) {
+      var visitors = document.querySelector('.leancloud_visitors');
+      var url = decodeURI(visitors.id);
+      var title = visitors.dataset.flagTitle;
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          if (results.length > 0) {
+            var counter = results[0];
+            leancloudSelector(url).innerText = counter.time + 1;
+            Counter('put', '/classes/Counter/' + counter.objectId, { time: { '__op': 'Increment', 'amount': 1 } })
+              .catch(error => {
+                console.error('Failed to save visitor count', error);
+              });
+          } else {
+              Counter('post', '/classes/Counter', { title, url, time: 1 })
+                .then(response => response.json())
+                .then(() => {
+                  leancloudSelector(url).innerText = 1;
+                })
+                .catch(error => {
+                  console.error('Failed to create', error);
+                });
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    function showTime(Counter) {
+      var visitors = document.querySelectorAll('.leancloud_visitors');
+      var entries = [...visitors].map(element => {
+        return decodeURI(element.id);
+      });
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url: { '$in': entries } })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          for (let url of entries) {
+            let target = results.find(item => item.url === url);
+            leancloudSelector(url).innerText = target ? target.time : 0;
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    let { app_id, app_key, server_url } = {"enable":true,"app_id":"wxYx0BX9gaKA3XC4LuO2of0v-gzGzoHsz","app_key":"LQMcs6IDIE4YAm10vMsn9IYq","server_url":"https://wxyx0bx9.lc-cn-n1-shared.com","security":false};
+    function fetchData(api_server) {
+      var Counter = (method, url, data) => {
+        return fetch(`${api_server}/1.1${url}`, {
+          method,
+          headers: {
+            'X-LC-Id'     : app_id,
+            'X-LC-Key'    : app_key,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data)
+        });
+      };
+      if (CONFIG.page.isPost) {
+        if (CONFIG.hostname !== location.hostname) return;
+        addCount(Counter);
+      } else if (document.querySelectorAll('.post-title-link').length >= 1) {
+        showTime(Counter);
+      }
+    }
+
+    let api_server = app_id.slice(-9) !== '-MdYXbMMI' ? server_url : `https://${app_id.slice(0, 8).toLowerCase()}.api.lncldglobal.com`;
+
+    if (api_server) {
+      fetchData(api_server);
+    } else {
+      fetch('https://app-router.leancloud.cn/2/route?appId=' + app_id)
+        .then(response => response.json())
+        .then(({ api_server }) => {
+          fetchData('https://' + api_server);
+        });
+    }
+  })();
+</script>
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

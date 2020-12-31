@@ -1,0 +1,1342 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"edward.org.cn","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="Linux的SPI子系统采用主机驱动和外设驱动分离的思想，首先主机SPI控制器是一种平台设备，因此它以platform的方式注册进内核，外设的信息是以boardinfo形式静态定义的，在创建spi_master时，会根据外设的bus_num和主机的bus_num是否相等，来选择是否将该外设挂接在该SPI主控制器下。先看SPI子系统中几个关键的数据结构： struct spi_master用来描述">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Linux SPI框架">
+<meta property="og:url" content="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/Linux%20SPI%E6%A1%86%E6%9E%B6/index.html">
+<meta property="og:site_name" content="点点滴滴">
+<meta property="og:description" content="Linux的SPI子系统采用主机驱动和外设驱动分离的思想，首先主机SPI控制器是一种平台设备，因此它以platform的方式注册进内核，外设的信息是以boardinfo形式静态定义的，在创建spi_master时，会根据外设的bus_num和主机的bus_num是否相等，来选择是否将该外设挂接在该SPI主控制器下。先看SPI子系统中几个关键的数据结构： struct spi_master用来描述">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-12-31T06:48:01.389Z">
+<meta property="article:modified_time" content="2020-01-16T04:37:32.313Z">
+<meta property="article:author" content="Edward">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/Linux%20SPI%E6%A1%86%E6%9E%B6/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>Linux SPI框架 | 点点滴滴</title>
+  
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?a92ed22eafce466e7a7b17546bb0dc6f";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">点点滴滴</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/Linux%20SPI%E6%A1%86%E6%9E%B6/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/avatar.gif">
+      <meta itemprop="name" content="Edward">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="点点滴滴">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Linux SPI框架
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-12-31 14:48:01" itemprop="dateCreated datePublished" datetime="2020-12-31T14:48:01+08:00">2020-12-31</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-01-16 12:37:32" itemprop="dateModified" datetime="2020-01-16T12:37:32+08:00">2020-01-16</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%83%82%E7%AC%94%E5%A4%B4/" itemprop="url" rel="index"><span itemprop="name">烂笔头</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/Linux%20SPI%E6%A1%86%E6%9E%B6/" class="post-meta-item leancloud_visitors" data-flag-title="Linux SPI框架" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p> Linux的SPI子系统采用主机驱动和外设驱动分离的思想，首先主机SPI控制器是一种平台设备，因此它以platform的方式注册进内核，外设的信息是以boardinfo形式静态定义的，在创建spi_master时，会根据外设的bus_num和主机的bus_num是否相等，来选择是否将该外设挂接在该SPI主控制器下。先看SPI子系统中几个关键的数据结构：</p>
+<p>struct spi_master用来描述一个SPI主控制器</p>
+<p>[cpp] view plain copy</p>
+<p>struct spi_master {  </p>
+<p>struct device    dev;  </p>
+<p>    s16    bus_num; /<em>总线编号</em>/  </p>
+<p>    u16    num_chipselect;/<em>支持的外设数量</em>/  </p>
+<p>    u16    dma_alignment;  </p>
+<p>int   (*transfer)(struct spi_device <em>spi, struct spi_message *mesg);/*用于将消息添加到队列</em>/  </p>
+<p>void  (*cleanup)(struct spi_device *spi);  </p>
+<p>};  </p>
+<p>struct spi_device用来描述一个SPI从设备</p>
+<p>[cpp] view plain copy</p>
+<p>struct spi_device {  </p>
+<p>struct device       dev;  </p>
+<p>struct spi_master   *master;                 /<em>从设备所属的SPI主控器</em>/  </p>
+<p>    u32         max_speed_hz;   /<em>最大传输频率</em>/  </p>
+<p>    u8          chip_select;    /<em>片选号，用于区别其他从设备</em>/  </p>
+<p>    u8          mode;           /<em>传输模式</em>/  </p>
+<p>/<em>各个mode的定义</em>/  </p>
+<p>#define SPI_CPHA    0x01             /* clock phase */  </p>
+<p>#define SPI_CPOL    0x02             /* clock polarity */  </p>
+<p>#define SPI_MODE_0  (0|0)        /* (original MicroWire) */  </p>
+<p>#define SPI_MODE_1  (0|SPI_CPHA)  </p>
+<p>#define SPI_MODE_2  (SPI_CPOL|0)  </p>
+<p>#define SPI_MODE_3  (SPI_CPOL|SPI_CPHA)  </p>
+<p>#define SPI_CS_HIGH 0x04         /* chipselect active high? */  </p>
+<p>#define SPI_LSB_FIRST   0x08         /* per-word bits-on-wire */  </p>
+<p>#define SPI_3WIRE   0x10             /* SI/SO signals shared */  </p>
+<p>#define SPI_LOOP    0x20             /* loopback mode */  </p>
+<p>    u8          bits_per_word; /<em>每个字的比特数</em>/  </p>
+<p>int         irq;           /<em>所使用的中断</em>/  </p>
+<p>void            *controller_state;  </p>
+<p>void            *controller_data;  </p>
+<p>char            modalias[32];  /<em>设备名，在和从设备驱动匹配时会用到</em>/  </p>
+<p>};  </p>
+<p>struct spi_driver用来描述一个SPI从设备的驱动，它的形式和struct platform_driver是一致的</p>
+<p>[cpp] view plain copy</p>
+<p>struct spi_driver {  </p>
+<p>int         (*probe)(struct spi_device *spi);  </p>
+<p>int         (*remove)(struct spi_device *spi);  </p>
+<p>void            (*shutdown)(struct spi_device *spi);  </p>
+<p>int         (*suspend)(struct spi_device *spi, pm_message_t mesg);  </p>
+<p>int         (*resume)(struct spi_device *spi);  </p>
+<p>struct device_driver    driver;  </p>
+<p>};  </p>
+<p>SPI子系统初始化的第一步就是将SPI总线注册进内核，并且在/sys下创建一个spi_master的类，以后注册的从设备都将挂接在该总线下</p>
+<p>[cpp] view plain copy</p>
+<p>static int __init spi_init(void)  </p>
+<p>{  </p>
+<p>int status;  </p>
+<p>    buf = kmalloc(SPI_BUFSIZ, GFP_KERNEL);  </p>
+<p>if (!buf) {  </p>
+<p>        status = -ENOMEM;  </p>
+<p>goto err0;  </p>
+<p>    }  </p>
+<p>    status = bus_register(&amp;spi_bus_type);//注册SPI总线  </p>
+<p>if (status &lt; 0)  </p>
+<p>goto err1;  </p>
+<p>    status = class_register(&amp;spi_master_class);//注册spi_master类  </p>
+<p>if (status &lt; 0)  </p>
+<p>goto err2;  </p>
+<p>return 0;  </p>
+<p>err2:  </p>
+<p>    bus_unregister(&amp;spi_bus_type);  </p>
+<p>err1:  </p>
+<p>    kfree(buf);  </p>
+<p>    buf = NULL;  </p>
+<p>err0:  </p>
+<p>return status;  </p>
+<p>}  </p>
+<p>我们来看spi_bus_type的定义</p>
+<p>[cpp] view plain copy</p>
+<p>struct bus_type spi_bus_type = {  </p>
+<p>    .name       = &quot;spi&quot;,  </p>
+<p>    .dev_attrs  = spi_dev_attrs,  </p>
+<p>    .match      = spi_match_device,  </p>
+<p>    .uevent     = spi_uevent,  </p>
+<p>    .suspend    = spi_suspend,  </p>
+<p>    .resume     = spi_resume,  </p>
+<p>};  </p>
+<p>来看挂接在SPI总线下的从设备和从设备驱动是如何匹配的，也就是spi_match_device函数</p>
+<p>[cpp] view plain copy</p>
+<p>static int spi_match_device(struct device *dev, struct device_driver *drv)  </p>
+<p>{  </p>
+<p>const struct spi_device *spi = to_spi_device(dev);  </p>
+<p>return strcmp(spi-&gt;modalias, drv-&gt;name) == 0;  </p>
+<p>}  </p>
+<p>这里可以看到是将struct device_driver中的name字段与struct spi_device中的modalias字段进行匹配</p>
+<p>这里已经完成了SPI子系统初始化的第一步，也就是注册SPI总线，这一步是和平台无关的，第二步是和平台相关的初始化 </p>
+<p>上节介绍了SPI子系统中的一些重要数据结构和SPI子系统初始化的第一步，也就是注册SPI总线。这节介绍针对于s3c24xx平台的SPI子系统初始化，在看具体的代码之前，先上一张自己画的图，帮助理清初始化的主要步骤</p>
+<p>显然，SPI是一种平台特定的资源，所以它是以platform平台设备的方式注册进内核的，因此它的struct platform_device结构是已经静态定义好了的，现在只待它的struct platform_driver注册，然后和platform_device匹配。</p>
+<p>初始化的入口：</p>
+<p>[html] view plain copy</p>
+<p>static int __init s3c24xx_spi_init(void)  </p>
+<p>{  </p>
+<p>        return platform_driver_probe(&amp;s3c24xx_spi_driver, s3c24xx_spi_probe);  </p>
+<p>}  </p>
+<p>platform_driver_probe()会调用platform_driver_register()来注册驱动，然后在注册的过程中寻求匹配的platform_device,一旦匹配成功，便会调用probe函数，也就是s3c24xx_spi_probe()，在看这个函数之前，还得介绍几个相关的数据结构。</p>
+<p>struct s3c2410_spi_info是一个板级结构，也是在移植时就定义好的，在初始化spi_master时用到，platform_device–&gt;dev–&gt;platform_data会指向这个结构。</p>
+<p>[cpp] view plain copy</p>
+<p>struct s3c2410_spi_info {  </p>
+<p>int          pin_cs;    /* simple gpio cs */  </p>
+<p>    unsigned int         num_cs;    /* total chipselects */  </p>
+<p>int          bus_num;/* bus number to use. */  </p>
+<p>void (*gpio_setup)(struct s3c2410_spi_info *spi, int enable);  </p>
+<p>void (*set_cs)(struct s3c2410_spi_info *spi, int cs, int pol);  </p>
+<p>};  </p>
+<p>struct s3c24xx_spi用来具体描述s3c24xx平台上一个SPI控制器</p>
+<p>[cpp] view plain copy</p>
+<p>struct s3c24xx_spi {  </p>
+<p>/* bitbang has to be first */  </p>
+<p>struct spi_bitbang   bitbang;  </p>
+<p>struct completion    done;  </p>
+<p>void __iomem        *regs;  </p>
+<p>int          irq;  </p>
+<p>int          len;  </p>
+<p>int          count;  </p>
+<p>void            (*set_cs)(struct s3c2410_spi_info *spi,  </p>
+<p>int cs, int pol);  </p>
+<p>/* data buffers */  </p>
+<p>const unsigned char *tx;  </p>
+<p>    unsigned char       *rx;  </p>
+<p>struct clk      *clk;  </p>
+<p>struct resource     *ioarea;  </p>
+<p>struct spi_master   *master;  </p>
+<p>struct spi_device   *curdev;  </p>
+<p>struct device       *dev;  </p>
+<p>struct s3c2410_spi_info *pdata;  </p>
+<p>};  </p>
+<p>struct spi_bitbang用于控制实际的数据传输</p>
+<p>[cpp] view plain copy</p>
+<p>struct spi_bitbang {  </p>
+<p>struct workqueue_struct *workqueue;  /<em>工作队列</em>/  </p>
+<p>struct work_struct  work;  </p>
+<p>    spinlock_t      lock;  </p>
+<p>struct list_head    queue;  </p>
+<p>    u8          busy;  </p>
+<p>    u8          use_dma;  </p>
+<p>    u8          flags;      /* extra spi-&gt;mode support */  </p>
+<p>struct spi_master   *master;         /<em>bitbang所属的master</em>/  </p>
+<p>/<em>用于设置设备传输时的时钟，字长等</em>/  </p>
+<p>int (*setup_transfer)(struct spi_device *spi,  </p>
+<p>struct spi_transfer *t);  </p>
+<p>void    (*chipselect)(struct spi_device *spi, int is_on);  </p>
+<p>#define BITBANG_CS_ACTIVE   1   /* normally nCS, active low */  </p>
+<p>#define BITBANG_CS_INACTIVE 0  </p>
+<p>/<em>针对于平台的传输控制函数</em>/  </p>
+<p>int (*txrx_bufs)(struct spi_device *spi, struct spi_transfer *t);  </p>
+<p>/* txrx_word<a href="">SPI_MODE_*</a> just looks like a shift register */  </p>
+<p>    u32 (*txrx_word[4])(struct spi_device *spi,  </p>
+<p>            unsigned nsecs,  </p>
+<p>            u32 word, u8 bits);  </p>
+<p>};  </p>
+<p>下面来看s3c24xx_spi_probe()函数的实现</p>
+<p>[cpp] view plain copy</p>
+<p>static int __init s3c24xx_spi_probe(struct platform_device *pdev)  </p>
+<p>{  </p>
+<p>struct s3c2410_spi_info *pdata;  </p>
+<p>struct s3c24xx_spi *hw;  </p>
+<p>struct spi_master *master;  </p>
+<p>struct resource *res;  </p>
+<p>int err = 0;  </p>
+<p>/<em>创建spi_master，并将spi_master-&gt;private_data指向s3c24xx_spi</em>/  </p>
+<p>    master = spi_alloc_master(&amp;pdev-&gt;dev, sizeof(struct s3c24xx_spi));  </p>
+<p>if (master == NULL) {  </p>
+<p>        dev_err(&amp;pdev-&gt;dev, &quot;No memory for spi_master\n&quot;);  </p>
+<p>        err = -ENOMEM;  </p>
+<p>goto err_nomem;  </p>
+<p>    }  </p>
+<p>    hw = spi_master_get_devdata(master);//获取s3c24xx_spi  </p>
+<p>    memset(hw, 0, sizeof(struct s3c24xx_spi));  </p>
+<p>    hw-&gt;master = spi_master_get(master);  </p>
+<p>    hw-&gt;pdata = pdata = pdev-&gt;dev.platform_data;  </p>
+<p>    hw-&gt;dev = &amp;pdev-&gt;dev;  </p>
+<p>if (pdata == NULL) {  </p>
+<p>        dev_err(&amp;pdev-&gt;dev, &quot;No platform data supplied\n&quot;);  </p>
+<p>        err = -ENOENT;  </p>
+<p>goto err_no_pdata;  </p>
+<p>    }  </p>
+<p>    platform_set_drvdata(pdev, hw);  </p>
+<p>    init_completion(&amp;hw-&gt;done);  </p>
+<p>/* setup the master state. */  </p>
+<p>/<em>片选数和SPI主控制器编号是在platform_data中已经定义好了的</em>/  </p>
+<p>    master-&gt;num_chipselect = hw-&gt;pdata-&gt;num_cs;  </p>
+<p>    master-&gt;bus_num = pdata-&gt;bus_num;  </p>
+<p>/* setup the state for the bitbang driver */  </p>
+<p>/<em>设置bitbang的所属master和控制传输的相关函数</em>/  </p>
+<p>    hw-&gt;bitbang.master         = hw-&gt;master;  </p>
+<p>    hw-&gt;bitbang.setup_transfer = s3c24xx_spi_setupxfer;  </p>
+<p>    hw-&gt;bitbang.chipselect     = s3c24xx_spi_chipsel;  </p>
+<p>    hw-&gt;bitbang.txrx_bufs      = s3c24xx_spi_txrx;  </p>
+<p>    hw-&gt;bitbang.master-&gt;setup  = s3c24xx_spi_setup;  </p>
+<p>    dev_dbg(hw-&gt;dev, &quot;bitbang at %p\n&quot;, &amp;hw-&gt;bitbang);  </p>
+<p>/* find and map our resources */  </p>
+<p>    res = platform_get_resource(pdev, IORESOURCE_MEM, 0);  </p>
+<p>if (res == NULL) {  </p>
+<p>        dev_err(&amp;pdev-&gt;dev, &quot;Cannot get IORESOURCE_MEM\n&quot;);  </p>
+<p>        err = -ENOENT;  </p>
+<p>goto err_no_iores;  </p>
+<p>    }  </p>
+<p>    hw-&gt;ioarea = request_mem_region(res-&gt;start, (res-&gt;end - res-&gt;start)+1,  </p>
+<p>                    pdev-&gt;name);  </p>
+<p>if (hw-&gt;ioarea == NULL) {  </p>
+<p>        dev_err(&amp;pdev-&gt;dev, &quot;Cannot reserve region\n&quot;);  </p>
+<p>        err = -ENXIO;  </p>
+<p>goto err_no_iores;  </p>
+<p>    }  </p>
+<p>/<em>映射SPI控制寄存器</em>/  </p>
+<p>    hw-&gt;regs = ioremap(res-&gt;start, (res-&gt;end - res-&gt;start)+1);  </p>
+<p>if (hw-&gt;regs == NULL) {  </p>
+<p>        dev_err(&amp;pdev-&gt;dev, &quot;Cannot map IO\n&quot;);  </p>
+<p>        err = -ENXIO;  </p>
+<p>goto err_no_iomap;  </p>
+<p>    }  </p>
+<p>/<em>获取中断号</em>/  </p>
+<p>    hw-&gt;irq = platform_get_irq(pdev, 0);  </p>
+<p>if (hw-&gt;irq &lt; 0) {  </p>
+<p>        dev_err(&amp;pdev-&gt;dev, &quot;No IRQ specified\n&quot;);  </p>
+<p>        err = -ENOENT;  </p>
+<p>goto err_no_irq;  </p>
+<p>    }  </p>
+<p>/<em>注册中断</em>/  </p>
+<p>    err = request_irq(hw-&gt;irq, s3c24xx_spi_irq, 0, pdev-&gt;name, hw);  </p>
+<p>if (err) {  </p>
+<p>        dev_err(&amp;pdev-&gt;dev, &quot;Cannot claim IRQ\n&quot;);  </p>
+<p>goto err_no_irq;  </p>
+<p>    }  </p>
+<p>    hw-&gt;clk = clk_get(&amp;pdev-&gt;dev, &quot;spi&quot;);  </p>
+<p>if (IS_ERR(hw-&gt;clk)) {  </p>
+<p>        dev_err(&amp;pdev-&gt;dev, &quot;No clock for device\n&quot;);  </p>
+<p>        err = PTR_ERR(hw-&gt;clk);  </p>
+<p>goto err_no_clk;  </p>
+<p>    }  </p>
+<p>/* setup any gpio we can */  </p>
+<p>if (!pdata-&gt;set_cs) {  </p>
+<p>if (pdata-&gt;pin_cs &lt; 0) {  </p>
+<p>            dev_err(&amp;pdev-&gt;dev, &quot;No chipselect pin\n&quot;);  </p>
+<p>goto err_register;  </p>
+<p>        }  </p>
+<p>        err = gpio_request(pdata-&gt;pin_cs, dev_name(&amp;pdev-&gt;dev));  </p>
+<p>if (err) {  </p>
+<p>            dev_err(&amp;pdev-&gt;dev, &quot;Failed to get gpio for cs\n&quot;);  </p>
+<p>goto err_register;  </p>
+<p>        }  </p>
+<p>        hw-&gt;set_cs = s3c24xx_spi_gpiocs;//设定片选函数  </p>
+<p>        gpio_direction_output(pdata-&gt;pin_cs, 1);  </p>
+<p>    } else  </p>
+<p>        hw-&gt;set_cs = pdata-&gt;set_cs;  </p>
+<p>    s3c24xx_spi_initialsetup(hw);  </p>
+<p>/* register our spi controller */  </p>
+<p>/* 注册主机SPI控制器 */  </p>
+<p>    err = spi_bitbang_start(&amp;hw-&gt;bitbang);  </p>
+<p>if (err) {  </p>
+<p>        dev_err(&amp;pdev-&gt;dev, &quot;Failed to register SPI master\n&quot;);  </p>
+<p>goto err_register;  </p>
+<p>    }  </p>
+<p>return 0;  </p>
+<p> err_register:  </p>
+<p>if (hw-&gt;set_cs == s3c24xx_spi_gpiocs)  </p>
+<p>        gpio_free(pdata-&gt;pin_cs);  </p>
+<p>    clk_disable(hw-&gt;clk);  </p>
+<p>    clk_put(hw-&gt;clk);  </p>
+<p> err_no_clk:  </p>
+<p>    free_irq(hw-&gt;irq, hw);  </p>
+<p> err_no_irq:  </p>
+<p>    iounmap(hw-&gt;regs);  </p>
+<p>[cpp] view plain copy</p>
+<p>int spi_bitbang_start(struct spi_bitbang *bitbang)  </p>
+<p>{  </p>
+<p>int status;  </p>
+<p>if (!bitbang-&gt;master || !bitbang-&gt;chipselect)  </p>
+<p>return -EINVAL;  </p>
+<p>/<em>初始化一个struct work,处理函数为bitbang_work</em>/  </p>
+<p>    INIT_WORK(&amp;bitbang-&gt;work, bitbang_work);  </p>
+<p>    spin_lock_init(&amp;bitbang-&gt;lock);  </p>
+<p>    INIT_LIST_HEAD(&amp;bitbang-&gt;queue);  </p>
+<p>/<em>检测bitbang中的函数是否都定义了，如果没定义，则默认使用spi_bitbang_xxx</em>/  </p>
+<p>if (!bitbang-&gt;master-&gt;transfer)  </p>
+<p>        bitbang-&gt;master-&gt;transfer = spi_bitbang_transfer;  </p>
+<p>if (!bitbang-&gt;txrx_bufs) {  </p>
+<p>        bitbang-&gt;use_dma = 0;  </p>
+<p>        bitbang-&gt;txrx_bufs = spi_bitbang_bufs;  </p>
+<p>if (!bitbang-&gt;master-&gt;setup) {  </p>
+<p>if (!bitbang-&gt;setup_transfer)  </p>
+<p>                bitbang-&gt;setup_transfer =  </p>
+<p>                     spi_bitbang_setup_transfer;  </p>
+<p>            bitbang-&gt;master-&gt;setup = spi_bitbang_setup;  </p>
+<p>            bitbang-&gt;master-&gt;cleanup = spi_bitbang_cleanup;  </p>
+<p>        }  </p>
+<p>    } else if (!bitbang-&gt;master-&gt;setup)  </p>
+<p>return -EINVAL;  </p>
+<p>/* this task is the only thing to touch the SPI bits */  </p>
+<p>    bitbang-&gt;busy = 0;  </p>
+<p>/<em>创建bitbang的工作队列</em>/  </p>
+<p>    bitbang-&gt;workqueue = create_singlethread_workqueue(  </p>
+<p>            dev_name(bitbang-&gt;master-&gt;dev.parent));  </p>
+<p>if (bitbang-&gt;workqueue == NULL) {  </p>
+<p>        status = -EBUSY;  </p>
+<p>goto err1;  </p>
+<p>    }  </p>
+<p>/* driver may get busy before register() returns, especially </p>
+<p>     * if someone registered boardinfo for devices </p>
+<p>     */  </p>
+<p>/<em>注册spi_master</em>/  </p>
+<p>    status = spi_register_master(bitbang-&gt;master);  </p>
+<p>if (status &lt; 0)  </p>
+<p>goto err2;  </p>
+<p>return status;  </p>
+<p>err2:  </p>
+<p>    destroy_workqueue(bitbang-&gt;workqueue);  </p>
+<p>err1:  </p>
+<p>return status;  </p>
+<p>}  </p>
+<p>下一个关键函数就是spi_register_master(),用于注册spi_master</p>
+<p>[cpp] view plain copy</p>
+<p>int spi_register_master(struct spi_master *master)  </p>
+<p>{  </p>
+<p>static atomic_t     dyn_bus_id = ATOMIC_INIT((1&lt;&lt;15) - 1);  </p>
+<p>struct device       *dev = master-&gt;dev.parent;  </p>
+<p>int         status = -ENODEV;  </p>
+<p>int         dynamic = 0;  </p>
+<p>if (!dev)  </p>
+<p>return -ENODEV;  </p>
+<p>/* even if it’s just one always-selected device, there must </p>
+<p>     * be at least one chipselect </p>
+<p>     */  </p>
+<p>if (master-&gt;num_chipselect == 0)//片选数不能为0  </p>
+<p>return -EINVAL;  </p>
+<p>/* convention:  dynamically assigned bus IDs count down from the max */  </p>
+<p>if (master-&gt;bus_num &lt; 0) {  </p>
+<p>/* FIXME switch to an IDR based scheme, something like </p>
+<p>         * I2C now uses, so we can’t run out of &quot;dynamic&quot; IDs </p>
+<p>         */  </p>
+<p>        master-&gt;bus_num = atomic_dec_return(&amp;dyn_bus_id);  </p>
+<p>        dynamic = 1;  </p>
+<p>    }  </p>
+<p>/* register the device, then userspace will see it. </p>
+<p>     * registration fails if the bus ID is in use. </p>
+<p>     */  </p>
+<p>    dev_set_name(&amp;master-&gt;dev, &quot;spi%u&quot;, master-&gt;bus_num);  </p>
+<p>    status = device_add(&amp;master-&gt;dev);//添加spi_master设备  </p>
+<p>if (status &lt; 0)  </p>
+<p>goto done;  </p>
+<p>    dev_dbg(dev, &quot;registered master %s%s\n&quot;, dev_name(&amp;master-&gt;dev),  </p>
+<p>            dynamic ? &quot; (dynamic)&quot; : &quot;&quot;);  </p>
+<p>/* populate children from any spi device tables */  </p>
+<p>    scan_boardinfo(master);//遍历板级信息，寻找可以挂接在该spi_master下的从设备  </p>
+<p>    status = 0;  </p>
+<p>done:  </p>
+<p>return status;  </p>
+<p>}  </p>
+<p>[cpp] view plain copy</p>
+<p>static void scan_boardinfo(struct spi_master *master)  </p>
+<p>{  </p>
+<p>struct boardinfo    *bi;  </p>
+<p>    mutex_lock(&amp;board_lock);  </p>
+<p>    list_for_each_entry(bi, &amp;board_list, list) {  </p>
+<p>struct spi_board_info   *chip = bi-&gt;board_info;  </p>
+<p>        unsigned        n;  </p>
+<p>for (n = bi-&gt;n_board_info; n &gt; 0; n–, chip++) {  </p>
+<p>if (chip-&gt;bus_num != master-&gt;bus_num)  </p>
+<p>continue;  </p>
+<p>/* NOTE: this relies on spi_new_device to </p>
+<p>             * issue diagnostics when given bogus inputs </p>
+<p>             */  </p>
+<p>/<em>bus_num相等则创建新设备</em>/  </p>
+<p>            (void) spi_new_device(master, chip);  </p>
+<p>        }  </p>
+<p>    }  </p>
+<p>    mutex_unlock(&amp;board_lock);  </p>
+<p>}  </p>
+<p>spi_board_info是板级信息，是在移植时就写好的，并且要将其注册</p>
+<p>[cpp] view plain copy</p>
+<p>struct spi_board_info {  </p>
+<p>char        modalias[32];  /<em>名字</em>/  </p>
+<p>const void  *platform_data;  </p>
+<p>void        *controller_data;  </p>
+<p>int     irq;          /<em>中断号</em>/  </p>
+<p>    u32     max_speed_hz; /<em>最高传输速率</em>/  </p>
+<p>    u16     bus_num;      /<em>所属的spi_master编号</em>/  </p>
+<p>    u16     chip_select;  /<em>片选号</em>/  </p>
+<p>    u8      mode;         /<em>传输模式</em>/  </p>
+<p>};  </p>
+<p>最后一步就是将相应的从设备注册进内核</p>
+<p>[cpp] view plain copy</p>
+<p>struct spi_device *spi_new_device(struct spi_master *master,  </p>
+<p>struct spi_board_info *chip)  </p>
+<p>{  </p>
+<p>struct spi_device   *proxy;  </p>
+<p>int         status;  </p>
+<p>/* NOTE:  caller did any chip-&gt;bus_num checks necessary. </p>
+<p>     * </p>
+<p>     * Also, unless we change the return value convention to use </p>
+<p>     * error-or-pointer (not NULL-or-pointer), troubleshootability </p>
+<p>     * suggests syslogged diagnostics are best here (ugh). </p>
+<p>     */  </p>
+<p>/<em>创建SPI_device</em>/  </p>
+<p>    proxy = spi_alloc_device(master);  </p>
+<p>if (!proxy)  </p>
+<p>return NULL;  </p>
+<p>    WARN_ON(strlen(chip-&gt;modalias) &gt;= sizeof(proxy-&gt;modalias));  </p>
+<p>/<em>初始化</em>/  </p>
+<p>    proxy-&gt;chip_select = chip-&gt;chip_select;  </p>
+<p>    proxy-&gt;max_speed_hz = chip-&gt;max_speed_hz;  </p>
+<p>    proxy-&gt;mode = chip-&gt;mode;  </p>
+<p>    proxy-&gt;irq = chip-&gt;irq;  </p>
+<p>    strlcpy(proxy-&gt;modalias, chip-&gt;modalias, sizeof(proxy-&gt;modalias));  </p>
+<p>    proxy-&gt;dev.platform_data = (void *) chip-&gt;platform_data;  </p>
+<p>    proxy-&gt;controller_data = chip-&gt;controller_data;  </p>
+<p>    proxy-&gt;controller_state = NULL;  </p>
+<p>/<em>将新设备添加进内核</em>/  </p>
+<p>    status = spi_add_device(proxy);  </p>
+<p>if (status &lt; 0) {  </p>
+<p>        spi_dev_put(proxy);  </p>
+<p>return NULL;  </p>
+<p>    }  </p>
+<p>return proxy;  </p>
+<p>}  </p>
+<p>本节以spidev设备驱动为例，来阐述SPI数据传输的过程。spidev是内核中一个通用的设备驱动，我们注册的从设备都可以使用该驱动，只需在注册时将从设备的modalias字段设置为&quot;spidev&quot;,这样才能和spidev驱动匹配成功。我们要传输的数据有时需要分为一段一段的(比如先发送，后读取，就需要两个字段)，每个字段都被封装成一个transfer,N个transfer可以被添加到message中，作为一个消息包进行传输。当用户发出传输数据的请求时，message并不会立刻传输到从设备，而是由之前定义的transfer()函数将message放入一个等待队列中，这些message会以FIFO的方式有workqueue调度进行传输，这样能够避免SPI从设备同一时间对主SPI控制器的竞争。和之前一样，还是习惯先画一张图来描述数据传输的主要过程。</p>
+<p>   在使用spidev设备驱动时，需要先初始化spidev. spidev是以字符设备的形式注册进内核的。</p>
+<p>[cpp] view plain copy</p>
+<p>static int __init spidev_init(void)  </p>
+<p>{  </p>
+<p>int status;  </p>
+<p>/* Claim our 256 reserved device numbers.  Then register a class </p>
+<p>     * that will key udev/mdev to add/remove /dev nodes.  Last, register </p>
+<p>     * the driver which manages those device numbers. </p>
+<p>     */  </p>
+<p>    BUILD_BUG_ON(N_SPI_MINORS &gt; 256);  </p>
+<p>/<em>将spidev作为字符设备注册</em>/  </p>
+<p>    status = register_chrdev(SPIDEV_MAJOR, &quot;spi&quot;, &amp;spidev_fops);  </p>
+<p>if (status &lt; 0)  </p>
+<p>return status;  </p>
+<p>/<em>创建spidev类</em>/  </p>
+<p>    spidev_class = class_create(THIS_MODULE, &quot;spidev&quot;);  </p>
+<p>if (IS_ERR(spidev_class)) {  </p>
+<p>        unregister_chrdev(SPIDEV_MAJOR, spidev_spi.driver.name);  </p>
+<p>return PTR_ERR(spidev_class);  </p>
+<p>    }  </p>
+<p>/<em>注册spidev的driver,可与modalias字段为&quot;spidev&quot;的spi_device匹配</em>/  </p>
+<p>    status = spi_register_driver(&amp;spidev_spi);  </p>
+<p>if (status &lt; 0) {  </p>
+<p>        class_destroy(spidev_class);  </p>
+<p>        unregister_chrdev(SPIDEV_MAJOR, spidev_spi.driver.name);  </p>
+<p>    }  </p>
+<p>return status;  </p>
+<p>}  </p>
+<p>与相应的从设备匹配成功后，则调用spidev中的probe函数</p>
+<p>[cpp] view plain copy</p>
+<p>static int spidev_probe(struct spi_device *spi)  </p>
+<p>{  </p>
+<p>struct spidev_data  *spidev;  </p>
+<p>int         status;  </p>
+<p>    unsigned long       minor;  </p>
+<p>/* Allocate driver data */  </p>
+<p>    spidev = kzalloc(sizeof(*spidev), GFP_KERNEL);  </p>
+<p>if (!spidev)  </p>
+<p>return -ENOMEM;  </p>
+<p>/* Initialize the driver data */  </p>
+<p>    spidev-&gt;spi = spi;//设定spi  </p>
+<p>    spin_lock_init(&amp;spidev-&gt;spi_lock);  </p>
+<p>    mutex_init(&amp;spidev-&gt;buf_lock);  </p>
+<p>    INIT_LIST_HEAD(&amp;spidev-&gt;device_entry);  </p>
+<p>/* If we can allocate a minor number, hook up this device. </p>
+<p>     * Reusing minors is fine so long as udev or mdev is working. </p>
+<p>     */  </p>
+<p>    mutex_lock(&amp;device_list_lock);  </p>
+<p>    minor = find_first_zero_bit(minors, N_SPI_MINORS);//寻找没被占用的次设备号  </p>
+<p>if (minor &lt; N_SPI_MINORS) {  </p>
+<p>struct device *dev;  </p>
+<p>/<em>计算设备号</em>/  </p>
+<p>        spidev-&gt;devt = MKDEV(SPIDEV_MAJOR, minor);  </p>
+<p>/<em>在spidev_class下创建设备</em>/  </p>
+<p>        dev = device_create(spidev_class, &amp;spi-&gt;dev, spidev-&gt;devt,  </p>
+<p>                    spidev, &quot;spidev%d.%d&quot;,  </p>
+<p>                    spi-&gt;master-&gt;bus_num, spi-&gt;chip_select);  </p>
+<p>        status = IS_ERR(dev) ? PTR_ERR(dev) : 0;  </p>
+<p>    } else {  </p>
+<p>        dev_dbg(&amp;spi-&gt;dev, &quot;no minor number available!\n&quot;);  </p>
+<p>        status = -ENODEV;  </p>
+<p>    }  </p>
+<p>if (status == 0) {  </p>
+<p>        set_bit(minor, minors);//将minors的相应位置位，表示该位对应的次设备号已被占用  </p>
+<p>        list_add(&amp;spidev-&gt;device_entry, &amp;device_list);//将创建的spidev添加到device_list  </p>
+<p>    }  </p>
+<p>    mutex_unlock(&amp;device_list_lock);  </p>
+<p>if (status == 0)  </p>
+<p>        spi_set_drvdata(spi, spidev);  </p>
+<p>else  </p>
+<p>        kfree(spidev);  </p>
+<p>return status;  </p>
+<p>}  </p>
+<p>然后就可以利用spidev模块提供的接口来实现主从设备之间的数据传输了。我们以spidev_write()函数为例来分析数据传输的过程，实际上spidev_read()和其是差不多的，只是前面的一些步骤不一样，可以参照上图。</p>
+<p>[cpp] view plain copy</p>
+<p>static ssize_t  </p>
+<p>spidev_write(struct file *filp, const char __user *buf,  </p>
+<p>size_t count, loff_t *f_pos)  </p>
+<p>{  </p>
+<p>struct spidev_data  *spidev;  </p>
+<p>    ssize_t         status = 0;  </p>
+<p>    unsigned long       missing;  </p>
+<p>/* chipselect only toggles at start or end of operation */  </p>
+<p>if (count &gt; bufsiz)  </p>
+<p>return -EMSGSIZE;  </p>
+<p>    spidev = filp-&gt;private_data;  </p>
+<p>    mutex_lock(&amp;spidev-&gt;buf_lock);  </p>
+<p>//将用户要发送的数据拷贝到spidev-&gt;buffer  </p>
+<p>    missing = copy_from_user(spidev-&gt;buffer, buf, count);  </p>
+<p>if (missing == 0) {//全部拷贝成功，则调用spidev_sysn_write()  </p>
+<p>        status = spidev_sync_write(spidev, count);  </p>
+<p>    } else  </p>
+<p>        status = -EFAULT;  </p>
+<p>    mutex_unlock(&amp;spidev-&gt;buf_lock);  </p>
+<p>return status;  </p>
+<p>}  </p>
+<p>[cpp] view plain copy</p>
+<p>static inline ssize_t  </p>
+<p>spidev_sync_write(struct spidev_data *spidev, size_t len)  </p>
+<p>{  </p>
+<p>struct spi_transfer t = {//设置传输字段  </p>
+<p>            .tx_buf     = spidev-&gt;buffer,  </p>
+<p>            .len        = len,  </p>
+<p>        };  </p>
+<p>struct spi_message   m;//创建message  </p>
+<p>    spi_message_init(&amp;m);  </p>
+<p>    spi_message_add_tail(&amp;t, &amp;m);//将transfer添加到message中  </p>
+<p>return spidev_sync(spidev, &amp;m);  </p>
+<p>}  </p>
+<p>我们来看看struct spi_transfer和struct spi_message是如何定义的</p>
+<p>[cpp] view plain copy</p>
+<p>struct spi_transfer {  </p>
+<p>/* it’s ok if tx_buf == rx_buf (right?) </p>
+<p>     * for MicroWire, one buffer must be null </p>
+<p>     * buffers must work with dma_*map_single() calls, unless </p>
+<p>     *   spi_message.is_dma_mapped reports a pre-existing mapping </p>
+<p>     */  </p>
+<p>const void  *tx_buf;//发送缓冲区  </p>
+<p>void        *rx_buf;//接收缓冲区  </p>
+<p>    unsigned    len;    //传输数据的长度  </p>
+<p>    dma_addr_t  tx_dma;  </p>
+<p>    dma_addr_t  rx_dma;  </p>
+<p>    unsigned    cs_change:1; //该位如果为1，则表示当该transfer传输完后，改变片选信号  </p>
+<p>    u8      bits_per_word;//字比特数  </p>
+<p>    u16     delay_usecs;  //传输后的延时   </p>
+<p>    u32     speed_hz;  //指定的时钟  </p>
+<p>struct list_head transfer_list;//用于将该transfer链入message  </p>
+<p>};  </p>
+<p>[cpp] view plain copy</p>
+<p>struct spi_message {  </p>
+<p>struct list_head    transfers;//用于链接spi_transfer  </p>
+<p>struct spi_device   *spi;      //指向目的从设备  </p>
+<p>    unsigned        is_dma_mapped:1;  </p>
+<p>/* REVISIT:  we might want a flag affecting the behavior of the </p>
+<p>     * last transfer … allowing things like &quot;read 16 bit length L&quot; </p>
+<p>     * immediately followed by &quot;read L bytes&quot;.  Basically imposing </p>
+<p>     * a specific message scheduling algorithm. </p>
+<p>     * </p>
+<p>     * Some controller drivers (message-at-a-time queue processing) </p>
+<p>     * could provide that as their default scheduling algorithm.  But </p>
+<p>     * others (with multi-message pipelines) could need a flag to </p>
+<p>     * tell them about such special cases. </p>
+<p>     */  </p>
+<p>/* completion is reported through a callback */  </p>
+<p>void            (*complete)(void *context);//用于异步传输完成时调用的回调函数  </p>
+<p>void            *context;                  //回调函数的参数  </p>
+<p>    unsigned        actual_length;            //实际传输的长度  </p>
+<p>int         status;  </p>
+<p>/* for optional use by whatever driver currently owns the </p>
+<p>     * spi_message …  between calls to spi_async and then later </p>
+<p>     * complete(), that’s the spi_master controller driver. </p>
+<p>     */  </p>
+<p>struct list_head    queue; //用于将该message链入bitbang等待队列  </p>
+<p>void            *state;  </p>
+<p>};  </p>
+<p>继续跟踪源码，进入spidev_sync(),从这一步开始，read和write就完全一样了</p>
+<p>[cpp] view plain copy</p>
+<p>&lt;span style=&quot;font-size:12px;&quot;&gt;static ssize_t  </p>
+<p>spidev_sync(struct spidev_data *spidev, struct spi_message *message)  </p>
+<p>{  </p>
+<p>    DECLARE_COMPLETION_ONSTACK(done);  </p>
+<p>int status;  </p>
+<p>    message-&gt;complete = spidev_complete;//设置回调函数  </p>
+<p>    message-&gt;context = &amp;done;              </p>
+<p>    spin_lock_irq(&amp;spidev-&gt;spi_lock);  </p>
+<p>if (spidev-&gt;spi == NULL)  </p>
+<p>        status = -ESHUTDOWN;  </p>
+<p>else  </p>
+<p>        status = spi_async(spidev-&gt;spi, message);//调用spi核心层的函数spi_async()  </p>
+<p>    spin_unlock_irq(&amp;spidev-&gt;spi_lock);  </p>
+<p>if (status == 0) {  </p>
+<p>        wait_for_completion(&amp;done);  </p>
+<p>        status = message-&gt;status;  </p>
+<p>if (status == 0)  </p>
+<p>            status = message-&gt;actual_length;  </p>
+<p>    }  </p>
+<p>return status;  </p>
+<p>}&lt;/span&gt;  </p>
+<p>[cpp] view plain copy</p>
+<p>static inline int  </p>
+<p>spi_async(struct spi_device *spi, struct spi_message *message)  </p>
+<p>{  </p>
+<p>    message-&gt;spi = spi;  </p>
+<p>/<em>调用master的transfer函数将message放入等待队列</em>/  </p>
+<p>return spi-&gt;master-&gt;transfer(spi, message);  </p>
+<p>}  </p>
+<p>s3c24xx平台下的transfer函数是在bitbang_start()函数中定义的，为bitbang_transfer()</p>
+<p>[cpp] view plain copy</p>
+<p>int spi_bitbang_transfer(struct spi_device *spi, struct spi_message *m)  </p>
+<p>{  </p>
+<p>struct spi_bitbang  *bitbang;  </p>
+<p>    unsigned long       flags;  </p>
+<p>int         status = 0;  </p>
+<p>    m-&gt;actual_length = 0;  </p>
+<p>    m-&gt;status = -EINPROGRESS;  </p>
+<p>    bitbang = spi_master_get_devdata(spi-&gt;master);  </p>
+<p>    spin_lock_irqsave(&amp;bitbang-&gt;lock, flags);  </p>
+<p>if (!spi-&gt;max_speed_hz)  </p>
+<p>        status = -ENETDOWN;  </p>
+<p>else {  </p>
+<p>        list_add_tail(&amp;m-&gt;queue, &amp;bitbang-&gt;queue);//将message添加到bitbang的等待队列  </p>
+<p>        queue_work(bitbang-&gt;workqueue, &amp;bitbang-&gt;work);//调度运行work  </p>
+<p>    }  </p>
+<p>    spin_unlock_irqrestore(&amp;bitbang-&gt;lock, flags);  </p>
+<p>return status;  </p>
+<p>}  </p>
+<p>这里可以看到transfer函数不负责实际的数据传输，而是将message添加到等待队列中。同样在spi_bitbang_start()中，有这样一个定义INIT_WORK(&amp;bitbang-&gt;work, bitbang_work);因此bitbang_work()函数会被调度运行，类似于底半部机制</p>
+<p>[cpp] view plain copy</p>
+<p>static void bitbang_work(struct work_struct *work)  </p>
+<p>{  </p>
+<p>struct spi_bitbang  *bitbang =  </p>
+<p>        container_of(work, struct spi_bitbang, work);//获取bitbang  </p>
+<p>    unsigned long       flags;  </p>
+<p>    spin_lock_irqsave(&amp;bitbang-&gt;lock, flags);  </p>
+<p>    bitbang-&gt;busy = 1;  </p>
+<p>while (!list_empty(&amp;bitbang-&gt;queue)) {//等待队列不为空  </p>
+<p>struct spi_message  *m;  </p>
+<p>struct spi_device   *spi;  </p>
+<p>        unsigned        nsecs;  </p>
+<p>struct spi_transfer *t = NULL;  </p>
+<p>        unsigned        tmp;  </p>
+<p>        unsigned        cs_change;  </p>
+<p>int         status;  </p>
+<p>int         (*setup_transfer)(struct spi_device *,  </p>
+<p>struct spi_transfer *);  </p>
+<p>/<em>取出等待队列中的的第一个message</em>/  </p>
+<p>        m = container_of(bitbang-&gt;queue.next, struct spi_message,  </p>
+<p>                queue);  </p>
+<p>        list_del_init(&amp;m-&gt;queue);//将message从队列中删除  </p>
+<p>        spin_unlock_irqrestore(&amp;bitbang-&gt;lock, flags);  </p>
+<p>/* FIXME this is made-up … the correct value is known to </p>
+<p>         * word-at-a-time bitbang code, and presumably chipselect() </p>
+<p>         * should enforce these requirements too? </p>
+<p>         */  </p>
+<p>        nsecs = 100;  </p>
+<p>        spi = m-&gt;spi;  </p>
+<p>        tmp = 0;  </p>
+<p>        cs_change = 1;  </p>
+<p>        status = 0;  </p>
+<p>        setup_transfer = NULL;  </p>
+<p>/<em>遍历message中的所有传输字段,逐一进行传输</em>/  </p>
+<p>        list_for_each_entry (t, &amp;m-&gt;transfers, transfer_list) {  </p>
+<p>/* override or restore speed and wordsize */  </p>
+<p>if (t-&gt;speed_hz || t-&gt;bits_per_word) {  </p>
+<p>                setup_transfer = bitbang-&gt;setup_transfer;  </p>
+<p>if (!setup_transfer) {  </p>
+<p>                    status = -ENOPROTOOPT;  </p>
+<p>break;  </p>
+<p>                }  </p>
+<p>            }  </p>
+<p>/<em>调用setup_transfer根据transfer中的信息进行时钟、字比特数的设定</em>/  </p>
+<p>if (setup_transfer) {  </p>
+<p>                status = setup_transfer(spi, t);  </p>
+<p>if (status &lt; 0)  </p>
+<p>break;  </p>
+<p>            }  </p>
+<p>/* set up default clock polarity, and activate chip; </p>
+<p>             * this implicitly updates clock and spi modes as </p>
+<p>             * previously recorded for this device via setup(). </p>
+<p>             * (and also deselects any other chip that might be </p>
+<p>             * selected …) </p>
+<p>             */  </p>
+<p>if (cs_change) {//使能外设的片选  </p>
+<p>                bitbang-&gt;chipselect(spi, BITBANG_CS_ACTIVE);  </p>
+<p>                ndelay(nsecs);  </p>
+<p>            }  </p>
+<p>            cs_change = t-&gt;cs_change;//这里确定进行了这个字段的传输后是否要改变片选状态  </p>
+<p>if (!t-&gt;tx_buf &amp;&amp; !t-&gt;rx_buf &amp;&amp; t-&gt;len) {  </p>
+<p>                status = -EINVAL;  </p>
+<p>break;  </p>
+<p>            }  </p>
+<p>/* transfer data.  the lower level code handles any </p>
+<p>             * new dma mappings it needs. our caller always gave </p>
+<p>             * us dma-safe buffers. </p>
+<p>             */  </p>
+<p>if (t-&gt;len) {  </p>
+<p>/* REVISIT dma API still needs a designated </p>
+<p>                 * DMA_ADDR_INVALID; ~0 might be better. </p>
+<p>                 */  </p>
+<p>if (!m-&gt;is_dma_mapped)  </p>
+<p>                    t-&gt;rx_dma = t-&gt;tx_dma = 0;  </p>
+<p>/<em>调用针对于平台的传输函数txrx_bufs</em>/  </p>
+<p>                status = bitbang-&gt;txrx_bufs(spi, t);  </p>
+<p>            }  </p>
+<p>if (status &gt; 0)  </p>
+<p>                m-&gt;actual_length += status;  </p>
+<p>if (status != t-&gt;len) {  </p>
+<p>/* always report some kind of error */  </p>
+<p>if (status &gt;= 0)  </p>
+<p>                    status = -EREMOTEIO;  </p>
+<p>break;  </p>
+<p>            }  </p>
+<p>            status = 0;  </p>
+<p>/* protocol tweaks before next transfer */  </p>
+<p>/<em>如果要求在传输完一个字段后进行delay,则进行delay</em>/  </p>
+<p>if (t-&gt;delay_usecs)  </p>
+<p>                udelay(t-&gt;delay_usecs);  </p>
+<p>if (!cs_change)  </p>
+<p>continue;  </p>
+<p>/<em>最后一个字段传输完毕了，则跳出循环</em>/  </p>
+<p>if (t-&gt;transfer_list.next == &amp;m-&gt;transfers)  </p>
+<p>break;  </p>
+<p>/* sometimes a short mid-message deselect of the chip </p>
+<p>             * may be needed to terminate a mode or command </p>
+<p>             */  </p>
+<p>            ndelay(nsecs);  </p>
+<p>            bitbang-&gt;chipselect(spi, BITBANG_CS_INACTIVE);  </p>
+<p>            ndelay(nsecs);  </p>
+<p>        }  </p>
+<p>        m-&gt;status = status;  </p>
+<p>        m-&gt;complete(m-&gt;context);  </p>
+<p>/* restore speed and wordsize */  </p>
+<p>if (setup_transfer)  </p>
+<p>            setup_transfer(spi, NULL);  </p>
+<p>/* normally deactivate chipselect … unless no error and </p>
+<p>         * cs_change has hinted that the next message will probably </p>
+<p>         * be for this chip too. </p>
+<p>         */  </p>
+<p>if (!(status == 0 &amp;&amp; cs_change)) {  </p>
+<p>            ndelay(nsecs);  </p>
+<p>            bitbang-&gt;chipselect(spi, BITBANG_CS_INACTIVE);  </p>
+<p>            ndelay(nsecs);  </p>
+<p>        }  </p>
+<p>        spin_lock_irqsave(&amp;bitbang-&gt;lock, flags);  </p>
+<p>    }  </p>
+<p>    bitbang-&gt;busy = 0;  </p>
+<p>    spin_unlock_irqrestore(&amp;bitbang-&gt;lock, flags);  </p>
+<p>}  </p>
+<p>只要bitbang-&gt;queue等待队列不为空，就表示相应的SPI主控制器上还有传输任务没有完成，因此bitbang_work()会被不断地调度执行。 bitbang_work()中的工作主要是两个循环，外循环遍历等待队列中的message,内循环遍历message中的transfer,在bitbang_work()中，传输总是以transfer为单位的。当选定了一个transfer后，便会调用transfer_txrx()函数，进行实际的数据传输，显然这个函数是针对于平台的SPI控制器而实现的，在s3c24xx平台中，该函数为s3c24xx_spi_txrx();</p>
+<p>[cpp] view plain copy</p>
+<p>static int s3c24xx_spi_txrx(struct spi_device *spi, struct spi_transfer *t)  </p>
+<p>{  </p>
+<p>struct s3c24xx_spi *hw = to_hw(spi);  </p>
+<p>    dev_dbg(&amp;spi-&gt;dev, &quot;txrx: tx %p, rx %p, len %d\n&quot;,  </p>
+<p>        t-&gt;tx_buf, t-&gt;rx_buf, t-&gt;len);  </p>
+<p>    hw-&gt;tx = t-&gt;tx_buf;//获取发送缓冲区  </p>
+<p>    hw-&gt;rx = t-&gt;rx_buf;//获取读取缓存区  </p>
+<p>    hw-&gt;len = t-&gt;len;  //获取数据长度  </p>
+<p>    hw-&gt;count = 0;  </p>
+<p>    init_completion(&amp;hw-&gt;done);//初始化完成量  </p>
+<p>/* send the first byte */  </p>
+<p>/<em>只发送第一个字节，其他的在中断中发送(读取)</em>/  </p>
+<p>    writeb(hw_txbyte(hw, 0), hw-&gt;regs + S3C2410_SPTDAT);  </p>
+<p>    wait_for_completion(&amp;hw-&gt;done);  </p>
+<p>return hw-&gt;count;  </p>
+<p>}  </p>
+<p>[cpp] view plain copy</p>
+<p>static inline unsigned int hw_txbyte(struct s3c24xx_spi *hw, int count)  </p>
+<p>{  </p>
+<p>/*如果tx不为空，也就是说当前是从主机向从机发送数据，则直接将tx[count]发送过去， </p>
+<p>      如果tx为空，也就是说当前是从从机向主机发送数据，则向从机写入0*/  </p>
+<p>return hw-&gt;tx ? hw-&gt;tx[count] : 0;  </p>
+<p>}  </p>
+<p>负责SPI数据传输的中断函数：</p>
+<p>[cpp] view plain copy</p>
+<p>static irqreturn_t s3c24xx_spi_irq(int irq, void *dev)  </p>
+<p>{  </p>
+<p>struct s3c24xx_spi *hw = dev;  </p>
+<p>    unsigned int spsta = readb(hw-&gt;regs + S3C2410_SPSTA);  </p>
+<p>    unsigned int count = hw-&gt;count;  </p>
+<p>/<em>冲突检测</em>/  </p>
+<p>if (spsta &amp; S3C2410_SPSTA_DCOL) {  </p>
+<p>        dev_dbg(hw-&gt;dev, &quot;data-collision\n&quot;);  </p>
+<p>        complete(&amp;hw-&gt;done);  </p>
+<p>goto irq_done;  </p>
+<p>    }  </p>
+<p>/<em>设备忙检测</em>/  </p>
+<p>if (!(spsta &amp; S3C2410_SPSTA_READY)) {  </p>
+<p>        dev_dbg(hw-&gt;dev, &quot;spi not ready for tx?\n&quot;);  </p>
+<p>        complete(&amp;hw-&gt;done);  </p>
+<p>goto irq_done;  </p>
+<p>    }  </p>
+<p>    hw-&gt;count++;  </p>
+<p>if (hw-&gt;rx)//读取数据到缓冲区  </p>
+<p>        hw-&gt;rx[count] = readb(hw-&gt;regs + S3C2410_SPRDAT);  </p>
+<p>    count++;  </p>
+<p>if (count &lt; hw-&gt;len)//向从机写入数据  </p>
+<p>        writeb(hw_txbyte(hw, count), hw-&gt;regs + S3C2410_SPTDAT);  </p>
+<p>else//count == len，一个字段发送完成，唤醒完成量  </p>
+<p>        complete(&amp;hw-&gt;done);  </p>
+<p> irq_done:  </p>
+<p>return IRQ_HANDLED;  </p>
+<p>}  </p>
+<p>这里可以看到一点，即使tx为空，也就是说用户申请的是从从设备读取数据，也要不断地向从设备写入数据，只不过写入从设备的是无效数据(0)，这样做得目的是为了维持SPI总线上的时钟。至此，SPI框架已分析完毕。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/Linux%20Platform%20devices%20%E5%B9%B3%E5%8F%B0%E8%AE%BE%E5%A4%87%E9%A9%B1%E5%8A%A8/" rel="prev" title="Linux Platform devices 平台设备驱动">
+      <i class="fa fa-chevron-left"></i> Linux Platform devices 平台设备驱动
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/linux%20%E5%A4%A7%E7%A1%AC%E7%9B%98%202T%20%20GPT%E5%88%86%E5%8C%BA/" rel="next" title="linux 大硬盘 2T  GPT分区">
+      linux 大硬盘 2T  GPT分区 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Edward"
+      src="/uploads/avatar.gif">
+  <p class="site-author-name" itemprop="name">Edward</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">570</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Edward</span>
+</div>
+
+        
+
+
+
+
+
+
+<script>
+  (function() {
+    function leancloudSelector(url) {
+      url = encodeURI(url);
+      return document.getElementById(url).querySelector('.leancloud-visitors-count');
+    }
+
+    function addCount(Counter) {
+      var visitors = document.querySelector('.leancloud_visitors');
+      var url = decodeURI(visitors.id);
+      var title = visitors.dataset.flagTitle;
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          if (results.length > 0) {
+            var counter = results[0];
+            leancloudSelector(url).innerText = counter.time + 1;
+            Counter('put', '/classes/Counter/' + counter.objectId, { time: { '__op': 'Increment', 'amount': 1 } })
+              .catch(error => {
+                console.error('Failed to save visitor count', error);
+              });
+          } else {
+              Counter('post', '/classes/Counter', { title, url, time: 1 })
+                .then(response => response.json())
+                .then(() => {
+                  leancloudSelector(url).innerText = 1;
+                })
+                .catch(error => {
+                  console.error('Failed to create', error);
+                });
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    function showTime(Counter) {
+      var visitors = document.querySelectorAll('.leancloud_visitors');
+      var entries = [...visitors].map(element => {
+        return decodeURI(element.id);
+      });
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url: { '$in': entries } })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          for (let url of entries) {
+            let target = results.find(item => item.url === url);
+            leancloudSelector(url).innerText = target ? target.time : 0;
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    let { app_id, app_key, server_url } = {"enable":true,"app_id":"wxYx0BX9gaKA3XC4LuO2of0v-gzGzoHsz","app_key":"LQMcs6IDIE4YAm10vMsn9IYq","server_url":"https://wxyx0bx9.lc-cn-n1-shared.com","security":false};
+    function fetchData(api_server) {
+      var Counter = (method, url, data) => {
+        return fetch(`${api_server}/1.1${url}`, {
+          method,
+          headers: {
+            'X-LC-Id'     : app_id,
+            'X-LC-Key'    : app_key,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data)
+        });
+      };
+      if (CONFIG.page.isPost) {
+        if (CONFIG.hostname !== location.hostname) return;
+        addCount(Counter);
+      } else if (document.querySelectorAll('.post-title-link').length >= 1) {
+        showTime(Counter);
+      }
+    }
+
+    let api_server = app_id.slice(-9) !== '-MdYXbMMI' ? server_url : `https://${app_id.slice(0, 8).toLowerCase()}.api.lncldglobal.com`;
+
+    if (api_server) {
+      fetchData(api_server);
+    } else {
+      fetch('https://app-router.leancloud.cn/2/route?appId=' + app_id)
+        .then(response => response.json())
+        .then(({ api_server }) => {
+          fetchData('https://' + api_server);
+        });
+    }
+  })();
+</script>
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

@@ -1,0 +1,1749 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"edward.org.cn","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="&#x2F;* drivers&#x2F;power&#x2F;rk30_adc_battery.c  *  * battery detect driver for the rk30   *  * This software is licensed under the terms of the GNU General Public  * License version 2, as published by the Free S">
+<meta property="og:type" content="article">
+<meta property="og:title" content="driverspowerrk30_adc_battery">
+<meta property="og:url" content="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/driverspowerrk30_adc_battery.c/index.html">
+<meta property="og:site_name" content="点点滴滴">
+<meta property="og:description" content="&#x2F;* drivers&#x2F;power&#x2F;rk30_adc_battery.c  *  * battery detect driver for the rk30   *  * This software is licensed under the terms of the GNU General Public  * License version 2, as published by the Free S">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-12-31T06:48:01.112Z">
+<meta property="article:modified_time" content="2020-01-16T04:37:32.144Z">
+<meta property="article:author" content="Edward">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/driverspowerrk30_adc_battery.c/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>driverspowerrk30_adc_battery | 点点滴滴</title>
+  
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?a92ed22eafce466e7a7b17546bb0dc6f";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">点点滴滴</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/driverspowerrk30_adc_battery.c/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/avatar.gif">
+      <meta itemprop="name" content="Edward">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="点点滴滴">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          driverspowerrk30_adc_battery
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-12-31 14:48:01" itemprop="dateCreated datePublished" datetime="2020-12-31T14:48:01+08:00">2020-12-31</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-01-16 12:37:32" itemprop="dateModified" datetime="2020-01-16T12:37:32+08:00">2020-01-16</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%83%82%E7%AC%94%E5%A4%B4/" itemprop="url" rel="index"><span itemprop="name">烂笔头</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/driverspowerrk30_adc_battery.c/" class="post-meta-item leancloud_visitors" data-flag-title="driverspowerrk30_adc_battery" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>/* drivers/power/rk30_adc_battery.c</p>
+<p> *</p>
+<p> * battery detect driver for the rk30 </p>
+<p> *</p>
+<p> * This software is licensed under the terms of the GNU General Public</p>
+<p> * License version 2, as published by the Free Software Foundation, and</p>
+<p> * may be copied, distributed, and modified under those terms.</p>
+<p> *</p>
+<p> * This program is distributed in the hope that it will be useful,</p>
+<p> * but WITHOUT ANY WARRANTY; without even the implied warranty of</p>
+<p> * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the</p>
+<p> * GNU General Public License for more details.</p>
+<p> *</p>
+<p> */</p>
+<p>#include &lt;linux/module.h&gt;</p>
+<p>#include &lt;linux/err.h&gt;</p>
+<p>#include &lt;linux/platform_device.h&gt;</p>
+<p>#include &lt;linux/power_supply.h&gt;</p>
+<p>#include &lt;linux/regulator/consumer.h&gt;</p>
+<p>#include &lt;linux/types.h&gt;</p>
+<p>#include &lt;linux/pci.h&gt;</p>
+<p>#include &lt;linux/interrupt.h&gt;</p>
+<p>#include &lt;asm/io.h&gt;</p>
+<p>#include &lt;asm/mach-types.h&gt;</p>
+<p>#include &lt;asm/mach/arch.h&gt;</p>
+<p>#include &lt;asm/mach/map.h&gt;</p>
+<p>#include &lt;mach/gpio.h&gt;</p>
+<p>#include &lt;linux/adc.h&gt;</p>
+<p>#include &lt;mach/iomux.h&gt;</p>
+<p>#include &lt;mach/board.h&gt;</p>
+<p>#include &lt;linux/delay.h&gt;</p>
+<p>#include &lt;linux/ktime.h&gt;</p>
+<p>#include &lt;linux/slab.h&gt;</p>
+<p>#include &lt;linux/syscalls.h&gt;</p>
+<p>#include &lt;linux/fs.h&gt;</p>
+<p>#include &lt;linux/wakelock.h&gt;</p>
+<p>#if 0</p>
+<p>#define DBG(x…)   printk(x)</p>
+<p>#else</p>
+<p>#define DBG(x…)</p>
+<p>#endif</p>
+<p>static int rk30_battery_dbg_level = 2;</p>
+<p>module_param_named(dbg_level, rk30_battery_dbg_level, int, 0644);</p>
+<p>#define pr_bat( args…) \</p>
+<p>do { \</p>
+<p>if (rk30_battery_dbg_level) { \</p>
+<p>pr_info(args); \</p>
+<p>} \</p>
+<p>} while (0)</p>
+<p>/*<strong><strong><strong><strong>**</strong></strong></strong></strong>以下参数可以修改**<strong><strong><strong><strong><strong><strong>****</strong></strong></strong></strong></strong></strong>/</p>
+<p>#define TIMER_MS_COUNTS 1000 //定时器的长度ms</p>
+<p>//以下参数需要根据实际测试调整</p>
+<p>#define SLOPE_SECOND_COUNTS               15 //统计电压斜率的时间间隔s</p>
+<p>#define DISCHARGE_MIN_SECOND               45 //最快放电电1%时间</p>
+<p>#define CHARGE_MIN_SECOND               45 //最快充电电1%时间</p>
+<p>#define CHARGE_MID_SECOND               90 //普通充电电1%时间</p>
+<p>#define CHARGE_MAX_SECOND               250 //最长充电电1%时间</p>
+<p>#define   CHARGE_FULL_DELAY_TIMES          10          //充电满检测防抖时间</p>
+<p>#define   USBCHARGE_IDENTIFY_TIMES        5           //插入USB混流，pc识别检测时间</p>
+<p>#define NUM_VOLTAGE_SAMPLE                       ((SLOPE_SECOND_COUNTS * 1000) / TIMER_MS_COUNTS)  </p>
+<p>#define NUM_DISCHARGE_MIN_SAMPLE         ((DISCHARGE_MIN_SECOND * 1000) / TIMER_MS_COUNTS)  </p>
+<p>#define NUM_CHARGE_MIN_SAMPLE         ((CHARGE_MIN_SECOND * 1000) / TIMER_MS_COUNTS)    </p>
+<p>#define NUM_CHARGE_MID_SAMPLE         ((CHARGE_MID_SECOND * 1000) / TIMER_MS_COUNTS)     </p>
+<p>#define NUM_CHARGE_MAX_SAMPLE         ((CHARGE_MAX_SECOND * 1000) / TIMER_MS_COUNTS)  </p>
+<p>#define   NUM_CHARGE_FULL_DELAY_TIMES         ((CHARGE_FULL_DELAY_TIMES * 1000) / TIMER_MS_COUNTS) //充电满状态持续时间长度</p>
+<p>#define   NUM_USBCHARGE_IDENTIFY_TIMES      ((USBCHARGE_IDENTIFY_TIMES * 1000) / TIMER_MS_COUNTS) //充电满状态持续时间长度</p>
+<p>#define   CHARGE_IS_OK                    1</p>
+<p>#define   INVALID_CHARGE_CHECK               -1</p>
+<p>#if defined(CONFIG_ARCH_RK3066B)</p>
+<p>#define  BAT_DEFINE_VALUE                                     1800</p>
+<p>#elif defined(CONFIG_ARCH_RK2928)</p>
+<p>#define  BAT_DEFINE_VALUE                                                3300</p>
+<p>#else</p>
+<p>#define  BAT_DEFINE_VALUE                                     2500</p>
+<p>#endif</p>
+<p>#define BATT_FILENAME &quot;/data/bat_last_capacity.dat&quot;</p>
+<p>static struct wake_lock batt_wake_lock;</p>
+<p>struct batt_vol_cal{</p>
+<p>u32 disp_cal;</p>
+<p>u32 dis_charge_vol;</p>
+<p>u32 charge_vol;</p>
+<p>};</p>
+<p>#ifdef CONFIG_BATTERY_RK30_VOL3V8</p>
+<p>#define BATT_MAX_VOL_VALUE                             4120               //满电时的电池电压  </p>
+<p>#define BATT_ZERO_VOL_VALUE                            3500               //关机时的电池电压</p>
+<p>#define BATT_NOMAL_VOL_VALUE                         3800               </p>
+<p>//divider resistance </p>
+<p>#define BAT_PULL_UP_R                                         200</p>
+<p>#if defined(CONFIG_ARCH_RK3066B)</p>
+<p>#define BAT_PULL_DOWN_R                                    100</p>
+<p>#else</p>
+<p>#define BAT_PULL_DOWN_R                                    200</p>
+<p>#endif</p>
+<p>static struct batt_vol_cal  batt_table[] = {</p>
+<p>/*</p>
+<p>{0,3400,3520},{1,3420,3525},{2,3420,3575},{3,3475,3600},{5,3505,3620},{7,3525,3644},</p>
+<p>{9,3540,3662},{11,3557,3670},{13,3570,3684},{15,3580,3700},{17,3610,3715},</p>
+<p>{19,3630,3720},{21,3640,3748},{23,3652,3756},{25,3662,3775},{27,3672,3790},</p>
+<p>{29,3680,3810},{31,3687,3814},{33,3693,3818},{35,3699,3822},{37,3705,3825},</p>
+<p>{39,3710,3830},{41,3714,3832},{43,3718,3834},{45,3722,3836},{47,3726,3837},</p>
+<p>{49,3730,3839},{51,3734,3841},{53,3738,3842},{55,3742,3844},{57,3746,3844},</p>
+<p>{59,3750,3855},{61,3756,3860},{63,3764,3864},{65,3774,3871},{67,3786,3890},</p>
+<p>{69,3800,3910},{71,3808,3930},{73,3817,3977},{75,3827,3977},{77,3845,3997},</p>
+<p>{79,3950,4030},{81,3964,4047},{83,3982,4064},{85,4002,4080},{87,4026,4096},</p>
+<p>{89,4030,4132</p>
+<p>*/</p>
+<p>/*</p>
+<p>{0,3500,3550},{2,3512,3562},{4,3524,3574},{6,3536,3586},{8,3548,3598},</p>
+<p>{10,3560,3610},{12,3572,3622},{14,3584,3634},{16,3596,3646},{18,3608,3658},</p>
+<p>{20,3620,3670},{22,3632,3682},{24,3644,3694},{26,3656,3706},{28,3668,3718},</p>
+<p>{30,3680,3730},{32,3692,3742},{34,3704,3754},{36,3716,3766},{38,3728,3778},</p>
+<p>{40,3740,3790},{42,3752,3802},{44,3764,3814},{46,3776,3826},{48,3788,3838},</p>
+<p>{50,3800,3850},{52,3812,3862},{54,3824,3874},{56,3836,3886},{58,3848,3898},</p>
+<p>{60,3860,3910},{62,3872,3922},{64,3884,3934},{66,3896,3946},{68,3908,3958},</p>
+<p>{70,3920,3970},{72,3932,3982},{74,3944,3994},{76,3956,4006},{78,3968,4018},</p>
+<p>{80,3980,4030},{82,3992,4042},{84,4004,4054},{86,4016,4066},{88,4028,4078},</p>
+<p>{90,4040,4090},{92,4052,4102},{94,4064,4114},{96,4076,4126},{98,4088,4168},</p>
+<p>{100,4120,4200},*/</p>
+<p>{1,3500,3700},{10,3575,3750},{20,3600,3800},{30,3615,3850},{40,3645,3900},</p>
+<p>{50,3680,3950},{60,3730,4000},{70,3785,4050},{80,3850,4100},{90,3935,4150},</p>
+<p>{100,4120,4200},</p>
+<p>};</p>
+<p>#else</p>
+<p>#define BATT_MAX_VOL_VALUE                              8284               //Full charge voltage</p>
+<p>#define BATT_ZERO_VOL_VALUE                             6800             // power down voltage </p>
+<p>#define BATT_NOMAL_VOL_VALUE                          7600                </p>
+<p>//定义ADC采样分压电阻，以实际值为准，单位K</p>
+<p>#define BAT_PULL_UP_R                                         300 </p>
+<p>#define BAT_PULL_DOWN_R                                    100</p>
+<p>static struct batt_vol_cal  batt_table[] = {</p>
+<p>{0,6800,7400},    {1,6840,7440},    {2,6880,7480},     {3,6950,7450},       {5,7010,7510},    {7,7050,7550},</p>
+<p>{9,7080,7580},    {11,7104,7604},   {13,7140,7640},   {15,7160,7660},      {17,7220,7720},</p>
+<p>{19,7260,7760},  {21,7280,7780},   {23,7304,7802},   {25,7324,7824},      {27,7344,7844},</p>
+<p>{29,7360,7860},  {31,7374,7874},   {33,7386,7886},   {35,7398,7898},      {37,7410,7910},//500</p>
+<p>{39,7420,7920},  {41,7424,7928},   {43,7436,7947},   {45,7444,7944},      {47,7450,7958}, //508</p>
+<p>{49,7460,7965},  {51,7468,7975},   {53, 7476,7990},  {55,7482,8000},      {57,7492,8005}, // 5 14</p>
+<p>{59,7500,8011},  {61,7510,8033},   {63,7528,8044},   {65,7548,8055},      {67,7560,8066},//506</p>
+<p>{69,7600,8070},  {71,7618,8075},   {73,7634,8080},   {75,7654,8085},      {77,7690,8100}, //400</p>
+<p>{79,7900,8180},  {81,7920,8210},   {83,7964,8211},   {85,8000,8214},      {87,8002,8218},//290</p>
+<p>{89,8012, 8220}, {91,8022,8235},   {93,8110,8260},   {95,8140,8290},       {97,8170,8300},  {100,8200 ,8310},//110</p>
+<p>};</p>
+<p>#endif</p>
+<p>#define BATT_NUM  ARRAY_SIZE(batt_table)</p>
+<p>#define adc_to_voltage(adc_val)                           ((adc_val * BAT_DEFINE_VALUE * (BAT_PULL_UP_R + BAT_PULL_DOWN_R)) / (1024 * BAT_PULL_DOWN_R))</p>
+<p>/<strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong>****</strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong>/</p>
+<p>extern int dwc_vbus_status(void);</p>
+<p>extern int get_msc_connect_flag(void);</p>
+<p>struct rk30_adc_battery_data {</p>
+<p>int irq;</p>
+<p>//struct timer_list       timer;</p>
+<p>struct workqueue_struct *wq;</p>
+<p>struct delayed_work    delay_work;</p>
+<p>struct work_struct    dcwakeup_work;</p>
+<p>struct work_struct                   lowerpower_work;</p>
+<p>bool                    resume;</p>
+<p>struct rk30_adc_battery_platform_data *pdata;</p>
+<p>int                     full_times;</p>
+<p>struct adc_client       *client; </p>
+<p>int                     adc_val;</p>
+<p>int                     adc_samples[NUM_VOLTAGE_SAMPLE+2];</p>
+<p>int                     bat_status;</p>
+<p>int                     bat_status_cnt;</p>
+<p>int                     bat_health;</p>
+<p>int                     bat_present;</p>
+<p>int                     bat_voltage;</p>
+<p>int                     bat_capacity;</p>
+<p>int                     bat_change;</p>
+<p>int                     old_charge_level;</p>
+<p>int                    *pSamples;</p>
+<p>int                     gBatCapacityDisChargeCnt;</p>
+<p>int                     gBatCapacityChargeCnt;</p>
+<p>int          capacitytmp;</p>
+<p>int                     poweron_check;</p>
+<p>int                     suspend_capacity;</p>
+<p>int                     status_lock;</p>
+<p>};</p>
+<p>static struct rk30_adc_battery_data *gBatteryData;</p>
+<p>enum {</p>
+<p>BATTERY_STATUS          = 0,</p>
+<p>BATTERY_HEALTH          = 1,</p>
+<p>BATTERY_PRESENT         = 2,</p>
+<p>BATTERY_CAPACITY        = 3,</p>
+<p>BATTERY_AC_ONLINE       = 4,</p>
+<p>BATTERY_STATUS_CHANGED = 5,</p>
+<p>AC_STATUS_CHANGED   = 6,</p>
+<p>BATTERY_INT_STATUS    = 7,</p>
+<p>BATTERY_INT_ENABLE    = 8,</p>
+<p>};</p>
+<p>typedef enum {</p>
+<p>CHARGER_BATTERY = 0,</p>
+<p>CHARGER_USB,</p>
+<p>CHARGER_AC</p>
+<p>} charger_type_t;</p>
+<p>static int rk30_adc_battery_load_capacity(void)</p>
+<p>{</p>
+<p>char value[4];</p>
+<p>int* p = (int *)value;</p>
+<p>long fd = sys_open(BATT_FILENAME,O_RDONLY,0);</p>
+<p>if(fd &lt; 0){</p>
+<p>pr_bat(&quot;rk30_adc_battery_load_capacity: open file /data/bat_last_capacity.dat failed\n&quot;);</p>
+<p>return -1;</p>
+<p>}</p>
+<p>sys_read(fd,(char __user *)value,4);</p>
+<p>sys_close(fd);</p>
+<p>return (*p);</p>
+<p>}</p>
+<p>static void rk30_adc_battery_put_capacity(int loadcapacity)</p>
+<p>{</p>
+<p>char value[4];</p>
+<p>int* p = (int *)value;</p>
+<p>long fd = sys_open(BATT_FILENAME,O_CREAT | O_RDWR,0);</p>
+<p>if(fd &lt; 0){</p>
+<p>pr_bat(&quot;rk30_adc_battery_put_capacity: open file /data/bat_last_capacity.dat failed\n&quot;);</p>
+<p>return;</p>
+<p>}</p>
+<p>*p = loadcapacity;</p>
+<p>sys_write(fd, (const char __user *)value, 4);</p>
+<p>sys_close(fd);</p>
+<p>}</p>
+<p>static void rk30_adc_battery_charge_enable(struct rk30_adc_battery_data *bat)</p>
+<p>{</p>
+<p>struct rk30_adc_battery_platform_data *pdata = bat-&gt;pdata;</p>
+<p>if (pdata-&gt;charge_set_pin != INVALID_GPIO){</p>
+<p>gpio_direction_output(pdata-&gt;charge_set_pin, pdata-&gt;charge_set_level);</p>
+<p>}</p>
+<p>}</p>
+<p>static void rk30_adc_battery_charge_disable(struct rk30_adc_battery_data *bat)</p>
+<p>{</p>
+<p>struct rk30_adc_battery_platform_data *pdata = bat-&gt;pdata;</p>
+<p>if (pdata-&gt;charge_set_pin != INVALID_GPIO){</p>
+<p>gpio_direction_output(pdata-&gt;charge_set_pin, 1 - pdata-&gt;charge_set_level);</p>
+<p>}</p>
+<p>}</p>
+<p>//extern int suspend_flag;</p>
+<p>static int rk30_adc_battery_get_charge_level(struct rk30_adc_battery_data *bat)</p>
+<p>{</p>
+<p>int charge_on = 0;</p>
+<p>struct rk30_adc_battery_platform_data *pdata = bat-&gt;pdata;</p>
+<p>#if defined (CONFIG_BATTERY_RK30_AC_CHARGE)</p>
+<p>if (pdata-&gt;dc_det_pin != INVALID_GPIO){</p>
+<p>if (gpio_get_value (pdata-&gt;dc_det_pin) == pdata-&gt;dc_det_level){</p>
+<p>charge_on = 1;</p>
+<p>}</p>
+<p>}</p>
+<p>/*</p>
+<p>else{</p>
+<p>if(pdata-&gt;is_dc_charging)</p>
+<p>charge_on =pdata-&gt;is_dc_charging();</p>
+<p>}*/</p>
+<p>#endif</p>
+<p>#if 0</p>
+<p>if (pdata-&gt;spport_usb_charging)  //is usb charging </p>
+<p>if(pdata-&gt;is_usb_charging)</p>
+<p>charge_on = pdata-&gt;is_usb_charging();</p>
+<p>#endif</p>
+<p>return charge_on;</p>
+<p>}</p>
+<p>static int  is_charge_ok(struct rk30_adc_battery_data *bat)</p>
+<p>{</p>
+<p>int charge_is_ok = 0;</p>
+<p>struct rk30_adc_battery_platform_data *pdata = bat-&gt;pdata;</p>
+<p>if((pdata-&gt;charge_ok_pin == INVALID_GPIO)&amp;&amp; ( pdata-&gt;charging_ok == NULL))</p>
+<p>return -1;</p>
+<p>if (pdata-&gt;charge_ok_pin != INVALID_GPIO){</p>
+<p>if (gpio_get_value(pdata-&gt;charge_ok_pin) == pdata-&gt;charge_ok_level)</p>
+<p>{</p>
+<p>charge_is_ok =1;</p>
+<p>}</p>
+<p>}else if( pdata-&gt;charging_ok)</p>
+<p>{</p>
+<p>charge_is_ok = pdata-&gt;charging_ok();</p>
+<p>}</p>
+<p>return charge_is_ok;</p>
+<p>}</p>
+<p>//int old_charge_level;</p>
+<p>static int rk30_adc_battery_status_samples(struct rk30_adc_battery_data *bat)</p>
+<p>{</p>
+<p>int charge_level;</p>
+<p>// struct rk30_adc_battery_platform_data *pdata = bat-&gt;pdata;</p>
+<p>charge_level = rk30_adc_battery_get_charge_level(bat);</p>
+<p>//检测充电状态变化情况</p>
+<p>if (charge_level != bat-&gt;old_charge_level){</p>
+<p>bat-&gt;old_charge_level = charge_level;</p>
+<p>bat-&gt;bat_change  = 1;</p>
+<p>if(charge_level) {            </p>
+<p>rk30_adc_battery_charge_enable(bat);</p>
+<p>}</p>
+<p>else{</p>
+<p>rk30_adc_battery_charge_disable(bat);</p>
+<p>}</p>
+<p>bat-&gt;bat_status_cnt = 0;        //状态变化开始计数</p>
+<p>}</p>
+<p>if(charge_level == 0){   </p>
+<p>//discharge</p>
+<p>bat-&gt;full_times = 0;</p>
+<p>bat-&gt;bat_status = POWER_SUPPLY_STATUS_NOT_CHARGING;</p>
+<p>}</p>
+<p>else{</p>
+<p>//CHARGE</p>
+<p>if( is_charge_ok(bat)  ==  INVALID_CHARGE_CHECK){</p>
+<p>//if (pdata-&gt;charge_ok_pin == INVALID_GPIO){  //no charge_ok_pin</p>
+<p>if (bat-&gt;bat_capacity == 100){</p>
+<p>if (bat-&gt;bat_status != POWER_SUPPLY_STATUS_FULL){</p>
+<p>bat-&gt;bat_status = POWER_SUPPLY_STATUS_FULL;</p>
+<p>bat-&gt;bat_change  = 1;</p>
+<p>}</p>
+<p>}</p>
+<p>else{</p>
+<p>bat-&gt;bat_status = POWER_SUPPLY_STATUS_CHARGING;</p>
+<p>}</p>
+<p>}</p>
+<p>else{  // pin of charge_ok_pin</p>
+<p>if (is_charge_ok(bat) != CHARGE_IS_OK ){</p>
+<p>bat-&gt;full_times = 0;</p>
+<p>bat-&gt;bat_status = POWER_SUPPLY_STATUS_CHARGING;</p>
+<p>}</p>
+<p>else{</p>
+<p>//检测到充电满电平标志</p>
+<p>bat-&gt;full_times++;</p>
+<p>if (bat-&gt;full_times &gt;= NUM_CHARGE_FULL_DELAY_TIMES) {</p>
+<p>bat-&gt;full_times = NUM_CHARGE_FULL_DELAY_TIMES + 1;</p>
+<p>}</p>
+<p>if ((bat-&gt;full_times &gt;= NUM_CHARGE_FULL_DELAY_TIMES) &amp;&amp; (bat-&gt;bat_capacity &gt;= 95)){</p>
+<p>if (bat-&gt;bat_status != POWER_SUPPLY_STATUS_FULL){</p>
+<p>bat-&gt;bat_status = POWER_SUPPLY_STATUS_FULL;</p>
+<p>bat-&gt;bat_capacity = 100;</p>
+<p>bat-&gt;bat_change  = 1;</p>
+<p>}</p>
+<p>}</p>
+<p>else{</p>
+<p>bat-&gt;bat_status = POWER_SUPPLY_STATUS_CHARGING;</p>
+<p>}</p>
+<p>}</p>
+<p>}</p>
+<p>}</p>
+<p>return charge_level;</p>
+<p>}</p>
+<p>//#define adc_to_voltage(adc_val)                           ((adc_val * BAT_DEFINE_VALUE * (BAT_PULL_UP_R + BAT_PULL_DOWN_R)) / (1024 * BAT_PULL_DOWN_R))</p>
+<p>static int rk_adc_voltage(int value)</p>
+<p>{</p>
+<p>int voltage;</p>
+<p>int ref_voltage; //reference_voltage</p>
+<p>int pullup_res;</p>
+<p>int pulldown_res;</p>
+<p>ref_voltage = gBatteryData -&gt;pdata-&gt;reference_voltage;</p>
+<p>pullup_res = gBatteryData -&gt;pdata-&gt;pull_up_res;</p>
+<p>pulldown_res = gBatteryData -&gt;pdata-&gt;pull_down_res;</p>
+<p>if(ref_voltage &amp;&amp; pullup_res &amp;&amp; pulldown_res){</p>
+<p>voltage =  ((value * ref_voltage * (pullup_res + pulldown_res)) / (1024 * pulldown_res));</p>
+<p>}else{</p>
+<p>voltage = adc_to_voltage(value);</p>
+<p>}</p>
+<p>return voltage;</p>
+<p>}</p>
+<p>static int *pSamples;</p>
+<p>static void rk30_adc_battery_voltage_samples(struct rk30_adc_battery_data *bat)</p>
+<p>{</p>
+<p>int value;</p>
+<p>int i,*pStart = bat-&gt;adc_samples, num = 0;</p>
+<p>int level = rk30_adc_battery_get_charge_level(bat);</p>
+<p>value = bat-&gt;adc_val;</p>
+<p>adc_async_read(bat-&gt;client);</p>
+<p>*pSamples++ = rk_adc_voltage(value);</p>
+<p>bat-&gt;bat_status_cnt++;</p>
+<p>if (bat-&gt;bat_status_cnt &gt; NUM_VOLTAGE_SAMPLE)  bat-&gt;bat_status_cnt = NUM_VOLTAGE_SAMPLE + 1;</p>
+<p>num = pSamples - pStart;</p>
+<p>if (num &gt;= NUM_VOLTAGE_SAMPLE){</p>
+<p>pSamples = pStart;</p>
+<p>num = NUM_VOLTAGE_SAMPLE;</p>
+<p>}</p>
+<p>value = 0;</p>
+<p>for (i = 0; i &lt; num; i++){</p>
+<p>value += bat-&gt;adc_samples[i];</p>
+<p>}</p>
+<p>bat-&gt;bat_voltage = value / num;</p>
+<p>/<em>消除毛刺电压</em>/</p>
+<p>if(1 == level){</p>
+<p>if(bat-&gt;bat_voltage &gt;= batt_table[BATT_NUM-1].charge_vol+ 10)</p>
+<p>bat-&gt;bat_voltage = batt_table[BATT_NUM-1].charge_vol  + 10;</p>
+<p>else if(bat-&gt;bat_voltage &lt;= batt_table[0].charge_vol  - 10)</p>
+<p>bat-&gt;bat_voltage =  batt_table[0].charge_vol - 10;</p>
+<p>}</p>
+<p>else{</p>
+<p>if(bat-&gt;bat_voltage &gt;= batt_table[BATT_NUM-1].dis_charge_vol+ 10)</p>
+<p>bat-&gt;bat_voltage = batt_table[BATT_NUM-1].dis_charge_vol  + 10;</p>
+<p>else if(bat-&gt;bat_voltage &lt;= batt_table[0].dis_charge_vol  - 10)</p>
+<p>bat-&gt;bat_voltage =  batt_table[0].dis_charge_vol - 10;</p>
+<p>}</p>
+<p>}</p>
+<p>static int rk30_adc_battery_voltage_to_capacity(struct rk30_adc_battery_data *bat, int BatVoltage)</p>
+<p>{</p>
+<p>int i = 0;</p>
+<p>int capacity = 0;</p>
+<p>struct batt_vol_cal *p;</p>
+<p>p = batt_table;</p>
+<p>if (rk30_adc_battery_get_charge_level(bat)){  //charge</p>
+<p>if(BatVoltage &gt;= (p[BATT_NUM - 1].charge_vol)){</p>
+<p>capacity = 99;</p>
+<p>}</p>
+<p>else{</p>
+<p>if(BatVoltage &lt;= (p[0].charge_vol)){</p>
+<p>capacity = 0;</p>
+<p>}</p>
+<p>else{</p>
+<p>for(i = 0; i &lt; BATT_NUM - 1; i++){</p>
+<p>if(((p[i].charge_vol) &lt;= BatVoltage) &amp;&amp; (BatVoltage &lt; (p[i+1].charge_vol))){</p>
+<p>capacity = p[i].disp_cal + ((BatVoltage - p[i].charge_vol) *  (p[i+1].disp_cal -p[i].disp_cal ))/ (p[i+1].charge_vol- p[i].charge_vol);</p>
+<p>break;</p>
+<p>}</p>
+<p>}</p>
+<p>}  </p>
+<p>}</p>
+<p>}</p>
+<p>else{  //discharge</p>
+<p>if(BatVoltage &gt;= (p[BATT_NUM - 1].dis_charge_vol)){</p>
+<p>capacity = 100;</p>
+<p>}</p>
+<p>else{</p>
+<p>if(BatVoltage &lt;= (p[0].dis_charge_vol)){</p>
+<p>capacity = 0;</p>
+<p>}</p>
+<p>else{</p>
+<p>for(i = 0; i &lt; BATT_NUM - 1; i++){</p>
+<p>if(((p[i].dis_charge_vol) &lt;= BatVoltage) &amp;&amp; (BatVoltage &lt; (p[i+1].dis_charge_vol))){</p>
+<p>capacity =  p[i].disp_cal+ ((BatVoltage - p[i].dis_charge_vol) * (p[i+1].disp_cal -p[i].disp_cal ) )/ (p[i+1].dis_charge_vol- p[i].dis_charge_vol) ;</p>
+<p>break;</p>
+<p>}</p>
+<p>}</p>
+<p>}  </p>
+<p>}</p>
+<p>}</p>
+<p>    return capacity;</p>
+<p>    }</p>
+<p>static void rk30_adc_battery_capacity_samples(struct rk30_adc_battery_data *bat)</p>
+<p>{</p>
+<p>int capacity = 0;</p>
+<p>// struct rk30_adc_battery_platform_data *pdata = bat-&gt;pdata;</p>
+<p>int timer_of_charge_sample = NUM_CHARGE_MIN_SAMPLE;</p>
+<p>int timer_of_discharge_sample = NUM_CHARGE_MIN_SAMPLE;</p>
+<p>//充放电状态变化后，Buffer填满之前，不更新</p>
+<p>if (bat-&gt;bat_status_cnt &lt; NUM_VOLTAGE_SAMPLE)  {</p>
+<p>bat-&gt;gBatCapacityDisChargeCnt = 0;</p>
+<p>bat-&gt;gBatCapacityChargeCnt    = 0;</p>
+<p>return;</p>
+<p>}</p>
+<p>capacity = rk30_adc_battery_voltage_to_capacity(bat, bat-&gt;bat_voltage);</p>
+<p>if (rk30_adc_battery_get_charge_level(bat)){</p>
+<p>if (capacity &gt; bat-&gt;bat_capacity){</p>
+<p>if(capacity &gt; bat-&gt;bat_capacity + 10 )</p>
+<p>       timer_of_charge_sample = NUM_CHARGE_MIN_SAMPLE -10;  //5s</p>
+<p>else if(capacity &gt; bat-&gt;bat_capacity + 7 )</p>
+<p>       timer_of_charge_sample = NUM_CHARGE_MIN_SAMPLE -5; //10s</p>
+<p>       else if(capacity &gt; bat-&gt;bat_capacity + 3 )</p>
+<p>               timer_of_charge_sample = NUM_CHARGE_MIN_SAMPLE - 2; // 13</p>
+<p>//实际采样到的容量比显示的容量大，逐级上升</p>
+<p>if (++(bat-&gt;gBatCapacityDisChargeCnt) &gt;= timer_of_charge_sample){</p>
+<p>bat-&gt;gBatCapacityDisChargeCnt  = 0;</p>
+<p>if (bat-&gt;bat_capacity &lt; 99){</p>
+<p>bat-&gt;bat_capacity++;</p>
+<p>bat-&gt;bat_change  = 1;</p>
+<p>}</p>
+<p>}</p>
+<p>bat-&gt;gBatCapacityChargeCnt = 0;</p>
+<p>}</p>
+<p>else{  //   实际的容量比采样比 显示的容量小</p>
+<p>           bat-&gt;gBatCapacityDisChargeCnt = 0;</p>
+<p>           (bat-&gt;gBatCapacityChargeCnt)++;</p>
+<p>pr_bat(&quot;————- is_charge_ok(bat)=%d\n&quot;, is_charge_ok(bat));</p>
+<p>            if( is_charge_ok(bat) != INVALID_CHARGE_CHECK){</p>
+<p>//if (pdata-&gt;charge_ok_pin != INVALID_GPIO){</p>
+<p>//if (gpio_get_value(pdata-&gt;charge_ok_pin) == pdata-&gt;charge_ok_level){</p>
+<p>if( is_charge_ok(bat) == CHARGE_IS_OK){</p>
+<p>if(capacity &gt; bat-&gt;bat_capacity + 10 )</p>
+<p>       timer_of_charge_sample = NUM_CHARGE_MIN_SAMPLE -13;  //  2s</p>
+<p>else if(capacity &gt; bat-&gt;bat_capacity + 7 )</p>
+<p>       timer_of_charge_sample = NUM_CHARGE_MIN_SAMPLE -10; //10s</p>
+<p>else if(capacity &gt; bat-&gt;bat_capacity + 2 )</p>
+<p>       timer_of_charge_sample = NUM_CHARGE_MIN_SAMPLE -8; //7s</p>
+<p>//检测到电池充满标志，同时长时间内充电电压无变化，开始启动计时充电，快速上升容量</p>
+<p>if (bat-&gt;gBatCapacityChargeCnt &gt;= timer_of_charge_sample){</p>
+<p>bat-&gt;gBatCapacityChargeCnt = 0;</p>
+<p>if (bat-&gt;bat_capacity &lt; 99){</p>
+<p>bat-&gt;bat_capacity++;</p>
+<p>bat-&gt;bat_change  = 1;</p>
+<p>}</p>
+<p>}</p>
+<p>}</p>
+<p>else{</p>
+<p>#if 0</p>
+<p>if (capacity &gt; capacitytmp){</p>
+<p>//过程中如果电压有增长，定时器复位，防止定时器模拟充电比实际充电快</p>
+<p>gBatCapacityChargeCnt = 0;</p>
+<p>}</p>
+<p>else if (/<em>bat-&gt;bat_capacity &gt;= 85) &amp;&amp;</em>/ (gBatCapacityChargeCnt &gt; NUM_CHARGE_MAX_SAMPLE)){</p>
+<p>gBatCapacityChargeCnt = (NUM_CHARGE_MAX_SAMPLE - NUM_CHARGE_MID_SAMPLE);</p>
+<p>if (bat-&gt;bat_capacity &lt; 99){</p>
+<p>bat-&gt;bat_capacity++;</p>
+<p>bat-&gt;bat_change  = 1;</p>
+<p>}</p>
+<p>}</p>
+<p>}</p>
+<p>#else //  防止电池老化后出现冲不满的情况，</p>
+<p>if (capacity &gt; bat-&gt;capacitytmp){</p>
+<p>//过程中如果电压有增长，定时器复位，防止定时器模拟充电比实际充电快</p>
+<p>bat-&gt;gBatCapacityChargeCnt = 0;</p>
+<p>}</p>
+<p>else{</p>
+<p>if ((bat-&gt;bat_capacity &gt;= 85) &amp;&amp;((bat-&gt;gBatCapacityChargeCnt) &gt; NUM_CHARGE_MAX_SAMPLE)){</p>
+<p>bat-&gt;gBatCapacityChargeCnt = (NUM_CHARGE_MAX_SAMPLE - NUM_CHARGE_MID_SAMPLE);</p>
+<p>if (bat-&gt;bat_capacity &lt; 99){</p>
+<p>bat-&gt;bat_capacity++;</p>
+<p>bat-&gt;bat_change  = 1;</p>
+<p>}</p>
+<p>}</p>
+<p>}</p>
+<p>}</p>
+<p>#endif</p>
+<p>}</p>
+<p>else{</p>
+<p>//没有充电满检测脚，长时间内电压无变化，定时器模拟充电</p>
+<p>if (capacity &gt; bat-&gt;capacitytmp){</p>
+<p>//过程中如果电压有增长，定时器复位，防止定时器模拟充电比实际充电快</p>
+<p>bat-&gt;gBatCapacityChargeCnt = 0;</p>
+<p>}</p>
+<p>else{</p>
+<p>if ((bat-&gt;bat_capacity &gt;= 85) &amp;&amp;(bat-&gt;gBatCapacityChargeCnt &gt; NUM_CHARGE_MAX_SAMPLE)){</p>
+<p>bat-&gt;gBatCapacityChargeCnt = (NUM_CHARGE_MAX_SAMPLE - NUM_CHARGE_MID_SAMPLE);</p>
+<p>if (bat-&gt;bat_capacity &lt;= 99){</p>
+<p>bat-&gt;bat_capacity++;</p>
+<p>bat-&gt;bat_change  = 1;</p>
+<p>}</p>
+<p>}</p>
+<p>}</p>
+<p>}            </p>
+<p>}</p>
+<p>}    </p>
+<p>else{   </p>
+<p>//放电时,只允许电压下降</p>
+<p>if (capacity &lt; bat-&gt;bat_capacity){</p>
+<p>if(capacity + 10 &gt; bat-&gt;bat_capacity  )</p>
+<p>       timer_of_discharge_sample = NUM_CHARGE_MIN_SAMPLE -10;  //5s</p>
+<p>else if(capacity  + 7 &gt; bat-&gt;bat_capacity )</p>
+<p>       timer_of_discharge_sample = NUM_CHARGE_MIN_SAMPLE -5; //10s</p>
+<p>       else if(capacity  + 3&gt; bat-&gt;bat_capacity )</p>
+<p>               timer_of_discharge_sample = NUM_CHARGE_MIN_SAMPLE - 2; // 13</p>
+<p>if (++(bat-&gt;gBatCapacityDisChargeCnt) &gt;= timer_of_discharge_sample){</p>
+<p>bat-&gt;gBatCapacityDisChargeCnt = 0;</p>
+<p>if (bat-&gt;bat_capacity &gt; 0){</p>
+<p>bat-&gt;bat_capacity– ;</p>
+<p>bat-&gt;bat_change  = 1;</p>
+<p>}</p>
+<p>}</p>
+<p>}</p>
+<p>else{</p>
+<p>bat-&gt;gBatCapacityDisChargeCnt = 0;</p>
+<p>}</p>
+<p>bat-&gt;gBatCapacityChargeCnt = 0;</p>
+<p>}</p>
+<p>bat-&gt;capacitytmp = capacity;</p>
+<p>}</p>
+<p>//static int poweron_check = 0;</p>
+<p>static void rk30_adc_battery_poweron_capacity_check(void)</p>
+<p>{</p>
+<p>int new_capacity, old_capacity;</p>
+<p>new_capacity = gBatteryData-&gt;bat_capacity;</p>
+<p>old_capacity = rk30_adc_battery_load_capacity();</p>
+<p>printk(&quot;————old_capacity—%d\n&quot;,old_capacity);</p>
+<p>printk(&quot;————new_capacity—%d\n&quot;,new_capacity);</p>
+<p>if ((old_capacity &lt;= 0) || (old_capacity &gt;= 100)){</p>
+<p>old_capacity = new_capacity;</p>
+<p>}    </p>
+<p>if (gBatteryData-&gt;bat_status == POWER_SUPPLY_STATUS_FULL){</p>
+<p>if (new_capacity &gt; 80){</p>
+<p>gBatteryData-&gt;bat_capacity = 100;</p>
+<p>}</p>
+<p>}</p>
+<p>else if (gBatteryData-&gt;bat_status != POWER_SUPPLY_STATUS_NOT_CHARGING){</p>
+<p>//chargeing state</p>
+<p>//问题：</p>
+<p>// //1）长时间关机放置后，开机后读取的容量远远大于实际容量怎么办？</p>
+<p>// //2）如果不这样做，短时间关机再开机，前后容量不一致又该怎么办？</p>
+<p>// //3）一下那种方式合适？</p>
+<p>//gBatteryData-&gt;bat_capacity = new_capacity;</p>
+<p>// gBatteryData-&gt;bat_capacity = (new_capacity &gt; old_capacity) ? new_capacity : old_capacity;</p>
+<p>if (old_capacity &gt; new_capacity)//放置一段时间了</p>
+<p>{</p>
+<p>   if((old_capacity - new_capacity) &gt; 10)</p>
+<p>   {</p>
+<p>       old_capacity=new_capacity;</p>
+<p>   }</p>
+<p>}else{</p>
+<p>            if((new_capacity - old_capacity)&gt;55){ //充电了，电量有所上升</p>
+<p>                old_capacity=new_capacity;</p>
+<p>            }</p>
+<p>        }</p>
+<p>        gBatteryData-&gt;bat_capacity = old_capacity; </p>
+<p>}else{</p>
+<p>if(new_capacity &gt; old_capacity + 35 )</p>
+<p>gBatteryData-&gt;bat_capacity = new_capacity;</p>
+<p>else</p>
+<p>gBatteryData-&gt;bat_capacity = (new_capacity &lt; old_capacity) ? new_capacity : old_capacity;  //avoid the value of capacity increase </p>
+<p>}</p>
+<p>pr_bat(&quot;capacity = %d, new_capacity = %d, old_capacity = %d\n&quot;,gBatteryData-&gt;bat_capacity, new_capacity, old_capacity);</p>
+<p>gBatteryData-&gt;bat_change = 1;</p>
+<p>}</p>
+<p>#if defined(CONFIG_BATTERY_RK30_USB_CHARGE)</p>
+<p>static int rk30_adc_battery_get_usb_property(struct power_supply *psy, </p>
+<p>   enum power_supply_property psp,</p>
+<p>   union power_supply_propval *val)</p>
+<p>{</p>
+<p>charger_type_t charger;</p>
+<p>charger =  CHARGER_USB;</p>
+<p>switch (psp) {</p>
+<p>case POWER_SUPPLY_PROP_ONLINE:</p>
+<p>if (psy-&gt;type == POWER_SUPPLY_TYPE_USB)</p>
+<p>// val-&gt;intval = get_msc_connect_flag();</p>
+<p>if (gBatteryData-&gt;pdata-&gt;spport_usb_charging)  //is usb charging </p>
+<p>if(gBatteryData-&gt;pdata-&gt;is_usb_charging)</p>
+<p>val-&gt;intval = gBatteryData -&gt;pdata-&gt;is_usb_charging();</p>
+<p>printk(&quot;%s:%d\n&quot;,<strong>FUNCTION</strong>,val-&gt;intval);</p>
+<p>break;</p>
+<p>default:</p>
+<p>return -EINVAL;</p>
+<p>}</p>
+<p>return 0;</p>
+<p>}</p>
+<p>static enum power_supply_property rk30_adc_battery_usb_props[] = {</p>
+<p>POWER_SUPPLY_PROP_ONLINE,</p>
+<p>};</p>
+<p>static struct power_supply rk30_usb_supply = </p>
+<p>{</p>
+<p>.name = &quot;usb&quot;,</p>
+<p>.type = POWER_SUPPLY_TYPE_USB,</p>
+<p>.get_property   = rk30_adc_battery_get_usb_property,</p>
+<p>.properties     = rk30_adc_battery_usb_props,</p>
+<p>.num_properties = ARRAY_SIZE(rk30_adc_battery_usb_props),</p>
+<p>};</p>
+<p>#endif</p>
+<p>#if defined(CONFIG_BATTERY_RK30_AC_CHARGE)</p>
+<p>static irqreturn_t rk30_adc_battery_dc_wakeup(int irq, void *dev_id)</p>
+<p>{   </p>
+<p>queue_work(gBatteryData-&gt;wq, &amp;gBatteryData-&gt;dcwakeup_work);</p>
+<p>return IRQ_HANDLED;</p>
+<p>}</p>
+<p>static int rk30_adc_battery_get_ac_property(struct power_supply *psy,</p>
+<p>enum power_supply_property psp,</p>
+<p>union power_supply_propval *val)</p>
+<p>{</p>
+<p>int ret = 0;</p>
+<p>charger_type_t charger;</p>
+<p>charger =  CHARGER_USB;</p>
+<p>switch (psp) {</p>
+<p>case POWER_SUPPLY_PROP_ONLINE:</p>
+<p>if (psy-&gt;type == POWER_SUPPLY_TYPE_MAINS)</p>
+<p>{</p>
+<p>if (rk30_adc_battery_get_charge_level(gBatteryData))</p>
+<p>{</p>
+<p>val-&gt;intval = 1;</p>
+<p>}</p>
+<p>else</p>
+<p>{</p>
+<p>val-&gt;intval = 0;</p>
+<p>}</p>
+<p>}</p>
+<p>DBG(&quot;%s:%d\n&quot;,<strong>FUNCTION</strong>,val-&gt;intval);</p>
+<p>break;</p>
+<p>default:</p>
+<p>ret = -EINVAL;</p>
+<p>break;</p>
+<p>}</p>
+<p>return ret;</p>
+<p>}</p>
+<p>static enum power_supply_property rk30_adc_battery_ac_props[] = </p>
+<p>{</p>
+<p>POWER_SUPPLY_PROP_ONLINE,</p>
+<p>};</p>
+<p>static struct power_supply rk30_ac_supply = </p>
+<p>{</p>
+<p>.name = &quot;ac&quot;,</p>
+<p>.type = POWER_SUPPLY_TYPE_MAINS,</p>
+<p>.get_property   = rk30_adc_battery_get_ac_property,</p>
+<p>.properties     = rk30_adc_battery_ac_props,</p>
+<p>.num_properties = ARRAY_SIZE(rk30_adc_battery_ac_props),</p>
+<p>};</p>
+<p>static void rk30_adc_battery_dcdet_delaywork(struct work_struct *work)</p>
+<p>{</p>
+<p>int ret;</p>
+<p>struct rk30_adc_battery_platform_data *pdata;</p>
+<p>int irq;</p>
+<p>int irq_flag;</p>
+<p>pdata    = gBatteryData-&gt;pdata;</p>
+<p>irq        = gpio_to_irq(pdata-&gt;dc_det_pin);</p>
+<p>irq_flag = gpio_get_value (pdata-&gt;dc_det_pin) ? IRQF_TRIGGER_FALLING : IRQF_TRIGGER_RISING;</p>
+<p>rk28_send_wakeup_key(); // wake up the system</p>
+<p>free_irq(irq, NULL);</p>
+<p>ret = request_irq(irq, rk30_adc_battery_dc_wakeup, irq_flag, &quot;ac_charge_irq&quot;, NULL);// reinitialize the DC irq </p>
+<p>if (ret) {</p>
+<p>free_irq(irq, NULL);</p>
+<p>}</p>
+<p>power_supply_changed(&amp;rk30_ac_supply);</p>
+<p>gBatteryData-&gt;bat_status_cnt = 0;        //the state of battery is change</p>
+<p>}</p>
+<p>#endif</p>
+<p>static int rk30_adc_battery_get_status(struct rk30_adc_battery_data *bat)</p>
+<p>{</p>
+<p>return (bat-&gt;bat_status);</p>
+<p>}</p>
+<p>static int rk30_adc_battery_get_health(struct rk30_adc_battery_data *bat)</p>
+<p>{</p>
+<p>return POWER_SUPPLY_HEALTH_GOOD;</p>
+<p>}</p>
+<p>static int rk30_adc_battery_get_present(struct rk30_adc_battery_data *bat)</p>
+<p>{</p>
+<p>return (bat-&gt;bat_voltage &lt; BATT_MAX_VOL_VALUE) ? 0 : 1;</p>
+<p>}</p>
+<p>static int rk30_adc_battery_get_voltage(struct rk30_adc_battery_data *bat)</p>
+<p>{</p>
+<p>return (bat-&gt;bat_voltage );</p>
+<p>}</p>
+<p>static int rk30_adc_battery_get_capacity(struct rk30_adc_battery_data *bat)</p>
+<p>{</p>
+<p>return (bat-&gt;bat_capacity);</p>
+<p>}</p>
+<p>static int rk30_adc_battery_get_property(struct power_supply *psy,</p>
+<p>enum power_supply_property psp,</p>
+<p>union power_supply_propval *val)</p>
+<p>{</p>
+<p>int ret = 0;</p>
+<p>switch (psp) {</p>
+<p>case POWER_SUPPLY_PROP_STATUS:</p>
+<p>val-&gt;intval = rk30_adc_battery_get_status(gBatteryData);</p>
+<p>DBG(&quot;gBatStatus=%d\n&quot;,val-&gt;intval);</p>
+<p>break;</p>
+<p>case POWER_SUPPLY_PROP_HEALTH:</p>
+<p>val-&gt;intval = rk30_adc_battery_get_health(gBatteryData);</p>
+<p>DBG(&quot;gBatHealth=%d\n&quot;,val-&gt;intval);</p>
+<p>break;</p>
+<p>case POWER_SUPPLY_PROP_PRESENT:</p>
+<p>val-&gt;intval = rk30_adc_battery_get_present(gBatteryData);</p>
+<p>DBG(&quot;gBatPresent=%d\n&quot;,val-&gt;intval);</p>
+<p>break;</p>
+<p>case POWER_SUPPLY_PROP_VOLTAGE_NOW:</p>
+<p>val -&gt;intval = rk30_adc_battery_get_voltage(gBatteryData);</p>
+<p>DBG(&quot;gBatVoltage=%d\n&quot;,val-&gt;intval);</p>
+<p>break;</p>
+<p>// case POWER_SUPPLY_PROP_CURRENT_NOW:</p>
+<p>// val-&gt;intval = 1100;</p>
+<p>// break;</p>
+<p>case POWER_SUPPLY_PROP_CAPACITY:</p>
+<p>val-&gt;intval = rk30_adc_battery_get_capacity(gBatteryData);</p>
+<p>DBG(&quot;gBatCapacity=%d%%\n&quot;,val-&gt;intval);</p>
+<p>break;</p>
+<p>case POWER_SUPPLY_PROP_TECHNOLOGY:</p>
+<p>val-&gt;intval = POWER_SUPPLY_TECHNOLOGY_LION;</p>
+<p>break;</p>
+<p>case POWER_SUPPLY_PROP_VOLTAGE_MAX_DESIGN:</p>
+<p>val-&gt;intval = BATT_MAX_VOL_VALUE;</p>
+<p>break;</p>
+<p>case POWER_SUPPLY_PROP_VOLTAGE_MIN_DESIGN:</p>
+<p>val-&gt;intval = BATT_ZERO_VOL_VALUE;</p>
+<p>break;</p>
+<p>default:</p>
+<p>ret = -EINVAL;</p>
+<p>break;</p>
+<p>}</p>
+<p>return ret;</p>
+<p>}</p>
+<p>static enum power_supply_property rk30_adc_battery_props[] = {</p>
+<p>POWER_SUPPLY_PROP_STATUS,</p>
+<p>POWER_SUPPLY_PROP_HEALTH,</p>
+<p>POWER_SUPPLY_PROP_PRESENT,</p>
+<p>POWER_SUPPLY_PROP_VOLTAGE_NOW,</p>
+<p>// POWER_SUPPLY_PROP_CURRENT_NOW,</p>
+<p>POWER_SUPPLY_PROP_TECHNOLOGY,</p>
+<p>POWER_SUPPLY_PROP_CAPACITY,</p>
+<p>POWER_SUPPLY_PROP_VOLTAGE_MAX_DESIGN,</p>
+<p>POWER_SUPPLY_PROP_VOLTAGE_MIN_DESIGN,</p>
+<p>};</p>
+<p>static struct power_supply rk30_battery_supply = </p>
+<p>{</p>
+<p>.name = &quot;battery&quot;,</p>
+<p>.type = POWER_SUPPLY_TYPE_BATTERY,</p>
+<p>.get_property   = rk30_adc_battery_get_property,</p>
+<p>.properties     = rk30_adc_battery_props,</p>
+<p>.num_properties = ARRAY_SIZE(rk30_adc_battery_props),</p>
+<p>};</p>
+<p>#ifdef CONFIG_PM</p>
+<p>static void rk30_adc_battery_resume_check(void)</p>
+<p>{</p>
+<p>int i;</p>
+<p>int level,oldlevel;</p>
+<p>int new_capacity, old_capacity;</p>
+<p>struct rk30_adc_battery_data *bat = gBatteryData;</p>
+<p>bat-&gt;old_charge_level = -1;</p>
+<p>pSamples = bat-&gt;adc_samples;</p>
+<p>adc_sync_read(bat-&gt;client);                             //start adc sample</p>
+<p>level = oldlevel = rk30_adc_battery_status_samples(bat);//init charge status</p>
+<p>for (i = 0; i &lt; NUM_VOLTAGE_SAMPLE; i++) {               //0.3 s   </p>
+<p>mdelay(1);</p>
+<p>rk30_adc_battery_voltage_samples(bat);              //get voltage</p>
+<p>level = rk30_adc_battery_status_samples(bat);       //check charge status</p>
+<p>if (oldlevel != level){</p>
+<p>   oldlevel = level;                               //if charge status changed, reset sample</p>
+<p>   i = 0;</p>
+<p>}        </p>
+<p>}</p>
+<p>new_capacity = rk30_adc_battery_voltage_to_capacity(bat, bat-&gt;bat_voltage);</p>
+<p>old_capacity =gBatteryData-&gt; suspend_capacity;</p>
+<p>if (bat-&gt;bat_status != POWER_SUPPLY_STATUS_NOT_CHARGING){</p>
+<p>//chargeing state</p>
+<p>bat-&gt;bat_capacity = (new_capacity &gt; old_capacity) ? new_capacity : old_capacity;</p>
+<p>}</p>
+<p>else{</p>
+<p>bat-&gt;bat_capacity = (new_capacity &lt; old_capacity) ? new_capacity : old_capacity;  // aviod the value of capacity increase    dicharge</p>
+<p>}</p>
+<p>}</p>
+<p>static int rk30_adc_battery_suspend(struct platform_device *dev, pm_message_t state)</p>
+<p>{</p>
+<p>int irq;</p>
+<p>gBatteryData-&gt;suspend_capacity = gBatteryData-&gt;bat_capacity;</p>
+<p>cancel_delayed_work(&amp;gBatteryData-&gt;delay_work);</p>
+<p>if( gBatteryData-&gt;pdata-&gt;batt_low_pin != INVALID_GPIO){</p>
+<p>irq = gpio_to_irq(gBatteryData-&gt;pdata-&gt;batt_low_pin);</p>
+<p>enable_irq(irq);</p>
+<p>    enable_irq_wake(irq);</p>
+<p>    }</p>
+<p>return 0;</p>
+<p>}</p>
+<p>static int rk30_adc_battery_resume(struct platform_device *dev)</p>
+<p>{</p>
+<p>int irq;</p>
+<p>gBatteryData-&gt;resume = true;</p>
+<p>queue_delayed_work(gBatteryData-&gt;wq, &amp;gBatteryData-&gt;delay_work, msecs_to_jiffies(100));</p>
+<p>if( gBatteryData-&gt;pdata-&gt;batt_low_pin != INVALID_GPIO){</p>
+<p>irq = gpio_to_irq(gBatteryData-&gt;pdata-&gt;batt_low_pin);</p>
+<p>    disable_irq_wake(irq);</p>
+<p>disable_irq(irq);</p>
+<p>    }</p>
+<p>return 0;</p>
+<p>}</p>
+<p>#else</p>
+<p>#define rk30_adc_battery_suspend NULL</p>
+<p>#define rk30_adc_battery_resume NULL</p>
+<p>#endif</p>
+<p>unsigned long AdcTestCnt = 0;</p>
+<p>static void rk30_adc_battery_timer_work(struct work_struct *work)</p>
+<p>{</p>
+<p>#ifdef CONFIG_PM</p>
+<p>if (gBatteryData-&gt;resume) {</p>
+<p>rk30_adc_battery_resume_check();</p>
+<p>gBatteryData-&gt;resume = false;</p>
+<p>}</p>
+<p>#endif</p>
+<p>rk30_adc_battery_status_samples(gBatteryData);</p>
+<p>if (gBatteryData-&gt;poweron_check){   </p>
+<p>gBatteryData-&gt;poweron_check = 0;</p>
+<p>rk30_adc_battery_poweron_capacity_check();</p>
+<p>}</p>
+<p>rk30_adc_battery_voltage_samples(gBatteryData);</p>
+<p>rk30_adc_battery_capacity_samples(gBatteryData);</p>
+<p>if( 0 == gBatteryData -&gt;pdata -&gt;charging_sleep){</p>
+<p>if( 1 == rk30_adc_battery_get_charge_level(gBatteryData)){  // charge</p>
+<p>if(0 == gBatteryData-&gt;status_lock ){</p>
+<p>wake_lock(&amp;batt_wake_lock);  //lock</p>
+<p>gBatteryData-&gt;status_lock = 1; </p>
+<p>}</p>
+<p>}</p>
+<p>else{</p>
+<p>if(1 == gBatteryData-&gt;status_lock ){</p>
+<p>wake_unlock(&amp;batt_wake_lock);  //unlock</p>
+<p>gBatteryData-&gt;status_lock = 0; </p>
+<p>}</p>
+<p>}</p>
+<p>}</p>
+<p>/<em>update battery parameter after adc and capacity has been changed</em>/</p>
+<p>if(gBatteryData-&gt;bat_change){</p>
+<p>gBatteryData-&gt;bat_change = 0;</p>
+<p>rk30_adc_battery_put_capacity(gBatteryData-&gt;bat_capacity);</p>
+<p>power_supply_changed(&amp;rk30_battery_supply);</p>
+<p>#if  defined (CONFIG_BATTERY_RK30_AC_CHARGE)</p>
+<p>if (gBatteryData-&gt;pdata-&gt;dc_det_pin == INVALID_GPIO){</p>
+<p>power_supply_changed(&amp;rk30_ac_supply);</p>
+<p>}</p>
+<p>#endif</p>
+<p>}</p>
+<p>if (rk30_battery_dbg_level){</p>
+<p>if (++AdcTestCnt &gt;= 2)</p>
+<p>{</p>
+<p>AdcTestCnt = 0;</p>
+<p>pr_bat(&quot;Status = %d, RealAdcVal = %d, RealVol = %d,gBatVol = %d, gBatCap = %d, RealCapacity = %d, dischargecnt = %d, chargecnt = %d\n&quot;, </p>
+<p>gBatteryData-&gt;bat_status, gBatteryData-&gt;adc_val, rk_adc_voltage(gBatteryData-&gt;adc_val), </p>
+<p>gBatteryData-&gt;bat_voltage, gBatteryData-&gt;bat_capacity, gBatteryData-&gt;capacitytmp, gBatteryData-&gt;gBatCapacityDisChargeCnt,gBatteryData-&gt; gBatCapacityChargeCnt);</p>
+<p>}</p>
+<p>}</p>
+<p>queue_delayed_work(gBatteryData-&gt;wq, &amp;gBatteryData-&gt;delay_work, msecs_to_jiffies(TIMER_MS_COUNTS));</p>
+<p>}</p>
+<p>static int rk30_adc_battery_io_init(struct rk30_adc_battery_platform_data *pdata)</p>
+<p>{</p>
+<p>int ret = 0;</p>
+<p>if (pdata-&gt;io_init) {</p>
+<p>pdata-&gt;io_init();</p>
+<p>return 0;</p>
+<p>}</p>
+<p>//charge control pin</p>
+<p>if (pdata-&gt;charge_set_pin != INVALID_GPIO){</p>
+<p>    ret = gpio_request(pdata-&gt;charge_set_pin, NULL);</p>
+<p>    if (ret) {</p>
+<p>    printk(&quot;failed to request dc_det gpio\n&quot;);</p>
+<p>    goto error;</p>
+<p>    }</p>
+<p>    gpio_direction_output(pdata-&gt;charge_set_pin, 1 - pdata-&gt;charge_set_level);</p>
+<p>}</p>
+<p>//dc charge detect pin</p>
+<p>if (pdata-&gt;dc_det_pin != INVALID_GPIO){</p>
+<p>    ret = gpio_request(pdata-&gt;dc_det_pin, NULL);</p>
+<p>    if (ret) {</p>
+<p>    printk(&quot;failed to request dc_det gpio\n&quot;);</p>
+<p>    goto error;</p>
+<p>    }</p>
+<p>    gpio_pull_updown(pdata-&gt;dc_det_pin, GPIOPullUp);//important</p>
+<p>    ret = gpio_direction_input(pdata-&gt;dc_det_pin);</p>
+<p>    if (ret) {</p>
+<p>    printk(&quot;failed to set gpio dc_det input\n&quot;);</p>
+<p>    goto error;</p>
+<p>    }</p>
+<p>}</p>
+<p>//charge ok detect</p>
+<p>if (pdata-&gt;charge_ok_pin != INVALID_GPIO){</p>
+<p>  ret = gpio_request(pdata-&gt;charge_ok_pin, NULL);</p>
+<p>    if (ret) {</p>
+<p>    printk(&quot;failed to request charge_ok gpio\n&quot;);</p>
+<p>    goto error;</p>
+<p>    }</p>
+<p>    gpio_pull_updown(pdata-&gt;charge_ok_pin, GPIOPullUp);//important</p>
+<p>    ret = gpio_direction_input(pdata-&gt;charge_ok_pin);</p>
+<p>    if (ret) {</p>
+<p>    printk(&quot;failed to set gpio charge_ok input\n&quot;);</p>
+<p>    goto error;</p>
+<p>    }</p>
+<p>}</p>
+<p>//batt low pin</p>
+<p>if( pdata-&gt;batt_low_pin != INVALID_GPIO){</p>
+<p>  ret = gpio_request(pdata-&gt;batt_low_pin, NULL);</p>
+<p>    if (ret) {</p>
+<p>    printk(&quot;failed to request batt_low_pin gpio\n&quot;);</p>
+<p>    goto error;</p>
+<p>    }</p>
+<p>    gpio_pull_updown(pdata-&gt;batt_low_pin, GPIOPullUp); </p>
+<p>    ret = gpio_direction_input(pdata-&gt;batt_low_pin);</p>
+<p>    if (ret) {</p>
+<p>    printk(&quot;failed to set gpio batt_low_pin input\n&quot;);</p>
+<p>    goto error;</p>
+<p>    }</p>
+<p>}</p>
+<p>return 0;</p>
+<p>error:</p>
+<p>return -1;</p>
+<p>}</p>
+<p>extern void kernel_power_off(void);</p>
+<p>static void rk30_adc_battery_check(struct rk30_adc_battery_data *bat)</p>
+<p>{</p>
+<p>int i;</p>
+<p>int level,oldlevel;</p>
+<p>struct rk30_adc_battery_platform_data *pdata = bat-&gt;pdata;</p>
+<p>//printk(&quot;%s–%d:\n&quot;,<strong>FUNCTION</strong>,<strong>LINE</strong>);</p>
+<p>bat-&gt;old_charge_level = -1;</p>
+<p>bat-&gt;capacitytmp = 0;</p>
+<p>bat-&gt;suspend_capacity = 0;</p>
+<p>pSamples = bat-&gt;adc_samples;</p>
+<p>adc_sync_read(bat-&gt;client);                             //start adc sample</p>
+<p>level = oldlevel = rk30_adc_battery_status_samples(bat);//init charge status</p>
+<p>bat-&gt;full_times = 0;</p>
+<p>for (i = 0; i &lt; NUM_VOLTAGE_SAMPLE; i++){                //0.3 s</p>
+<p>mdelay(1);</p>
+<p>rk30_adc_battery_voltage_samples(bat);              //get voltage</p>
+<p>//level = rk30_adc_battery_status_samples(bat);       //check charge status</p>
+<p>level = rk30_adc_battery_get_charge_level(bat);</p>
+<p>if (oldlevel != level){</p>
+<p>oldlevel = level;                               //if charge status changed, reset sample</p>
+<p>i = 0;</p>
+<p>}        </p>
+<p>}</p>
+<p>bat-&gt;bat_capacity = rk30_adc_battery_voltage_to_capacity(bat, bat-&gt;bat_voltage);  //init bat_capacity</p>
+<p>bat-&gt;bat_status = POWER_SUPPLY_STATUS_NOT_CHARGING;</p>
+<p>if (rk30_adc_battery_get_charge_level(bat)){</p>
+<p>bat-&gt;bat_status = POWER_SUPPLY_STATUS_CHARGING;</p>
+<p>if (pdata-&gt;charge_ok_pin != INVALID_GPIO){</p>
+<p>if (gpio_get_value(pdata-&gt;charge_ok_pin) == pdata-&gt;charge_ok_level){</p>
+<p>bat-&gt;bat_status = POWER_SUPPLY_STATUS_FULL;</p>
+<p>bat-&gt;bat_capacity = 100;</p>
+<p>}</p>
+<p>}</p>
+<p>}</p>
+<p>#if 0</p>
+<p>#if 1</p>
+<p>rk30_adc_battery_poweron_capacity_check();</p>
+<p>#else</p>
+<p>gBatteryData-&gt;poweron_check = 1;</p>
+<p>#endif</p>
+<p>gBatteryData-&gt;poweron_check = 0;</p>
+<p>#endif</p>
+<p>/*<strong><strong><strong><strong><strong><strong><strong><strong><strong><strong>**</strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></p>
+<p>//开机采样到的电压和上次关机保存电压相差较大，怎么处理？</p>
+<p>if (bat-&gt;bat_capacity &gt; old_capacity)</p>
+<p>{</p>
+<p>if ((bat-&gt;bat_capacity - old_capacity) &gt; 20)</p>
+<p>{</p>
+<p>}</p>
+<p>}</p>
+<p>else if (bat-&gt;bat_capacity &lt; old_capacity)</p>
+<p>{</p>
+<p>if ((old_capacity &gt; bat-&gt;bat_capacity) &gt; 20)</p>
+<p>{</p>
+<p>}</p>
+<p>}</p>
+<p>*<strong><strong><strong><strong><strong><strong><strong><strong><strong><strong>****</strong></strong></strong></strong></strong></strong></strong></strong></strong></strong>/</p>
+<p>if (bat-&gt;bat_capacity == 0) bat-&gt;bat_capacity = 1;</p>
+<p>if(1==gBatteryData -&gt; pdata-&gt;low_voltage_protection)</p>
+<p>if ((bat-&gt;bat_voltage &lt;= batt_table[0].dis_charge_vol+ 50)&amp;&amp;(bat-&gt;bat_status != POWER_SUPPLY_STATUS_CHARGING)){</p>
+<p>kernel_power_off();</p>
+<p>}</p>
+<p>}</p>
+<p>static void rk30_adc_battery_callback(struct adc_client *client, void *param, int result)</p>
+<p>{</p>
+<p>#if 0</p>
+<p>struct rk30_adc_battery_data  *info = container_of(client, struct rk30_adc_battery_data,</p>
+<p>client);</p>
+<p>info-&gt;adc_val = result;</p>
+<p>#endif</p>
+<p>if (result &lt; 0){</p>
+<p>pr_bat(&quot;adc_battery_callback    resule &lt; 0 , the value &quot;);</p>
+<p>return;</p>
+<p>}</p>
+<p>else{</p>
+<p>gBatteryData-&gt;adc_val = result;</p>
+<p>pr_bat(&quot;result = %d, gBatteryData-&gt;adc_val = %d\n&quot;, result, gBatteryData-&gt;adc_val );</p>
+<p>}</p>
+<p>return;</p>
+<p>}</p>
+<p>#if 1</p>
+<p>static void rk30_adc_battery_lowerpower_delaywork(struct work_struct *work)</p>
+<p>{</p>
+<p>int irq;</p>
+<p>if( gBatteryData-&gt;pdata-&gt;batt_low_pin != INVALID_GPIO){</p>
+<p>irq = gpio_to_irq(gBatteryData-&gt;pdata-&gt;batt_low_pin);</p>
+<p>disable_irq(irq);</p>
+<p>}</p>
+<p>printk(&quot;lowerpower\n&quot;);</p>
+<p>  rk28_send_wakeup_key(); // wake up the system</p>
+<p>return;</p>
+<p>}</p>
+<p>static irqreturn_t rk30_adc_battery_low_wakeup(int irq,void *dev_id)</p>
+<p>{</p>
+<p>queue_work(gBatteryData-&gt;wq, &amp;gBatteryData-&gt;lowerpower_work);</p>
+<p>return IRQ_HANDLED;</p>
+<p>}</p>
+<p>#endif</p>
+<p>static int rk30_adc_battery_probe(struct platform_device *pdev)</p>
+<p>{</p>
+<p>int    ret;</p>
+<p>int    irq;</p>
+<p>int    irq_flag;</p>
+<p>struct adc_client                   *client;</p>
+<p>struct rk30_adc_battery_data          *data;</p>
+<p>struct rk30_adc_battery_platform_data *pdata = pdev-&gt;dev.platform_data;</p>
+<p>data = kzalloc(sizeof(*data), GFP_KERNEL);</p>
+<p>if (data == NULL) {</p>
+<p>ret = -ENOMEM;</p>
+<p>goto err_data_alloc_failed;</p>
+<p>}</p>
+<p>memset(data, 0, sizeof(struct rk30_adc_battery_data));</p>
+<p>gBatteryData = data;</p>
+<p>platform_set_drvdata(pdev, data);</p>
+<p>    data-&gt;pdata = pdata;</p>
+<p>data-&gt;status_lock = 0;</p>
+<p>ret = rk30_adc_battery_io_init(pdata);</p>
+<p>if (ret) {</p>
+<p>goto err_io_init;</p>
+<p>}</p>
+<p>memset(data-&gt;adc_samples, 0, sizeof(int)*(NUM_VOLTAGE_SAMPLE + 2));</p>
+<p>//register adc for battery sample</p>
+<p>if(0 == pdata-&gt;adc_channel)</p>
+<p>client = adc_register(0, rk30_adc_battery_callback, NULL);  //pdata-&gt;adc_channel = ani0</p>
+<p>else</p>
+<p>client = adc_register(pdata-&gt;adc_channel, rk30_adc_battery_callback, NULL);  </p>
+<p>if(!client)</p>
+<p>goto err_adc_register_failed;</p>
+<p>//variable init</p>
+<p>data-&gt;client  = client;</p>
+<p>data-&gt;adc_val = adc_sync_read(client);</p>
+<p>ret = power_supply_register(&amp;pdev-&gt;dev, &amp;rk30_battery_supply);</p>
+<p>if (ret){</p>
+<p>printk(KERN_INFO &quot;fail to battery power_supply_register\n&quot;);</p>
+<p>goto err_battery_failed;</p>
+<p>}</p>
+<p>#if defined (CONFIG_BATTERY_RK30_USB_CHARGE)</p>
+<p>ret = power_supply_register(&amp;pdev-&gt;dev, &amp;rk30_usb_supply);</p>
+<p>if (ret){</p>
+<p>printk(KERN_INFO &quot;fail to usb power_supply_register\n&quot;);</p>
+<p>goto err_usb_failed;</p>
+<p>}</p>
+<p>#endif</p>
+<p>  wake_lock_init(&amp;batt_wake_lock, WAKE_LOCK_SUSPEND, &quot;batt_lock&quot;);</p>
+<p>data-&gt;wq = create_singlethread_workqueue(&quot;adc_battd&quot;);</p>
+<p>INIT_DELAYED_WORK(&amp;data-&gt;delay_work, rk30_adc_battery_timer_work);</p>
+<p>//Power on Battery detect</p>
+<p>rk30_adc_battery_check(data);</p>
+<p>if(1 == pdata-&gt;save_capacity ){</p>
+<p>queue_delayed_work(data-&gt;wq, &amp;data-&gt;delay_work, msecs_to_jiffies(TIMER_MS_COUNTS*10));</p>
+<p>gBatteryData-&gt;poweron_check = 1;</p>
+<p>}else{</p>
+<p>queue_delayed_work(data-&gt;wq, &amp;data-&gt;delay_work, msecs_to_jiffies(TIMER_MS_COUNTS));</p>
+<p>gBatteryData-&gt;poweron_check = 0;</p>
+<p>}</p>
+<p>#if  defined (CONFIG_BATTERY_RK30_AC_CHARGE)</p>
+<p>ret = power_supply_register(&amp;pdev-&gt;dev, &amp;rk30_ac_supply);</p>
+<p>if (ret) {</p>
+<p>printk(KERN_INFO &quot;fail to ac power_supply_register\n&quot;);</p>
+<p>goto err_ac_failed;</p>
+<p>}</p>
+<p>//init dc dectet irq &amp; delay work</p>
+<p>if (pdata-&gt;dc_det_pin != INVALID_GPIO){</p>
+<p>INIT_WORK(&amp;data-&gt;dcwakeup_work, rk30_adc_battery_dcdet_delaywork);</p>
+<p>irq = gpio_to_irq(pdata-&gt;dc_det_pin);        </p>
+<p>irq_flag = gpio_get_value (pdata-&gt;dc_det_pin) ? IRQF_TRIGGER_FALLING : IRQF_TRIGGER_RISING;</p>
+<p>    ret = request_irq(irq, rk30_adc_battery_dc_wakeup, irq_flag, &quot;ac_charge_irq&quot;, NULL);</p>
+<p>    if (ret) {</p>
+<p>    printk(&quot;failed to request dc det irq\n&quot;);</p>
+<p>    goto err_dcirq_failed;</p>
+<p>    }</p>
+<p>    enable_irq_wake(irq);  </p>
+<p>}</p>
+<p>#endif</p>
+<p>#if 1</p>
+<p>// batt low irq lowerpower_work</p>
+<p>if( pdata-&gt;batt_low_pin != INVALID_GPIO){</p>
+<p>INIT_WORK(&amp;data-&gt;lowerpower_work, rk30_adc_battery_lowerpower_delaywork);</p>
+<p>irq = gpio_to_irq(pdata-&gt;batt_low_pin);</p>
+<p>    ret = request_irq(irq, rk30_adc_battery_low_wakeup, IRQF_TRIGGER_LOW, &quot;batt_low_irq&quot;, NULL);</p>
+<p>    if (ret) {</p>
+<p>    printk(&quot;failed to request batt_low_irq irq\n&quot;);</p>
+<p>    goto err_lowpowerirq_failed;</p>
+<p>    }</p>
+<p>disable_irq(irq);</p>
+<p>    }</p>
+<p>#endif</p>
+<p>printk(KERN_INFO &quot;rk30_adc_battery: driver initialized\n&quot;);</p>
+<p>return 0;</p>
+<p>#if defined (CONFIG_BATTERY_RK30_USB_CHARGE)</p>
+<p>err_usb_failed:</p>
+<p>power_supply_unregister(&amp;rk30_usb_supply);</p>
+<p>#endif</p>
+<p>err_ac_failed:</p>
+<p>#if defined (CONFIG_BATTERY_RK30_AC_CHARGE)</p>
+<p>power_supply_unregister(&amp;rk30_ac_supply);</p>
+<p>#endif</p>
+<p>err_battery_failed:</p>
+<p>power_supply_unregister(&amp;rk30_battery_supply);</p>
+<p>err_dcirq_failed:</p>
+<p>free_irq(gpio_to_irq(pdata-&gt;dc_det_pin), data);</p>
+<p>#if 1</p>
+<p> err_lowpowerirq_failed:</p>
+<p>free_irq(gpio_to_irq(pdata-&gt;batt_low_pin), data);</p>
+<p>#endif</p>
+<p>err_adc_register_failed:</p>
+<p>err_io_init:    </p>
+<p>err_data_alloc_failed:</p>
+<p>kfree(data);</p>
+<p>printk(&quot;rk30_adc_battery: error!\n&quot;);</p>
+<p>return ret;</p>
+<p>}</p>
+<p>static int rk30_adc_battery_remove(struct platform_device *pdev)</p>
+<p>{</p>
+<p>struct rk30_adc_battery_data *data = platform_get_drvdata(pdev);</p>
+<p>struct rk30_adc_battery_platform_data *pdata = pdev-&gt;dev.platform_data;</p>
+<p>cancel_delayed_work(&amp;gBatteryData-&gt;delay_work);</p>
+<p>#if defined(CONFIG_BATTERY_RK30_USB_CHARGE)</p>
+<p>power_supply_unregister(&amp;rk30_usb_supply);</p>
+<p>#endif</p>
+<p>#if defined(CONFIG_BATTERY_RK30_AC_CHARGE)</p>
+<p>power_supply_unregister(&amp;rk30_ac_supply);</p>
+<p>#endif</p>
+<p>power_supply_unregister(&amp;rk30_battery_supply);</p>
+<p>free_irq(gpio_to_irq(pdata-&gt;dc_det_pin), data);</p>
+<p>kfree(data);</p>
+<p>return 0;</p>
+<p>}</p>
+<p>static struct platform_driver rk30_adc_battery_driver = {</p>
+<p>.probe = rk30_adc_battery_probe,</p>
+<p>.remove = rk30_adc_battery_remove,</p>
+<p>.suspend = rk30_adc_battery_suspend,</p>
+<p>.resume = rk30_adc_battery_resume,</p>
+<p>.driver = {</p>
+<p>.name = &quot;rk30-battery&quot;,</p>
+<p>.owner = THIS_MODULE,</p>
+<p>}</p>
+<p>};</p>
+<p>static int __init rk30_adc_battery_init(void)</p>
+<p>{</p>
+<p>return platform_driver_register(&amp;rk30_adc_battery_driver);</p>
+<p>}</p>
+<p>static void __exit rk30_adc_battery_exit(void)</p>
+<p>{</p>
+<p>platform_driver_unregister(&amp;rk30_adc_battery_driver);</p>
+<p>}</p>
+<p>//subsys_initcall(rk30_adc_battery_init);//subsys_initcall(rk30_adc_battery_init);</p>
+<p>module_init(rk30_adc_battery_init);//subsys_initcall(rk30_adc_battery_init);</p>
+<p>module_exit(rk30_adc_battery_exit);</p>
+<p>MODULE_DESCRIPTION(&quot;Battery detect driver for the rk30&quot;);</p>
+<p>MODULE_AUTHOR(&quot;luowei <a href="mailto:&#x6c;&#x77;&#64;&#114;&#111;&#99;&#107;&#45;&#x63;&#104;&#x69;&#x70;&#x73;&#x2e;&#x63;&#x6f;&#109;">&#x6c;&#x77;&#64;&#114;&#111;&#99;&#107;&#45;&#x63;&#104;&#x69;&#x70;&#x73;&#x2e;&#x63;&#x6f;&#109;</a>&quot;);</p>
+<p>MODULE_LICENSE(&quot;GPL&quot;);</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/DOS%20xcopy/" rel="prev" title="DOS xcopy">
+      <i class="fa fa-chevron-left"></i> DOS xcopy
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/email%E8%83%8C%E6%99%AF%20%20windowBackground/" rel="next" title="email背景  windowBackground">
+      email背景  windowBackground <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Edward"
+      src="/uploads/avatar.gif">
+  <p class="site-author-name" itemprop="name">Edward</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">570</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Edward</span>
+</div>
+
+        
+
+
+
+
+
+
+<script>
+  (function() {
+    function leancloudSelector(url) {
+      url = encodeURI(url);
+      return document.getElementById(url).querySelector('.leancloud-visitors-count');
+    }
+
+    function addCount(Counter) {
+      var visitors = document.querySelector('.leancloud_visitors');
+      var url = decodeURI(visitors.id);
+      var title = visitors.dataset.flagTitle;
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          if (results.length > 0) {
+            var counter = results[0];
+            leancloudSelector(url).innerText = counter.time + 1;
+            Counter('put', '/classes/Counter/' + counter.objectId, { time: { '__op': 'Increment', 'amount': 1 } })
+              .catch(error => {
+                console.error('Failed to save visitor count', error);
+              });
+          } else {
+              Counter('post', '/classes/Counter', { title, url, time: 1 })
+                .then(response => response.json())
+                .then(() => {
+                  leancloudSelector(url).innerText = 1;
+                })
+                .catch(error => {
+                  console.error('Failed to create', error);
+                });
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    function showTime(Counter) {
+      var visitors = document.querySelectorAll('.leancloud_visitors');
+      var entries = [...visitors].map(element => {
+        return decodeURI(element.id);
+      });
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url: { '$in': entries } })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          for (let url of entries) {
+            let target = results.find(item => item.url === url);
+            leancloudSelector(url).innerText = target ? target.time : 0;
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    let { app_id, app_key, server_url } = {"enable":true,"app_id":"wxYx0BX9gaKA3XC4LuO2of0v-gzGzoHsz","app_key":"LQMcs6IDIE4YAm10vMsn9IYq","server_url":"https://wxyx0bx9.lc-cn-n1-shared.com","security":false};
+    function fetchData(api_server) {
+      var Counter = (method, url, data) => {
+        return fetch(`${api_server}/1.1${url}`, {
+          method,
+          headers: {
+            'X-LC-Id'     : app_id,
+            'X-LC-Key'    : app_key,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data)
+        });
+      };
+      if (CONFIG.page.isPost) {
+        if (CONFIG.hostname !== location.hostname) return;
+        addCount(Counter);
+      } else if (document.querySelectorAll('.post-title-link').length >= 1) {
+        showTime(Counter);
+      }
+    }
+
+    let api_server = app_id.slice(-9) !== '-MdYXbMMI' ? server_url : `https://${app_id.slice(0, 8).toLowerCase()}.api.lncldglobal.com`;
+
+    if (api_server) {
+      fetchData(api_server);
+    } else {
+      fetch('https://app-router.leancloud.cn/2/route?appId=' + app_id)
+        .then(response => response.json())
+        .then(({ api_server }) => {
+          fetchData('https://' + api_server);
+        });
+    }
+  })();
+</script>
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

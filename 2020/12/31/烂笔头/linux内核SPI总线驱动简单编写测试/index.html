@@ -1,0 +1,709 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"edward.org.cn","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="linux内核SPI总线驱动简单编写测试 下面有两个大的模块： 一个是SPI总线驱动的分析            (研究了具体实现的过程) 另一个是SPI总线驱动的编写（不用研究具体的实现过程） SPI总线驱动分析 1 SPI概述      SPI是英语Serial Peripheral interface的缩写，顾名思义就是串行外围设备接口，是Motorola首先在其MC68HCXX系列处理器上">
+<meta property="og:type" content="article">
+<meta property="og:title" content="linux内核SPI总线驱动简单编写测试">
+<meta property="og:url" content="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/linux%E5%86%85%E6%A0%B8SPI%E6%80%BB%E7%BA%BF%E9%A9%B1%E5%8A%A8%E7%AE%80%E5%8D%95%E7%BC%96%E5%86%99%E6%B5%8B%E8%AF%95/index.html">
+<meta property="og:site_name" content="点点滴滴">
+<meta property="og:description" content="linux内核SPI总线驱动简单编写测试 下面有两个大的模块： 一个是SPI总线驱动的分析            (研究了具体实现的过程) 另一个是SPI总线驱动的编写（不用研究具体的实现过程） SPI总线驱动分析 1 SPI概述      SPI是英语Serial Peripheral interface的缩写，顾名思义就是串行外围设备接口，是Motorola首先在其MC68HCXX系列处理器上">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-12-31T06:48:01.407Z">
+<meta property="article:modified_time" content="2020-01-16T04:37:32.301Z">
+<meta property="article:author" content="Edward">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/linux%E5%86%85%E6%A0%B8SPI%E6%80%BB%E7%BA%BF%E9%A9%B1%E5%8A%A8%E7%AE%80%E5%8D%95%E7%BC%96%E5%86%99%E6%B5%8B%E8%AF%95/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>linux内核SPI总线驱动简单编写测试 | 点点滴滴</title>
+  
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?a92ed22eafce466e7a7b17546bb0dc6f";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">点点滴滴</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/linux%E5%86%85%E6%A0%B8SPI%E6%80%BB%E7%BA%BF%E9%A9%B1%E5%8A%A8%E7%AE%80%E5%8D%95%E7%BC%96%E5%86%99%E6%B5%8B%E8%AF%95/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/avatar.gif">
+      <meta itemprop="name" content="Edward">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="点点滴滴">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          linux内核SPI总线驱动简单编写测试
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-12-31 14:48:01" itemprop="dateCreated datePublished" datetime="2020-12-31T14:48:01+08:00">2020-12-31</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-01-16 12:37:32" itemprop="dateModified" datetime="2020-01-16T12:37:32+08:00">2020-01-16</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%83%82%E7%AC%94%E5%A4%B4/" itemprop="url" rel="index"><span itemprop="name">烂笔头</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/linux%E5%86%85%E6%A0%B8SPI%E6%80%BB%E7%BA%BF%E9%A9%B1%E5%8A%A8%E7%AE%80%E5%8D%95%E7%BC%96%E5%86%99%E6%B5%8B%E8%AF%95/" class="post-meta-item leancloud_visitors" data-flag-title="linux内核SPI总线驱动简单编写测试" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>linux内核SPI总线驱动简单编写测试</p>
+<p>下面有两个大的模块：</p>
+<p>一个是SPI总线驱动的分析            (研究了具体实现的过程)</p>
+<p>另一个是SPI总线驱动的编写（不用研究具体的实现过程）</p>
+<p>SPI总线驱动分析</p>
+<p>1 SPI概述<br>      SPI是英语Serial Peripheral interface的缩写，顾名思义就是串行外围设备接口，是Motorola首先在其MC68HCXX系列处理器上定义的。SPI接口主要应用在 EEPROM，FLASH，实时时钟，AD转换器，还有数字信号处理器和数字信号解码器之间。SPI是一种高速的，全双工，同步的通信总线，并且在芯片的管脚上只占用四根线，节约了芯片的管脚，同时为PCB的布局上节省空间，提供方便。<br>      SPI的通信原理很简单，它以主从方式工作，这种模式通常有一个主设备和一个或多个从设备，需要4根线，事实上3根也可以。也是所有基于SPI的设备共有的，它们是SDI(数据输入)，SDO(数据输出)，SCLK(时钟)，CS(片选)。<br>      MOSI(SDO)：主器件数据输出，从器件数据输入。<br>      MISO(SDI)：主器件数据输入，从器件数据输出。<br>      SCLK ：时钟信号，由主器件产生。<br>      CS：从器件使能信号，由主器件控制。<br>其中CS是控制芯片是否被选中的，也就是说只有片选信号为预先规定的使能信号时（高电位或低电位），对此芯片的操作才有效，这就允许在同一总线上连接多个SPI设备成为可能。需要注意的是，在具体的应用中，当一条SPI总线上连接有多个设备时，SPI本身的CS有可能被其他的GPIO脚代替，即每个设备的CS脚被连接到处理器端不同的GPIO，通过操作不同的GPIO口来控制具体的需要操作的SPI设备，减少各个SPI设备间的干扰。<br>      SPI是串行通讯协议，也就是说数据是一位一位从MSB或者LSB开始传输的，这就是SCK时钟线存在的原因，由SCK提供时钟脉冲，MISO、MOSI则基于此脉冲完成数据传输。 SPI支持4-32bits的串行数据传输，支持MSB和LSB，每次数据传输时当从设备的大小端发生变化时需要重新设置SPI Master的大小端。</p>
+<p>2 Linux SPI驱动总体架构<br>      在2.6的linux内核中，SPI的驱动架构可以分为如下三个层次：SPI 核心层、SPI控制器驱动层和SPI设备驱动层。<br>      Linux 中SPI驱动代码位于drivers/spi目录。<br>2.1 SPI核心层<br>      SPI核心层是Linux的SPI核心部分，提供了核心数据结构的定义、SPI控制器驱动和设备驱动的注册、注销管理等API。其为硬件平台无关层，向下屏蔽了物理总线控制器的差异，定义了统一的访问策略和接口；其向上提供了统一的接口，以便SPI设备驱动通过总线控制器进行数据收发。<br>      Linux中，SPI核心层的代码位于driver/spi/ spi.c。由于该层是平台无关层，本文将不再叙述，有兴趣可以查阅相关资料。<br>2.2 SPI控制器驱动层<br>      SPI控制器驱动层，每种处理器平台都有自己的控制器驱动，属于平台移植相关层。它的职责是为系统中每条SPI总线实现相应的读写方法。在物理上，每个SPI控制器可以连接若干个SPI从设备。<br>      在系统开机时，SPI控制器驱动被首先装载。一个控制器驱动用于支持一条特定的SPI总线的读写。一个控制器驱动可以用数据结构struct spi_master来描述。</p>
+<p>   在include/liunx/spi/spi.h文件中，在数据结构struct spi_master定义如下：</p>
+<p>struct spi_master { </p>
+<p>struct device   dev; </p>
+<p>    s16         bus_num; </p>
+<p>    u16         num_chipselect; </p>
+<p>int         (*setup)(struct spi_device *spi); </p>
+<p>int         (*transfer)(struct spi_device *spi, struct spi_message *mesg); </p>
+<p>void        (*cleanup)(struct spi_device *spi); </p>
+<p>}; </p>
+<p>     bus_num为该控制器对应的SPI总线号。<br>      num_chipselect 控制器支持的片选数量，即能支持多少个spi设备 <br>      setup函数是设置SPI总线的模式，时钟等的初始化函数， 针对设备设置SPI的工作时钟及数据传输模式等。在spi_add_device函数中调用。 <br>      transfer函数是实现SPI总线读写方法的函数。实现数据的双向传输，可能会睡眠</p>
+<p>cleanup注销时候调用</p>
+<p>2.3 SPI设备驱动层<br>      SPI设备驱动层为用户接口层，其为用户提供了通过SPI总线访问具体设备的接口。<br>      SPI设备驱动层可以用两个模块来描述，struct spi_driver和struct spi_device。<br>      相关的数据结构如下：</p>
+<p>struct spi_driver { </p>
+<p>int         (*probe)(struct spi_device *spi); </p>
+<p>int         (*remove)(struct spi_device *spi); </p>
+<p>void            (*shutdown)(struct spi_device *spi); </p>
+<p>int         (*suspend)(struct spi_device *spi, pm_message_t mesg); </p>
+<p>int         (*resume)(struct spi_device *spi); </p>
+<p>struct device_driver    driver; </p>
+<p>};</p>
+<p>  Driver是为device服务的，spi_driver注册时会扫描SPI bus上的设备，进行驱动和设备的绑定，probe函数用于驱动和设备匹配时被调用。从上面的结构体注释中我们可以知道，SPI的通信是通过消息队列机制，而不是像I2C那样通过与从设备进行对话的方式。</p>
+<p>struct spi_device { </p>
+<p>struct device       dev; </p>
+<p>struct spi_master   *master; </p>
+<p>    u32         max_speed_hz; </p>
+<p>    u8          chip_select; </p>
+<p>    u8          mode;   </p>
+<p>    u8          bits_per_word; </p>
+<p>int         irq; </p>
+<p>void            *controller_state; </p>
+<p>void            *controller_data; </p>
+<p>char            modalias[32];  </p>
+<p>};</p>
+<p>        .modalias   = &quot;m25p10&quot;,</p>
+<p>        .mode   =SPI_MODE_0,   //CPOL=0, CPHA=0 此处选择具体数据传输模式</p>
+<p>        .max_speed_hz    = 10000000, //最大的spi时钟频率</p>
+<p>        /* Connected to SPI-0 as 1st Slave */</p>
+<p>        .bus_num    = 0,   //设备连接在spi控制器0上</p>
+<p>        .chip_select    = 0, //片选线号，在S5PC100的控制器驱动中没有使用它作为片选的依据，而是选择了下文controller_data里的方法。</p>
+<p>        .controller_data = &amp;smdk_spi0_csi[0], </p>
+<p>通常来说spi_device对应着SPI总线上某个特定的slave。并且spi_device封装了一个spi_master结构体。spi_device结构体包含了私有的特定的slave设备特性，包括它最大的频率，片选那个，输入输出模式等等</p>
+<p>3 OMAP3630 SPI控制器<br>      OMAP3630上SPI是一个主/从的同步串行总线，这边有4个独立的SPI模块(SPI1，SPI2，SPI3，SPI4)，各个模块之间的区别在于SPI1支持多达4个SPI设备，SPI2和SPI3支持2个SPI设备，而SPI4只支持1个SPI设备。</p>
+<p>SPI控制器具有以下特征：<br>?     1.可编程的串行时钟，包括频率，相位，极性。<br>?     2.支持4到32位数据传输<br>?     3.支持4通道或者单通道的从模式<br>?     4.支持主的多通道模式<br>?         4.1全双工/半双工<br>?         4.2只发送/只接收/收发都支持模式<br>?         4.3灵活的I/O端口控制<br>?         4.4每个通道都支持DMA读写<br>?     5.支持多个中断源的中断时间<br>?     6.支持wake-up的电源管理<br>?     7.内置64字节的FIFO</p>
+<p>4 spi_device以下一系列的操作是在platform板文件中完成！</p>
+<p>spi_device的板信息用spi_board_info结构体来描述：</p>
+<p>struct spi_board_info {</p>
+<p>charmodalias[SPI_NAME_SIZE];</p>
+<p>const void*platform_data;</p>
+<p>void*controller_data;</p>
+<p>intirq;</p>
+<p>u32max_speed_hz;</p>
+<p>u16bus_num;</p>
+<p>u16chip_select;</p>
+<p>u8mode;</p>
+<p>};</p>
+<p>这个结构体记录了SPI外设使用的主机控制器序号、片选信号、数据比特率、SPI传输方式等</p>
+<p>构建的操作是以下的两个步骤：</p>
+<p>1.</p>
+<p>static struct spi_board_info s3c_spi_devs[] __initdata = {</p>
+<p>{</p>
+<p>.modalias = &quot;m25p10a&quot;,</p>
+<p>.mode = SPI_MODE_0,</p>
+<p>.max_speed_hz = 1000000,</p>
+<p>.bus_num = 0,</p>
+<p>.chip_select = 0,</p>
+<p>.controller_data = &amp;smdk_spi0_csi[SMDK_MMCSPI_CS],</p>
+<p>},</p>
+<p>};</p>
+<p>2.</p>
+<p>而这个info在init函数调用的时候会初始化：</p>
+<p>spi_register_board_info(s3c_spi_devs,ARRAY_SIZE(s3c_spi_devs));</p>
+<p>spi_register_board_info(s3c_spi_devs,ARRAY_SIZE(s3c_spi_devs));//注册spi_board_info。这个代码会把spi_board_info注册到链表board_list上。spi_device封装了一个spi_master结构体，事实上spi_master的注册会在spi_register_board_info之后，spi_master注册的过程中会调用scan_boardinfo扫描board_list，找到挂接在它上面的spi设备，然后创建并注册spi_device。</p>
+<p>至此spi_device就构建并注册完成了！！！！！！！！！！！！！</p>
+<p>5 spi_driver的构建与注册</p>
+<p>driver有几个重要的结构体：spi_driver、spi_transfer、spi_message</p>
+<p>driver有几个重要的函数    ：spi_message_init、spi_message_add_tail、spi_sync</p>
+<p>   //spi_driver的构建</p>
+<p>static struct spi_driver   m25p80_driver = {</p>
+<p>.driver = {</p>
+<p>        .name   =&quot;m25p80&quot;,</p>
+<p>        .bus    =&amp;spi_bus_type,</p>
+<p>        .owner  = THIS_MODULE,</p>
+<p>    },</p>
+<p>    .probe  = m25p_probe,</p>
+<p>    .remove =__devexit_p(m25p_remove),</p>
+<p>};</p>
+<p>//spidriver的注册</p>
+<p>spi_register_driver(&amp;m25p80_driver);</p>
+<p>在有匹配的spi_device时，会调用m25p_probe</p>
+<p>probe里完成了spi_transfer、spi_message的构建；</p>
+<p>spi_message_init、spi_message_add_tail、spi_sync、spi_write_then_read函数的调用</p>
+<p>例如：</p>
+<p>*/ </p>
+<p>static int m25p10a_read( struct m25p10a *flash, loff_t from,  </p>
+<p>        size_t len, char *buf ) </p>
+<p>{ </p>
+<p>    int r_count = 0, i; </p>
+<p>    struct spi_transfer st[2]; </p>
+<p>    struct spi_message  msg; </p>
+<p>    spi_message_init( &amp;msg ); </p>
+<p>    memset( st, 0, sizeof(st) ); </p>
+<p>    flash-&gt;cmd[0] = CMD_READ_BYTES; </p>
+<p>    flash-&gt;cmd[1] = from &gt;&gt; 16; </p>
+<p>    flash-&gt;cmd[2] = from &gt;&gt; 8; </p>
+<p>    flash-&gt;cmd[3] = from; </p>
+<p>    st[ 0 ].tx_buf = flash-&gt;cmd; </p>
+<p>    st[ 0 ].len = CMD_SZ; </p>
+<p>    spi_message_add_tail( &amp;st[0], &amp;msg ); </p>
+<p>    st[ 1 ].rx_buf = buf; </p>
+<p>    st[ 1 ].len = len; </p>
+<p>    spi_message_add_tail( &amp;st[1], &amp;msg ); </p>
+<p>    mutex_lock( &amp;flash-&gt;lock ); </p>
+<p>    /* Wait until finished previous write command. */ </p>
+<p>    if (wait_till_ready(flash)) { </p>
+<p>        mutex_unlock( &amp;flash-&gt;lock ); </p>
+<p>        return -1; </p>
+<p>    } </p>
+<p>    spi_sync( flash-&gt;spi, &amp;msg ); </p>
+<p>r_count = msg.actual_length - CMD_SZ; </p>
+<p>    printk( &quot;in (%s): read %d bytes\n&quot;, <strong>func</strong>, r_count ); </p>
+<p>    for( i = 0; i &lt; r_count; i++ ) { </p>
+<p>        printk( &quot;0x%02x\n&quot;, buf[ i ] ); </p>
+<p>    } </p>
+<p>    mutex_unlock( &amp;flash-&gt;lock ); </p>
+<p>    return 0; </p>
+<p>} </p>
+<p>static int m25p10a_write( struct m25p10a *flash, loff_t to,  </p>
+<p>        size_t len, const char *buf ) </p>
+<p>{ </p>
+<p>    int w_count = 0, i, page_offset;</p>
+<p>    struct spi_transfer st[2];</p>
+<p>    struct spi_message  msg; </p>
+<p>    write_enable( flash );  //写使能 </p>
+<p>       spi_message_init( &amp;msg );  </p>
+<p>    memset( st, 0, sizeof(st) ); </p>
+<p>    flash-&gt;cmd[0] = CMD_PAGE_PROGRAM; </p>
+<p>    flash-&gt;cmd[1] = to &gt;&gt; 16; </p>
+<p>    flash-&gt;cmd[2] = to &gt;&gt; 8; </p>
+<p>    flash-&gt;cmd[3] = to; </p>
+<p>    st[ 0 ].tx_buf = flash-&gt;cmd; </p>
+<p>    st[ 0 ].len = CMD_SZ; </p>
+<p>//填充spi_transfer，将transfer放在队列后面</p>
+<p>   spi_message_add_tail( &amp;st[0], &amp;msg ); </p>
+<p>    st[ 1 ].tx_buf = buf; </p>
+<p>    st[ 1 ].len = len; </p>
+<p>spi_message_add_tail( &amp;st[1], &amp;msg ); </p>
+<p>       spi_sync( flash-&gt;spi, &amp;msg );   调用spi_master发送spi_message</p>
+<p>    return 0; </p>
+<p>}</p>
+<p>static int m25p10a_probe(struct spi_device *spi)  </p>
+<p>{  </p>
+<p>    int ret = 0; </p>
+<p>    struct m25p10a  *flash; </p>
+<p>    char buf[ 256 ]; </p>
+<p>flash = kzalloc( sizeof(struct m25p10a), GFP_KERNEL ); </p>
+<p>    flash-&gt;spi = spi; </p>
+<p>    /* save flash as driver’s private data */ </p>
+<p>    spi_set_drvdata( spi, flash );   </p>
+<p>    memset( buf, 0x7, 256 ); </p>
+<p>m25p10a_write( flash, 0, 20, buf); //0地址写入20个7 </p>
+<p>    memset( buf, 0, 256 ); </p>
+<p>  m25p10a_read( flash, 0, 25, buf ); //0地址读出25个数</p>
+<p>    return 0;  </p>
+<p>}  </p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/Linux%E5%9F%BA%E7%A1%80/" rel="prev" title="Linux基础">
+      <i class="fa fa-chevron-left"></i> Linux基础
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/Linux%E8%AE%BE%E5%A4%87%E9%A9%B1%E5%8A%A8%E4%B9%8B%E5%AD%97%E7%AC%A6%E8%AE%BE%E5%A4%87%E9%A9%B1%E5%8A%A8/" rel="next" title="Linux设备驱动之字符设备驱动">
+      Linux设备驱动之字符设备驱动 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Edward"
+      src="/uploads/avatar.gif">
+  <p class="site-author-name" itemprop="name">Edward</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">570</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Edward</span>
+</div>
+
+        
+
+
+
+
+
+
+<script>
+  (function() {
+    function leancloudSelector(url) {
+      url = encodeURI(url);
+      return document.getElementById(url).querySelector('.leancloud-visitors-count');
+    }
+
+    function addCount(Counter) {
+      var visitors = document.querySelector('.leancloud_visitors');
+      var url = decodeURI(visitors.id);
+      var title = visitors.dataset.flagTitle;
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          if (results.length > 0) {
+            var counter = results[0];
+            leancloudSelector(url).innerText = counter.time + 1;
+            Counter('put', '/classes/Counter/' + counter.objectId, { time: { '__op': 'Increment', 'amount': 1 } })
+              .catch(error => {
+                console.error('Failed to save visitor count', error);
+              });
+          } else {
+              Counter('post', '/classes/Counter', { title, url, time: 1 })
+                .then(response => response.json())
+                .then(() => {
+                  leancloudSelector(url).innerText = 1;
+                })
+                .catch(error => {
+                  console.error('Failed to create', error);
+                });
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    function showTime(Counter) {
+      var visitors = document.querySelectorAll('.leancloud_visitors');
+      var entries = [...visitors].map(element => {
+        return decodeURI(element.id);
+      });
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url: { '$in': entries } })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          for (let url of entries) {
+            let target = results.find(item => item.url === url);
+            leancloudSelector(url).innerText = target ? target.time : 0;
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    let { app_id, app_key, server_url } = {"enable":true,"app_id":"wxYx0BX9gaKA3XC4LuO2of0v-gzGzoHsz","app_key":"LQMcs6IDIE4YAm10vMsn9IYq","server_url":"https://wxyx0bx9.lc-cn-n1-shared.com","security":false};
+    function fetchData(api_server) {
+      var Counter = (method, url, data) => {
+        return fetch(`${api_server}/1.1${url}`, {
+          method,
+          headers: {
+            'X-LC-Id'     : app_id,
+            'X-LC-Key'    : app_key,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data)
+        });
+      };
+      if (CONFIG.page.isPost) {
+        if (CONFIG.hostname !== location.hostname) return;
+        addCount(Counter);
+      } else if (document.querySelectorAll('.post-title-link').length >= 1) {
+        showTime(Counter);
+      }
+    }
+
+    let api_server = app_id.slice(-9) !== '-MdYXbMMI' ? server_url : `https://${app_id.slice(0, 8).toLowerCase()}.api.lncldglobal.com`;
+
+    if (api_server) {
+      fetchData(api_server);
+    } else {
+      fetch('https://app-router.leancloud.cn/2/route?appId=' + app_id)
+        .then(response => response.json())
+        .then(({ api_server }) => {
+          fetchData('https://' + api_server);
+        });
+    }
+  })();
+</script>
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

@@ -1,0 +1,997 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"edward.org.cn","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="修改Android解锁界面 2012-05-05 11:13:01 分类： 嵌入式 背景     先说说背景吧，这是本人从WinCE系统转到Android之后，接到的第一个任务就是修改Android原生的解锁界面，之前看了两个星期的书和网络博客，Java的也有、Android应用开发的也有、Linux开发的也有、Android框架介绍的也有。然后写了几个APK试了了一下，觉得自己有能力了，便充满自">
+<meta property="og:type" content="article">
+<meta property="og:title" content="修改Android解锁界面">
+<meta property="og:url" content="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/%E4%BF%AE%E6%94%B9Android%E8%A7%A3%E9%94%81%E7%95%8C%E9%9D%A2/index.html">
+<meta property="og:site_name" content="点点滴滴">
+<meta property="og:description" content="修改Android解锁界面 2012-05-05 11:13:01 分类： 嵌入式 背景     先说说背景吧，这是本人从WinCE系统转到Android之后，接到的第一个任务就是修改Android原生的解锁界面，之前看了两个星期的书和网络博客，Java的也有、Android应用开发的也有、Linux开发的也有、Android框架介绍的也有。然后写了几个APK试了了一下，觉得自己有能力了，便充满自">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-12-31T06:48:02.202Z">
+<meta property="article:modified_time" content="2020-01-16T04:37:33.127Z">
+<meta property="article:author" content="Edward">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/%E4%BF%AE%E6%94%B9Android%E8%A7%A3%E9%94%81%E7%95%8C%E9%9D%A2/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>修改Android解锁界面 | 点点滴滴</title>
+  
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?a92ed22eafce466e7a7b17546bb0dc6f";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">点点滴滴</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/%E4%BF%AE%E6%94%B9Android%E8%A7%A3%E9%94%81%E7%95%8C%E9%9D%A2/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/avatar.gif">
+      <meta itemprop="name" content="Edward">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="点点滴滴">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          修改Android解锁界面
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-12-31 14:48:02" itemprop="dateCreated datePublished" datetime="2020-12-31T14:48:02+08:00">2020-12-31</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-01-16 12:37:33" itemprop="dateModified" datetime="2020-01-16T12:37:33+08:00">2020-01-16</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%83%82%E7%AC%94%E5%A4%B4/" itemprop="url" rel="index"><span itemprop="name">烂笔头</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/%E4%BF%AE%E6%94%B9Android%E8%A7%A3%E9%94%81%E7%95%8C%E9%9D%A2/" class="post-meta-item leancloud_visitors" data-flag-title="修改Android解锁界面" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>修改Android解锁界面 2012-05-05 11:13:01</p>
+<p>分类： 嵌入式</p>
+<p>背景  <br>   先说说背景吧，这是本人从WinCE系统转到Android之后，接到的第一个任务就是修改Android原生的解锁界面，之前看了两个星期的书和网络博客，Java的也有、Android应用开发的也有、Linux开发的也有、Android框架介绍的也有。然后写了几个APK试了了一下，觉得自己有能力了，便充满自信地找到组长接任务。组长没有说什么，拿出一个竞争对手公司的样机，玩了几下拿个我，说道：这是竞争对手公司的方案，他们的解锁效果不错，很方便，你看看能不能也做出来。<br>   说实话接到这个任务当时真的有点失望，心里面一直想，当初做WinCE做的几乎全是驱动，整天和寄存器、指针、协议打交道，现在转到Android，做这些应用的东西真的不太习惯。不过转头一想，不管什么东西，要做就要做好，慢慢来嘛，于是拿走样机回到工位上，安心开始研究。<br>   样机解锁界面效果类似如下 <br> 其实这也是我后面做出的效果，样机因为没有ROOT不好调试截图,功能是将解锁的图标添加了最近运行的运用的图标，这样的话更方便用户去使用</p>
+<p>1.分析 <br>1.1.Android锁屏功能分析</p>
+<p>Android锁屏相关的代码在以下几个路径：</p>
+<p>锁屏的具体实现：</p>
+<p>其中的主要代码如下：</p>
+<p>锁屏控件的View类</p>
+<p>\frameworks\base\policy\src\com\android\internal\policy\impl</p>
+<p>\frameworks\base\core\java\com\android\internal\widget\multiwaveview</p>
+<p>锁屏控件使用到的资源</p>
+<p>\frameworks\base\core\res\res\values-sw600dp-land\arrays.xml</p>
+<p>\frameworks\base\core\res\res\drawableXXX</p>
+<p>Android上常用的锁屏方法有以下几种：默认锁屏方式（LockScreen）、SIM卡解锁方式（SimUnlockScreen）、图案解锁方式（PatternUnlockScreen）、密码解锁方式（PasswordUnlockScreen）、账号解锁方式（AccountUnlockScreen），这些解锁方式都有对应的源码实现，我们这里讨论的是最常用的默认解锁方式，在Android4.0之后，解锁控件变为“波纹解锁”，即如概述介绍的那样，通过控制中心的圆圈来实现解锁，这种解锁方式，实际上可以进一步增强。</p>
+<p>1.1.1.  Android启动后从窗口管理器运行到解锁界面的动作：</p>
+<p>1.开机启动后执行到PhoneWindowManager.systemReady()。</p>
+<p>2.调用KeyguardViewMediator.onSystemReady()进行待机锁屏及解锁逻辑。</p>
+<p>3.KeyguardViewMediator是整个待机解锁屏业务的调度器，负责调度锁屏界面的相关动作及查询解锁屏状态。</p>
+<p>1.1.2.  KeyguardViewMediator的作用</p>
+<p>1.查询锁屏状态，及当前处于锁屏状态还是已解锁状态，PhoneWindowManager持有KeyguardViewMediator的引用，当用户触摸屏幕或者按下某个键是，PhoneWindowManager会通过KeyguardViewMediator查询锁屏状态（锁定/解锁），进行不同的响应处理。如果处于锁定状态，系统输入事件会受到限制。</p>
+<p>2.响应电源事件（黑/亮屏）。判断锁屏界面应该处于什么状态（显示或者重置）。手机黑屏后，锁屏界面马上就会显示出来，以便下一次亮屏后，马上就能显示锁屏界面，而不会出现闪烁或延时。</p>
+<p>3.其他应用程序或者服务也可以请求禁止锁屏（通过调用KeyguardViewMediator的setKeyguardEnabled(boolean)方法）。例如接听来电界面。</p>
+<p>KeyguardViewMediator类在WindowManagerPolicy（在手机系统中是PhoneWindowManager实例）初始化时被创建，并运行在它的线程上，锁屏的UI界面也是在这个线程上创建及显示的。KeyguardViewMediator类提供的状态查询api可以被诸如android.view.WindowManager、com.android.server.InputManager等其它线程调用，所以，KeyguardViewMediator类上的这些api方法都是线程同步的（synchronized）。</p>
+<p>1.1.3.  KeyguardViewMediator可以进行的调度操作</p>
+<p>1) 点亮屏幕pokeWakelock();</p>
+<p>2) 报告锁屏权限验证是否成功keyguardDone(boolean);</p>
+<p>3) 响应SIM卡状态变化并对锁屏界面做相应的调整onSimStateChanged（）。</p>
+<p>4) 调度待机锁屏UI界面的管理,包括:</p>
+<p>1.显示handleShow ()、</p>
+<p>2.隐藏handleHide ()、</p>
+<p>3.重置handleReset ()、</p>
+<p>4.点亮屏幕handleWakeWhenReady()等。</p>
+<p>KeyguardViewMediator实现这部分调度是通过持有一个KeyguardViewManager来实现的。总之KeyguardUpdateMonitor是所有会影响整个待机解/锁屏业务的事件的监控器。(除了作为监控器，它还发挥着类似上下文的作用，也许我们应该把这个类命名为(KeyguardContext)。它监控诸如时间改变、电池状态改变、时区改变、SIM卡状态变化、电话状态变化、电话信号变化等事件。它是一个观察者模式的被观察对象。观察者通过调用KeyguardUpdateMonitor的以下方法进行注册，观察自己感兴趣的变化。</p>
+<p>registerInfoCallback(InfoCallback)registerSimStateCallback(SimStateCallback)</p>
+<p>KeyguardUpdateMonitor的观察者包括KeyguardViewMediator、LockScreen、PatternUnlockScreen、AccountUnlockScreen、PasswordUnlockScreen、SimUnlockScreen等。观察者通过调用KeyguardUpdateMonitor的removeCallback(Object)取消观察。</p>
+<p>KeyguardViewManager负责管理待机屏UI界面的创建、显示、隐藏、重置以及通过一个回调KeyguardViewCallback通知调度器KeyguardViewMediator进行相关的调度。</p>
+<p>LockPatternKeyguardView（KeyguardViewBase）是所有锁屏和解锁UI界面的宿主。它有2个模式Mode. LockScreen和Mode. UnlockScreen。它负责根据当前上下文环境切换当前应该显示的待机屏。</p>
+<p>它提供一个回调给当前显示的待机屏并处理其回调，如果回调动作是自己处理不了的，则继续报告给KeyguardViewMediator进行处理。</p>
+<p>锁屏界面就是LockScreen；解锁界面包括SIM卡解锁SimUnlockScreen、图案解锁PatternUnlockScreen、密码解锁PasswordUnlockScreen、帐号解锁AccountUnlockScreen</p>
+<p>解锁成功后，锁屏流程转到KeyguardViewMediator的keyguardDone(boolean, boolean) 进行后续的流程（如转到Launcher桌面）。</p>
+<p>1.2. 解锁界面布局</p>
+<p>解锁界面布局在LockScreen类的构造函数中进行，LockScreen构造函数内容如下：</p>
+<p>点击(此处)折叠或打开</p>
+<p>LockScreen(Context context, Configuration configuration, LockPatternUtils lockPatternUtils,</p>
+<p>            KeyguardUpdateMonitor updateMonitor,</p>
+<p>            KeyguardScreenCallback callback) {</p>
+<p>super(context);</p>
+<p>        mLockPatternUtils = lockPatternUtils;</p>
+<p>        mUpdateMonitor = updateMonitor;</p>
+<p>        mCallback = callback;</p>
+<p>        mEnableMenuKeyInLockScreen = shouldEnableMenuKey();</p>
+<p>        mCreationOrientation = configuration.orientation;</p>
+<p>        mKeyboardHidden = configuration.hardKeyboardHidden;</p>
+<p>if (LockPatternKeyguardView.DEBUG_CONFIGURATION) {</p>
+<p>Log.v(TAG, &quot;***** CREATING LOCK SCREEN&quot;, new RuntimeException());</p>
+<p>Log.v(TAG, &quot;Cur orient=&quot; + mCreationOrientation</p>
+<p>+ &quot; res orient=&quot; + context.getResources().getConfiguration().orientation);</p>
+<p>}</p>
+<p>final LayoutInflater inflater = LayoutInflater.from(context);</p>
+<p>if (DBG) Log.v(TAG, &quot;Creation orientation = &quot; + mCreationOrientation);</p>
+<p>if (mCreationOrientation != Configuration.ORIENTATION_LANDSCAPE) {</p>
+<p>inflater.inflate(R.layout.keyguard_screen_tab_unlock, this, true);</p>
+<p>} else {</p>
+<p>inflater.inflate(R.layout.keyguard_screen_tab_unlock_land, this, true);</p>
+<p>}</p>
+<p>        mStatusViewManager = new KeyguardStatusViewManager(this, mUpdateMonitor, mLockPatternUtils,</p>
+<p>                mCallback, false);</p>
+<p>        setFocusable(true);</p>
+<p>        setFocusableInTouchMode(true);</p>
+<p>        setDescendantFocusability(ViewGroup.FOCUS_BLOCK_DESCENDANTS);</p>
+<p>        mAudioManager = (AudioManager) mContext.getSystemService(Context.AUDIO_SERVICE);</p>
+<p>        mSilentMode = isSilentMode();</p>
+<p>        mUnlockWidget = findViewById(R.id.unlock_widget);</p>
+<p>if (mUnlockWidget instanceof SlidingTab) {</p>
+<p>            SlidingTab slidingTabView = (SlidingTab) mUnlockWidget;</p>
+<p>            slidingTabView.setHoldAfterTrigger(true, false);</p>
+<p>            slidingTabView.setLeftHintText(R.string.lockscreen_unlock_label);</p>
+<p>            slidingTabView.setLeftTabResources(</p>
+<p>                    R.drawable.ic_jog_dial_unlock,</p>
+<p>                    R.drawable.jog_tab_target_green,</p>
+<p>                    R.drawable.jog_tab_bar_left_unlock,</p>
+<p>                    R.drawable.jog_tab_left_unlock);</p>
+<p>            SlidingTabMethods slidingTabMethods = new SlidingTabMethods(slidingTabView);</p>
+<p>            slidingTabView.setOnTriggerListener(slidingTabMethods);</p>
+<p>            mUnlockWidgetMethods = slidingTabMethods;</p>
+<p>} else if (mUnlockWidget instanceof WaveView) {</p>
+<p>            WaveView waveView = (WaveView) mUnlockWidget;</p>
+<p>            WaveViewMethods waveViewMethods = new WaveViewMethods(waveView);</p>
+<p>            waveView.setOnTriggerListener(waveViewMethods);</p>
+<p>            mUnlockWidgetMethods = waveViewMethods;</p>
+<p>} else if (mUnlockWidget instanceof MultiWaveView) {</p>
+<p>            MultiWaveView multiWaveView = (MultiWaveView) mUnlockWidget;</p>
+<p>            MultiWaveViewMethods multiWaveViewMethods = new MultiWaveViewMethods(multiWaveView);</p>
+<p>            multiWaveView.setOnTriggerListener(multiWaveViewMethods);</p>
+<p>            mUnlockWidgetMethods = multiWaveViewMethods;</p>
+<p>} else {</p>
+<p>throw new IllegalStateException(&quot;Unrecognized unlock widget: &quot; + mUnlockWidget);</p>
+<p>}</p>
+<p>// Update widget with initial ring state</p>
+<p>        mUnlockWidgetMethods.updateResources(context);</p>
+<p>if (DBG) Log.v(TAG, &quot;*** LockScreen accel is &quot;</p>
+<p>+ (mUnlockWidget.isHardwareAccelerated() ? &quot;on&quot;:&quot;off&quot;));</p>
+<p>}</p>
+<p>通过添加打印发现在480分辨率下采用的Layout文件为\layout-sw480dp\keyguard_screen_tab_unlock_land.xml，此文件的内容如下：</p>
+<p>点击(此处)折叠或打开</p>
+<p>&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;</p>
+<p>&lt;!–</p>
+<p>**</p>
+<p>** Copyright 2009, The Android Open Source Project</p>
+<p>**</p>
+<p>** Licensed under the Apache License, Version 2.0 (the &quot;License&quot;)</p>
+<p>** you may not use this file except in compliance with the License.</p>
+<p>** You may obtain a copy of the License at</p>
+<p>**</p>
+<p>** <a target="_blank" rel="noopener" href="http://www.apache.org/licenses/LICENSE-2.0">http://www.apache.org/licenses/LICENSE-2.0</a></p>
+<p>**</p>
+<p>** Unless required by applicable law or agreed to in writing, software</p>
+<p>** distributed under the License is distributed on an &quot;AS IS&quot; BASIS,</p>
+<p>** WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</p>
+<p>** See the License for the specific language governing permissions and</p>
+<p>** limitations under the License.</p>
+<p>*/</p>
+<p>–&gt;</p>
+<p>&lt;!– This is the general lock screen which shows information about the</p>
+<p>  state of the device, as well as instructions on how to get past it</p>
+<p>  depending on the state of the device.–&gt;</p>
+<p>&lt;LinearLayout xmlns:android=&quot;<a target="_blank" rel="noopener" href="http://schemas.android.com/apk/res/android">http://schemas.android.com/apk/res/android</a>&quot;</p>
+<p>    xmlns:tabunlock=&quot;<a target="_blank" rel="noopener" href="http://schemas.android.com/apk/res/com.android.tabunlock">http://schemas.android.com/apk/res/com.android.tabunlock</a>&quot;</p>
+<p>    android:layout_width=&quot;match_parent&quot;</p>
+<p>    android:layout_height=&quot;match_parent&quot;</p>
+<p>    android:orientation=&quot;horizontal&quot;</p>
+<p>    android:id=&quot;@+id/root&quot;&gt;</p>
+<p>&lt;!– left side: status and music –&gt;</p>
+<p>&lt;RelativeLayout</p>
+<p>        android:layout_height=&quot;match_parent&quot;</p>
+<p>        android:layout_weight=&quot;1&quot;</p>
+<p>        android:layout_width=&quot;0dip&quot;</p>
+<p>        android:gravity=&quot;center&quot;&gt;</p>
+<p>&lt;RelativeLayout android:id=&quot;@+id/transport_bg_protect&quot;</p>
+<p>            android:layout_width=&quot;512dip&quot;</p>
+<p>            android:layout_height=&quot;wrap_content&quot;&gt;</p>
+<p>&lt;!– Music transport control underneath –&gt;</p>
+<p>&lt;include android:id=&quot;@+id/transport&quot;</p>
+<p>                layout=&quot;@layout/keyguard_transport_control&quot;</p>
+<p>                android:layout_row=&quot;0&quot;</p>
+<p>                android:layout_column=&quot;0&quot;</p>
+<p>                android:layout_rowSpan=&quot;3&quot;</p>
+<p>                android:layout_columnSpan=&quot;1&quot;</p>
+<p>                android:layout_gravity=&quot;fill&quot;</p>
+<p>                android:layout_width=&quot;match_parent&quot;</p>
+<p>                android:layout_height=&quot;512dip&quot;</p>
+<p>/&gt;</p>
+<p>&lt;include layout=&quot;@layout/keyguard_screen_status_land&quot;</p>
+<p>                android:layout_width=&quot;match_parent&quot;</p>
+<p>                android:layout_height=&quot;wrap_content&quot;</p>
+<p>                android:layout_marginLeft=&quot;50dip&quot;</p>
+<p>                android:layout_marginTop=&quot;50dip&quot;</p>
+<p>                android:layout_marginBottom=&quot;82dip&quot;</p>
+<p>                android:layout_marginRight=&quot;64dip&quot;</p>
+<p>                android:layout_alignParentTop=&quot;true&quot;</p>
+<p>                android:layout_alignParentLeft=&quot;true&quot;/&gt;</p>
+<p>&lt;/RelativeLayout&gt;</p>
+<p>&lt;/RelativeLayout&gt;</p>
+<p>&lt;!– right side –&gt;</p>
+<p>&lt;RelativeLayout</p>
+<p>        android:layout_height=&quot;match_parent&quot;</p>
+<p>        android:layout_weight=&quot;1&quot;</p>
+<p>        android:layout_width=&quot;0dip&quot;</p>
+<p>        android:gravity=&quot;center_horizontal|center_vertical&quot;&gt;</p>
+<p>&lt;TextView</p>
+<p>            android:id=&quot;@+id/screenLocked&quot;</p>
+<p>            android:layout_width=&quot;wrap_content&quot;</p>
+<p>            android:layout_height=&quot;wrap_content&quot;</p>
+<p>            android:textAppearance=&quot;?android:attr/textAppearanceMedium&quot;</p>
+<p>            android:gravity=&quot;center&quot;</p>
+<p>            android:layout_marginTop=&quot;12dip&quot;</p>
+<p>            android:layout_alignParentLeft=&quot;true&quot;</p>
+<p>            android:layout_alignParentTop=&quot;true&quot;</p>
+<p>            android:drawablePadding=&quot;4dip&quot;/&gt;</p>
+<p>&lt;com.android.internal.widget.multiwaveview.MultiWaveView</p>
+<p>            android:id=&quot;@+id/unlock_widget&quot;</p>
+<p>            android:layout_width=&quot;match_parent&quot;</p>
+<p>            android:layout_height=&quot;match_parent&quot;</p>
+<p>            android:layout_rowSpan=&quot;7&quot;</p>
+<p>            android:layout_gravity=&quot;center_vertical|center_horizontal&quot;</p>
+<p>            android:targetDrawables=&quot;@array/lockscreen_targets_with_camera&quot;</p>
+<p>            android:targetDescriptions=&quot;@array/lockscreen_target_descriptions_with_camera&quot;</p>
+<p>            android:directionDescriptions=&quot;@array/lockscreen_direction_descriptions&quot;</p>
+<p>            android:handleDrawable=&quot;@drawable/ic_lockscreen_handle&quot;</p>
+<p>            android:waveDrawable=&quot;@drawable/ic_lockscreen_outerring&quot;</p>
+<p>            android:outerRadius=&quot;@dimen/multiwaveview_target_placement_radius&quot;</p>
+<p>            android:snapMargin=&quot;@dimen/multiwaveview_snap_margin&quot;</p>
+<p>            android:hitRadius=&quot;@dimen/multiwaveview_hit_radius&quot;</p>
+<p>            android:rightChevronDrawable=&quot;@drawable/ic_lockscreen_chevron_right&quot;</p>
+<p>            android:feedbackCount=&quot;3&quot;</p>
+<p>            android:vibrationDuration=&quot;20&quot;</p>
+<p>            android:horizontalOffset=&quot;0dip&quot;</p>
+<p>            android:verticalOffset=&quot;0dip&quot;</p>
+<p>/&gt;</p>
+<p>&lt;!– emergency call button shown when sim is PUKd and tab_selector is hidden –&gt;</p>
+<p>&lt;Button</p>
+<p>            android:id=&quot;@+id/emergencyCallButton&quot;</p>
+<p>            android:layout_width=&quot;wrap_content&quot;</p>
+<p>            android:layout_height=&quot;wrap_content&quot;</p>
+<p>            android:layout_marginRight=&quot;80dip&quot;</p>
+<p>            android:layout_marginBottom=&quot;80dip&quot;</p>
+<p>            android:layout_alignParentRight=&quot;true&quot;</p>
+<p>            android:layout_alignParentBottom=&quot;true&quot;</p>
+<p>            android:drawableLeft=&quot;@drawable/ic_emergency&quot;</p>
+<p>            style=&quot;@style/Widget.Button.Transparent&quot;</p>
+<p>            android:drawablePadding=&quot;8dip&quot;</p>
+<p>            android:visibility=&quot;gone&quot;/&gt;</p>
+<p>&lt;/RelativeLayout&gt;&gt;</p>
+<p>&lt;/LinearLayout&gt;</p>
+<p>   从文件中可以看出，解锁界面的数字时钟、充电状态、波纹解锁等控件均在其中布局，对解锁控件的大小修改也是通过修改该文件进行的。</p>
+<p>1.3. MultiWaveView控件分析</p>
+<p>对于Android4.0默认的LockScreen，采用的是MultiWaveView控件，LockScreen中创建该控件的代码如下：</p>
+<p>点击(此处)折叠或打开</p>
+<p>mUnlockWidget = findViewById(R.id.unlock_widget);</p>
+<p>if (mUnlockWidget instanceof SlidingTab) {</p>
+<p>            SlidingTab slidingTabView = (SlidingTab) mUnlockWidget;</p>
+<p>            slidingTabView.setHoldAfterTrigger(true, false);</p>
+<p>            slidingTabView.setLeftHintText(R.string.lockscreen_unlock_label);</p>
+<p>            slidingTabView.setLeftTabResources(</p>
+<p>                    R.drawable.ic_jog_dial_unlock,</p>
+<p>                    R.drawable.jog_tab_target_green,</p>
+<p>                    R.drawable.jog_tab_bar_left_unlock,</p>
+<p>                    R.drawable.jog_tab_left_unlock);</p>
+<p>            SlidingTabMethods slidingTabMethods = new SlidingTabMethods(slidingTabView);</p>
+<p>            slidingTabView.setOnTriggerListener(slidingTabMethods);</p>
+<p>            mUnlockWidgetMethods = slidingTabMethods;</p>
+<p>} else if (mUnlockWidget instanceof WaveView) {</p>
+<p>            WaveView waveView = (WaveView) mUnlockWidget;</p>
+<p>            WaveViewMethods waveViewMethods = new WaveViewMethods(waveView);</p>
+<p>            waveView.setOnTriggerListener(waveViewMethods);</p>
+<p>            mUnlockWidgetMethods = waveViewMethods;</p>
+<p>} else if (mUnlockWidget instanceof MultiWaveView) {</p>
+<p> MultiWaveView multiWaveView = (MultiWaveView) mUnlockWidget;</p>
+<p>            MultiWaveViewMethods multiWaveViewMethods = new MultiWaveViewMethods(multiWaveView);</p>
+<p>            multiWaveView.setOnTriggerListener(multiWaveViewMethods);</p>
+<p>            mUnlockWidgetMethods = multiWaveViewMethods;</p>
+<p>} else {</p>
+<p>throw new IllegalStateException(&quot;Unrecognized unlock widget: &quot; + mUnlockWidget);</p>
+<p>}</p>
+<p>这是LockScreen的构造函数中的代码，函数根据R.id.unlock_widget定义的类型选择不同的控件类，其中第一种是Android2.3的滑动解锁类，第二种的简单的波纹解锁类，第三种才是我们使用的MultiWaveView类，函数并创建了一个MultiWaveViewMethods类，这个类实际上是为了更好地使用而进行的封装，它的代码如下：</p>
+<p>点击(此处)折叠或打开</p>
+<p>class MultiWaveViewMethods implements MultiWaveView.OnTriggerListener,</p>
+<p>            UnlockWidgetCommonMethods {</p>
+<p>private final MultiWaveView mMultiWaveView;</p>
+<p>private boolean mCameraDisabled;</p>
+<p>        MultiWaveViewMethods(MultiWaveView multiWaveView) {</p>
+<p>            mMultiWaveView = multiWaveView;</p>
+<p>final boolean cameraDisabled = mLockPatternUtils.getDevicePolicyManager()</p>
+<p>.getCameraDisabled(null);</p>
+<p>if (cameraDisabled) {</p>
+<p>Log.v(TAG, &quot;Camera disabled by Device Policy&quot;);</p>
+<p>                mCameraDisabled = true;</p>
+<p>} else {</p>
+<p>// Camera is enabled if resource is initially defined for MultiWaveView</p>
+<p>// in the lockscreen layout file</p>
+<p>                mCameraDisabled = mMultiWaveView.getTargetResourceId()</p>
+<p>!= R.array.lockscreen_targets_with_camera;</p>
+<p>}</p>
+<p>}</p>
+<p>public void updateResources() {</p>
+<p>int resId;</p>
+<p>if (mCameraDisabled) {</p>
+<p>// Fall back to showing ring/silence if camera is disabled by DPM…</p>
+<p>                resId = mSilentMode ? R.array.lockscreen_targets_when_silent</p>
+<p>: R.array.lockscreen_targets_when_soundon;</p>
+<p>} else {</p>
+<p>                resId = R.array.lockscreen_targets_with_camera;</p>
+<p>}</p>
+<p>            mMultiWaveView.setTargetResources(resId);</p>
+<p>}</p>
+<p>public void onGrabbed(View v, int handle) {</p>
+<p>}</p>
+<p>public void onReleased(View v, int handle) {</p>
+<p>}</p>
+<p>public void onTrigger(View v, int target) {</p>
+<p>if (target == 0 || target == 1) { // 0 = unlock/portrait, 1 = unlock/landscape</p>
+<p>                mCallback.goToUnlockScreen();</p>
+<p>} else if (target == 2 || target == 3) { // 2 = alt/portrait, 3 = alt/landscape</p>
+<p>if (!mCameraDisabled) {</p>
+<p>// Start the Camera</p>
+<p>                    Intent intent = new Intent(MediaStore.INTENT_ACTION_STILL_IMAGE_CAMERA);</p>
+<p>                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);</p>
+<p>                    mContext.startActivity(intent);</p>
+<p>                    mCallback.goToUnlockScreen();</p>
+<p>} else {</p>
+<p>                    toggleRingMode();</p>
+<p>                    mUnlockWidgetMethods.updateResources();</p>
+<p>                    mCallback.pokeWakelock();</p>
+<p>}</p>
+<p>}</p>
+<p>}</p>
+<p>public void onGrabbedStateChange(View v, int handle) {</p>
+<p>// Don’t poke the wake lock when returning to a state where the handle is</p>
+<p>// not grabbed since that can happen when the system (instead of the user)</p>
+<p>// cancels the grab.</p>
+<p>if (handle != MultiWaveView.OnTriggerListener.NO_HANDLE) {</p>
+<p>                mCallback.pokeWakelock();</p>
+<p>}</p>
+<p>}</p>
+<p>这个类有两个方法特别重要，一个是更新MultiWaveView的资源，即public void updateResources()，另一个是对解锁后的响应，即public void onTrigger(View v, int target)，这方法传入的第二个参数为解锁选择的图标编号，图标是从右向左逆时针编号的，即最右边的图标编号为0，在此函数中即可进行解锁的处理，选择是进入主界面还是启动其他的Activity。Android4.0默认target = 0对应的是进入主界面，</p>
+<p>target = 2或者target = 3启动Camera，其解锁界面的图标是每次都是使用固定的资源，在完成解锁后按下Power键或者系统再次进入锁定状态，LockScreen都会再构造一次，会重新布局并加载资源，因此可以使每次解锁界面都不一样。</p>
+<p>2. 实现<br>2.1. 获取最近运行程序</p>
+<p>在Android中可以通过ActivityManager获取到最近运行的Activity，详细的用法如下：</p>
+<p>输入参数是需要查询的最大最近运行任务个数，查询的方式（默认采用ActivityManager.RECENT_IGNOR_UNAVAILABLE），返回ActivityManager.RecentTaskInfo对象，其定义如下：</p>
+<p>其中的baseIntent为启动最近运行任务的Intent，通过它我们可以很方便地获取Activity的图标并启动最近运行的Activity。</p>
+<p>相关的代码如下：</p>
+<p>final ActivityManager am = (ActivityManager)context.getSystemService(Context.ACTIVITY_SERVICE);           </p>
+<p>List&lt;ActivityManager.RecentTaskInfo&gt; recentLs = am.getRecentTasks(7, ActivityManager.RECENT_IGNORE_UNAVAILABLE);</p>
+<p>2.1.1. 获取Activity图标的方法</p>
+<p>通过PackManager我们可以很方便地获取到Activity的图标，对应的代码如下：</p>
+<p>final PackageManager pm = context.getPackageManager(); </p>
+<p>pm.getActivityIcon(recentLs.get(i).baseIntent)</p>
+<p>2.2.          修改/system/build.prop文件</p>
+<p>这个文件中包含了大量Android中的配置信息，其中也有和显示分辨率相关的，修改的方法如下：</p>
+<p>1.通过ADB将文件获取到主机任意文件夹。</p>
+<p>adb pull /system/build.prop</p>
+<p>2.用编辑软件打开build.prop，找到如下行</p>
+<p>2.将ro.sf.lcd_density=120修改为=160或者直接删除掉这一行（这样就使用默认160）。</p>
+<p>3.执行</p>
+<p>adb push build.prop /system/</p>
+<p>2.3. 修改MultiWaveView控件</p>
+<p>修改以下位置的源文件：</p>
+<p>Z:\exdroid\android4.0.1\frameworks\base\core\java\com\android\internal\widget\multiwaveview\MultiWaveView.java</p>
+<p>重载setTargetResources方法，重载后的方法如下：</p>
+<p>点击(此处)折叠或打开</p>
+<p>public void setTargetResources(ArrayList&lt;Drawable&gt; drawables)</p>
+<p>{</p>
+<p>       Resources res = getContext().getResources();</p>
+<p>int count = drawables.size();</p>
+<p>ArrayList&lt;TargetDrawable&gt; targetDrawables = new ArrayList&lt;TargetDrawable&gt;(count);</p>
+<p>for (int i = 0; i &lt; count; i++) {</p>
+<p>            Drawable drawable = drawables.get(i);</p>
+<p>            targetDrawables.add(new TargetDrawable(res, drawable));</p>
+<p>Log.v(TAG,&quot;Add a Drawable&quot;);</p>
+<p>}</p>
+<p>        mTargetDrawables = targetDrawables;</p>
+<p>        updateTargetPositions();</p>
+<p>}</p>
+<p>重载后的方法支持直接传入图片链表。这个方法是提供给LockScreen调用的</p>
+<p>2.4.修改LockScreen.java文件</p>
+<p>重载其中的MultiWaveViewMethods类的updateResources方法，重载后的方法如下：</p>
+<p>点击(此处)折叠或打开</p>
+<p>public void updateResources(Context context) </p>
+<p>{ </p>
+<p>ArrayList&lt;Drawable&gt; drawableAl = new ArrayList();</p>
+<p>final ActivityManager am = (ActivityManager)context.getSystemService(Context.ACTIVITY_SERVICE); </p>
+<p>final PackageManager pm = context.getPackageManager(); </p>
+<p>              drawableAl.add(getView().getResources().getDrawable(R.drawable.ic_lockscreen_unlock));</p>
+<p>List&lt;ActivityManager.RecentTaskInfo&gt; recentLs = am.getRecentTasks(7, ActivityManager.RECENT_IGNORE_UNAVAILABLE);</p>
+<p>for(int i=0;i&lt;recentLs.size();i++)</p>
+<p>{</p>
+<p>try</p>
+<p>{</p>
+<p>                       drawableAl.add(pm.getActivityIcon(recentLs.get(i).baseIntent));</p>
+<p>                       mIntentList.add(recentLs.get(i).baseIntent);</p>
+<p>}</p>
+<p>catch(Exception e)</p>
+<p>{</p>
+<p>Log.v(TAG,&quot;Catch Exception&quot;);</p>
+<p>}</p>
+<p>}</p>
+<p>              mMultiWaveView.setTargetResources(drawableAl);</p>
+<p>}</p>
+<p>重载后的updateResources函数实际上先获取最近运行的任务列表，再获取任务图标，最后用获取的图标设置MultiWaveView控件。</p>
+<p>修改解锁响应onTigger：</p>
+<p>点击(此处)折叠或打开</p>
+<p>public void onTrigger(View v, int target) {</p>
+<p>Log.v(TAG,&quot;onTrigger = &quot; + target);</p>
+<p>if(target ==0)</p>
+<p>{</p>
+<p>                   mCallback.goToUnlockScreen();</p>
+<p>}</p>
+<p>else</p>
+<p>{</p>
+<p>if(mIntentList.get(target-1)!=null)</p>
+<p>{</p>
+<p>                       Intent intent = mIntentList.get(target-1);</p>
+<p>                       mContext.startActivity(intent);</p>
+<p>                       mCallback.goToUnlockScreen();</p>
+<p>}</p>
+<p>}</p>
+<p>}</p>
+<p>这样解锁事件的响应被修改成0号图标解锁，其余启动对应的Activity。</p>
+<p>2.5. 调整解锁圆圈大小</p>
+<p>启动应用程序的功能实现了，但是解锁圆圈的大小还是太大，特别是在更改dpi之后，圆圈几乎占据了半个显示屏，显得并不雅观。</p>
+<p>实际上，解锁圆圈的资源就是/framework/cors/res/res/drawable-xxx中的unlock_ring.png，对于不同分辨率的设备，会采用不同的大小。我们可以通过修改位图的大小来进行更改，但在实际测试中修改了所有的unlock_ring.png，也未见解锁图标变小。</p>
+<p>决定采用代码配合更改图案大小的功能，如图：</p>
+<p>mOuterRing为外圆圈的资源，mOuterRadius为解锁圆圈的活动半径，修改代码后直接从图片获取，这样将采用drawable-sw480dp-mdpi下的图片，通过PhotoShop等软件将圆圈图片缩小，最终显示出的圆圈就变小了。</p>
+<p>3. 关于Android屏幕的知识（摘自网上）<br>3.1. density</p>
+<p>density表示每英寸有多少个显示点(逻辑值)，它的单位是dpi：dot per inch，通常屏幕大时，density就大，屏幕小时，density就小，通常:</p>
+<p>屏幕实际分辨率为240px*400px时，density=120</p>
+<p>屏幕实际分辨率为320px*533px，density=160</p>
+<p>屏幕实际分辨率为480px*800px，density=240</p>
+<p>3.2. 分辨率</p>
+<p>是整个屏是多少点，比如800x480，它是软件的显示单位，实际上会因为不同的显示屏的像素大小不同，造成density不同。</p>
+<p>3.3. 资源目录名称</p>
+<p>res/xxx-hdpi          当density为240时，使用此目录下的资源</p>
+<p>res/xxx-mdpi          当density为160时，使用此目录下的资源</p>
+<p>res/xxx-ldpi          当density为120时，使用此目录下的资源</p>
+<p>res/xxx                不常后缀，为默认设置，同xxx-mdpi</p>
+<p>3.4. 资源单位（xml文件中定义大小的单位）</p>
+<p>a)dp=dip=dx (Density independent pixel)</p>
+<p>基于屏幕密度的抽象单位，设备无关的点，用于说明与密度无关的尺寸和位置。这些单位是相对于一个160dpi的屏幕，所有一个dp是160dpi屏幕上的一个点。</p>
+<p>b)px (Pixel)</p>
+<p>px指软件的单位点，设备相关的点</p>
+<p>3.5. 获取屏幕信息的相关代码片段</p>
+<p>public static String getDisplayMetrics(Context cx) {</p>
+<p>String str = &quot;&quot;;</p>
+<p>  DisplayMetrics dm = new DisplayMetrics();</p>
+<p>  dm = cx.getApplicationContext().getResources().getDisplayMetrics();</p>
+<p>int screenWidth = dm.widthPixels;</p>
+<p>int screenHeight = dm.heightPixels;</p>
+<p>float density = dm.density;</p>
+<p>float xdpi = dm.xdpi;</p>
+<p>float ydpi = dm.ydpi;</p>
+<p>  str += &quot;The absolute width:&quot; + String.valueOf(screenWidth) + &quot;pixels\n&quot;;</p>
+<p>  str += &quot;The absolute heightin:&quot; + String.valueOf(screenHeight)</p>
+<p>+ &quot;pixels\n&quot;;</p>
+<p>  str += &quot;The logical density of the display.:&quot; + String.valueOf(density)</p>
+<p>+ &quot;\n&quot;;</p>
+<p>  str += &quot;X dimension :&quot; + String.valueOf(xdpi) + &quot;pixels per inch\n&quot;;</p>
+<p>  str += &quot;Y dimension :&quot; + String.valueOf(ydpi) + &quot;pixels per inch\n&quot;;</p>
+<p>return str;</p>
+<p>}</p>
+<p>3.6.  获取状态栏和标题栏的高度</p>
+<p>点击(此处)折叠或打开</p>
+<p>TextView tv1;</p>
+<p>@Override</p>
+<p>protected void onCreate(Bundle savedInstanceState) {</p>
+<p>super.onCreate(savedInstanceState);</p>
+<p>  setContentView(R.layout.layout_test2);</p>
+<p>  tv1 = (TextView) findViewById(R.id.TextView01);</p>
+<p>  tv1.post(new Runnable(){</p>
+<p>public void run()</p>
+<p>{</p>
+<p>      processLayout();</p>
+<p>}</p>
+<p>});</p>
+<p>}</p>
+<p>private void processLayout(){</p>
+<p>  Rect rect= new Rect();</p>
+<p>Window window= getWindow();</p>
+<p>  tv1.getWindowVisibleDisplayFrame(rect);</p>
+<p>//状态栏高度</p>
+<p>int statusBarHeight= rect.top;</p>
+<p>int contentViewTop= window.findViewById(Window.ID_ANDROID_CONTENT).getTop();</p>
+<p>//标题栏高度</p>
+<p>int titleBarHeight= contentViewTop - statusBarHeight;</p>
+<p>//测试结果：ok之后 100多 ms 才运行了</p>
+<p>Log.v(&quot;test&quot;, &quot;=-init-= statusBarHeight=&quot;+statusBarHeight+</p>
+<p>&quot; contentViewTop=&quot;+contentViewTop+</p>
+<p>&quot; titleBarHeight=&quot;+titleBarHeight); </p>
+<p>}</p>
+<p>4.总结 <br>    也算是费了一些功夫，总算是把First Task完成得差不多了，毕业一年以来都是在做WinCE驱动，虽然在大学里面学过一点Linux的知识，但是初次转到Android还是有点不适应，好在有网络这个好东西，Android学习才不是那么难，但是感觉也不能太依靠网络。从长期来看，在消费电子这一块，智能系统的进化将会越来越快，这对我等的考验会越来越大。但是当今世界就是一个不断学习的世界，今后要多把自己的学习总结出来，这样进步才会更快。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/%E4%BF%AE%E5%A4%8Dlauncher2%E6%A8%AA%E7%AB%96%E5%B1%8Fbug/" rel="prev" title="修复launcher2横竖屏bug">
+      <i class="fa fa-chevron-left"></i> 修复launcher2横竖屏bug
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/%E4%BF%AE%E6%94%B9%E5%8E%82%E5%95%86%E4%BF%A1%E6%81%AF%E5%8F%8A%E8%AE%BE%E5%A4%87%E5%90%8D%E7%A7%B0/" rel="next" title="修改厂商信息及设备名称">
+      修改厂商信息及设备名称 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Edward"
+      src="/uploads/avatar.gif">
+  <p class="site-author-name" itemprop="name">Edward</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">570</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Edward</span>
+</div>
+
+        
+
+
+
+
+
+
+<script>
+  (function() {
+    function leancloudSelector(url) {
+      url = encodeURI(url);
+      return document.getElementById(url).querySelector('.leancloud-visitors-count');
+    }
+
+    function addCount(Counter) {
+      var visitors = document.querySelector('.leancloud_visitors');
+      var url = decodeURI(visitors.id);
+      var title = visitors.dataset.flagTitle;
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          if (results.length > 0) {
+            var counter = results[0];
+            leancloudSelector(url).innerText = counter.time + 1;
+            Counter('put', '/classes/Counter/' + counter.objectId, { time: { '__op': 'Increment', 'amount': 1 } })
+              .catch(error => {
+                console.error('Failed to save visitor count', error);
+              });
+          } else {
+              Counter('post', '/classes/Counter', { title, url, time: 1 })
+                .then(response => response.json())
+                .then(() => {
+                  leancloudSelector(url).innerText = 1;
+                })
+                .catch(error => {
+                  console.error('Failed to create', error);
+                });
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    function showTime(Counter) {
+      var visitors = document.querySelectorAll('.leancloud_visitors');
+      var entries = [...visitors].map(element => {
+        return decodeURI(element.id);
+      });
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url: { '$in': entries } })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          for (let url of entries) {
+            let target = results.find(item => item.url === url);
+            leancloudSelector(url).innerText = target ? target.time : 0;
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    let { app_id, app_key, server_url } = {"enable":true,"app_id":"wxYx0BX9gaKA3XC4LuO2of0v-gzGzoHsz","app_key":"LQMcs6IDIE4YAm10vMsn9IYq","server_url":"https://wxyx0bx9.lc-cn-n1-shared.com","security":false};
+    function fetchData(api_server) {
+      var Counter = (method, url, data) => {
+        return fetch(`${api_server}/1.1${url}`, {
+          method,
+          headers: {
+            'X-LC-Id'     : app_id,
+            'X-LC-Key'    : app_key,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data)
+        });
+      };
+      if (CONFIG.page.isPost) {
+        if (CONFIG.hostname !== location.hostname) return;
+        addCount(Counter);
+      } else if (document.querySelectorAll('.post-title-link').length >= 1) {
+        showTime(Counter);
+      }
+    }
+
+    let api_server = app_id.slice(-9) !== '-MdYXbMMI' ? server_url : `https://${app_id.slice(0, 8).toLowerCase()}.api.lncldglobal.com`;
+
+    if (api_server) {
+      fetchData(api_server);
+    } else {
+      fetch('https://app-router.leancloud.cn/2/route?appId=' + app_id)
+        .then(response => response.json())
+        .then(({ api_server }) => {
+          fetchData('https://' + api_server);
+        });
+    }
+  })();
+</script>
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

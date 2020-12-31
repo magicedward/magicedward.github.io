@@ -1,0 +1,1175 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"edward.org.cn","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="Android Input子系统架构 1.1 Input服务的启动 在Android的开机过程中，系统中的服务很多都是由SystemServer中启动的。 SystemServer的代码中有这么一句话。 Framework&#x2F;base&#x2F;services&#x2F;java&#x2F;com&#x2F;android&#x2F;server&#x2F;SystemServer.java Slog.i(TAG, &quot;Window Manager">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android Input子系统架构">
+<meta property="og:url" content="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/Android%20Input%E5%AD%90%E7%B3%BB%E7%BB%9F%E6%9E%B6%E6%9E%84/index.html">
+<meta property="og:site_name" content="点点滴滴">
+<meta property="og:description" content="Android Input子系统架构 1.1 Input服务的启动 在Android的开机过程中，系统中的服务很多都是由SystemServer中启动的。 SystemServer的代码中有这么一句话。 Framework&#x2F;base&#x2F;services&#x2F;java&#x2F;com&#x2F;android&#x2F;server&#x2F;SystemServer.java Slog.i(TAG, &quot;Window Manager">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-12-31T06:48:00.864Z">
+<meta property="article:modified_time" content="2020-01-16T04:37:32.458Z">
+<meta property="article:author" content="Edward">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/Android%20Input%E5%AD%90%E7%B3%BB%E7%BB%9F%E6%9E%B6%E6%9E%84/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>Android Input子系统架构 | 点点滴滴</title>
+  
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?a92ed22eafce466e7a7b17546bb0dc6f";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">点点滴滴</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/Android%20Input%E5%AD%90%E7%B3%BB%E7%BB%9F%E6%9E%B6%E6%9E%84/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/avatar.gif">
+      <meta itemprop="name" content="Edward">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="点点滴滴">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Android Input子系统架构
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-12-31 14:48:00" itemprop="dateCreated datePublished" datetime="2020-12-31T14:48:00+08:00">2020-12-31</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-01-16 12:37:32" itemprop="dateModified" datetime="2020-01-16T12:37:32+08:00">2020-01-16</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%83%82%E7%AC%94%E5%A4%B4/" itemprop="url" rel="index"><span itemprop="name">烂笔头</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/Android%20Input%E5%AD%90%E7%B3%BB%E7%BB%9F%E6%9E%B6%E6%9E%84/" class="post-meta-item leancloud_visitors" data-flag-title="Android Input子系统架构" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>Android Input子系统架构</p>
+<p>1.1 Input服务的启动</p>
+<p>在Android的开机过程中，系统中的服务很多都是由SystemServer中启动的。</p>
+<p>SystemServer的代码中有这么一句话。</p>
+<p>Framework/base/services/java/com/android/server/SystemServer.java</p>
+<p>Slog.i(TAG, &quot;Window Manager&quot;);</p>
+<p> wm = WindowManagerService.main(context, power,</p>
+<p>                    factoryTest != SystemServer.FACTORY_TEST_LOW_LEVEL,!firstBoot);</p>
+<p>在这里new了一个WindowManagerService的类，我们找到这个类的构造函数。</p>
+<p>Framework/base/services/java/com/android/server/wm/WindowManagerServer.java</p>
+<p>private WindowManagerService(Context context, PowerManagerService pm,</p>
+<p>            boolean haveInputMethods, boolean showBootMsgs) {</p>
+<p>……</p>
+<p>mInputManager = new InputManager(context, this);</p>
+<p>……</p>
+<p>mInputManager.start();</p>
+<p>……</p>
+<p>}</p>
+<p>在WindowManagerService的构造函数中又new了一个InputManager类。InputManager类是整个android的input的上层代码最重要的类，就是通过这个类繁衍出了整个复杂的Android的input子系统。作用就好像Zygote的孕育着Android的各个服务，而InputManager就是负责将整个android的Input子系统。</p>
+<p>Framework/base/services/java/com/android/server/wm/WindowManagerServer.java</p>
+<p>public InputManager(Context context, WindowManagerService windowManagerService) {</p>
+<p>……</p>
+<p>Looper looper = windowManagerService.mH.getLooper();</p>
+<p>nativeInit(mContext, mCallbacks, looper.getQueue());</p>
+<p>……</p>
+<p>}</p>
+<p>在InputManger的构造函数中，调用了nativeInit这个方式，看到native开头或者结尾的函数，一般都是JNI。在InputManager的JNI可以找到这个函数的实现。</p>
+<p>Framework/base/services/jni/com_android_server_InputManager.java</p>
+<p>static JNINativeMethod gInputManagerMethods[] = {</p>
+<p>{ &quot;nativeInit&quot;, &quot;(Landroid/content/Context;&quot;</p>
+<p>&quot;Lcom/android/server/wm/InputManager$Callbacks;Landroid/os/MessageQueue;)V&quot;,</p>
+<p>            (void*) android_server_InputManager_nativeInit },</p>
+<p>简单介绍下JNI的代码风格，第一个引号括起来的函数就是我们java代码的函数原型，中间的引号中的就是代表java原型函数的参数。而最后的那个函数就是在对应的函数。一般都是c++代码。</p>
+<p>Framework/base/services/jni/com_android_server_InputManager.java</p>
+<p>static void android_server_InputManager_nativeInit(JNIEnv* env, jclass clazz,</p>
+<p>        jobject contextObj, jobject callbacksObj, jobject messageQueueObj) {</p>
+<p>……</p>
+<p>gNativeInputManager = new NativeInputManager(contextObj, callbacksObj, looper);</p>
+<p>……</p>
+<p>}</p>
+<p>在JNI的代码中，又构造了一个重要的NativeInputManager类，这是个C++的本地类。已经不在是之前了那个java的InputManager类。接下来看看NativeInputManager的构造函数。</p>
+<p>Framework/base/services/jni/com_android_server_InputManager.java</p>
+<p>NativeInputManager::NativeInputManager(jobject contextObj,</p>
+<p>  jobject callbacksObj, const sp&lt;Looper&gt;&amp; looper) :mLooper(looper) {</p>
+<p>……</p>
+<p>sp&lt;EventHub&gt; eventHub = new EventHub();</p>
+<p> mInputManager = new InputManager(eventHub, this, this);</p>
+<p>……</p>
+<p>}</p>
+<p>这里new了两个类，EventHub和InputManager类。EventHub就是Input子系统的HAL层了，负责将linux的所有的input设备打开并负责轮询读取他们的上报的数据，后面会详细介绍，这里先简单介绍一下。InputManager类主要是负责管理input Event，有InputReader从EventHub读取事件，然后交给InputDispatcher进行分发。</p>
+<p>Framework/base/services/input/InputManager.cpp</p>
+<p>InputManager::InputManager(</p>
+<p>        const sp&lt;InputReaderInterface&gt;&amp; reader,</p>
+<p>        const sp&lt;InputDispatcherInterface&gt;&amp; dispatcher) :</p>
+<p>        mReader(reader),</p>
+<p>        mDispatcher(dispatcher) {</p>
+<p>    initialize();</p>
+<p>}</p>
+<p>void InputManager::initialize() {</p>
+<p>    mReaderThread = new InputReaderThread(mReader);</p>
+<p>    mDispatcherThread = new InputDispatcherThread(mDispatcher);</p>
+<p>}</p>
+<p>在InputManager中的initialize的初始化了两个线程。一个是inputReaderThread，负责从EventHub中读取事件，另外一个是InputDispatcherThread线程，主要负责分发读取的事件去处理。</p>
+<p>Framework/base/services/java/com/android/server/wm/WindowManagerServer.java</p>
+<p>private WindowManagerService(Context context, PowerManagerService pm,</p>
+<p>            boolean haveInputMethods, boolean showBootMsgs)</p>
+<p>mInputManager.start();</p>
+<p>……</p>
+<p>}</p>
+<p>在开始的时候，new了一个InputManager，然后在继续调用其start方法。</p>
+<p>Framework/base/services/java/com/android/server/wm/WindowManagerServer.java</p>
+<p>public void start() {</p>
+<p>        Slog.i(TAG, &quot;Starting input manager&quot;);</p>
+<p>        nativeStart();</p>
+<p>        registerPointerSpeedSettingObserver();</p>
+<p>        registerShowTouchesSettingObserver();</p>
+<p>        updatePointerSpeedFromSettings();</p>
+<p>        updateShowTouchesFromSettings();</p>
+<p>    }  </p>
+<p>NativeStart()跑到JNI的代码中去了，跟上面的方式一样。</p>
+<p>Framework/base/services/jni/com_android_server_InputManager.java</p>
+<p>static JNINativeMethod gInputManagerMethods[] = {</p>
+<p>……</p>
+<p>{ &quot;nativeStart&quot;, &quot;()V&quot;, (void*) android_server_InputManager_nativeStart },</p>
+<p>……</p>
+<p>}</p>
+<p>static void android_server_InputManager_nativeStart(JNIEnv* env, jclass clazz) {</p>
+<p>……</p>
+<p>status_t result = gNativeInputManager-&gt;getInputManager()-&gt;start();</p>
+<p>……</p>
+<p>}</p>
+<p>在java代码中用了nativeStart()，然后JNI中又调用了NativeInputManager的start方法。在Native的InputManager中找到start的实现。</p>
+<p>Framework/base/services/input/InputManager.cpp</p>
+<p>status_t InputManager::start() {</p>
+<p>status_t result = mDispatcherThread-&gt;run(&quot;InputDispatcher&quot;, PRIORITY_URGENT_DISPLAY);</p>
+<p>……</p>
+<p>result = mReaderThread-&gt;run(&quot;InputReader&quot;, PRIORITY_URGENT_DISPLAY);</p>
+<p>……</p>
+<p>}</p>
+<p>这个方法就是在前面InputManager中的构造函数initialize中的两个线程运行起来。先看Input</p>
+<p>Dispatcher线程运行的情况，然后就是InputReader线程。</p>
+<p>Framework/base/services/input/InputDispatcher.cpp</p>
+<p>bool InputDispatcherThread::threadLoop() {</p>
+<p>    mDispatcher-&gt;dispatchOnce();</p>
+<p>    return true;</p>
+<p>}</p>
+<p>InputDispatcher线程调用了Dispatcher的dispatchOnce的方法。同样的InputReader线程也会调用Reader的ReaderOnce的方法。</p>
+<p>Framework/base/services/input/InputDispatcher.cpp</p>
+<p>void InputDispatcher::dispatchOnce() {</p>
+<p>……</p>
+<p>dispatchOnceInnerLocked(&amp;nextWakeupTime);</p>
+<p>……</p>
+<p>  int timeoutMillis = toMillisecondTimeoutDelay(currentTime, nextWakeupTime);</p>
+<p>    mLooper-&gt;pollOnce(timeoutMillis);</p>
+<p>}</p>
+<p>dispatchOnceInnerLocked是处理input输入消息，mLooper-&gt;pollOnce(timeoutMillis)是等待下次输入消息的事件。先看下消息在dispatchOnceInnerLocked函数中是如何处理的。</p>
+<p>Framework/base/services/input/InputDispatcher.cpp</p>
+<p>void InputDispatcher::dispatchOnceInnerLocked(nsecs_t* nextWakeupTime) {</p>
+<p>……</p>
+<p>case EventEntry::TYPE_KEY</p>
+<p>……</p>
+<p>done = dispatchKeyLocked(currentTime, typedEntry, &amp;dropReason, nextWakeupTime);</p>
+<p>case EventEntry::TYPE_MOTION: {</p>
+<p>……</p>
+<p>done = dispatchMotionLocked(currentTime, typedEntry, &amp;dropReason, nextWakeupTime);</p>
+<p>……</p>
+<p>}</p>
+<p>这个函数比较长，input事件在android的上层通过两个队列来保存，分别是InboundQueue和outboundQueue。当有input事件产生时候，会判断InboundQueue是否为空，如果事件不为空的话，就从队列中取出这个input事件，然后根据input事件的类型来分发事件给不同的处理函数，比较常见的是KEY和Motion事件。不管是Key事件也好还是Motion事件都会调用dispatchEventToCurrentInputTargetsLocked(currentTime, entry, false);这个函数来继续处理。</p>
+<p>Framework/base/services/input/InputDispatcher.cpp</p>
+<p>void InputDispatcher::dispatchEventToCurrentInputTargetsLocked(nsecs_t currentTime,</p>
+<p>        EventEntry* eventEntry, bool resumeWithAppendedMotionSample) {</p>
+<p>……</p>
+<p>prepareDispatchCycleLocked(currentTime, connection, eventEntry, &amp; inputTarget,</p>
+<p>                    resumeWithAppendedMotionSample);</p>
+<p>……</p>
+<p>}</p>
+<p>在这个函数中会继续调用prepareDispatchCycleLocked方法来继续处理。而在prepareDispatch</p>
+<p>CycleLocked中又会继续调用startDispatchCycleLocked(currentTime, connection)来进一步处理。</p>
+<p>Framework/base/services/input/InputDispatcher.cpp</p>
+<p>void InputDispatcher::startDispatchCycleLocked(nsecs_t currentTime,</p>
+<p>        const sp&lt;Connection&gt;&amp; connection) {</p>
+<p>……</p>
+<p>switch (eventEntry-&gt;type) {</p>
+<p>case EventEntry::TYPE_KEY: {</p>
+<p>status = connection-&gt;inputPublisher.publishKeyEvent</p>
+<p>case EventEntry::TYPE_MOTION: {</p>
+<p>……</p>
+<p>status = connection-&gt;inputPublisher.publishMotionEvent</p>
+<p>……</p>
+<p>status = connection-&gt;inputPublisher.sendDispatchSignal();</p>
+<p>……</p>
+<p>}</p>
+<p>这个函数主要是根据input事件的类型来分发给不同的函数去处理，如果是KEY类型的事件就调用inputPublisher类的publishKeyEvent,如果是MOTION类的事件就会调用inputPublisher类的publishMotionEvent方法。并在最后发一个sendDispatchSignal。</p>
+<p>Framework/base/libs/ui/InputTransport.cpp</p>
+<p>status_t InputPublisher::publishInputEvent(</p>
+<p>……</p>
+<p>int ashmemFd = mChannel-&gt;getAshmemFd();</p>
+<p>int result = ashmem_pin_region(ashmemFd, 0, 0);</p>
+<p>……</p>
+<p>mSemaphoreInitialized = true;</p>
+<p>    mSharedMessage-&gt;consumed = false;</p>
+<p>    mSharedMessage-&gt;type = type;</p>
+<p>    mSharedMessage-&gt;deviceId = deviceId;</p>
+<p>mSharedMessage-&gt;source = source;</p>
+<p>……</p>
+<p>}</p>
+<p>利用publisher中的publishInputEvent将input event写入共享内存。这边产生了事件，另外一边必然会有个地方回去消费这个事件。注意到上面的代码中，最后发送了一个sendDispatchS</p>
+<p>ignal。</p>
+<p>Framework/base/libs/ui/InputTransport.cpp</p>
+<p>status_t InputPublisher::sendDispatchSignal() {</p>
+<p>……</p>
+<p>return mChannel-&gt;sendSignal(INPUT_SIGNAL_DISPATCH);</p>
+<p>……</p>
+<p>}</p>
+<p>这个函数直接调用了inputChannel的sendSignal方法。继续找到inputChannel的sendSignal实现。</p>
+<p>Framework/base/libs/ui/InputTransport.cpp</p>
+<p>status_t InputChannel::sendSignal(char signal) {</p>
+<p>……</p>
+<p>do {</p>
+<p>        nWrite = ::write(mSendPipeFd, &amp; signal, 1);</p>
+<p>    } while (nWrite == -1 &amp;&amp; errno == EINTR);</p>
+<p>……</p>
+<p>}</p>
+<p>而在注册InputChannel的时候就曾经注册了当Looper接收到了信号的一个回调函数。</p>
+<p>Framework/base/services/input/InputDispatcher.cpp</p>
+<p>status_t InputDispatcher::registerInputChannel(const sp&lt;InputChannel&gt;&amp; inputChannel,</p>
+<p>        const sp&lt;InputWindowHandle&gt;&amp; inputWindowHandle, bool monitor) {</p>
+<p>……</p>
+<p>mLooper-&gt;addFd(receiveFd, 0, ALOOPER_EVENT_INPUT, handleReceiveCallback, this);</p>
+<p>……</p>
+<p>}</p>
+<p>在handleReceiveCallback中，作为回调函数然后调用InputConsumer的consume函数来消费从inputReader中读取过来的InputEvent。</p>
+<p>Framework/base/core/jni/android_view_InputQueue.cpp</p>
+<p>int NativeInputQueue::handleReceiveCallback(int receiveFd, int events, void* data) {</p>
+<p>……</p>
+<p>status = connection-&gt;inputConsumer.consume(&amp; connection-&gt;inputEventFactory, &amp; inputEvent);</p>
+<p>……</p>
+<p>}</p>
+<p>回过头来看之前的InputReader线程，在inputManager的start方法被调用了，Input的线程也就开始运行了。</p>
+<p>Framework/base/services/input/InputReader.cpp</p>
+<p>bool InputReaderThread::threadLoop() {</p>
+<p>    mReader-&gt;loopOnce();</p>
+<p>    return true;</p>
+<p>}</p>
+<p>在InputReader的loopOnce中会调用EventHub的getevents方法。这个方法会和linux内核的input子系统打交道。</p>
+<p>Framework/base/services/input/InputReader.cpp</p>
+<p>void InputReader::loopOnce() {</p>
+<p>……</p>
+<p>size_t count = mEventHub-&gt;getEvents(timeoutMillis, mEventBuffer, EVENT_BUFFER_SIZE);</p>
+<p>……</p>
+<p>if (count) {</p>
+<p>            processEventsLocked(mEventBuffer, count);</p>
+<p>        }</p>
+<p>……</p>
+<p>}</p>
+<p>这个函数主要通过EventHub的getEvents来获取input事件。</p>
+<p>Framework/base/services/input/EventHub.cpp</p>
+<p>size_t EventHub::getEvents(int timeoutMillis, RawEvent* buffer, size_t bufferSize) {</p>
+<p>……</p>
+<p>struct input_event readBuffer[bufferSize];</p>
+<p>……</p>
+<p>for (;;) {</p>
+<p>……</p>
+<p>if (mNeedToScanDevices) {</p>
+<p>            mNeedToScanDevices = false;</p>
+<p>            scanDevicesLocked();</p>
+<p>            mNeedToSendFinishedDeviceScan = true;</p>
+<p>        }</p>
+<p>……</p>
+<p>在eventHub初始化的时候mNeedToScanDevices的值是ture的，所以会直接进入到scanDevices</p>
+<p>Locked。而在内核里面所有的input device在注册的时候都会在linux的文件系统下的/dev/input 下面，所以按照一般的HAL的思想，如果要去操作这个设备，首先还是要打开这个设备节点的。</p>
+<p>Framework/base/services/input/EventHub.cpp</p>
+<p>void EventHub::scanDevicesLocked() {</p>
+<p>    status_t res = scanDirLocked(DEVICE_PATH);</p>
+<p>    if(res &lt; 0) {</p>
+<p>        LOGE(&quot;scan dir failed for %s\n&quot;, DEVICE_PATH);</p>
+<p>    }</p>
+<p>}</p>
+<p>status_t EventHub::scanDirLocked(const char *dirname)</p>
+<p>{</p>
+<p>……</p>
+<p>openDeviceLocked(devname);</p>
+<p>……</p>
+<p>}</p>
+<p>代码中的while循环会对DEVICE_PATH(/dev/input)下的所有的设备节点调用openDeviceLocked</p>
+<p>方法。</p>
+<p>Framework/base/services/input/EventHub.cpp</p>
+<p>status_t EventHub::openDeviceLocked(const char *devicePath) {</p>
+<p>……</p>
+<p>int fd = open(devicePath, O_RDWR);</p>
+<p>……</p>
+<p>InputDeviceIdentifier identifier;</p>
+<p>……</p>
+<p>if(ioctl(fd, EVIOCGNAME(sizeof(buffer) - 1), &amp;buffer) &lt; 1</p>
+<p>……</p>
+<p>if(ioctl(fd, EVIOCGVERSION, &amp;driverVersion))</p>
+<p>……</p>
+<p>if(ioctl(fd, EVIOCGID, &amp;inputId))</p>
+<p>……</p>
+<p>identifier.bus = inputId.bustype;</p>
+<p>identifier.product = inputId.product;</p>
+<p>identifier.vendor = inputId.vendor;</p>
+<p>identifier.version = inputId.version;</p>
+<p>……</p>
+<p>Device* device = new Device(fd, deviceId, String8(devicePath), identifier);</p>
+<p>……</p>
+<p>struct epoll_event eventItem;</p>
+<p>    memset(&amp;eventItem, 0, sizeof(eventItem));</p>
+<p>    eventItem.events = EPOLLIN;</p>
+<p>eventItem.data.u32 = deviceId;</p>
+<p>……</p>
+<p>mDevices.add(deviceId, device);</p>
+<p>    device-&gt;next = mOpeningDevices;</p>
+<p>    mOpeningDevices = device;</p>
+<p>return 0;</p>
+<p>}</p>
+<p>首先通过open系统调用得到设备节点的文件描述符，然后新构造一个叫InputDeviceIdentifier类。接着通过对刚才得到的设备节点描述下ioctl的命令获取设备的一些简单信息，譬如：设备的名字，设备驱动的版本号，设备的唯一id，和描述符轮询的方式。得到的这些信息保存在InputDeviceIdentifier类里面。最后又构造了一个Device类，其中设备描述符和刚才的构造InputDeviceIdentifier类作为参数重新构造了Device类。然后在构造成功了Device类又会通过ioctl系统调用获取input设备的一些比较重要的参数。比如：设备上报事件的类型是相对事件还是绝对事件，相对事件一般是指像鼠标滑动，绝对事件就好比触摸屏上报的坐标，设备所属的class等一些比较重要的信息。举一些例子：INPUT_DEVICE_CLASS_KEYBOARD(按键类型)，INPUT_DEVICE_CLASS_CURSOR(带游标类型：鼠标和轨迹球等)，INPUT_DEVICE_CLASS_</p>
+<p>TOUCH(触摸类型：单点触摸或多点触摸)，INPUT_DEVICE_CLASS_TOUCH_MT(这个类型特指多</p>
+<p>点触摸)等。如果一个设备的驱动没有指明设备的类型的话，那么他在android中上报的数据时不会被处理的。这个函数的最后是将input设备的文件描述符加入到轮询的集合中去，如果接收到事件就会去处理。</p>
+<p>Framework/base/services/input/InputReader.cpp</p>
+<p>void InputReader::loopOnce() {</p>
+<p>……</p>
+<p>size_t count = mEventHub-&gt;getEvents(timeoutMillis, mEventBuffer, EVENT_BUFFER_SIZE);</p>
+<p>……</p>
+<p>if (count) {</p>
+<p>            processEventsLocked(mEventBuffer, count);</p>
+<p>        }</p>
+<p>……</p>
+<p>}</p>
+<p>回到之前的InputReader的线程中，通过EventHub的getevents方法得到了input事件。函数返回的是获取的事件数目。如果事件不为零或者负数就会调用processEventLocked来处理。</p>
+<p>Framework/base/services/input/InputReader.cpp</p>
+<p>void InputReader::processEventsLocked(const RawEvent* rawEvents, size_t count) {</p>
+<p>……</p>
+<p>            processEventsForDeviceLocked(deviceId, rawEvent, batchSize);</p>
+<p>……</p>
+<p>case EventHubInterface::DEVICE_ADDED:</p>
+<p>                addDeviceLocked(rawEvent-&gt;when, rawEvent-&gt;deviceId);</p>
+<p>……</p>
+<p>case EventHubInterface::DEVICE_REMOVED:</p>
+<p>                removeDeviceLocked(rawEvent-&gt;when, rawEvent-&gt;deviceId);</p>
+<p>case EventHubInterface::FINISHED_DEVICE_SCAN:</p>
+<p>                handleConfigurationChangedLocked(rawEvent-&gt;when);</p>
+<p>}</p>
+<p>在处理input的事件时候，如果不是设备的添加，删除和完成扫描的时候。就会调用process</p>
+<p>EventsForDeviceLocked来处理。</p>
+<p>Framework/base/services/input/InputReader.cpp</p>
+<p>void InputReader::processEventsForDeviceLocked(int32_t deviceId,</p>
+<p>        const RawEvent* rawEvents, size_t count) {</p>
+<p>……</p>
+<p>device-&gt;process(rawEvents, count);</p>
+<p>}</p>
+<p>这个函数也很简单直接回调了device的process方法来进行处理，这个device就是在之前的eventHub打开设备时候构造了一个device类。下面来具体看看device的process是如何进行处理的。</p>
+<p>Framework/base/services/input/InputReader.cpp</p>
+<p>void InputDevice::process(const RawEvent* rawEvents, size_t count) {</p>
+<p>……</p>
+<p>  for (size_t i = 0; i &lt; numMappers; i++) {</p>
+<p>                InputMapper* mapper = mMappers[i];</p>
+<p>                mapper-&gt;process(rawEvent);</p>
+<p>            }</p>
+<p>……</p>
+<p>}</p>
+<p>这里直接调用了mapper的process。那InputMapper是什么时候初始化的呢？前面提到如果设备不是设备的添加或删除的时候就调用processEventsForDeviceLocked来处理。也就是说当设备第一次添加的时候，就会调用addDeviceLocked。InputMapper就是从这个地方注册过来的。具体看下面的代码：</p>
+<p>Framework/base/services/input/InputReader.cpp</p>
+<p>void InputReader::addDeviceLocked(nsecs_t when, int32_t deviceId) {</p>
+<p>……</p>
+<p>InputDevice* device = createDeviceLocked(deviceId, name, classes);</p>
+<p>……</p>
+<p>}</p>
+<p>InputDevice* InputReader::createDeviceLocked(int32_t deviceId,const String8&amp; name, uint32_t classes) {</p>
+<p>……</p>
+<p>InputDevice* device = new InputDevice(&amp;mContext, deviceId, name, classes);</p>
+<p>……</p>
+<p>if (classes &amp; INPUT_DEVICE_CLASS_SWITCH) {</p>
+<p>        device-&gt;addMapper(new SwitchInputMapper(device));</p>
+<p>}</p>
+<p>……</p>
+<p>if (classes &amp; INPUT_DEVICE_CLASS_CURSOR) {</p>
+<p>        device-&gt;addMapper(new CursorInputMapper(device));</p>
+<p>}</p>
+<p>……</p>
+<p>if (classes &amp; INPUT_DEVICE_CLASS_TOUCH_MT) {</p>
+<p>        device-&gt;addMapper(new MultiTouchInputMapper(device));</p>
+<p>    } else if (classes &amp; INPUT_DEVICE_CLASS_TOUCH) {</p>
+<p>        device-&gt;addMapper(new SingleTouchInputMapper(device));</p>
+<p>}</p>
+<p>……</p>
+<p>if (classes &amp; INPUT_DEVICE_CLASS_JOYSTICK) {</p>
+<p>        device-&gt;addMapper(new JoystickInputMapper(device));</p>
+<p>}</p>
+<p>return device;</p>
+<p>}</p>
+<p>从上面的代码可以非常明显的看出，InputMapper是根据inputDevice的class来构造的这么一个类。也就是说如果我们的设备是Switch类就为这个设备构造一个SwitchInputMapper类，我们假设我们现在的事件是由触摸屏上报的事件处理流程。在前面处理的过程中我们就会调用MultiTouchInputMapper的process来继续处理。也就是说当处理到mapper-&gt;process的时候，代码就会根据具体的设备class类型来处理相应的事件。这么多inputMapper，我们就以</p>
+<p>MultiTouchInputMapper的流程继续来分析事件的处理流程。</p>
+<p>Framework/base/services/input/InputReader.cpp</p>
+<p>void MultiTouchInputMapper::process(const RawEvent* rawEvent) {</p>
+<p>    TouchInputMapper::process(rawEvent);</p>
+<p> mMultiTouchMotionAccumulator.process(rawEvent);</p>
+<p>}</p>
+<p>void MultiTouchMotionAccumulator::process(const RawEvent* rawEvent) {</p>
+<p>……</p>
+<p>  switch (rawEvent-&gt;scanCode) {</p>
+<p>            case ABS_MT_POSITION_X:</p>
+<p>                slot-&gt;mInUse = true;</p>
+<p>                slot-&gt;mAbsMTPositionX = rawEvent-&gt;value;</p>
+<p>……</p>
+<p>case ABS_MT_POSITION_Y:</p>
+<p>                slot-&gt;mInUse = true;</p>
+<p>                slot-&gt;mAbsMTPositionY = rawEvent-&gt;value;</p>
+<p>……</p>
+<p>case ABS_MT_TOUCH_MAJOR:</p>
+<p>                slot-&gt;mInUse = true;</p>
+<p>                slot-&gt;mAbsMTTouchMajor = rawEvent-&gt;value;</p>
+<p>                break;</p>
+<p>……</p>
+<p>case ABS_MT_TOUCH_MINOR:</p>
+<p>                slot-&gt;mInUse = true;</p>
+<p>                slot-&gt;mAbsMTTouchMinor = rawEvent-&gt;value;</p>
+<p>                slot-&gt;mHaveAbsMTTouchMinor = true;</p>
+<p>……</p>
+<p>}</p>
+<p>在这个处理过程中将上报的原始事件的一些重要参数都赋值给了一个叫slot的结构的成员。我们知道多点触摸上报的一些参数主要包括：X轴和Y轴的坐标点，ABS_MT_TOUCH_MAJOR代表手指和触摸屏接触面的长轴(如果假定人手指和触摸屏接触面一般都是椭圆)，ABS_MT_T</p>
+<p>OUCH_MINOR代表手指和屏幕接触面的短轴等等一些重要的参数都对号入座的赋值给了一个叫slot的结构体成员，具体更多的参数代表什么意思我就不多说了(大家可以参照linux内核文档，多点触摸协议)。</p>
+<p>MultiTouchInputMapper的process处理分了两部分，首先是调用了TouchInputMapper的process方法，然后调用了mMultiTouchMotionAccumulator.process来进行处理。先看TouchInputMapper的处理流程。</p>
+<p>Framework/base/services/input/InputReader.cpp</p>
+<p>void TouchInputMapper::process(const RawEvent* rawEvent) {</p>
+<p>……</p>
+<p>if (rawEvent-&gt;type == EV_SYN &amp;&amp; rawEvent-&gt;scanCode == SYN_REPORT) {</p>
+<p>        sync(rawEvent-&gt;when);</p>
+<p>    }</p>
+<p>}</p>
+<p>在linux内核往上层上报input event的时候是由顺序的，以触摸屏为例，input_report_abs会被用来上报一些绝对事件(如：接触面积半径，X和Y轴的坐标点)，但是在每一次上报完成后都会调用input_sync(input_dev);来表示一次完整的事件上报，换句话说这个rawEvent-&gt;type为EV_SYN的事件就是许多input event的分隔符。</p>
+<p>Framework/base/services/input/InputReader.cpp</p>
+<p>void TouchInputMapper::sync(nsecs_t when) {</p>
+<p>……<br>bool havePointerIds = true; </p>
+<p>    mCurrentRawPointerData.clear();</p>
+<p>syncTouch(when, &amp;havePointerIds);</p>
+<p>……</p>
+<p>cookPointerData();</p>
+<p>……</p>
+<p>dispatchHoverExit(when, policyFlags);</p>
+<p>dispatchTouches(when, policyFlags);</p>
+<p>dispatchHoverEnterAndMove(when, policyFlags);</p>
+<p>……</p>
+<p>}</p>
+<p>通过同步触摸事件，然后调用cookPointerData来计算X和Y的坐标，前后两次上报数据的距离，和根据缩放的大小及方向来判断是不是需要旋转屏幕。然后dispatchTouches中又调用了</p>
+<p>disaptchMotion方法。</p>
+<p>Framework/base/services/input/InputReader.cpp</p>
+<p>void TouchInputMapper::dispatchMotion(nsecs_t when, uint32_t policyFlags, uint32_t source,…</p>
+<p>) {</p>
+<p>……</p>
+<p>getListener()-&gt;notifyMotion(&amp;args);</p>
+<p>}</p>
+<p>通过getLister的方法得到InputListener并调用其notifyMotion。</p>
+<p>void QueuedInputListener::notifyMotion(const NotifyMotionArgs* args) {</p>
+<p>    mArgsQueue.push(new NotifyMotionArgs(*args));</p>
+<p>}</p>
+<p>在构造了一个NotifyMotionArgs类之后，我们回到之前的InputReader的loopOnce方法中，</p>
+<p>在最后调用了mQueuedListener-&gt;flush();Flush函数就是要把mArgsQueue中的所有NotifyArgs进行处理。为描述方便，先看看其代码：</p>
+<p>Framework/base/services/input/InputLisenter.cpp</p>
+<p>void QueuedInputListener::flush() {</p>
+<p>    size_t count = mArgsQueue.size();</p>
+<p>    for (size_t i = 0; i &lt; count; i++) {</p>
+<p>        NotifyArgs* args = mArgsQueue[i];</p>
+<p>        args-&gt;notify(mInnerListener);</p>
+<p>        delete args;</p>
+<p>    }</p>
+<p>    mArgsQueue.clear();</p>
+<p>}</p>
+<p>继续在NotifyArgs中调用了其notify的方法。还是在这个文件中可以看看我们NotifyMotion</p>
+<p>Args的notify方法。</p>
+<p>Framework/base/services/input/InputLisenter.cpp</p>
+<p>void NotifyMotionArgs::notify(const sp&lt;InputListenerInterface&gt;&amp; listener) const {</p>
+<p>    listener-&gt;notifyMotion(this);</p>
+<p>}</p>
+<p>在InputDispatcher.h中InputDispatcherInterface是继承InputListenerInterface，父类调用了子类的虚函数notifyMotion的实例化。在inputDispacher的notifyMotion中继续，这就重新回到了我们上面分析的InputDispatch线程的代码。正好完成了一边生产事件而在另一边消费事件。</p>
+<p>1.2 Input子系统在linux内核分析</p>
+<p>1.2.1 Input设备在内核中的注册过程</p>
+<p>在linux系统中描述一个input设备可以用input_dev，在编写一个input设备驱动时，通常就需要为你的input设备分配这样一个结构体，然后input_allocate_device分配内存，初始化dev</p>
+<p>结构体。</p>
+<p>Kernel/drivers/input/input.c</p>
+<p>struct input_dev *input_allocate_device(void)</p>
+<p>{</p>
+<p>    struct input_dev *dev;</p>
+<p>    dev = kzalloc(sizeof(struct input_dev), GFP_KERNEL);</p>
+<p>    if (dev) {</p>
+<p>        dev-&gt;dev.type = &amp;input_dev_type;</p>
+<p>        dev-&gt;dev.class = &amp;input_class;</p>
+<p>        device_initialize(&amp;dev-&gt;dev);</p>
+<p>        mutex_init(&amp;dev-&gt;mutex);</p>
+<p>        spin_lock_init(&amp;dev-&gt;event_lock);</p>
+<p>        INIT_LIST_HEAD(&amp;dev-&gt;h_list);</p>
+<p>        INIT_LIST_HEAD(&amp;dev-&gt;node);</p>
+<p>        __module_get(THIS_MODULE);</p>
+<p>    }   </p>
+<p>    return dev;</p>
+<p>}</p>
+<p>分配好了input_dev结构体所要的内存后，将dev的成员赋值初始化后，然后就可以调用内核API input_register_device来向input子系统注册。</p>
+<p>Kernel/drivers/input/input.c</p>
+<p>int input_register_device(struct input_dev *dev)</p>
+<p>{</p>
+<p>……</p>
+<p>error = device_add(&amp;dev-&gt;dev);</p>
+<p>……</p>
+<p>list_add_tail(&amp;dev-&gt;node, &amp;input_dev_list);</p>
+<p>……</p>
+<p>list_for_each_entry(handler, &amp;input_handler_list, node)</p>
+<p>        input_attach_handler(dev, handler);</p>
+<p>……</p>
+<p>}</p>
+<p>设备的注册还是和所有的linux设备注册一样调用device_add将设备注册进linux设备模型。</p>
+<p>同时将设备添加到linux内核全局链表input_dev_list。然后通过list_for_each_entry来为设备找到属于自己的handler。介绍下linux的input子系统的三个重要概念：input_dev(代表一个input设备)，input_handler(响应并处理input事件)，input_handle(像个红娘一样将input设备和对应的input_handler连接在一起，其中就包含一个input_dev和input_handler的链表)。</p>
+<p>1.2.2 Input_handler的注册过程</p>
+<p>一般来说input_handler的注册会在input_dev之前来注册，常见的input_handler有：mousedev</p>
+<p>handler(处理来自鼠标类的input事件)，joydev_handler(处理摇杆类事件)，kdev_handler(处理来自键盘类事件)，evdev_handler(响应绝大部门的事件，默认的input处理事件)。先看input的handler的注册函数API input_register_handler。</p>
+<p>Kernel/drivers/input/input.c</p>
+<p>int input_register_handler(struct input_handler *handler)</p>
+<p>{</p>
+<p>……</p>
+<p>  INIT_LIST_HEAD(&amp;handler-&gt;h_list);</p>
+<p>    if (handler-&gt;fops != NULL) {</p>
+<p>        if (input_table[handler-&gt;minor &gt;&gt; 5]) {</p>
+<p>            retval = -EBUSY;</p>
+<p>            goto out;</p>
+<p>        }</p>
+<p>        input_table[handler-&gt;minor &gt;&gt; 5] = handler;</p>
+<p>}</p>
+<p>……</p>
+<p>list_add_tail(&amp;handler-&gt;node, &amp;input_handler_list);</p>
+<p>list_for_each_entry(dev, &amp;input_dev_list, node) input_attach_handler(dev, handler);</p>
+<p>……</p>
+<p>}</p>
+<p>函数先初始化了input handler在linux内核链表，然后如果handler的文件操作不为空就会为这个handler分配一个次设备号，从handler-&gt;minor &gt;&gt; 5，handler通过32为倍数来区分的，</p>
+<p>换句话说每个handler处理的input event不能超过32。现在可以看到无论是设备的注册还是handler注册都会调用input_attach_handler。</p>
+<p>static int input_attach_handler(struct input_dev *dev, struct input_handler *handler)</p>
+<p>{</p>
+<p>……</p>
+<p>id = input_match_device(handler, dev);</p>
+<p>……</p>
+<p>error = handler-&gt;connect(handler, dev, id);</p>
+<p>……</p>
+<p>}</p>
+<p>每个handler在注册的时候都有自己的id_table，如果设备和input handler能够匹配成功的话，就会调用input handler的connect函数。在input_match_device中会将input device的id.bus</p>
+<p>type,id.vendor,id.product和id.version首先匹配。然后会去match的evbit,keybit,relbit,absbit等。</p>
+<p>Kernel/drivers/input/input.c</p>
+<p>static const struct input_device_id *input_match_device(struct input_handler *handler,</p>
+<p>                            struct input_dev *dev)</p>
+<p>{</p>
+<p>……</p>
+<p>for (id = handler-&gt;id_table; id-&gt;flags || id-&gt;driver_info; id++) {</p>
+<p>        if (id-&gt;flags &amp; INPUT_DEVICE_ID_MATCH_BUS)</p>
+<p>            if (id-&gt;bustype != dev-&gt;id.bustype)</p>
+<p>                continue;</p>
+<p>……</p>
+<p>MATCH_BIT(evbit,  EV_MAX);</p>
+<p>……</p>
+<p>  if (!handler-&gt;match || handler-&gt;match(handler, dev))</p>
+<p>            return id;</p>
+<p>}</p>
+<p>}</p>
+<p>如果handler和device能够match的话，就会调用handler的match回调函数，但是在linux input</p>
+<p>Handler中不是所以的handler都实现了这个回调函数，只有joydev handler实现了。在看看evdev handler的id_table。</p>
+<p>Kernel/driver/input/evdev.c</p>
+<p>static const struct input_device_id evdev_ids[] = {</p>
+<p>        { .driver_info = 1 },   /* Matches all devices */</p>
+<p>        { },                    /* Terminating zero entry */</p>
+<p>};</p>
+<p>可以看到evdev是作为一个通用的handler去处理input device的事件。也就是说一旦有设备注册就会去调用evdev的connect函数。</p>
+<p>Kernel/driver/input/evdev.c</p>
+<p>static int evdev_connect(struct input_handler *handler, struct input_dev *dev  const struct input_device_id *id)</p>
+<p>{</p>
+<p>……</p>
+<p>evdev = kzalloc(sizeof(struct evdev), GFP_KERNEL);</p>
+<p>……</p>
+<p>evdev-&gt;handle.dev = input_get_device(dev);</p>
+<p>evdev-&gt;handle.name = dev_name(&amp;evdev-&gt;dev)</p>
+<p>evdev-&gt;handle.handler = handler;</p>
+<p>evdev-&gt;handle.private = evdev;</p>
+<p>evdev-&gt;dev.devt = MKDEV(INPUT_MAJOR, EVDEV_MINOR_BASE + minor);</p>
+<p>evdev-&gt;dev.class = &amp;input_class;</p>
+<p>evdev-&gt;dev.parent = &amp;dev-&gt;dev;</p>
+<p>evdev-&gt;dev.release = evdev_free;</p>
+<p>device_initialize(&amp;evdev-&gt;dev);</p>
+<p>error = input_register_handle(&amp;evdev-&gt;handle);</p>
+<p>……</p>
+<p>error = device_add(&amp;evdev-&gt;dev);</p>
+<p>……</p>
+<p>}</p>
+<p>这里面又有个设备注册的过程，重新创建了一个evdev设备，存在于/dev/input/eventX。这就是上面提到的Android上层需要直接操作的文件节点，就是在这个时候注册的。Input_register_handle也只是将匹配好的input设备和input handler分别加到自己的input设备链表和handler链表。</p>
+<p>1.2.3 Linux input事件上报流程</p>
+<p>一般input事件在底层上报都是通过中断方式，按键或者触摸。以一个具体的触摸屏的驱动为例分析下事件的上报过程。</p>
+<p>input_report_abs(dev, ABS_X, MTOUCH_GET_XC(mtouch-&gt;data));</p>
+<p>input_report_abs(dev, ABS_Y, MTOUCH_MAX_YC - MTOUCH_GET_YC(mtouch-&gt;data));</p>
+<p>input_report_key(dev, BTN_TOUCH, MTOUCH_GET_TOUCHED(mtouch-&gt;data));</p>
+<p>input_sync(dev)</p>
+<p>上面就是一具体触摸屏接收到中断信号，调用中断处理函数来处理事件所调用的方法来完成一次上报事件，以input_sync来表示一次完成的事件上报。在input.h的头文件中这个函数都会统一调用input_event来进行处理。</p>
+<p>Kernel/driver/input/input.c</p>
+<p>void input_event(struct input_dev *dev, unsigned int type, unsigned int code, int value)</p>
+<p>{</p>
+<p>……</p>
+<p>input_handle_event(dev, type, code, value);</p>
+<p>……</p>
+<p>}</p>
+<p>static void input_handle_event(struct input_dev *dev,</p>
+<p>                               unsigned int type, unsigned int code, int value)</p>
+<p>{</p>
+<p>……</p>
+<p>int disposition = INPUT_IGNORE_EVENT;</p>
+<p>……</p>
+<p>if (disposition &amp; INPUT_PASS_TO_HANDLERS)</p>
+<p>                input_pass_event(dev, type, code, value);</p>
+<p>……</p>
+<p>}</p>
+<p>在input_handle_event函数中会有个disposition的变量来判定事件是交由谁来处理，有交给device来处理，handler处理和device和handler共同处理。一般大部分情况都是交给handler来处理。也就是说会又input_pass_event函数来继续处理。</p>
+<p>Kernel/driver/input/input.c</p>
+<p>static void input_pass_event(struct input_dev *dev, unsigned int type, unsigned int code, int value)</p>
+<p>{</p>
+<p>……</p>
+<p>handle = rcu_dereference(dev-&gt;grab);</p>
+<p>        if (handle)</p>
+<p>                handle-&gt;handler-&gt;event(handle, type, code, value);</p>
+<p>……</p>
+<p>}</p>
+<p>在之前的handler或者device注册的时候，每当一个device和handler发生匹配都会注册一个handle，然后将handler和device都加到自己链表中，这时候就可以通过hand来调用handler的event函数。</p>
+<p>Kernel/driver/input/evdev.c</p>
+<p>static struct input_handler evdev_handler = {</p>
+<p>        .event          = evdev_event,</p>
+<p>……</p>
+<p>}</p>
+<p>static void evdev_event(struct input_handle *handle,  unsigned int type, unsigned int code, int value)</p>
+<p>{</p>
+<p>struct evdev_client *client;</p>
+<p>……</p>
+<p>client = rcu_dereference(evdev-&gt;grab);</p>
+<p>        if (client)</p>
+<p>                evdev_pass_event(client, &amp;event);</p>
+<p>……</p>
+<p>if (type == EV_SYN &amp;&amp; code == SYN_REPORT)</p>
+<p>     wake_up_interruptible(&amp;evdev-&gt;wait);</p>
+<p>……</p>
+<p>}</p>
+<p>static void evdev_pass_event(struct evdev_client *client, struct input_event *event)</p>
+<p>{</p>
+<p>……</p>
+<p>client-&gt;buffer[client-&gt;head++] = *event;</p>
+<p>……</p>
+<p>}</p>
+<p>这里有个叫evdev_client的关键结构体，我们比较关注里面的3个结构体成员，client-&gt;buffer这个是用来存放input event事件。而head和client是用来标识input HAL也就是前面eventHub读的时候会不会阻塞的条件。这里有个type==EV_SYN也就是标识同步一次input事件，当每接收到一次input事件，就会去唤醒一次evdev-&gt;wait。说道这里还是看看evdev-&gt;wait是在哪里阻塞的。</p>
+<p>Kernel/driver/input/evdev.c</p>
+<p>static ssize_t evdev_read(struct file *file, char __user *buffer,size_t count, loff_t *ppos)</p>
+<p>{</p>
+<p>……</p>
+<p>if (!(file-&gt;f_flags &amp; O_NONBLOCK)) {</p>
+<p>                retval = wait_event_interruptible(evdev-&gt;wait,</p>
+<p>                         client-&gt;packet_head != client-&gt;tail || !evdev-&gt;exist);</p>
+<p>                if (retval)</p>
+<p>                        return retval;</p>
+<p>        }</p>
+<p>while (retval + input_event_size() &lt;= count &amp;&amp;</p>
+<p>               evdev_fetch_next_event(client, &amp;event)) {</p>
+<p>                if (input_event_to_user(buffer + retval, &amp;event))</p>
+<p>                        return -EFAULT;</p>
+<p>                retval += input_event_size();</p>
+<p>        }</p>
+<p>static int evdev_fetch_next_event(struct evdev_client *client,</p>
+<p>                                  struct input_event *event)</p>
+<p>{</p>
+<p>……</p>
+<p>if (have_event) {</p>
+<p>                *event = client-&gt;buffer[client-&gt;tail++];</p>
+<p>                client-&gt;tail &amp;= client-&gt;bufsize - 1;</p>
+<p>                if (client-&gt;head == client-&gt;tail)</p>
+<p>                        wake_unlock(&amp;client-&gt;wake_lock);</p>
+<p>        }</p>
+<p>……</p>
+<p>}</p>
+<p>等待队列唤醒的条件是client-&gt;tail和client-&gt;packet_head不相等，初始化的时候两个都为0，</p>
+<p>也就是说如果没有input事件上报的话，这个读事件是一直阻塞的。当有input事件上报，就会掉到evdev_pass_event中并且将client-&gt;head++。这样head和tail就不相等了，满足了唤醒条件，然后调用wake_up_interruptible(&amp;evdev-&gt;wait)就可以唤醒之前eventHub读的时候阻塞的进程，通过input_event_to_user。就可以将input事件从内核空间拷贝到用户态空间。从而完成了数据的传递。当然了为了达到同步，每处理完一次事件后，就会继续阻塞使进程睡眠，需要一个同步的工作，evdev_fetch_next_event会将client-&gt;tail++。这样他们有相等了，可以继续满足睡眠的条件，等待下一次的input事件上报将进程唤醒。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/android%20initlogo.rle%20%E5%9C%A832%E4%BD%8DLCD%E4%B8%8A%E6%98%BE%E7%A4%BA/" rel="prev" title="android initlogo">
+      <i class="fa fa-chevron-left"></i> android initlogo
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/android%20kernel%20version/" rel="next" title="android kernel version">
+      android kernel version <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Edward"
+      src="/uploads/avatar.gif">
+  <p class="site-author-name" itemprop="name">Edward</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">570</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Edward</span>
+</div>
+
+        
+
+
+
+
+
+
+<script>
+  (function() {
+    function leancloudSelector(url) {
+      url = encodeURI(url);
+      return document.getElementById(url).querySelector('.leancloud-visitors-count');
+    }
+
+    function addCount(Counter) {
+      var visitors = document.querySelector('.leancloud_visitors');
+      var url = decodeURI(visitors.id);
+      var title = visitors.dataset.flagTitle;
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          if (results.length > 0) {
+            var counter = results[0];
+            leancloudSelector(url).innerText = counter.time + 1;
+            Counter('put', '/classes/Counter/' + counter.objectId, { time: { '__op': 'Increment', 'amount': 1 } })
+              .catch(error => {
+                console.error('Failed to save visitor count', error);
+              });
+          } else {
+              Counter('post', '/classes/Counter', { title, url, time: 1 })
+                .then(response => response.json())
+                .then(() => {
+                  leancloudSelector(url).innerText = 1;
+                })
+                .catch(error => {
+                  console.error('Failed to create', error);
+                });
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    function showTime(Counter) {
+      var visitors = document.querySelectorAll('.leancloud_visitors');
+      var entries = [...visitors].map(element => {
+        return decodeURI(element.id);
+      });
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url: { '$in': entries } })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          for (let url of entries) {
+            let target = results.find(item => item.url === url);
+            leancloudSelector(url).innerText = target ? target.time : 0;
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    let { app_id, app_key, server_url } = {"enable":true,"app_id":"wxYx0BX9gaKA3XC4LuO2of0v-gzGzoHsz","app_key":"LQMcs6IDIE4YAm10vMsn9IYq","server_url":"https://wxyx0bx9.lc-cn-n1-shared.com","security":false};
+    function fetchData(api_server) {
+      var Counter = (method, url, data) => {
+        return fetch(`${api_server}/1.1${url}`, {
+          method,
+          headers: {
+            'X-LC-Id'     : app_id,
+            'X-LC-Key'    : app_key,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data)
+        });
+      };
+      if (CONFIG.page.isPost) {
+        if (CONFIG.hostname !== location.hostname) return;
+        addCount(Counter);
+      } else if (document.querySelectorAll('.post-title-link').length >= 1) {
+        showTime(Counter);
+      }
+    }
+
+    let api_server = app_id.slice(-9) !== '-MdYXbMMI' ? server_url : `https://${app_id.slice(0, 8).toLowerCase()}.api.lncldglobal.com`;
+
+    if (api_server) {
+      fetchData(api_server);
+    } else {
+      fetch('https://app-router.leancloud.cn/2/route?appId=' + app_id)
+        .then(response => response.json())
+        .then(({ api_server }) => {
+          fetchData('https://' + api_server);
+        });
+    }
+  })();
+</script>
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

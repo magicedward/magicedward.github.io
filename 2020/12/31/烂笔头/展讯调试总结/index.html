@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"edward.org.cn","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="1.IO配置 u-boot15&#x2F;board&#x2F;spreadtrum&#x2F;xxx&#x2F;pinmap-xxx.c {REG_PIN_SDA2,                          BITS_PIN_AF(0)}, {REG_MISC_PIN_SDA2,                     BITS_PIN_DS(1)|BIT_PIN_WPUS|BIT_PIN_WPU|BIT_PIN_SLP_A">
+<meta property="og:type" content="article">
+<meta property="og:title" content="展讯调试总结">
+<meta property="og:url" content="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/%E5%B1%95%E8%AE%AF%E8%B0%83%E8%AF%95%E6%80%BB%E7%BB%93/index.html">
+<meta property="og:site_name" content="点点滴滴">
+<meta property="og:description" content="1.IO配置 u-boot15&#x2F;board&#x2F;spreadtrum&#x2F;xxx&#x2F;pinmap-xxx.c {REG_PIN_SDA2,                          BITS_PIN_AF(0)}, {REG_MISC_PIN_SDA2,                     BITS_PIN_DS(1)|BIT_PIN_WPUS|BIT_PIN_WPU|BIT_PIN_SLP_A">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-12-31T06:48:02.263Z">
+<meta property="article:modified_time" content="2020-01-16T04:37:34.006Z">
+<meta property="article:author" content="Edward">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/%E5%B1%95%E8%AE%AF%E8%B0%83%E8%AF%95%E6%80%BB%E7%BB%93/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>展讯调试总结 | 点点滴滴</title>
+  
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?a92ed22eafce466e7a7b17546bb0dc6f";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">点点滴滴</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/%E5%B1%95%E8%AE%AF%E8%B0%83%E8%AF%95%E6%80%BB%E7%BB%93/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/avatar.gif">
+      <meta itemprop="name" content="Edward">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="点点滴滴">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          展讯调试总结
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-12-31 14:48:02" itemprop="dateCreated datePublished" datetime="2020-12-31T14:48:02+08:00">2020-12-31</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-01-16 12:37:34" itemprop="dateModified" datetime="2020-01-16T12:37:34+08:00">2020-01-16</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%83%82%E7%AC%94%E5%A4%B4/" itemprop="url" rel="index"><span itemprop="name">烂笔头</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/%E5%B1%95%E8%AE%AF%E8%B0%83%E8%AF%95%E6%80%BB%E7%BB%93/" class="post-meta-item leancloud_visitors" data-flag-title="展讯调试总结" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>1.IO配置</p>
+<p>u-boot15/board/spreadtrum/xxx/pinmap-xxx.c</p>
+<p>{REG_PIN_SDA2,                          BITS_PIN_AF(0)},</p>
+<p>{REG_MISC_PIN_SDA2,                     BITS_PIN_DS(1)|BIT_PIN_WPUS|BIT_PIN_WPU|BIT_PIN_SLP_AP|BIT_PIN_SLP_WPU|BIT_PIN_SLP_Z},</p>
+<p>BITS_PIN_AF(n) n=0,1,2,3功能　　具体功能可参考SCxxxx_GPIO_Spec_Vxxx.xlsx</p>
+<p>BITS_PIN_DS　　　　　　驱动能力(ata测试中导线长或者高速信号可以调整)</p>
+<p>BIT_PIN_WPUS　　　　　强上拉（强是指电流，选择阻值较小的电阻）</p>
+<p>BIT_PIN_NULL　　　　　  没强上拉</p>
+<p>BIT_PIN_WPU　　　　　 上拉(初始电平为高)</p>
+<p>BIT_PIN_WPD　　　　　 下拉(初始电平为低)</p>
+<p>BIT_PIN_NUL　　　　　   既不上拉也不下拉</p>
+<p>BIT_PIN_SLP_AP                  跟随AP休眠</p>
+<p>BIT_PIN_SLP_ALL               可能是跟随BP休眠</p>
+<p>BIT_PIN_SLP_NONE           不休眠</p>
+<p>BIT_PIN_SLP_NUL　　      休眠时既不上拉也不下拉</p>
+<p>BIT_PIN_SLP_WPD　　     休眠时下拉</p>
+<p>BIT_PIN_SLP_WPU　　     休眠时上拉</p>
+<p>BIT_PIN_SLP_OE　　　    休眠时输出</p>
+<p>BIT_PIN_SLP_IE　　　      休眠时输入</p>
+<p>BIT_PIN_SLP_Z　　　      休眠时高阻</p>
+<p>2.按键</p>
+<p>gpio作为按键</p>
+<p>配置为BITS_PIN_DS(1)|BIT_PIN_NULL|BIT_PIN_WPU|BIT_PIN_SLP_AP|BIT_PIN_SLP_WPU|BIT_PIN_SLP_IE},这个配置出错可能导致低电流大</p>
+<p>keypad模块的按键</p>
+<p>KEYIN作为为列</p>
+<p>KEYOUT作为行</p>
+<p>如KEYOUT0,KEYIN2,那么</p>
+<p>sprd,row = &lt;0&gt;;</p>
+<p>sprd,column = &lt;2&gt;;</p>
+<p>3.lcd</p>
+<p>xxx-common.dtsi包含的使用的默认屏</p>
+<p>u-boot15/drivers/video/sprdfb/lcd/Makefile</p>
+<p>u-boot15/drivers/video/sprdfb/sprdfb_panel.c</p>
+<p>u-boot15/drivers/video/sprdfb/sprdfb_spi.c(spi的可能需要修改这里的SPI_RS(选择发数据还是命令)脚)</p>
+<p>u-boot15/include/configs/xxxx.h</p>
+<p>如果使用spi类型的屏,spi这个展讯这里默认是收发用一根线的，当然也可配置成标准的SPI线</p>
+<p>如果开启了te脚检测spi_te_gpio，屏也要开启te,否则会出现卡顿的情况</p>
+<p>4.增大音量，工具Audiotester,可参考</p>
+<p><a target="_blank" rel="noopener" href="https://wenku.baidu.com/view/e454011a580216fc700afdf3.html">https://wenku.baidu.com/view/e454011a580216fc700afdf3.html</a></p>
+<p>5.当按键不好用时，可安装应用Vysor来控制屏幕(ubuntu系统可以在谷歌浏览器安装Vysor插件)</p>
+<p>6.分区大小更改</p>
+<p>直接修改device/sprd/sharkle/xxx/xxx.xml中size的大小(这里单位是M)</p>
+<p>7.编译与烧写</p>
+<p>编译uboot  make bootloader</p>
+<p>烧写uboot fastboot flash uboot u-boot-sign.bin</p>
+<p>sudo fastboot -S 100M flash system system.img</p>
+<p>8.gpio和ldo调试</p>
+<p>cat /d/gpio可以查看引脚状态，包括gpio_request有没有申请成功，引脚现在的状态(输入或输出，高电平或低电平)</p>
+<p>     gpio-49  (                   |xxxx1                )in(输入)  hi(高电平)</p>
+<p>　 gpio-138 (                   |xxxx2                 )out(输出) lo(低电平)</p>
+<p>/d/regulator可查看ldo的使用情况，以及配置的最大和最小电压</p>
+<p>9.暗码</p>
+<p><em>#</em>#83781#<em>#</em>,进入工程模式(EngineerMode.apk)</p>
+<p><em>#</em>#83789#<em>#</em>,测试模式</p>
+<p><em>#</em>#2266#<em>#</em>,进入sgps测试，选择INF,打开sgps switch,可在SA见到卫星信号。</p>
+<p>10.cat /proc/meminfo只能看到部分内存容量(有部分没算在这)</p>
+<p>11.展讯网站</p>
+<p>提问题<a target="_blank" rel="noopener" href="http://222.66.158.139:2008/cqweb/#">http://222.66.158.139:2008/cqweb/#</a></p>
+<p>资料<a target="_blank" rel="noopener" href="https://isupport.spreadtrum.com/iSupport/apply/faq_list#tab-">https://isupport.spreadtrum.com/iSupport/apply/faq_list#tab-</a></p>
+<p>12.EXINT的管脚有硬件去抖的功能,如使用EXINT12,pinmap配置成EXINT12,</p>
+<p>           gpios = &lt;&amp;ap_eic 12 1&gt;;</p>
+<p>13.刚开机,串口打印一点就停止输出了,找到对应的dts文件,将loglevel=1改成loglevel=8或者adb shell,</p>
+<p>echo 8 &gt;/proc/sys/kernel/printk</p>
+<p>14.测试休眠底电流的时候，userdebug版本要关闭modem log,否则无法正常休眠。</p>
+<p>15.展讯平台sysdump <a target="_blank" rel="noopener" href="https://blog.csdn.net/mike8825/article/details/85039187">https://blog.csdn.net/mike8825/article/details/85039187</a></p>
+<p>16.音频参数不用格式化升级</p>
+<p>17.进入usb下载方式(这里的加号是短路的意思)</p>
+<p>        1.KEYIN0+KEYOUT0;2.KEYIN0+GND;3.U1TXD+GND</p>
+<p>18.spi串口屏可以读寄存器来实现esd protect，可以让展讯提供补丁 。</p>
+<p>19.配置内核kuconfig/kmconfig/kdconfig</p>
+<p>20.展讯工具介绍<a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_23922117/article/details/81144364">https://blog.csdn.net/qq_23922117/article/details/81144364</a></p>
+<p>21.pwma,pwmb,pwm的基地址分别是0x40260000,0x40260020,0x40260040,dts默认只配置了一路</p>
+<p>        pwma有多个引脚可以设置，但只能选其中一个作为pwma,pwmb,pwmc类似，要参考sprd背光pwm来使用，否认会出现休眠死机的情况。</p>
+<p>——————— </p>
+<p>作者：那颗流星的秘密 </p>
+<p>来源：CSDN </p>
+<p>原文：<a target="_blank" rel="noopener" href="https://blog.csdn.net/mike8825/article/details/80977278">https://blog.csdn.net/mike8825/article/details/80977278</a> </p>
+<p>版权声明：本文为博主原创文章，转载请附上博文链接！</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/%E5%A2%9E%E5%8A%A0%E6%97%A5%E6%9C%9F%E6%97%B6%E9%97%B4%E5%90%8E%E4%BF%AE%E6%94%B9%E9%BB%98%E8%AE%A4%E5%80%BC/" rel="prev" title="增加日期时间后修改默认值">
+      <i class="fa fa-chevron-left"></i> 增加日期时间后修改默认值
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/%E9%95%BF%E6%8C%89%E8%BF%94%E5%9B%9E%E9%94%AE%20HOME/" rel="next" title="长按返回键 HOME">
+      长按返回键 HOME <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Edward"
+      src="/uploads/avatar.gif">
+  <p class="site-author-name" itemprop="name">Edward</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">570</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Edward</span>
+</div>
+
+        
+
+
+
+
+
+
+<script>
+  (function() {
+    function leancloudSelector(url) {
+      url = encodeURI(url);
+      return document.getElementById(url).querySelector('.leancloud-visitors-count');
+    }
+
+    function addCount(Counter) {
+      var visitors = document.querySelector('.leancloud_visitors');
+      var url = decodeURI(visitors.id);
+      var title = visitors.dataset.flagTitle;
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          if (results.length > 0) {
+            var counter = results[0];
+            leancloudSelector(url).innerText = counter.time + 1;
+            Counter('put', '/classes/Counter/' + counter.objectId, { time: { '__op': 'Increment', 'amount': 1 } })
+              .catch(error => {
+                console.error('Failed to save visitor count', error);
+              });
+          } else {
+              Counter('post', '/classes/Counter', { title, url, time: 1 })
+                .then(response => response.json())
+                .then(() => {
+                  leancloudSelector(url).innerText = 1;
+                })
+                .catch(error => {
+                  console.error('Failed to create', error);
+                });
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    function showTime(Counter) {
+      var visitors = document.querySelectorAll('.leancloud_visitors');
+      var entries = [...visitors].map(element => {
+        return decodeURI(element.id);
+      });
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url: { '$in': entries } })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          for (let url of entries) {
+            let target = results.find(item => item.url === url);
+            leancloudSelector(url).innerText = target ? target.time : 0;
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    let { app_id, app_key, server_url } = {"enable":true,"app_id":"wxYx0BX9gaKA3XC4LuO2of0v-gzGzoHsz","app_key":"LQMcs6IDIE4YAm10vMsn9IYq","server_url":"https://wxyx0bx9.lc-cn-n1-shared.com","security":false};
+    function fetchData(api_server) {
+      var Counter = (method, url, data) => {
+        return fetch(`${api_server}/1.1${url}`, {
+          method,
+          headers: {
+            'X-LC-Id'     : app_id,
+            'X-LC-Key'    : app_key,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data)
+        });
+      };
+      if (CONFIG.page.isPost) {
+        if (CONFIG.hostname !== location.hostname) return;
+        addCount(Counter);
+      } else if (document.querySelectorAll('.post-title-link').length >= 1) {
+        showTime(Counter);
+      }
+    }
+
+    let api_server = app_id.slice(-9) !== '-MdYXbMMI' ? server_url : `https://${app_id.slice(0, 8).toLowerCase()}.api.lncldglobal.com`;
+
+    if (api_server) {
+      fetchData(api_server);
+    } else {
+      fetch('https://app-router.leancloud.cn/2/route?appId=' + app_id)
+        .then(response => response.json())
+        .then(({ api_server }) => {
+          fetchData('https://' + api_server);
+        });
+    }
+  })();
+</script>
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

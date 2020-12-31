@@ -1,0 +1,1037 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"edward.org.cn","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="&#x2F;*  * Driver for keys on GPIO lines capable of generating interrupts.  *  * Copyright 2005 Phil Blundell  *  * This program is free software; you can redistribute it and&#x2F;or modify  * it under the term">
+<meta property="og:type" content="article">
+<meta property="og:title" content="rk29_keys">
+<meta property="og:url" content="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/rk29_keys.c/index.html">
+<meta property="og:site_name" content="点点滴滴">
+<meta property="og:description" content="&#x2F;*  * Driver for keys on GPIO lines capable of generating interrupts.  *  * Copyright 2005 Phil Blundell  *  * This program is free software; you can redistribute it and&#x2F;or modify  * it under the term">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-12-31T06:48:01.545Z">
+<meta property="article:modified_time" content="2020-01-16T04:37:32.174Z">
+<meta property="article:author" content="Edward">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/rk29_keys.c/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>rk29_keys | 点点滴滴</title>
+  
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?a92ed22eafce466e7a7b17546bb0dc6f";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">点点滴滴</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/rk29_keys.c/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/avatar.gif">
+      <meta itemprop="name" content="Edward">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="点点滴滴">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          rk29_keys
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-12-31 14:48:01" itemprop="dateCreated datePublished" datetime="2020-12-31T14:48:01+08:00">2020-12-31</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-01-16 12:37:32" itemprop="dateModified" datetime="2020-01-16T12:37:32+08:00">2020-01-16</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%83%82%E7%AC%94%E5%A4%B4/" itemprop="url" rel="index"><span itemprop="name">烂笔头</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/rk29_keys.c/" class="post-meta-item leancloud_visitors" data-flag-title="rk29_keys" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>/*</p>
+<p> * Driver for keys on GPIO lines capable of generating interrupts.</p>
+<p> *</p>
+<p> * Copyright 2005 Phil Blundell</p>
+<p> *</p>
+<p> * This program is free software; you can redistribute it and/or modify</p>
+<p> * it under the terms of the GNU General Public License version 2 as</p>
+<p> * published by the Free Software Foundation.</p>
+<p> */</p>
+<p>#include &lt;linux/module.h&gt;</p>
+<p>#include &lt;linux/init.h&gt;</p>
+<p>#include &lt;linux/fs.h&gt;</p>
+<p>#include &lt;linux/interrupt.h&gt;</p>
+<p>#include &lt;linux/irq.h&gt;</p>
+<p>#include &lt;linux/sched.h&gt;</p>
+<p>#include &lt;linux/pm.h&gt;</p>
+<p>#include &lt;linux/sysctl.h&gt;</p>
+<p>#include &lt;linux/proc_fs.h&gt;</p>
+<p>#include &lt;linux/delay.h&gt;</p>
+<p>#include &lt;linux/platform_device.h&gt;</p>
+<p>#include &lt;linux/input.h&gt;</p>
+<p>#include &lt;linux/adc.h&gt;</p>
+<p>#include &lt;asm/gpio.h&gt;</p>
+<p>#include &lt;mach/board.h&gt;</p>
+<p>#include &lt;plat/key.h&gt;</p>
+<p>#define EMPTY_ADVALUE 950</p>
+<p>#define DRIFT_ADVALUE 70</p>
+<p>#define INVALID_ADVALUE -1</p>
+<p>#define EV_MENU KEY_F1</p>
+<p>#if 0</p>
+<p>#define key_dbg(bdata, format, arg…) \</p>
+<p>dev_printk(KERN_INFO , &amp;bdata-&gt;input-&gt;dev , format , ## arg)</p>
+<p>#else</p>
+<p>#define key_dbg(bdata, format, arg…) </p>
+<p>#endif</p>
+<p>struct rk29_button_data {</p>
+<p>int state;</p>
+<p>int long_press_count;</p>
+<p>struct rk29_keys_button *button;</p>
+<p>struct input_dev *input;</p>
+<p>struct timer_list timer;</p>
+<p>        struct rk29_keys_drvdata *ddata;</p>
+<p>};</p>
+<p>struct rk29_keys_drvdata {</p>
+<p>int nbuttons;</p>
+<p>int result;</p>
+<p>bool in_suspend; /* Flag to indicate if we’re suspending/resuming */</p>
+<p>struct input_dev *input;</p>
+<p>struct adc_client *client;</p>
+<p>struct timer_list timer;</p>
+<p>struct rk29_button_data data[0];</p>
+<p>};</p>
+<p>static struct input_dev *input_dev;</p>
+<p>struct rk29_keys_Arrary {</p>
+<p>char keyArrary[20];</p>
+<p>};</p>
+<p>static ssize_t rk29key_set(struct device *dev,</p>
+<p>struct device_attribute *attr, const char *buf, size_t count)</p>
+<p>{</p>
+<p>struct rk29_keys_platform_data *pdata = dev_get_platdata(dev);</p>
+<p>int i,j,start,end;</p>
+<p>char rk29keyArrary[400];</p>
+<p>struct rk29_keys_Arrary Arrary[]={</p>
+<p>                {</p>
+<p>                        .keyArrary = {&quot;menu&quot;},</p>
+<p>                },</p>
+<p>                {</p>
+<p>                        .keyArrary = {&quot;home&quot;},</p>
+<p>                },</p>
+<p>                {</p>
+<p>                        .keyArrary = {&quot;esc&quot;},</p>
+<p>                },</p>
+<p>                {</p>
+<p>                        .keyArrary = {&quot;sensor&quot;},</p>
+<p>                },</p>
+<p>                {</p>
+<p>                        .keyArrary = {&quot;play&quot;},</p>
+<p>                },</p>
+<p>                {</p>
+<p>                        .keyArrary = {&quot;vol+&quot;},</p>
+<p>                },</p>
+<p>                {</p>
+<p>                        .keyArrary = {&quot;vol-&quot;},</p>
+<p>                },</p>
+<p>        }; </p>
+<p>char *p;</p>
+<p>for(i=0;i&lt;7;i++)</p>
+<p>{</p>
+<p>p = strstr(buf,Arrary[i].keyArrary);</p>
+<p>if(p==0)</p>
+<p>              {</p>
+<p>                   dev_dbg(dev,&quot; rk29key_set p == 0 error ……………\n&quot;);</p>
+<p>                   continue;</p>
+<p>              }</p>
+<p>start = strcspn(p,&quot;:&quot;);</p>
+<p>if(i&lt;6)</p>
+<p>end = strcspn(p,&quot;,&quot;);</p>
+<p>else</p>
+<p>end = strcspn(p,&quot;}&quot;);</p>
+<p>memset(rk29keyArrary,0,sizeof(rk29keyArrary));</p>
+<p>strncpy(rk29keyArrary,p+start+1,end-start-1);</p>
+<p>for(j=0;j&lt;7;j++)</p>
+<p>{ </p>
+<p>if(strcmp(pdata-&gt;buttons[j].desc,Arrary[i].keyArrary)==0)</p>
+<p>{</p>
+<p>if(strcmp(rk29keyArrary,&quot;MENU&quot;)==0)</p>
+<p>pdata-&gt;buttons[j].code = EV_MENU;</p>
+<p>else if(strcmp(rk29keyArrary,&quot;HOME&quot;)==0)</p>
+<p>pdata-&gt;buttons[j].code = KEY_HOME;</p>
+<p>else if(strcmp(rk29keyArrary,&quot;ESC&quot;)==0)</p>
+<p>pdata-&gt;buttons[j].code = KEY_BACK;</p>
+<p>else if(strcmp(rk29keyArrary,&quot;sensor&quot;)==0)</p>
+<p>pdata-&gt;buttons[j].code = KEY_CAMERA;</p>
+<p>else if(strcmp(rk29keyArrary,&quot;PLAY&quot;)==0)</p>
+<p>pdata-&gt;buttons[j].code = KEY_POWER;</p>
+<p>else if(strcmp(rk29keyArrary,&quot;VOLUP&quot;)==0)</p>
+<p>pdata-&gt;buttons[j].code = KEY_VOLUMEUP;</p>
+<p>else if(strcmp(rk29keyArrary,&quot;VOLDOWN&quot;)==0)</p>
+<p>pdata-&gt;buttons[j].code = KEY_VOLUMEDOWN;</p>
+<p>else</p>
+<p>    continue;</p>
+<p>}</p>
+<p>}</p>
+<p>}</p>
+<p>for(i=0;i&lt;7;i++)</p>
+<p>dev_dbg(dev, &quot;desc=%s, code=%d\n&quot;,pdata-&gt;buttons[i].desc,pdata-&gt;buttons[i].code);</p>
+<p>return 0; </p>
+<p>}</p>
+<p>static DEVICE_ATTR(rk29key,0660, NULL, rk29key_set);</p>
+<p>void rk29_send_power_key(int state)</p>
+<p>{</p>
+<p>if (!input_dev)</p>
+<p>return;</p>
+<p>if(state)</p>
+<p>{</p>
+<p>input_report_key(input_dev, KEY_POWER, 1);</p>
+<p>input_sync(input_dev);</p>
+<p>}</p>
+<p>else</p>
+<p>{</p>
+<p>input_report_key(input_dev, KEY_POWER, 0);</p>
+<p>input_sync(input_dev);</p>
+<p>}</p>
+<p>}</p>
+<p>void rk28_send_wakeup_key(void)</p>
+<p>{</p>
+<p>if (!input_dev)</p>
+<p>return;</p>
+<p>input_report_key(input_dev, KEY_WAKEUP, 1);</p>
+<p>input_sync(input_dev);</p>
+<p>input_report_key(input_dev, KEY_WAKEUP, 0);</p>
+<p>input_sync(input_dev);</p>
+<p>}</p>
+<p>static void keys_long_press_timer(unsigned long _data)</p>
+<p>{</p>
+<p>int state;</p>
+<p>struct rk29_button_data *bdata = (struct rk29_button_data *)_data;</p>
+<p>struct rk29_keys_button *button = bdata-&gt;button;</p>
+<p>struct input_dev *input = bdata-&gt;input;</p>
+<p>unsigned int type = EV_KEY;</p>
+<p>if(button-&gt;gpio != INVALID_GPIO )</p>
+<p>state = !!((gpio_get_value(button-&gt;gpio) ? 1 : 0) ^ button-&gt;active_low);</p>
+<p>else</p>
+<p>state = !!button-&gt;adc_state;</p>
+<p>if(state) {</p>
+<p>if(bdata-&gt;long_press_count != 0) {</p>
+<p>/* if(bdata-&gt;long_press_count % (LONG_PRESS_COUNT+ONE_SEC_COUNT) == 0){</p>
+<p>key_dbg(bdata, &quot;%skey[%s]: report ev[%d] state[0]\n&quot;, </p>
+<p>(button-&gt;gpio == INVALID_GPIO)?&quot;ad&quot;:&quot;io&quot;, button-&gt;desc, button-&gt;code_long_press);</p>
+<p>input_event(input, type, button-&gt;code_long_press, 0);</p>
+<p>input_sync(input);</p>
+<p>}</p>
+<p>else*/ if(bdata-&gt;long_press_count%LONG_PRESS_COUNT == 0) {</p>
+<p>key_dbg(bdata, &quot;%skey[%s]: report ev[%d] state[1]\n&quot;, </p>
+<p>(button-&gt;gpio == INVALID_GPIO)?&quot;ad&quot;:&quot;io&quot;, button-&gt;desc, button-&gt;code_long_press);</p>
+<p>input_event(input, type, button-&gt;code_long_press, 1);</p>
+<p>input_sync(input);</p>
+<p>}</p>
+<p>}</p>
+<p>bdata-&gt;long_press_count++;</p>
+<p>mod_timer(&amp;bdata-&gt;timer,</p>
+<p>jiffies + msecs_to_jiffies(DEFAULT_DEBOUNCE_INTERVAL));</p>
+<p>}</p>
+<p>else {</p>
+<p>if(bdata-&gt;long_press_count &lt;= LONG_PRESS_COUNT) {</p>
+<p>bdata-&gt;long_press_count = 0;</p>
+<p>key_dbg(bdata, &quot;%skey[%s]: report ev[%d] state[1], report ev[%d] state[0]\n&quot;, </p>
+<p>(button-&gt;gpio == INVALID_GPIO)?&quot;ad&quot;:&quot;io&quot;, button-&gt;desc, button-&gt;code, button-&gt;code);</p>
+<p>input_event(input, type, button-&gt;code, 1);</p>
+<p>input_sync(input);</p>
+<p>input_event(input, type, button-&gt;code, 0);</p>
+<p>input_sync(input);</p>
+<p>}</p>
+<p>else if(bdata-&gt;state != state) {</p>
+<p>key_dbg(bdata, &quot;%skey[%s]: report ev[%d] state[0]\n&quot;, </p>
+<p>(button-&gt;gpio == INVALID_GPIO)?&quot;ad&quot;:&quot;io&quot;, button-&gt;desc, button-&gt;code_long_press);</p>
+<p>input_event(input, type, button-&gt;code_long_press, 0);</p>
+<p>input_sync(input);</p>
+<p>bdata-&gt;long_press_count = 0;</p>
+<p>}</p>
+<p>}</p>
+<p>bdata-&gt;state = state;</p>
+<p>}</p>
+<p>static void keys_timer(unsigned long _data)</p>
+<p>{</p>
+<p>int state;</p>
+<p>struct rk29_button_data *bdata = (struct rk29_button_data *)_data;</p>
+<p>struct rk29_keys_button *button = bdata-&gt;button;</p>
+<p>struct input_dev *input = bdata-&gt;input;</p>
+<p>unsigned int type = EV_KEY;</p>
+<p>if(button-&gt;gpio != INVALID_GPIO)</p>
+<p>state = !!((gpio_get_value(button-&gt;gpio) ? 1 : 0) ^ button-&gt;active_low);</p>
+<p>else</p>
+<p>state = !!button-&gt;adc_state;</p>
+<p>if(bdata-&gt;state != state) {</p>
+<p>bdata-&gt;state = state;</p>
+<p>key_dbg(bdata, &quot;%skey[%s]: report ev[%d] state[%d]\n&quot;, </p>
+<p>(button-&gt;gpio == INVALID_GPIO)?&quot;ad&quot;:&quot;io&quot;, button-&gt;desc, button-&gt;code, bdata-&gt;state);</p>
+<p>input_event(input, type, button-&gt;code, bdata-&gt;state);</p>
+<p>input_sync(input);</p>
+<p>}</p>
+<p>if(state)</p>
+<p>mod_timer(&amp;bdata-&gt;timer,</p>
+<p>jiffies + msecs_to_jiffies(DEFAULT_DEBOUNCE_INTERVAL));</p>
+<p>}</p>
+<p>static irqreturn_t keys_isr(int irq, void *dev_id)</p>
+<p>{</p>
+<p>struct rk29_button_data *bdata = dev_id;</p>
+<p>struct rk29_keys_button *button = bdata-&gt;button;</p>
+<p>struct input_dev *input = bdata-&gt;input;</p>
+<p>unsigned int type = EV_KEY;</p>
+<p>BUG_ON(irq != gpio_to_irq(button-&gt;gpio));</p>
+<p>        if(button-&gt;wakeup == 1 &amp;&amp; bdata-&gt;ddata-&gt;in_suspend == true){</p>
+<p>bdata-&gt;state = 1;</p>
+<p>key_dbg(bdata, &quot;wakeup: %skey[%s]: report ev[%d] state[%d]\n&quot;, </p>
+<p>(button-&gt;gpio == INVALID_GPIO)?&quot;ad&quot;:&quot;io&quot;, button-&gt;desc, button-&gt;code, bdata-&gt;state);</p>
+<p>input_event(input, type, button-&gt;code, bdata-&gt;state);</p>
+<p>input_sync(input);</p>
+<p>        }</p>
+<p>bdata-&gt;long_press_count = 0;</p>
+<p>mod_timer(&amp;bdata-&gt;timer,</p>
+<p>jiffies + msecs_to_jiffies(DEFAULT_DEBOUNCE_INTERVAL));</p>
+<p>return IRQ_HANDLED;</p>
+<p>}</p>
+<p>static void keys_adc_callback(struct adc_client *client, void *client_param, int result)</p>
+<p>{</p>
+<p>struct rk29_keys_drvdata *ddata = (struct rk29_keys_drvdata *)client_param;</p>
+<p>int i;</p>
+<p>if(result &gt; INVALID_ADVALUE &amp;&amp; result &lt; EMPTY_ADVALUE)</p>
+<p>ddata-&gt;result = result;</p>
+<p>for (i = 0; i &lt; ddata-&gt;nbuttons; i++) {</p>
+<p>struct rk29_button_data *bdata = &amp;ddata-&gt;data[i];</p>
+<p>struct rk29_keys_button *button = bdata-&gt;button;</p>
+<p>if(!button-&gt;adc_value)</p>
+<p>continue;</p>
+<p>if(result &lt; button-&gt;adc_value + DRIFT_ADVALUE &amp;&amp;</p>
+<p>result &gt; button-&gt;adc_value - DRIFT_ADVALUE)</p>
+<p>button-&gt;adc_state = 1;</p>
+<p>else</p>
+<p>button-&gt;adc_state = 0;</p>
+<p>if(bdata-&gt;state != button-&gt;adc_state)</p>
+<p>mod_timer(&amp;bdata-&gt;timer,</p>
+<p>jiffies + msecs_to_jiffies(DEFAULT_DEBOUNCE_INTERVAL));</p>
+<p>}</p>
+<p>return;</p>
+<p>}</p>
+<p>static void keys_adc_timer(unsigned long _data)</p>
+<p>{</p>
+<p>struct rk29_keys_drvdata *ddata = (struct rk29_keys_drvdata *)_data;</p>
+<p>if (!ddata-&gt;in_suspend)</p>
+<p>adc_async_read(ddata-&gt;client);</p>
+<p>mod_timer(&amp;ddata-&gt;timer, jiffies + msecs_to_jiffies(ADC_SAMPLE_TIME));</p>
+<p>}</p>
+<p>static ssize_t adc_value_show(struct device *dev, struct device_attribute *attr, char *buf)</p>
+<p>{</p>
+<p>struct rk29_keys_drvdata *ddata = dev_get_drvdata(dev);</p>
+<p>return sprintf(buf, &quot;adc_value: %d\n&quot;, ddata-&gt;result);</p>
+<p>}</p>
+<p>static DEVICE_ATTR(get_adc_value, S_IRUGO | S_IWUSR, adc_value_show, NULL);</p>
+<p>static int __devinit keys_probe(struct platform_device *pdev)</p>
+<p>{</p>
+<p>struct device *dev = &amp;pdev-&gt;dev;</p>
+<p>struct rk29_keys_platform_data *pdata = dev_get_platdata(dev);</p>
+<p>struct rk29_keys_drvdata *ddata;</p>
+<p>struct input_dev *input;</p>
+<p>int i, error = 0;</p>
+<p>int wakeup = 0;</p>
+<p>if(!pdata) </p>
+<p>return -EINVAL;</p>
+<p>ddata = kzalloc(sizeof(struct rk29_keys_drvdata) +</p>
+<p>pdata-&gt;nbuttons * sizeof(struct rk29_button_data),</p>
+<p>GFP_KERNEL);</p>
+<p>input = input_allocate_device();</p>
+<p>if (!ddata || !input) {</p>
+<p>error = -ENOMEM;</p>
+<p>goto fail0;</p>
+<p>}</p>
+<p>platform_set_drvdata(pdev, ddata);</p>
+<p>input-&gt;name = pdev-&gt;name;</p>
+<p>input-&gt;phys = &quot;gpio-keys/input0&quot;;</p>
+<p>input-&gt;dev.parent = dev;</p>
+<p>input-&gt;id.bustype = BUS_HOST;</p>
+<p>input-&gt;id.vendor = 0x0001;</p>
+<p>input-&gt;id.product = 0x0001;</p>
+<p>input-&gt;id.version = 0x0100;</p>
+<p>/* Enable auto repeat feature of Linux input subsystem */</p>
+<p>if (pdata-&gt;rep)</p>
+<p>__set_bit(EV_REP, input-&gt;evbit);</p>
+<p>ddata-&gt;nbuttons = pdata-&gt;nbuttons;</p>
+<p>ddata-&gt;input = input;</p>
+<p>for (i = 0; i &lt; pdata-&gt;nbuttons; i++) {</p>
+<p>struct rk29_keys_button *button = &amp;pdata-&gt;buttons[i];</p>
+<p>struct rk29_button_data *bdata = &amp;ddata-&gt;data[i];</p>
+<p>bdata-&gt;input = input;</p>
+<p>bdata-&gt;button = button;</p>
+<p>                bdata-&gt;ddata = ddata;</p>
+<p>if (button-&gt;code_long_press)</p>
+<p>setup_timer(&amp;bdata-&gt;timer,</p>
+<p>keys_long_press_timer, (unsigned long)bdata);</p>
+<p>else if (button-&gt;code)</p>
+<p>setup_timer(&amp;bdata-&gt;timer,</p>
+<p>keys_timer, (unsigned long)bdata);</p>
+<p>if (button-&gt;wakeup)</p>
+<p>wakeup = 1;</p>
+<p>input_set_capability(input, EV_KEY, button-&gt;code);</p>
+<p>if(button-&gt;code_long_press)</p>
+<p>               input_set_capability(input, EV_KEY, button-&gt;code_long_press);</p>
+<p>};</p>
+<p>if (pdata-&gt;chn &gt;= 0) {</p>
+<p>setup_timer(&amp;ddata-&gt;timer, keys_adc_timer, (unsigned long)ddata);</p>
+<p>ddata-&gt;client = adc_register(pdata-&gt;chn, keys_adc_callback, (void *)ddata);</p>
+<p>if (!ddata-&gt;client) {</p>
+<p>error = -EINVAL;</p>
+<p>goto fail1;</p>
+<p>}</p>
+<p>mod_timer(&amp;ddata-&gt;timer, jiffies + msecs_to_jiffies(100));</p>
+<p>}</p>
+<p>for (i = 0; i &lt; pdata-&gt;nbuttons; i++) {</p>
+<p>struct rk29_keys_button *button = &amp;pdata-&gt;buttons[i];</p>
+<p>struct rk29_button_data *bdata = &amp;ddata-&gt;data[i];</p>
+<p>int irq;</p>
+<p>if(button-&gt;gpio != INVALID_GPIO) {</p>
+<p>error = gpio_request(button-&gt;gpio, button-&gt;desc ?: &quot;keys&quot;);</p>
+<p>if (error &lt; 0) {</p>
+<p>pr_err(&quot;gpio-keys: failed to request GPIO %d,&quot;</p>
+<p>&quot; error %d\n&quot;, button-&gt;gpio, error);</p>
+<p>goto fail2;</p>
+<p>}</p>
+<p>error = gpio_direction_input(button-&gt;gpio);</p>
+<p>if (error &lt; 0) {</p>
+<p>pr_err(&quot;gpio-keys: failed to configure input&quot;</p>
+<p>&quot; direction for GPIO %d, error %d\n&quot;,</p>
+<p>button-&gt;gpio, error);</p>
+<p>gpio_free(button-&gt;gpio);</p>
+<p>goto fail2;</p>
+<p>}</p>
+<p>irq = gpio_to_irq(button-&gt;gpio);</p>
+<p>if (irq &lt; 0) {</p>
+<p>error = irq;</p>
+<p>pr_err(&quot;gpio-keys: Unable to get irq number&quot;</p>
+<p>&quot; for GPIO %d, error %d\n&quot;,</p>
+<p>button-&gt;gpio, error);</p>
+<p>gpio_free(button-&gt;gpio);</p>
+<p>goto fail2;</p>
+<p>}</p>
+<p>error = request_irq(irq, keys_isr,</p>
+<p>   (button-&gt;active_low)?IRQF_TRIGGER_FALLING : IRQF_TRIGGER_RISING,</p>
+<p>   button-&gt;desc ? button-&gt;desc : &quot;keys&quot;,</p>
+<p>   bdata);</p>
+<p>if (error) {</p>
+<p>pr_err(&quot;gpio-keys: Unable to claim irq %d; error %d\n&quot;,</p>
+<p>irq, error);</p>
+<p>gpio_free(button-&gt;gpio);</p>
+<p>goto fail2;</p>
+<p>}</p>
+<p>}</p>
+<p>}</p>
+<p>input_set_capability(input, EV_KEY, KEY_WAKEUP);</p>
+<p>error = input_register_device(input);</p>
+<p>if (error) {</p>
+<p>pr_err(&quot;gpio-keys: Unable to register input device, &quot;</p>
+<p>&quot;error: %d\n&quot;, error);</p>
+<p>goto fail2;</p>
+<p>}</p>
+<p>device_init_wakeup(dev, wakeup);</p>
+<p>error = device_create_file(dev, &amp;dev_attr_get_adc_value);</p>
+<p>error = device_create_file(dev, &amp;dev_attr_rk29key);</p>
+<p>if(error )</p>
+<p>{</p>
+<p>pr_err(&quot;failed to create key file error: %d\n&quot;, error);</p>
+<p>}</p>
+<p>input_dev = input;</p>
+<p>return error;</p>
+<p> fail2:</p>
+<p>while (–i &gt;= 0) {</p>
+<p>free_irq(gpio_to_irq(pdata-&gt;buttons[i].gpio), &amp;ddata-&gt;data[i]);</p>
+<p>del_timer_sync(&amp;ddata-&gt;data[i].timer);</p>
+<p>gpio_free(pdata-&gt;buttons[i].gpio);</p>
+<p>}</p>
+<p>if(pdata-&gt;chn &gt;= 0 &amp;&amp; ddata-&gt;client);</p>
+<p>adc_unregister(ddata-&gt;client);</p>
+<p>if(pdata-&gt;chn &gt;= 0)</p>
+<p>       del_timer_sync(&amp;ddata-&gt;timer);</p>
+<p> fail1:</p>
+<p>platform_set_drvdata(pdev, NULL);</p>
+<p> fail0:</p>
+<p>input_free_device(input);</p>
+<p>kfree(ddata);</p>
+<p>return error;</p>
+<p>}</p>
+<p>static int __devexit keys_remove(struct platform_device *pdev)</p>
+<p>{</p>
+<p>struct device *dev = &amp;pdev-&gt;dev;</p>
+<p>struct rk29_keys_platform_data *pdata = dev_get_platdata(dev);</p>
+<p>struct rk29_keys_drvdata *ddata = dev_get_drvdata(dev);</p>
+<p>struct input_dev *input = ddata-&gt;input;</p>
+<p>int i;</p>
+<p>input_dev = NULL;</p>
+<p>device_init_wakeup(dev, 0);</p>
+<p>for (i = 0; i &lt; pdata-&gt;nbuttons; i++) {</p>
+<p>int irq = gpio_to_irq(pdata-&gt;buttons[i].gpio);</p>
+<p>free_irq(irq, &amp;ddata-&gt;data[i]);</p>
+<p>del_timer_sync(&amp;ddata-&gt;data[i].timer);</p>
+<p>gpio_free(pdata-&gt;buttons[i].gpio);</p>
+<p>}</p>
+<p>if(pdata-&gt;chn &gt;= 0 &amp;&amp; ddata-&gt;client);</p>
+<p>adc_unregister(ddata-&gt;client);</p>
+<p>input_unregister_device(input);</p>
+<p>return 0;</p>
+<p>}</p>
+<p>#ifdef CONFIG_PM</p>
+<p>static int keys_suspend(struct device *dev)</p>
+<p>{</p>
+<p>struct rk29_keys_platform_data *pdata = dev_get_platdata(dev);</p>
+<p>struct rk29_keys_drvdata *ddata = dev_get_drvdata(dev);</p>
+<p>int i;</p>
+<p>ddata-&gt;in_suspend = true;</p>
+<p>if (device_may_wakeup(dev)) {</p>
+<p>for (i = 0; i &lt; pdata-&gt;nbuttons; i++) {</p>
+<p>struct rk29_keys_button *button = &amp;pdata-&gt;buttons[i];</p>
+<p>if (button-&gt;wakeup) {</p>
+<p>int irq = gpio_to_irq(button-&gt;gpio);</p>
+<p>enable_irq_wake(irq);</p>
+<p>}</p>
+<p>}</p>
+<p>}</p>
+<p>return 0;</p>
+<p>}</p>
+<p>static int keys_resume(struct device *dev)</p>
+<p>{</p>
+<p>struct rk29_keys_platform_data *pdata = dev_get_platdata(dev);</p>
+<p>struct rk29_keys_drvdata *ddata = dev_get_drvdata(dev);</p>
+<p>int i;</p>
+<p>if (device_may_wakeup(dev)) {</p>
+<p>for (i = 0; i &lt; pdata-&gt;nbuttons; i++) {</p>
+<p>struct rk29_keys_button *button = &amp;pdata-&gt;buttons[i];</p>
+<p>if (button-&gt;wakeup) {</p>
+<p>int irq = gpio_to_irq(button-&gt;gpio);</p>
+<p>disable_irq_wake(irq);</p>
+<p>}</p>
+<p>}</p>
+<p>preempt_disable();</p>
+<p>if (local_softirq_pending())</p>
+<p>do_softirq(); // for call resend_irqs, which may call keys_isr</p>
+<p>preempt_enable_no_resched();</p>
+<p>}</p>
+<p>ddata-&gt;in_suspend = false;</p>
+<p>return 0;</p>
+<p>}</p>
+<p>static const struct dev_pm_ops keys_pm_ops = {</p>
+<p>.suspend = keys_suspend,</p>
+<p>.resume = keys_resume,</p>
+<p>};</p>
+<p>#endif</p>
+<p>static struct platform_driver keys_device_driver = {</p>
+<p>.probe = keys_probe,</p>
+<p>.remove = __devexit_p(keys_remove),</p>
+<p>.driver = {</p>
+<p>.name = &quot;rk29-keypad&quot;,</p>
+<p>.owner = THIS_MODULE,</p>
+<p>#ifdef CONFIG_PM</p>
+<p>.pm = &amp;keys_pm_ops,</p>
+<p>#endif</p>
+<p>}</p>
+<p>};</p>
+<p>static int __init keys_init(void)</p>
+<p>{</p>
+<p>return platform_driver_register(&amp;keys_device_driver);</p>
+<p>}</p>
+<p>static void __exit keys_exit(void)</p>
+<p>{</p>
+<p>platform_driver_unregister(&amp;keys_device_driver);</p>
+<p>}</p>
+<p>module_init(keys_init);</p>
+<p>module_exit(keys_exit);</p>
+<p>MODULE_LICENSE(&quot;GPL&quot;);</p>
+<p>MODULE_AUTHOR(&quot;Phil Blundell &lt;<a href="mailto:&#x70;&#98;&#64;&#104;&#97;&#110;&#x64;&#104;&#x65;&#x6c;&#x64;&#x73;&#x2e;&#111;&#114;&#x67;">&#x70;&#98;&#64;&#104;&#97;&#110;&#x64;&#104;&#x65;&#x6c;&#x64;&#x73;&#x2e;&#111;&#114;&#x67;</a>&gt;&quot;);</p>
+<p>MODULE_DESCRIPTION(&quot;Keyboard driver for CPU GPIOs&quot;);</p>
+<p>MODULE_ALIAS(&quot;platform:gpio-keys&quot;);</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/rk29_keys.c%20%20%E4%BF%AE%E5%A4%8D%E9%95%BF%E6%8C%89/" rel="prev" title="rk29_keys">
+      <i class="fa fa-chevron-left"></i> rk29_keys
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/rk30_factory_adc_battery.c/" rel="next" title="rk30_factory_adc_battery">
+      rk30_factory_adc_battery <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Edward"
+      src="/uploads/avatar.gif">
+  <p class="site-author-name" itemprop="name">Edward</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">570</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Edward</span>
+</div>
+
+        
+
+
+
+
+
+
+<script>
+  (function() {
+    function leancloudSelector(url) {
+      url = encodeURI(url);
+      return document.getElementById(url).querySelector('.leancloud-visitors-count');
+    }
+
+    function addCount(Counter) {
+      var visitors = document.querySelector('.leancloud_visitors');
+      var url = decodeURI(visitors.id);
+      var title = visitors.dataset.flagTitle;
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          if (results.length > 0) {
+            var counter = results[0];
+            leancloudSelector(url).innerText = counter.time + 1;
+            Counter('put', '/classes/Counter/' + counter.objectId, { time: { '__op': 'Increment', 'amount': 1 } })
+              .catch(error => {
+                console.error('Failed to save visitor count', error);
+              });
+          } else {
+              Counter('post', '/classes/Counter', { title, url, time: 1 })
+                .then(response => response.json())
+                .then(() => {
+                  leancloudSelector(url).innerText = 1;
+                })
+                .catch(error => {
+                  console.error('Failed to create', error);
+                });
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    function showTime(Counter) {
+      var visitors = document.querySelectorAll('.leancloud_visitors');
+      var entries = [...visitors].map(element => {
+        return decodeURI(element.id);
+      });
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url: { '$in': entries } })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          for (let url of entries) {
+            let target = results.find(item => item.url === url);
+            leancloudSelector(url).innerText = target ? target.time : 0;
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    let { app_id, app_key, server_url } = {"enable":true,"app_id":"wxYx0BX9gaKA3XC4LuO2of0v-gzGzoHsz","app_key":"LQMcs6IDIE4YAm10vMsn9IYq","server_url":"https://wxyx0bx9.lc-cn-n1-shared.com","security":false};
+    function fetchData(api_server) {
+      var Counter = (method, url, data) => {
+        return fetch(`${api_server}/1.1${url}`, {
+          method,
+          headers: {
+            'X-LC-Id'     : app_id,
+            'X-LC-Key'    : app_key,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data)
+        });
+      };
+      if (CONFIG.page.isPost) {
+        if (CONFIG.hostname !== location.hostname) return;
+        addCount(Counter);
+      } else if (document.querySelectorAll('.post-title-link').length >= 1) {
+        showTime(Counter);
+      }
+    }
+
+    let api_server = app_id.slice(-9) !== '-MdYXbMMI' ? server_url : `https://${app_id.slice(0, 8).toLowerCase()}.api.lncldglobal.com`;
+
+    if (api_server) {
+      fetchData(api_server);
+    } else {
+      fetch('https://app-router.leancloud.cn/2/route?appId=' + app_id)
+        .then(response => response.json())
+        .then(({ api_server }) => {
+          fetchData('https://' + api_server);
+        });
+    }
+  })();
+</script>
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

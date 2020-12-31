@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"edward.org.cn","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="三种模式         烧写的过程中，需要在三种模式下互相切换。确切的说，应该是三个操作环境：bootloader、recovery和main system。         bootloader主要用来屏蔽硬件的差异，类似于PC中的BIOS，它的功能相对比较简单，内部提供了一些命令，比如：可以将nand flash分区加载到内存、运行内存中的程序、操作SD卡等。Android中的booload">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android系统 启动三种模式 及OTA包升级流程">
+<meta property="og:url" content="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/Android%E7%B3%BB%E7%BB%9F%20%E5%90%AF%E5%8A%A8%E4%B8%89%E7%A7%8D%E6%A8%A1%E5%BC%8F%20%E5%8F%8AOTA%E5%8C%85%E5%8D%87%E7%BA%A7%E6%B5%81%E7%A8%8B/index.html">
+<meta property="og:site_name" content="点点滴滴">
+<meta property="og:description" content="三种模式         烧写的过程中，需要在三种模式下互相切换。确切的说，应该是三个操作环境：bootloader、recovery和main system。         bootloader主要用来屏蔽硬件的差异，类似于PC中的BIOS，它的功能相对比较简单，内部提供了一些命令，比如：可以将nand flash分区加载到内存、运行内存中的程序、操作SD卡等。Android中的booload">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-12-31T06:48:00.973Z">
+<meta property="article:modified_time" content="2020-01-16T04:37:33.341Z">
+<meta property="article:author" content="Edward">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/Android%E7%B3%BB%E7%BB%9F%20%E5%90%AF%E5%8A%A8%E4%B8%89%E7%A7%8D%E6%A8%A1%E5%BC%8F%20%E5%8F%8AOTA%E5%8C%85%E5%8D%87%E7%BA%A7%E6%B5%81%E7%A8%8B/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>Android系统 启动三种模式 及OTA包升级流程 | 点点滴滴</title>
+  
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?a92ed22eafce466e7a7b17546bb0dc6f";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">点点滴滴</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/Android%E7%B3%BB%E7%BB%9F%20%E5%90%AF%E5%8A%A8%E4%B8%89%E7%A7%8D%E6%A8%A1%E5%BC%8F%20%E5%8F%8AOTA%E5%8C%85%E5%8D%87%E7%BA%A7%E6%B5%81%E7%A8%8B/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/avatar.gif">
+      <meta itemprop="name" content="Edward">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="点点滴滴">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Android系统 启动三种模式 及OTA包升级流程
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-12-31 14:48:00" itemprop="dateCreated datePublished" datetime="2020-12-31T14:48:00+08:00">2020-12-31</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-01-16 12:37:33" itemprop="dateModified" datetime="2020-01-16T12:37:33+08:00">2020-01-16</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%83%82%E7%AC%94%E5%A4%B4/" itemprop="url" rel="index"><span itemprop="name">烂笔头</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/Android%E7%B3%BB%E7%BB%9F%20%E5%90%AF%E5%8A%A8%E4%B8%89%E7%A7%8D%E6%A8%A1%E5%BC%8F%20%E5%8F%8AOTA%E5%8C%85%E5%8D%87%E7%BA%A7%E6%B5%81%E7%A8%8B/" class="post-meta-item leancloud_visitors" data-flag-title="Android系统 启动三种模式 及OTA包升级流程" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>三种模式</p>
+<p>        烧写的过程中，需要在三种模式下互相切换。确切的说，应该是三个操作环境：bootloader、recovery和main system。</p>
+<p>        bootloader主要用来屏蔽硬件的差异，类似于PC中的BIOS，它的功能相对比较简单，内部提供了一些命令，比如：可以将nand flash分区加载到内存、运行内存中的程序、操作SD卡等。Android中的booloader是uboot，位于源码的uboot目录下。</p>
+<p>        main system就是正常运行的Android操作系统，而recovery则是一个mini的Android系统，顾名思义，就是用来进行系统恢复相关的操作的，它的运行规则和main system一样，只是，它在启动时只加载recovery服务，此服务用于烧写Android系统。</p>
+<p>        三者之间的关系如下图所示：</p>
+<p>        系统先启动到bootloader模式下，然后根据情况，启动到recovery或者main system模式下。</p>
+<p>bootloader</p>
+<p>        板子启动时，在Putty控制台中按回车，可以进入uboot，输入help可以查看其可用的命令。uboot的命令是可以自定义的，需要在uboot源码中进行设置。</p>
+<p>uboot下可以使用fastboot命令，进入fastboot模式下，可以使用PC与之连接（此时，使用fastboot协议通信），进行Android系统的烧写工作。</p>
+<p>        在uboot中，你可以更新uboot在内的所有系统模块。</p>
+<p>recovery</p>
+<p>        recovery系统包含了内核和类似于根文件系统两部分，启动时仍采用init进程和init.rc配置脚本，不同的是init.rc脚本比较简单，system目录中只存放了一些必备的工具。</p>
+<p>        recovery系统下，你能更新除uboot之外的所有Android系统模块。</p>
+<p>        recovery模式下，只有一个recovery服务，该服务对应于recovery进程，源码位置：bootable\recovery。</p>
+<p>main system</p>
+<p>        main system是正常运行的Android系统。</p>
+<p>通信</p>
+<p>        Android板子每个时刻只可以处于bootloader、recovery、main system其中的一个模式中，烧写过程中，三个模式之间需要通信，比如：main system通知recovery烧写那个升级包。</p>
+<p>大致有三种方式可以用来通信：BCB、寄存器和cache分区。</p>
+<p>BCB</p>
+<p>        BCB (bootloader control block)可以用于main system传递数据给bootloader和recovery模式。BCB的内容存在于nand flash的一个独立的分区，可以在nand flash分区表中看到，分区的名称为misc。</p>
+<p>        通过BCB，main system可以通知bootloader启动到recovery模式下，同时也可以传递命令给recovery，比如烧写哪个文件。</p>
+<p>        recovery在烧写的过程中，会设置BCB，以确保烧写成功前，一直会开机启动到recovery模式下，这样可以防止烧写过程中断电的情况。</p>
+<p>寄存器</p>
+<p>        main system模式下，运行如下命令会重启，并进入recovery模式：（也可调用android_reboot函数） </p>
+<p> reboot recovery  </p>
+<p>        reboot命令实际上是系统调用，最终会调用到内核的kernel_restart函数，该函数最终会设置某个寄存器的位置，然后执行重启操作。</p>
+<p>重启后，bootloader会检测到该寄存器的值，并根据其值，启动到recovery模式下。</p>
+<p>cache分区</p>
+<p>        recovery和main system模式下，都会将nand flash的cache分区挂载到cache目录从而实现这两种模式下的通信。比如：main system模式下，下载升级包update.zip，并将其路径设置到文件/cache/recovery/command中，然后重启到recovery模式下，recovery进程会读取到文件/cache/recovery/command中的值，并执行系统升级工作。</p>
+<p>升级包</p>
+<p>        通常升级包的名称为update.zip，它包含了要升级的内容和升级脚本，也就是说，整个升级的过程都由升级包本省控制。</p>
+<p>        升级脚本解析对应的源码：META-INF\com\google\android\updater-script。可用的命令列表可以参见bootable\recovery\updater\install.c的函数RegisterInstallFunctions()。</p>
+<p>        解析升级脚本采用语言Edify，源码位置：bootable\recovery\updater和bootable\recovery\edify。</p>
+<p>        若想自己制作update.zip包，需要使用的一下三个文件：</p>
+<p>out/host/linux-x86/framework/signapk.jar</p>
+<p>build/target/product/security/testkey.pk8</p>
+<p>build/target/product/security/testkey.x509.pem</p>
+<p>        制作的过程：</p>
+<p>解压从源码中编译出来的update.zip。</p>
+<p>修改解压后的文件。</p>
+<p>重新压成包update.zip</p>
+<p>使用命令处理update.zip，该命令主要是最zip执行签名操作：java -Xmx1024m -jar signapk.jar -w testkey.x509.pem testkey.pk8 update.zip update_unsigned.zip</p>
+<p>update_unsigned.zip就是最终的升级包。</p>
+<p>启动流程</p>
+<p>        启动流程大致路下：</p>
+<p>        1.开机后，启动到bootloader下，bootloader会作一些初始化的操作，然后会从三个地方确定后面的动作：</p>
+<p>        查找SD卡上指定的文件：此种情况，主要用于，通过SD卡，升级系统。只要在SD卡中按照规则放置升级文件和相关的脚本，即可实现系统的升级。</p>
+<p>        查找按键的状态：此种情况主要用于开机后进入bootloader或者recovery模式，按键也通常是硬件上的几个键按下的状态。</p>
+<p>        获取BCB的内容：需要根据BCB的内容，来执行具体的操作，通常是进入recovery模式。</p>
+<p>        若没有发现上述的三种信息，则会按照正常的启动流程，进入main system模式。</p>
+<p>        2.若需要通过SD卡升级，则会显示升级提示界面，并开始系统升级，完成后，重启进入main system。</p>
+<p>        3.若需要进入recovery模式，在bootloader模式下，会加载recovery分区到内存，然后进入recovery模式下。</p>
+<p>        recovery会启动recovery进程，该进程会读取/cache/recovery分区中的内容，决定具体的操作。若没有相关的配置，则进入控制台模式。</p>
+<p>        4.若需要进入main system模式，则会加载boot分区中的内容，然后进入正常的启动流程。</p>
+<p>升级流程</p>
+<p>        升级的流程大致如下：</p>
+<p>        1.main system模式下，下载update.zip到/cache目录。</p>
+<p>        2.设置/cache/recovery/command目录的内容为：–update_package=/cache/update.zip。</p>
+<p>        3.调用函数android_reboot，并设置进入recovery模式的代码。</p>
+<p>        4.系统重启，进入recovery模式，并启动recovery进程，该进程会检测/cache/recovery/command的内容，然后升级update.zip。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/Android%E5%9B%BE%E7%89%87%E5%8A%A0%E8%BD%BD%EF%BC%9A%E9%87%87%E7%94%A8%E4%BA%8C%E7%BA%A7%E7%BC%93%E5%AD%98%E3%80%81%E5%BC%82%E6%AD%A5%E5%8A%A0%E8%BD%BD%E7%BD%91%E7%BB%9C%E5%9B%BE%E7%89%87/" rel="prev" title="Android图片加载：采用二级缓存、异步加载网络图片">
+      <i class="fa fa-chevron-left"></i> Android图片加载：采用二级缓存、异步加载网络图片
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/Android%E7%B3%BB%E7%BB%9F%E7%89%88%E6%9C%AC%E4%BF%A1%E6%81%AF.Build/" rel="next" title="Android系统版本信息">
+      Android系统版本信息 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Edward"
+      src="/uploads/avatar.gif">
+  <p class="site-author-name" itemprop="name">Edward</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">570</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Edward</span>
+</div>
+
+        
+
+
+
+
+
+
+<script>
+  (function() {
+    function leancloudSelector(url) {
+      url = encodeURI(url);
+      return document.getElementById(url).querySelector('.leancloud-visitors-count');
+    }
+
+    function addCount(Counter) {
+      var visitors = document.querySelector('.leancloud_visitors');
+      var url = decodeURI(visitors.id);
+      var title = visitors.dataset.flagTitle;
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          if (results.length > 0) {
+            var counter = results[0];
+            leancloudSelector(url).innerText = counter.time + 1;
+            Counter('put', '/classes/Counter/' + counter.objectId, { time: { '__op': 'Increment', 'amount': 1 } })
+              .catch(error => {
+                console.error('Failed to save visitor count', error);
+              });
+          } else {
+              Counter('post', '/classes/Counter', { title, url, time: 1 })
+                .then(response => response.json())
+                .then(() => {
+                  leancloudSelector(url).innerText = 1;
+                })
+                .catch(error => {
+                  console.error('Failed to create', error);
+                });
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    function showTime(Counter) {
+      var visitors = document.querySelectorAll('.leancloud_visitors');
+      var entries = [...visitors].map(element => {
+        return decodeURI(element.id);
+      });
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url: { '$in': entries } })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          for (let url of entries) {
+            let target = results.find(item => item.url === url);
+            leancloudSelector(url).innerText = target ? target.time : 0;
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    let { app_id, app_key, server_url } = {"enable":true,"app_id":"wxYx0BX9gaKA3XC4LuO2of0v-gzGzoHsz","app_key":"LQMcs6IDIE4YAm10vMsn9IYq","server_url":"https://wxyx0bx9.lc-cn-n1-shared.com","security":false};
+    function fetchData(api_server) {
+      var Counter = (method, url, data) => {
+        return fetch(`${api_server}/1.1${url}`, {
+          method,
+          headers: {
+            'X-LC-Id'     : app_id,
+            'X-LC-Key'    : app_key,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data)
+        });
+      };
+      if (CONFIG.page.isPost) {
+        if (CONFIG.hostname !== location.hostname) return;
+        addCount(Counter);
+      } else if (document.querySelectorAll('.post-title-link').length >= 1) {
+        showTime(Counter);
+      }
+    }
+
+    let api_server = app_id.slice(-9) !== '-MdYXbMMI' ? server_url : `https://${app_id.slice(0, 8).toLowerCase()}.api.lncldglobal.com`;
+
+    if (api_server) {
+      fetchData(api_server);
+    } else {
+      fetch('https://app-router.leancloud.cn/2/route?appId=' + app_id)
+        .then(response => response.json())
+        .then(({ api_server }) => {
+          fetchData('https://' + api_server);
+        });
+    }
+  })();
+</script>
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

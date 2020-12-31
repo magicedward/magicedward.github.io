@@ -1,0 +1,685 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"edward.org.cn","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="net_read: ret&#x3D;7    26668 RECV:  A5 A5 A6 02 01 02 54  Select DB 3 soundtype : 0 bJpgFileName: SD:\Photo\F\IMG190807-195212F.JPG MMPS_DSC_SetCaptureBuf mod:0 pos:21fbc00~243bc00 (sz:240000) W:780 H:438">
+<meta property="og:type" content="article">
+<meta property="og:title" content="net_read ret&#x3D;7">
+<meta property="og:url" content="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/net_read%20ret=7/index.html">
+<meta property="og:site_name" content="点点滴滴">
+<meta property="og:description" content="net_read: ret&#x3D;7    26668 RECV:  A5 A5 A6 02 01 02 54  Select DB 3 soundtype : 0 bJpgFileName: SD:\Photo\F\IMG190807-195212F.JPG MMPS_DSC_SetCaptureBuf mod:0 pos:21fbc00~243bc00 (sz:240000) W:780 H:438">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-12-31T06:48:01.466Z">
+<meta property="article:modified_time" content="2020-01-16T04:37:32.414Z">
+<meta property="article:author" content="Edward">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/net_read%20ret=7/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>net_read ret=7 | 点点滴滴</title>
+  
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?a92ed22eafce466e7a7b17546bb0dc6f";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">点点滴滴</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/net_read%20ret=7/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/avatar.gif">
+      <meta itemprop="name" content="Edward">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="点点滴滴">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          net_read ret=7
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-12-31 14:48:01" itemprop="dateCreated datePublished" datetime="2020-12-31T14:48:01+08:00">2020-12-31</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-01-16 12:37:32" itemprop="dateModified" datetime="2020-01-16T12:37:32+08:00">2020-01-16</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%83%82%E7%AC%94%E5%A4%B4/" itemprop="url" rel="index"><span itemprop="name">烂笔头</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/net_read%20ret=7/" class="post-meta-item leancloud_visitors" data-flag-title="net_read ret=7" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>net_read: ret=7   </p>
+<p>26668 RECV:  A5 A5 A6 02 01 02 54 </p>
+<p>Select DB 3</p>
+<p>soundtype : 0</p>
+<p>bJpgFileName: SD:\Photo\F\IMG190807-195212F.JPG</p>
+<p>MMPS_DSC_SetCaptureBuf mod:0 pos:21fbc00~243bc00 (sz:240000)</p>
+<p>W:780 H:438 ShotEn:0 MaxDramAdr:0</p>
+<p>End of DSC capture buffers = 0x243BC00</p>
+<p>AIHC_DCFDT_PostAddFile szFullPath SD:\Photo\F\IMG190807-195212F.JPG</p>
+<p>sDcfDtSet.m_uiCurrDBIdx = 3</p>
+<p>26929 SEND:  A5 A5 03 07 21 53 44 3A 5C 50 68 6F 74 6F 5C 46 5C 49 4D 47 31 39 30 38 30 37 2D 31 39 35 32 31 32 46 2E 4A 50 47 D3 </p>
+<p>Select DB 0</p>
+<p>AHC_GetAhcSysMode 96</p>
+<p>!!! Speaker turn-off by SpeakerPowerDetection</p>
+<p>##UPNP## \webserver.c:1646  FILEDOC SD:\Event\F\EMER150101-081223F.MOV</p>
+<p>##VERBOSE## handle_request:233 mini_dserver 4: COMPLETE</p>
+<p>##VERBOSE## do_accept:255 accepted HTTP-WEB connection from 192.168.43.1:47002, fd=4, listener=2</p>
+<p>##VERBOSE## prepare_response:70 ‘GET’ ‘/SD/Photo/F/IMG190807-195212F.JPG’ </p>
+<p>##UPNP## \webserver.c:1209 1209 GET filename /SD/Photo/F/IMG190807-195212F.JPG</p>
+<p>##UPNP## \webserver.c:1229 1229 GET filename SD:/Photo/F/IMG190807-195212F.JPG</p>
+<p>STATE_VIDEO_REC_MODE_EVENT_DOWNLOAD -</p>
+<p>event file:SD:\Event\F\EMER150101-081223F.MOV close</p>
+<p>##VERBOSE## osal_stat:215 FS: filename SD:\Photo\F\IMG190807-195212F.JPG, size 640741, mode x165CC40</p>
+<p>event file:SD:\Photo\F\IMG190807-195212F.JPG open</p>
+<p>##UPNP## \webserver.c:1646  FILEDOC SD:\Photo\F\IMG190807-195212F.JPG</p>
+<p>##VERBOSE## handle_request:233 mini_dserver 4: COMPLETE</p>
+<p>event file:SD:\Photo\F\IMG190807-195212F.JPG close</p>
+<p>[[ x3 ]] &gt;&gt;&gt;&gt; STATE_VIDEO_REC_MODE_EVENT_DOWNLOAD -</p>
+<p>HAIZHEN CHECK EVENT !</p>
+<p>net_read: ret=6   </p>
+<p>56717 RECV:  A5 A5 01 FF 00 FF </p>
+<p>export_net_config_file update=0</p>
+<p>NETWORK_reset ====</p>
+<p>tcp_client_thread detach</p>
+<p>NETCFG:: init DEV.1 Type=STA Start=1 </p>
+<p>WLAN CB : 3 : NO Mapping</p>
+<p>dhd_task: Exiting task!!</p>
+<p>@@@ Device DC CABLE is plugged out</p>
+<p> STATE_VIDEO_REC_MODE_EVENT_DC_CABLE_OUT_LCD +++ </p>
+<p>AHC_SetShutdownByChargerOut enable=1</p>
+<p>VideoPowerOffCounterReset 5</p>
+<p>@@@ Device DC CABLE NO ACC</p>
+<p> STATE_VIDEO_REC_MODE_EVENT_DC_CABLE_OUT_LCD +++ </p>
+<p>AHC_SetShutdownByChargerOut enable=1</p>
+<p>VideoPowerOffCounterReset 5</p>
+<p>tcp_slowtmr: rtime    7 pcb-&gt;rto    7</p>
+<p><strong>**</strong> REXMIT *****</p>
+<p>Dongle Host Driver, version 5.90.195.89</p>
+<p>Release version 3.12</p>
+<p>F1 signature read @0x18000000=0x1591a962</p>
+<p>DHD: dongle ram size is set to 245760(orig 245760)</p>
+<p>dhdsdio_download_code_array: Download, Upload and compare succeeded (43362a2-roml/sdio-g-pool-idsup-idauth-apsta, 5.90.195.89.37, 2015/01/23 10:49:49).</p>
+<p>dhdsdio_write_vars: Download, Upload and compare of NVRAM succeeded.</p>
+<p>HAIZHEN CHECK EVENT !</p>
+<p>dhd_wlfc_init(): successfully disabled bdcv2 tlv signaling, 0</p>
+<p>Dongles MAC address = 6C:21:A2:03:92:01</p>
+<p>WLAN CB : 2 : NO Mapping</p>
+<p>Dongle Host Driver, version 5.90.195.89</p>
+<p>Release version 3.12</p>
+<p>sdioh_ahcsd_get_cisaddr: Can’t read!</p>
+<p>[[ x9 ]] &gt;&gt;&gt;&gt; sdioh_ahcsd_get_cisaddr: Can’t read!</p>
+<p>sdioh_request_byte: Failed to Write byte F1:@0x1000a=00, Err: 1</p>
+<p>[[ x3 ]] &gt;&gt;&gt;&gt; sdioh_request_byte: Failed to Write byte F1:@0x1000a=00, Err: 1</p>
+<p>dhdsdio_probe_attach: FAILED to return to SI_ENUM_BASE</p>
+<p>F1 signature read @0x18000000=0x   0</p>
+<p>sdioh_request_byte: Failed to Write byte F1:@0x1000e=28, Err: 1</p>
+<p>[[ x3 ]] &gt;&gt;&gt;&gt; sdioh_request_byte: Failed to Write byte F1:@0x1000e=28, Err: 1</p>
+<p>dhdsdio_probe: ChipClkCSR access: err -35 wrote 0x28 read 0x00</p>
+<p>dhdsdio_probe: dhdsdio_probe_attach failed</p>
+<p>bcmsdh_probe: device attach failed</p>
+<p>szParam :  lrl 15 </p>
+<p>buf[ 0 ] : wl </p>
+<p>buf[ 1 ] : lrl </p>
+<p>buf[ 2 ] : 15 </p>
+<p>wl: </p>
+<p>Error getting the last error</p>
+<p>szParam :  srl 15 </p>
+<p>buf[ 0 ]Data Abort at x0011E70C</p>
+<p>===================================</p>
+<p>Current Thread</p>
+<p>===================================</p>
+<p>TaskName: tcpip_thread</p>
+<p>Thread ID: 40</p>
+<p>OSTCBStkBottom : 0x154CA18 = 16816888</p>
+<p>OSTCBStkSize   : 4096</p>
+<p>OSTCBStkPtr    : 0x1550860</p>
+<p>pulTop         : 0x1550A18</p>
+<p>S_0000:0x0165C6C0       S_0001:0x015C3394       S_0002:0x00000000       S_0003:0x015C3394</p>
+<p>S_0004:0x00000000       S_0005:0xEA000007       S_0006:0x015C05E8       S_0007:0x00000000</p>
+<p>S_0008:0x0001204F       S_0009:0x00000014       S_0010:0x015C3394       S_0011:0x0011E6B4</p>
+<p>S_0012:0x0165C6C0       S_0013:0x013BFA64       S_0014:0x01780B58       S_0015:0x01780B58</p>
+<p>S_0016:0x0182B764       S_0017:0x011D4DE4       S_0018:0x00000001       S_0019:0xFFFFFFFF</p>
+<p>S_0020:0x0165C6C0       S_0021:0x0011E2D0       S_0022:0x0144D4B4       S_0023:0x0182B764</p>
+<p>S_0024:0x0165C6C0       S_0025:0x00112988       S_0026:0x0182B764       S_0027:0x001127DC</p>
+<p>S_0028:0x0165C6C0       S_0029:0x0144D4B4       S_0030:0x0182B764       S_0031:0x0165C6F8</p>
+<p>S_0032:0x0181B188       S_0033:0x00114958       S_0034:0x0182B764       S_0035:0x0165C6C0</p>
+<p>S_0036:0x0182B760       S_0037:0x0182B764       S_0038:0x000000FF       S_0039:0x0182B760</p>
+<p>S_0040:0x0182B764       S_0041:0x000000FF       S_0042:0x00000006       S_0043:0x0182B760</p>
+<p>S_0044:0x000000FF       S_0045:0x0182B7D4       S_0046:0x00000000       S_0047:0x00114A60</p>
+<p>S_0048:0x00000000       S_0049:0x00000006       S_0050:0x0144D4B4       S_0051:0x00000000</p>
+<p>S_0052:0x00000000       S_0053:0x011ADE5C       S_0054:0x0165C6C0       S_0055:0x0182B764</p>
+<p>S_0056:0x00000000       S_0057:0x00114ADC       S_0058:0x00000000       S_0059:0x00000006</p>
+<p>S_0060:0x0144D4B4       S_0061:0x0182B760       S_0062:0x0184B640       S_0063:0x0182B764</p>
+<p>S_0064:0x00000000       S_0065:0x00000000       S_0066:0x0000FFFF       S_0067:0x0010D76C</p>
+<p>S_0068:0x00000000       S_0069:0x00000006       S_0070:0x0000001A       S_0071:0x0184B640</p>
+<p>S_0072:0x0182B760       S_0073:0x00000000       S_0074:0x00000000       S_0075:0x0010D908</p>
+<p>S_0076:0x00000000       S_0077:0x0182B760       S_0078:0x00000000       S_0079:0x00000000</p>
+<p>S_0080:0x018A3360       S_0081:0x00000000       S_0082:0x09090909       S_0083:0x10101010</p>
+<p>S_0084:0x00000000       S_0085:0x00114FFC       S_0086:0x018A3360       S_0087:0x0181B830</p>
+<p>S_0088:0x018A330A       S_0089:0x0011829C       S_0090:0x00000000       S_0091:0x0178129C</p>
+<p>S_0092:0x01550A0C       S_0093:0x018A33AC       S_0094:0x09090909       S_0095:0x10101010</p>
+<p>S_0096:0x11111111       S_0097:0x001182A4       S_0098:0x018A330A       S_0099:0x0011851C</p>
+<p>S_0100:0x0178129C       S_0101:0x05050505       S_0102:0x06060606       S_0103:0x07070707</p>
+<p>S_0104:0x08080808       S_0105:0x0011152C       S_0106:0x02020202       S_0107:0x00000000</p>
+<p>S_0108:0x04040404       S_0109:0x012537A8</p>
+<p>===================================</p>
+<p>[[ x2 ]] &gt;&gt;&gt;&gt; </p>
+<p>===================================</p>
+<p>TaskName: SYS</p>
+<p>Thread ID: 1</p>
+<p>OSTCBStkBottom : 0x190DC64 = 16816888</p>
+<p>OSTCBStkSize   : 1024</p>
+<p>OSTCBStkPtr    : 0x190EBB4</p>
+<p>pulTop         : 0x190EC64</p>
+<p>Flag 0x01798d48</p>
+<p>wait for: 0x00010001 wait type:3</p>
+<p>S_0000:0x200000D3       S_0001:0x0002D3C3       S_0002:0x01797A48       S_0003:0x00129750</p>
+<p>S_0004:0x01795748       S_0005:0x60000013       S_0006:0x01795748       S_0007:0x00010001</p>
+<p>S_0008:0x20000013       S_0009:0x00000003       S_0010:0x00000001       S_0011:0x00000000</p>
+<p>S_0012:0x00000000       S_0013:0x00000002       S_0014:0x00113D1C       S_0015:0x00113D1C</p>
+<p>S_0016:0x00000000       S_0017:0x01798D48       S_0018:0x0190EC48       S_0019:0x01252C7C</p>
+<p>S_0020:0x00000000       S_0021:0x00000000       S_0022:0x018B8A04       S_0023:0x01797BD8</p>
+<p>S_0024:0x01798D48       S_0025:0x00010001       S_0026:0x00000003       S_0027:0x0190EC58</p>
+<p>S_0028:0x05050505       S_0029:0x06060606       S_0030:0x07070707       S_0031:0x08080808</p>
+<p>S_0032:0x09090909       S_0033:0x10101010       S_0034:0x11111111       S_0035:0x01119AEC</p>
+<p>S_0036:0x0190EC48       S_0037:0x00000000       S_0038:0x00000001       S_0039:0x01122954</p>
+<p>S_0040:0x0190EC58       S_0041:0x00000001       S_0042:0x04040404       S_0043:0x012537A8</p>
+<p>===================================</p>
+<p>[[ x2 ]] &gt;&gt;&gt;&gt; </p>
+<p>===================================</p>
+<p>TaskName: uC/OS-II Tmr</p>
+<p>Thread ID: 5</p>
+<p>OSTCBStkBottom : 0x1799ADC = 16816888</p>
+<p>OSTCBStkSize   : 256</p>
+<p>OSTCBStkPtr    : 0x1799E4C</p>
+<p>pulTop         : 0x1799EDC</p>
+<p>Event 0x01795794 </p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/navigation_bar.xml/" rel="prev" title="navigation_bar">
+      <i class="fa fa-chevron-left"></i> navigation_bar
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/note%20android/" rel="next" title="note android">
+      note android <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Edward"
+      src="/uploads/avatar.gif">
+  <p class="site-author-name" itemprop="name">Edward</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">570</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Edward</span>
+</div>
+
+        
+
+
+
+
+
+
+<script>
+  (function() {
+    function leancloudSelector(url) {
+      url = encodeURI(url);
+      return document.getElementById(url).querySelector('.leancloud-visitors-count');
+    }
+
+    function addCount(Counter) {
+      var visitors = document.querySelector('.leancloud_visitors');
+      var url = decodeURI(visitors.id);
+      var title = visitors.dataset.flagTitle;
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          if (results.length > 0) {
+            var counter = results[0];
+            leancloudSelector(url).innerText = counter.time + 1;
+            Counter('put', '/classes/Counter/' + counter.objectId, { time: { '__op': 'Increment', 'amount': 1 } })
+              .catch(error => {
+                console.error('Failed to save visitor count', error);
+              });
+          } else {
+              Counter('post', '/classes/Counter', { title, url, time: 1 })
+                .then(response => response.json())
+                .then(() => {
+                  leancloudSelector(url).innerText = 1;
+                })
+                .catch(error => {
+                  console.error('Failed to create', error);
+                });
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    function showTime(Counter) {
+      var visitors = document.querySelectorAll('.leancloud_visitors');
+      var entries = [...visitors].map(element => {
+        return decodeURI(element.id);
+      });
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url: { '$in': entries } })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          for (let url of entries) {
+            let target = results.find(item => item.url === url);
+            leancloudSelector(url).innerText = target ? target.time : 0;
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    let { app_id, app_key, server_url } = {"enable":true,"app_id":"wxYx0BX9gaKA3XC4LuO2of0v-gzGzoHsz","app_key":"LQMcs6IDIE4YAm10vMsn9IYq","server_url":"https://wxyx0bx9.lc-cn-n1-shared.com","security":false};
+    function fetchData(api_server) {
+      var Counter = (method, url, data) => {
+        return fetch(`${api_server}/1.1${url}`, {
+          method,
+          headers: {
+            'X-LC-Id'     : app_id,
+            'X-LC-Key'    : app_key,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data)
+        });
+      };
+      if (CONFIG.page.isPost) {
+        if (CONFIG.hostname !== location.hostname) return;
+        addCount(Counter);
+      } else if (document.querySelectorAll('.post-title-link').length >= 1) {
+        showTime(Counter);
+      }
+    }
+
+    let api_server = app_id.slice(-9) !== '-MdYXbMMI' ? server_url : `https://${app_id.slice(0, 8).toLowerCase()}.api.lncldglobal.com`;
+
+    if (api_server) {
+      fetchData(api_server);
+    } else {
+      fetch('https://app-router.leancloud.cn/2/route?appId=' + app_id)
+        .then(response => response.json())
+        .then(({ api_server }) => {
+          fetchData('https://' + api_server);
+        });
+    }
+  })();
+</script>
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

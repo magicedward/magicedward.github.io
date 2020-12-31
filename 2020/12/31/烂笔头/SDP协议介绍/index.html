@@ -1,0 +1,738 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"edward.org.cn","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="SDP协议介绍 一、SDP协议介绍 SDP 完全是一种会话描述格式 ― 它不属于传输协议 ― 它只使用不同的适当的传输协议，包括会话通知协议（SAP）、会话初始协议（SIP）、实时流协议（RTSP）、MIME 扩展协议的电子邮件以及超文本传输协议（HTTP）。SDP协议是也是基于文本的协议，这样就能保证协议的可扩展性比较强，这样就使其具有广泛的应用范围。SDP 不支持会话内容或媒体编码的协商，所以">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SDP协议介绍">
+<meta property="og:url" content="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/SDP%E5%8D%8F%E8%AE%AE%E4%BB%8B%E7%BB%8D/index.html">
+<meta property="og:site_name" content="点点滴滴">
+<meta property="og:description" content="SDP协议介绍 一、SDP协议介绍 SDP 完全是一种会话描述格式 ― 它不属于传输协议 ― 它只使用不同的适当的传输协议，包括会话通知协议（SAP）、会话初始协议（SIP）、实时流协议（RTSP）、MIME 扩展协议的电子邮件以及超文本传输协议（HTTP）。SDP协议是也是基于文本的协议，这样就能保证协议的可扩展性比较强，这样就使其具有广泛的应用范围。SDP 不支持会话内容或媒体编码的协商，所以">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-12-31T06:48:01.611Z">
+<meta property="article:modified_time" content="2020-01-16T04:37:34.083Z">
+<meta property="article:author" content="Edward">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/SDP%E5%8D%8F%E8%AE%AE%E4%BB%8B%E7%BB%8D/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>SDP协议介绍 | 点点滴滴</title>
+  
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?a92ed22eafce466e7a7b17546bb0dc6f";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">点点滴滴</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/SDP%E5%8D%8F%E8%AE%AE%E4%BB%8B%E7%BB%8D/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/avatar.gif">
+      <meta itemprop="name" content="Edward">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="点点滴滴">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          SDP协议介绍
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-12-31 14:48:01" itemprop="dateCreated datePublished" datetime="2020-12-31T14:48:01+08:00">2020-12-31</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-01-16 12:37:34" itemprop="dateModified" datetime="2020-01-16T12:37:34+08:00">2020-01-16</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%83%82%E7%AC%94%E5%A4%B4/" itemprop="url" rel="index"><span itemprop="name">烂笔头</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/SDP%E5%8D%8F%E8%AE%AE%E4%BB%8B%E7%BB%8D/" class="post-meta-item leancloud_visitors" data-flag-title="SDP协议介绍" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>SDP协议介绍</p>
+<p>一、SDP协议介绍</p>
+<p>SDP 完全是一种会话描述格式 ― 它不属于传输协议 ― 它只使用不同的适当的传输协议，包括会话通知协议（SAP）、会话初始协议（SIP）、实时流协议（RTSP）、MIME 扩展协议的电子邮件以及超文本传输协议（HTTP）。SDP协议是也是基于文本的协议，这样就能保证协议的可扩展性比较强，这样就使其具有广泛的应用范围。SDP 不支持会话内容或媒体编码的协商，所以在流媒体中只用来描述媒体信息。媒体协商这一块要用RTSP来实现．</p>
+<p>二、SDP协议格式</p>
+<p>SDP描述由许多文本行组成，文本行的格式为&lt;类型&gt;=&lt;值&gt;，&lt;类型&gt;是一个字母，&lt;值&gt;是结构化的文本串，其格式依&lt;类型&gt;而定。</p>
+<p>＜type＞=&lt;value&gt;[CRLF]</p>
+<p>常见的fields有：</p>
+<p>三、SDP协议例子：</p>
+<p>下面是一个helix 流媒体服务器的RTSP协议中的SDP协议：</p>
+<p>v=0 //SDP version</p>
+<p>// o field定义的源的一些信息。其格式为：o=&lt;username&gt; &lt;sess-id&gt; &lt;sess-version&gt; &lt;nettype&gt; &lt;addrtype&gt; &lt;unicast-address&gt;</p>
+<p>o=- 1271659412 1271659412 IN IP4 10.56.136.37 s=&lt;No title&gt;</p>
+<p>i=&lt;No author&gt; &lt;No copyright&gt;  //session的信息</p>
+<p>c=IN IP4 0.0.0.0 //connect 的信息，分别描述了：网络协议，地址的类型，连接地址。</p>
+<p>c=IN IP4 0.0.0.0</p>
+<p>t=0 0 //时间信息，分别表示开始的时间和结束的时间，一般在流媒体的直播的时移中见的比较多。</p>
+<p>a=SdpplinVersion:1610641560 //描述性的信息</p>
+<p>a=StreamCount:integer;2 //用来描述媒体流的信息，表示有两个媒体流。integer表示信息的格式为整数。</p>
+<p>a=control:*</p>
+<p>a=DefaultLicenseValue:integer;0 //License信息</p>
+<p>a=FileType:string;&quot;MPEG4&quot; ////用来描述媒体流的信息说明当前协商的文件是mpeg4格式的文件</p>
+<p>a=LicenseKey:string;&quot;license.Summary.Datatypes.RealMPEG4.Enabled&quot;</p>
+<p>a=range:npt=0-72.080000  //用来表示媒体流的长度</p>
+<p>m=audio 0 RTP/AVP 96 //做为媒体描述信息的重要组成部分描述了媒体信息的详细内容：表示session的audio是通过RTP来格式传送的，其payload值为96传送的端口还没有定。</p>
+<p>b=as:24 //audio 的bitrate</p>
+<p>b=RR:1800</p>
+<p>b=RS:600</p>
+<p>a=control:streamid=1  //通过媒体流1来发送音频</p>
+<p>a=range:npt=0-72.080000 //说明媒体流的长度。</p>
+<p>a=length:npt=72.080000</p>
+<p>a=rtpmap:96 MPEG4-GENERIC/32000/2 //rtpmap的信息，表示音频为AAC的其sample为32000</p>
+<p>a=fmtp:96 profile-level-id=15;mode=AAC-hbr;sizelength=13;indexlength=3;indexdeltalength=3;config=1210 //config为AAC的详细格式信息</p>
+<p>a=mimetype:string;&quot;audio/MPEG4-GENERIC&quot;</p>
+<p>a=Helix-Adaptation-Support:1</p>
+<p>a=AvgBitRate:integer;48000</p>
+<p>a=HasOutOfOrderTS:integer;1</p>
+<p>a=MaxBitRate:integer;48000</p>
+<p>a=Preroll:integer;1000</p>
+<p>a=OpaqueData:buffer;&quot;A4CAgCIAAAAEgICAFEAVABgAAAC7gAAAu4AFgICAAhKIBoCAgAEC&quot;</p>
+<p>a=StreamName:string;&quot;Audio Track&quot;</p>
+<p>下面是video的信息基本和audio的信息相对称，这里就不再说了。</p>
+<p>m=video 0 RTP/AVP 97</p>
+<p>b=as:150</p>
+<p>b=RR:11250</p>
+<p>b=RS:3750</p>
+<p>a=control:streamid=2</p>
+<p>a=range:npt=0-72.080000</p>
+<p>a=length:npt=72.080000</p>
+<p>a=rtpmap:97 MP4V-ES/2500</p>
+<p>a=fmtp:97 profile-level-id=1;</p>
+<p>a=mimetype:string;&quot;video/MP4V-ES&quot;</p>
+<p>a=Helix-Adaptation-Support:1</p>
+<p>a=AvgBitRate:integer;300000</p>
+<p>a=HasOutOfOrderTS:integer;1</p>
+<p>a=Height:integer;240 //影片的长度</p>
+<p>a=MaxBitRate:integer;300000</p>
+<p>a=MaxPacketSize:integer;1400</p>
+<p>a=Preroll:integer;1000</p>
+<p>a=Width:integer;320  //影片的宽度</p>
+<p>a=OpaqueData:buffer;&quot;AzcAAB8ELyARAbd0AAST4AAEk+AFIAAAAbDzAAABtQ7gQMDPAAABAAAAASAAhED6KFAg8KIfBgEC&quot;</p>
+<p>a=StreamName:string;&quot;Video Track&quot;</p>
+<p>SDP协议学习笔记</p>
+<p>在SIP协议的包含的内容是SDP时，应该把Content-Type设置成application/sdp。</p>
+<p>SDP:Session Description Protocol</p>
+<p>SDP格式:<br>      Session description<br>         v=  (protocol version)<br>         o=  (owner/creator and session identifier)<br>         s=  (session name)<br>         i=* (session information)<br>         u=* (URI of description)<br>         e=* (email address)<br>         p=* (phone number)<br>         c=* (connection information - not required if included in all media)<br>         b=* (zero or more bandwidth information lines)<br>         One or more time descriptions (&quot;t=&quot; and &quot;r=&quot; lines, see below)<br>         z=* (time zone adjustments)<br>         k=* (encryption key)<br>         a=* (zero or more session attribute lines)<br>         Zero or more media descriptions</p>
+<p>      Time description<br>         t=  (time the session is active)<br>         r=* (zero or more repeat times)</p>
+<p>      Media description, if present<br>         m=  (media name and transport address)<br>         i=* (media title)<br>         c=* (connection information - optional if included at<br>              session-level)<br>         b=* (zero or more bandwidth information lines)<br>         k=* (encryption key)<br>         a=* (zero or more media attribute lines)</p>
+<p>以上带&quot;*&quot;号的是可选的,其余的是必须的。一般顺序也按照上面的顺序来排列。</p>
+<p>a=*是sdp协议扩展属性定义，除上面以外的，分解时其它的都可以扔掉。<br>a=charset属性指定协议使用的字符集。一般的是ISO-10646。</p>
+<p>示例：<br>v=&lt;username&gt; &lt;sess-id&gt; &lt;sess-version&gt; &lt;nettype&gt; &lt;addrtype&gt; &lt;unicast-address&gt;<br>   其中：nettype是IN,代表internet,addrtype是IP4或IP6。unicast-address任务创建计算机的地址。<br>   整个这个属性，是唯一表示一个任务。</p>
+<p>e=123@126.com 或 p=+1 616 555-6011<br>对于一个任务只能两者之中的一个，表示会议控制者的联系方式。邮件地址可以是[email]<a href="mailto:&#106;&#46;&#x64;&#111;&#101;&#64;&#x65;&#120;&#97;&#109;&#x70;&#x6c;&#x65;&#46;&#x63;&#x6f;&#109;">&#106;&#46;&#x64;&#111;&#101;&#64;&#x65;&#120;&#97;&#109;&#x70;&#x6c;&#x65;&#46;&#x63;&#x6f;&#109;</a>[/email] (Jane Doe)形式，括号里面的是描述联系人的名称，或者Jane Doe &lt;[email]<a href="mailto:&#106;&#46;&#x64;&#x6f;&#101;&#x40;&#101;&#120;&#x61;&#x6d;&#112;&#x6c;&#x65;&#x2e;&#99;&#111;&#109;">&#106;&#46;&#x64;&#x6f;&#101;&#x40;&#101;&#120;&#x61;&#x6d;&#112;&#x6c;&#x65;&#x2e;&#99;&#111;&#109;</a>[/email]&gt;，前面的是联系人的名称。</p>
+<p>c=&lt;nettype&gt; &lt;addrtype&gt; &lt;connection-address&gt;<br>这个连接数据，可以是传话级别的连接数据，或者是单独一个媒体数据的连接数据。在是多播时，connection-address就该是一个多播组地址，当是单播时，connection-address就该是一个单播地址。对于addrtype是IP4的情况下，connection-address不仅包含IP地址，并且还要包含a time to live value(TTL 0-255)，如：c=IN IP4 224.2.36.42/128，IP6没有这个TTL值。还允许象这样的&lt;base multicast address&gt;[/&lt;ttl&gt;]/&lt;number of addresses&gt;格式的connection-address。如：c=IN IP4 224.2.1.1/127/3等同于包含c=IN IP4 224.2.1.1/127, c=IN IP4 224.2.1.2/127, c=IN IP4 224.2.1.3/127三行内容。</p>
+<p>b=&lt;bwtype&gt;:&lt;bandwidth&gt; bwtype可以是CT或AS，CT方式是设置整个会议的带宽，AS是设置单个会话的带宽。缺省带宽是千比特每秒。<br>t=&lt;start-time&gt; &lt;stop-time&gt;，这个可以有行，指定多个不规则时间段，如果是规则的时间段，则r=属性可以使用。start-time和stop- time都遵从NTP(Network Time Protocol),是以秒为单位，自从1900以来的时间。要转换为UNIX时间，减去2208988800。如果stop-time设置为0,则会话没有时间限制。如果start-time也设置为0，则会话被认为是永久的。</p>
+<p>r=&lt;repeat-interval&gt; &lt;active duration&gt; &lt;offsets from start-time&gt;重复次数在时间表示里面可以如下表示：<br>      d - days (86400 seconds)<br>      h - hours (3600 seconds)<br>      m - minutes (60 seconds)<br>      s - seconds (allowed for completeness)<br>z=&lt;adjustment time&gt; &lt;offset&gt; &lt;adjustment time&gt; &lt;offset&gt; ….<br>k=&lt;method&gt;<br>k=&lt;method&gt;:&lt;encryption key&gt;<br>a=&lt;attribute&gt;<br>a=&lt;attribute&gt;:&lt;value&gt;<br>m=&lt;media&gt; &lt;port&gt; &lt;proto&gt; &lt;fmt&gt; …<br>m=&lt;media&gt; &lt;port&gt;/&lt;number of ports&gt; &lt;proto&gt; &lt;fmt&gt; …<br>其中：&lt;media&gt;可以是，&quot;audio&quot;,&quot;video&quot;, &quot;text&quot;, &quot;application&quot; and &quot;message&quot;。&lt;port&gt;是媒体传送的端口号，它依赖于c=和&lt;proto&gt;。&lt;proto&gt; 可以是，udp，RTP/AVP和RTP/SAVP。</p>
+<p>a=cat:&lt;category&gt;分类，根据分类接收者隔离相应的会话<br>a=keywds:&lt;keywords&gt;关键字，根据关键字隔离相应的会话<br>a=tool:&lt;name and version of tool&gt;创建任务描述的工具的名称及版本号<br>a=ptime:&lt;packet time&gt;在一个包里面的以毫秒为单位的媒体长度<br>a=maxptime:&lt;maximum packet time&gt;以毫秒为单位，能够压缩进一个包的媒体量。<br>a=rtpmap:&lt;payload type&gt; &lt;encoding name&gt;/&lt;clock rate&gt; [/&lt;encoding   parameters&gt;]<br>a=recvonly<br>a=sendrecv<br>a=sendonly<br>a=inactive，<br>a=orient:&lt;orientation&gt;其可能的值，&quot;portrait&quot;, &quot;landscape&quot; and &quot;seascape&quot; 。<br>a=type:&lt;conference type&gt;,建议值是，&quot;broadcast&quot;, &quot;meeting&quot;, &quot;moderated&quot;, &quot;test&quot; and &quot;H332&quot;。<br>a=charset:&lt;character set&gt;<br>a=sdplang:&lt;language tag&gt;指定会话或者是媒体级别使用的语言<br>a=framerate:&lt;frame rate&gt;设置最大视频帧速率<br>a=quality:&lt;quality&gt;值是0-10<br>a=fmtp:&lt;format&gt; &lt;format specific parameters&gt;</p>
+<p>在SIP协议的包含的内容是SDP时，应该把Content-Type设置成application/sdp。</p>
+<p>SDP（Session Description Protocol）模型介绍</p>
+<p>如果有哪里描述有误，或不准确，欢迎各位网友指正，可以及时讨论并修正。</p>
+<p>情态动词术语解释：</p>
+<p>&quot;MUST&quot;，必须、一定要；</p>
+<p>&quot;MUST NOT&quot;，禁止；</p>
+<p>&quot;REQUIRED&quot;，需要；</p>
+<p>&quot;SHALL&quot;、&quot;SHOULD&quot;，应该；</p>
+<p>&quot;SHALL NOT&quot;、&quot;SHOULD NOT&quot;，不应该；</p>
+<p>&quot;RECOMMENDED&quot;，推荐；</p>
+<p>&quot;MAY&quot;，可以</p>
+<p>以上情态动词术语可参考RFC2119[3]，这些动词要求我们在产品实现时，需要遵守或灵活变更约束。</p>
+<p>术语</p>
+<p>媒体流（Media Stream），或称为媒体类型（Media Type），即我们通常所说的音频流、视频流等，所有通信实体要进行媒体交互之前都必须进行媒体注的协商</p>
+<p>媒体格式（Media Format），每种媒体流都有不同的编码格式，像音频有G711、G712编码，视频有H261、H264等，像现在所谓的高清视频采用是720P、1070P等。</p>
+<p>单一会话（Unitcast Session）</p>
+<p>多会话（Multicast Sessions）</p>
+<p>单一媒体流（Unitcast Streams）</p>
+<p>多媒体流（Multicast Streams）</p>
+<p>SDP（Session Description Protocol）</p>
+<p>SDP（会话描述协议），用于两个会话实体之间的媒体协商，并达成一致，属信令语言族，采用文本（字符）描述形式。rfc3264协议[1]主要概述一个请求/响应模型（offer/answer，以下叙述采用英文），包括请求/响应的实体和不同阶段的操作行为，如初始协商过程和重协商过程，并简单介绍消息中各种参数的含义。具体各个参数的详细说明见rfc2327协议[2]。本文主要参照3264协议，大部分为直译，附加自己经验和理解。</p>
+<p>图1 SDP模型组网图</p>
+<p>1实体、消息</p>
+<p>Offer/Answer模型包括两个实体，一个是请求主体Offerer，另外一个是响应实体Answerer，两个实体只是在逻辑上进行区分，在一定条件可以转换。例如，手机A发起媒体协商请求，那么A就是Offerer，反之如果A为接收请求则为Offerer。</p>
+<p>Offerer发给Answerer的请求消息称为请求offer，内容包括媒体流类型、各个媒体流使用的编码集，以及将要用于接收媒体流的IP和端口。</p>
+<p>Answerer收到offer之后，回复给Offerer的消息称为响应，内容包括要使用的媒体编码，是否接收该媒体流以及告诉Offerer其用于接收媒体流的IP和端口。</p>
+<p>2 SDP各个参数简单介绍</p>
+<p>下面示例摘自3264协议[1]</p>
+<p>v=0                                                                              </p>
+<p>o=carol 28908764872 28908764872 IN IP4 100.3.6.6        //会话ID号和版本</p>
+<p>s=-                                     //用于传递会话主题</p>
+<p>t=0 0                                   //会话时间，一般由其它信令消息控制，因此填0</p>
+<p>c=IN IP4 192.0.2.4              //描述本端将用于传输媒体流的IP</p>
+<p>m=audio 0 RTP/AVP 0 1 3     //媒体类型 端口号 本端媒体使用的编码标识（Payload）集</p>
+<p>a=rtpmap:0 PCMU/8000 //rtpmap映射表，各种编码详细描述参数，包括使用带宽（bandwidth）</p>
+<p>a=rtpmap:1 1016/8000</p>
+<p>a=rtpmap:3 GSM/8000</p>
+<p>a=sendonly     //说明本端媒体流的方向，取值包括sendonly/recvonly/sendrecv/inactive</p>
+<p>a=ptime:20                           //说明媒体流打包时长</p>
+<p>m=video 0 RTP/AVP 31 34</p>
+<p>a=rtpmap:31 H261/90000</p>
+<p>a=rtpmap:34 H263/90000</p>
+<p>3 实体行为、操作过程</p>
+<p>3.1 初始协商的Offer请求</p>
+<p>实体A &lt;-&gt; 实体B，实体首先发起Offer请求，内容如2节所示，对于作何一个媒体流/媒体通道，这时实体A必须：</p>
+<p>a.       如果媒体流方向标为recvonly/sendrecv，即a=recvonly或a=sendrecv，则A必须（MUST）准备好在这个IP和端口上接收实体B发来的媒体流；</p>
+<p>b.       如果媒体流方向标为sendonly/inactive，即a=recvonly或a=sendrecv，则A不需要进行准备。</p>
+<p>3.2 Answer响应</p>
+<p>实体B收到A的请求offer后，根据自身支持的媒体类型和编码策略，回复响应。</p>
+<p>a. 如果实体B回复的响应中的媒体流数量和顺序必须（MUST）和请求offer一致，以便实体A进行甄别和决策。即m行的数量和顺序必须一致，B不能（MUST NOT）擅自增加或删除媒体流。如果B不支持某个媒体流，可以在对应的端口置0，但不能不带这个m行描述。</p>
+<p>b. 对于某种媒体，实体B必须（MUST）从请求offer中选出A支持且自己也支持的该媒体的编码标识集，并且可以（MAY）附带自己支持的其它类型编码。</p>
+<p>c. 对于响应消息中各个媒体的方向：</p>
+<p>如果请求某媒体流的方向为sendonly，那么响应中对应媒体的方向必须为recvonly；</p>
+<p>如果请求某媒体流的方向为recvonly，那么响应中对应媒体的方向必须为sendonly；</p>
+<p>如果请求某媒体流的方向为sendrecv，那么响应中对应媒体的方向可以为sendrecv/sendonly/recvonly/inactive中的一种；</p>
+<p>如果请求某媒体流的方向为inactive，那么响应中对应媒体的方向必须为inactive；</p>
+<p>d.       响应answer里提供IP和端口，指示Offerer本端期望用于接收媒体流的IP和端口，一旦响应发出之后，Offerer必须（MUST）准备好在这个IP和端口上接收实体A发来的媒体流。</p>
+<p>e.       如果请求offer中带了ptime（媒体流打包间隔）的a行或带宽的a行，则响应answer也应该（SHOULD）相应的携带。</p>
+<p>f.        实体B Offerer应该（SHOULD）使用实体A比较期望的编码生成媒体流发送。一般来说对于m行，如m=video 0 RTP/AVP 31 34，排充越靠前的编码表示该实体越希望以这个编码作为载体，这里示例31(H261)，34（H263）中H261为A更期望使用的编码类型。同理，当实体A收到响应answer后也是这样理解的。</p>
+<p>3.3 实体收到响应后的处理</p>
+<p>当实体A收到B回复的响应后，可以（MAY）开始发送媒体流，如果媒体流方向为sendonly/sendrecv，</p>
+<p>a.       必须（MUST）使用answer列举的媒体类型/编码生成媒体发送；</p>
+<p>b.       应该（SHOULD）使用answer中的ptime和bandwidth来打包发送媒体流；</p>
+<p>c.       可以（MAY）立即停止监听端口，该端口为offer支持answer不支持的媒体所使用的端口。</p>
+<p>4 修改媒体流（会话）</p>
+<p>修改媒体流的offer-answer操作必须基于之前协商的媒体形式（音频、视频等），不能（MUST NOT）对已有媒体流进行删减。</p>
+<p>4.1 删除媒体流</p>
+<p>如果实体认定新的会话不支持之前媒商的某个媒体，新的offer只须对这种媒体所在m行的端口置0，但不能不描述这种媒体，即不带对应m行。当answerer收到响应之后，处理同初始协商一样。</p>
+<p>4.2 增加媒体流</p>
+<p>如果实体打算新增媒体流，在offer里只须加上描述即可或者占用之前端口被置0的媒体流，即用新的媒体描述m行替换旧的。当answerer收到offer请求后，发现有新增媒体描述，或者过于端口被置0的媒体行被新的媒体描述替换，即知道当前为新增媒体流，处理同初始协商。</p>
+<p>4.3 修改媒体流</p>
+<p>修改媒体注主要是针对初始协商结果，如果有变更即进入修改流程处理，可能的变更包括IP地址、端口，媒体格式（编码），媒体类型（音、视频），媒体属性（ptime，bandwidth，媒体流方向变更等）。</p>
+<p>参考文档</p>
+<p>[1] RFC3264，An Offer/Answer Model with the Session Description Protocol (SDP)</p>
+<p>[2] RFC2327，SDP: Session Description Protocol</p>
+<p>[3] RFC2119，Key words for use in RFCs to Indicate Requirement Levels</p>
+<p>SDP: Session Description Protocol(会话描述协议)<br>(RFC2327)</p>
+<ol>
+<li><p>概述<br>SDP也是MMUSIC工作组的一个产品,在MBONE内容中用得很多。其目的就是在媒体会话中，传递媒体流信息，允许会话描述的接收者去参与会话。 SDP基本上在internet上工作。他定义了绘画描述的统一格式,但并不定义多播地址的分配和SDP消息的传输,也不支持媒体编码方案的协商,这些功能均由下层传送协议完成.典型的会话传送协议包括:SAP(Session Announcement Protocol 会话公告协议),SIP,RTSP,HTTP,和使用MIME的E-Mail.(注意:对SAP只能包含一个会话描述,其它会话传诵协议的SDP可包含多个绘画描述)<br>SDP包括以下一些方面：<br>1） 会话的名称和目的<br>2） 会话存活时间<br>3） 包含在会话中的媒体信息，包括：<br>媒体类型(video, audio, etc)<br>传输协议(RTP/UDP/IP, H.320, etc)<br>媒体格式(H.261 video, MPEG video, etc)<br>多播或远端（单播）地址和端口<br>4） 为接收媒体而需的信息(addresses, ports, formats and so on)<br>5） 使用的带宽信息<br>6） 可信赖的接洽信息（Contact information）</p>
+</li>
+<li><p>协议<br>Session description //格式及举例<br>v=   (protocol version) //v=0<br>       o=   (owner/creator and session identifier). //o=&lt;用户名&gt;&lt;会话id&gt;&lt;版本&gt;&lt;网络类<br>//型&gt;&lt;地址类型&gt;&lt;地址&gt;<br>//o=sname 1234567890 0987654321 IN<br>//IP4 126.15.64.3<br>       s=   (session name) //会话名<br>       i=* (session information) //会话信息<br>       u=* (URI of description) //u=<a target="_blank" rel="noopener" href="http://www.zte.com.cn/staff/sdp.ps">http://www.zte.com.cn/staff/sdp.ps</a><br>       e=* (email address) //e=zte@isi.edu(general text如：王生)<br>//或e=Mr. Wang&lt;[email]<a href="mailto:&#x77;&#x61;&#110;&#x67;&#64;&#122;&#116;&#101;&#x2e;&#99;&#x6f;&#109;">&#x77;&#x61;&#110;&#x67;&#64;&#122;&#116;&#101;&#x2e;&#99;&#x6f;&#109;</a>[/email]&gt;<br>       p=* (phone number) //p=+86-0755-26773000-7110(wang)<br>//or p=+1 617 253 6011<br>       c=* (connection information -如已经包含在所有媒体中则该行不需要)<br>//c=&lt;网络类型&gt;&lt;地址信息&gt;&lt;连接地址&gt;<br>//多点会议包括TTL<br>//连接地址: &lt;base multicast<br>//address&gt;/&lt;ttl&gt;/&lt;number of addresses&gt;<br>//c=IN IP4 224.2.13.23/127<br>//c=IN IP4 224.2.1.1/127/3<br>       b=* (bandwidth information) //b=&lt;修改量（CT Conference Total<br>//IAS Application-specific Max)&gt;:&lt;带宽<br>//值（kb/s）&gt;<br>//b=CT:120<br>One or more time descriptions (see below)<br>       z=* (time zone adjustments) //时区调整<br>       k=* (encryption key) //k=&lt;方法&gt;:&lt;密钥&gt;或k=&lt;方法&gt;<br>       a=* (zero or more session attribute lines) //a=&lt;属性&gt;   或a=&lt;属性&gt;:&lt;值&gt;<br>Zero or more media descriptions (see below)<br>各行严格按顺序,其中:<br>时间描述：<br>       t=   (time the session is active) //&lt;开始时间&gt;&lt;结束时间&gt;，单位秒，十<br>//进制NTP<br>//t=2873397468 2873404969<br>       r=* (zero or more repeat times) //&lt;重复时间&gt;&lt;活动持续时间<br>//以开始时刻为参考的偏移列表&gt;单位秒<br>//r=604800 3666 90000 或写成<br>//r=7d 1h 0 25h<br>媒体描述：<br>       m=   (media name and transport address) //m=&lt;媒体&gt;&lt;端口&gt;&lt;传送&gt;&lt;格式列表&gt;<br>//m=audio 49170 RTP/AVP 0 3<br>//协议为RTP，剖面为AVP<br>//参考rtp-parameters.txt<br>       i=* (media title媒体称呼) //<br>       c=* (connection information – 如已经包含在会话级描述则为可选)<br>       b=* (bandwidth information) //同c<br>       k=* (encryption key) //会话级为摸认值,同c<br>       a=* (zero or more media attribute lines) //两种形式：(也同c)（见后说明）<br>//a=&lt;attribute&gt;如：<br>// a=recvonly<br>//a=&lt;attribute&gt;:&lt;value&gt;<br>注：v,o,s,t,m为必须的,其他项为可选。<br>如果SDP语法分析器不能识别某一类型(Type),则整个描述丢失;<br>如果”a=”的某属性值不理解,则予以丢失<br>整个协议区分大小写<br>“=”两侧不允许有空格<br>会话级的描述就是媒体级描述的缺省值<br>所有均格式为&lt;type&gt;=&lt;value&gt;</p>
+</li>
+<li><p>SDP在IP电话中的使用<br>SDP用于构建INVITE和200 OK响应消息的消息体,供主\被叫用户交换媒体信息.</p>
+</li>
+<li><p>媒体流的配置</p>
+</li>
+</ol>
+<ol>
+<li>主被叫的媒体描述必须完全对应:主被叫的第n个媒体流(“m=”)对应,都包含”a=rtpmap”.这样的目的是易于适应静态净荷类型到动态净荷类型的转换.</li>
+<li>如被叫不想接收主叫提出的某个媒体流则在响应中设置该媒体流的端口号为0.并且,必须返回对应的媒体流行.</li>
+</ol>
+<ol start="2">
+<li>单播SDP值的设定</li>
+</ol>
+<ol>
+<li>对于只发媒体流,端口号无意义,应设为0.</li>
+<li>每个媒体流的净载荷类型例表应传送两个信息:能接受/发送的编译码,和用以标识这些编译码的RTP净载荷类型号.</li>
+<li>如对于某一媒体流,主/被叫没有公共的媒体格式,被叫仍然要求返回媒体流的”m=”行,端口好为0,同时,不列净载荷类型.</li>
+<li>如果所有媒体流均无公共的媒体格式,则被叫回送400响应(坏请求),并加入304警告头字段(无媒体类型)</li>
+</ol>
+<ol start="3">
+<li>多播操作</li>
+</ol>
+<ol>
+<li>接受和发送的多播地址是相同的</li>
+<li>被叫不允许改变媒体流的只发,只收,或收/发特性</li>
+<li>如果被叫不支持多播,则回送400响应和330警告(多播不可用)</li>
+</ol>
+<ol start="4">
+<li>延时媒体流<br>由于主叫可能实际上是一个和其他协议(如H.323)互同的协议的网关,与S其互同的协议要求呼叫建立后进行媒体协商.这样,主叫可以先发不带SDP的INVITE,呼叫建立后可以通过ACK或重新发一个INVITE请求修改被叫的会话描述(SDP).</li>
+<li>媒体流保持<br>如果要求对方进入HOLD,即暂时停止发送一个或多个媒体流,这可以用Re-INVITE,其会话描述和原来的请求或响应中的描述相同,只是,”c=”行中的保持媒体流的地址置为”0.0.0.0”,还有就是Re_INVITE中的Cseq得递增.</li>
+<li>对应于SIP中有3个实体字段:</li>
+</ol>
+<ol>
+<li>Content-Type: 指明消息体类型,有两种:<br>i. Application/sdp:表示是SDP会话描述<br>ii. Text/html:表示是普通文本或HTML格式的描述</li>
+<li>Content-Encoding:补充说明消息体类型,使用户可以采用压缩编码编辑消息体</li>
+<li>Content-Length:给出消息体的字节数</li>
+</ol>
+<ol start="7">
+<li>SDP各type的详细解释:<br>协议版本 v = SDP版本目前为0,没有子版本<br>会话源 o = &lt;用户名&gt;用户在发起主机上登录名,如果主机不支持用户标识的概念,则为”-”<br>&lt;会话id&gt;一般为数字串,其分配由创建工具决定,建议用网络时间协议(NTP)时<br>戳,以确保唯一性.<br>&lt;版本&gt;该会话公告的版本,供公告代理服务器检测同一会话的若干个公告哪个<br>是最新公告.基本要求是会话数据修改后该版本值递增,建议用NTP时戳<br>&lt;网络类型&gt;为文本串”IN”<br>&lt;地址类型&gt;”IP4”(可为域名或点分十进制)/”IP6”(域名或压缩文本地址形式)<br>&lt;地址&gt;<br>会话名 s= ISO 10646字符表示的会话名<br>会话信息   v= ISO 10646字符表示的会话信息<br>URI    u= 能提供会议进一步信息的URI地址<br>E妹地址   e= 给出会议负责人的联系信息,他不一定是创建会议公告的人<br>电话号码   p= 给出会议负责人的联系信息,他不一定是创建会议公告的人(国际通用形式)<br>连接数据   c=媒体连接数据，会话级为媒体级的摸认值<br>带宽    b= 给出会话或媒体所用带宽，单位为kbit/s.修饰语：CT(会议总带宽，表示所有<br>地点所有媒体的总带宽)，AS(应用特定最大带宽，表示一个地点单一媒体带宽)<br>时间描述   t= 见上<br>   r= 见上<br>时区调整   z= 见上<br>加密密钥    k=已定义的方法有<br>      k=clear:&lt;加密密钥&gt;密钥没有变换<br>k=base64:&lt;编码密钥&gt;已编码，因为它含有SDP禁用的字符<br>k=uri:&lt;获得密钥的URI&gt;<br>k=prompt。SDP没有提供密钥但该会话或媒体流是要求加密的。<br>属性    a=一个m=行可有多个a=行，SDP建议扩展如下：(具体见[1].Page419)<br>会话级： a=cat:&lt;类别&gt;//给出点分层次式会话分类号,供接收方筛选会话<br>a=keywds:&lt;关键词&gt;//供接收方筛选会话<br>a=tool:&lt;工具名和版本号&gt;//创建会话描述的工具名和版本号<br>a=recvonly/sendrecv/sendonly//收发模式<br>a=type:&lt;会议类型&gt;//有:广播,聚会,主席主持,测试,H.323<br>a=charset:&lt;字符集&gt;//显示会话名和信息数据的字符集<br>a=sdplang:&lt;语言标记&gt;//描述所有语言<br>a=lang:&lt;语言标记&gt;//会话描述的缺省语言或媒体描述的语言<br>a=framerate:&lt;帧速率&gt;//单位:帧/秒<br>a=quality:&lt;质量&gt;//视频的建议质量(10/5/0)<br>a=fmtp:&lt;格式&gt;&lt; 格式特定参数&gt;//定义指定格式的附加参数<br>媒体级：a=ptime:&lt;分组时间&gt;//媒体分组的时长(单位:秒)<br>a=recvonly/sendrecv/sendonly//收发模式<br>a=orient:&lt;白板方向&gt;//指明白板在屏莫上的方向<br>a=sdplang:&lt;语言标记&gt;//描述所有语言<br>a=lang:&lt;语言标记&gt;//会话描述的缺省语言或媒体描述的语言<br>媒体描述     m= &lt;媒体&gt;有5种类型：音频/视频/应用(如白板信息)/数据(不向用户显示的)/控制<br>&lt;端口&gt;媒体流发往传输层的端口。取决于c=行规定的网络类型和接下来的传<br>送层协议：对UDP为1024-65535；对分层编码应用（c=行没有多播地址），<br>要给出多播端口数，如：m=video 49170/2 RTP/AVP 31（表示：端口49170<br>和49171为第一对RTP/RTCP端口，49172和49173为第二对的端口）。<br>&lt;传送层协议&gt;与c=行的地址类型有关。对大多的媒体在RTP/UDP上传送，定<br>义2种：RTP/AVP：IETF RTP协议，音/视频应用文档。在UDP上传诵。<br>Udp：UDP协议。<br>&lt;格式列表&gt;对音/视频，就是音/视频应用文档中规定媒体净荷类型。列表中都<br>有可能用，但第一个为缺省值，分为静态绑定和动态绑定：静态绑定即使媒体编码方式有净荷类型号完全确定，动态绑定则媒体编码方式如时钟频率，音频信道数等）没有完全确定，需要进一步的属性说明。分别举例如下：<br>Alaw的PCM编码单信道Audio，其净荷类型号为8，把它发往UDP端口49232，则：m=audio 49232 RTP/AVP 8<br>16bit线性编码，双声道立体声，抽样速率16kHz，其动态净荷类型号98，则：m=audio 49232 RTP/AVP 98<br>a=rtpmap:98 L16/16000/2<br>说明：1）a=rtpmap:&lt;净荷类型号&gt;&lt;编码名&gt;/&lt;时钟速率&gt;[/&lt;编码参数&gt;]<br>    对音频，编码参数为音频信道数；对视频没有定义<br>2）SDP允许rtpmap规定实验性编码格式，但编码名必须以X-起，<br>表示此格式还没正式登记。</li>
+<li>SDP Grammar<br>announcement =        proto-version<br>                     origin-field<br>                     session-name-field<br>                     information-field<br>                     uri-field<br>                     email-fields<br>                     phone-fields<br>                     connection-field<br>                     bandwidth-fields<br>                     time-fields<br>                     key-field<br>                     attribute-fields<br>                     media-descriptions<br>proto-version =    &quot;v=&quot; 1<em>DIGIT CRLF<br>                     ;this memo describes version 0<br>origin-field =        &quot;o=&quot; username space<br>                     sess-id space sess-version space<br>                     nettype space addrtype space<br>                     addr CRLF<br>session-name-field =   &quot;s=&quot; text CRLF<br>information-field = [&quot;i=&quot; text CRLF]<br>uri-field =           [&quot;u=&quot; uri CRLF]<br>email-fields =        <em>(&quot;e=&quot; email-address CRLF)<br>phone-fields =        *(&quot;p=&quot; phone-number CRLF)<br>connection-field = [&quot;c=&quot; nettype space addrtype space<br>                     connection-address CRLF]<br>                     ;a connection field must be present<br>                     ;in every media description or at the<br>                     ;session-level<br>bandwidth-fields = *(&quot;b=&quot; bwtype &quot;:&quot; bandwidth CRLF)<br>time-fields =       1</em>( &quot;t=&quot; start-time space stop-time<br>                     <em>(CRLF repeat-fields) CRLF)<br>                     [zone-adjustments CRLF]<br>repeat-fields =    &quot;r=&quot; repeat-interval space typed-time<br>                     1</em>(space typed-time)<br>zone-adjustments = time space [&quot;-&quot;] typed-time<br>                     *(space time space [&quot;-&quot;] typed-time)<br>key-field =           [&quot;k=&quot; key-type CRLF]<br>key-type =          &quot;prompt&quot; |<br>                     &quot;clear:&quot; key-data |<br>                     &quot;base64:&quot; key-data |<br>                     &quot;uri:&quot; uri<br>key-data =          email-safe | &quot;~&quot; | &quot;<br>attribute-fields = *(&quot;a=&quot; attribute CRLF)<br>media-descriptions =   *( media-field<br>                     information-field<br>                     *(connection-field)<br>                     bandwidth-fields<br>                     key-field<br>                     attribute-fields )<br>media-field =       &quot;m=&quot; media space port [&quot;/&quot; integer]<br>                     space proto 1</em>(space fmt) CRLF<br>media =             1*(alpha-numeric)<br>                     ;typically &quot;audio&quot;, &quot;video&quot;, &quot;application&quot;<br>                     ;or &quot;data&quot;<br>fmt =                 1*(alpha-numeric)<br>                     ;typically an RTP payload type for audio<br>                     ;and video media<br>proto =             1*(alpha-numeric)<br>                     ;typically &quot;RTP/AVP&quot; or &quot;udp&quot; for IP4<br>port =             1*(DIGIT)<br>                     ;should in the range &quot;1024&quot; to &quot;65535&quot; inclusive<br>                     ;for UDP based media<br>attribute =           (att-field &quot;:&quot; att-value) | att-field<br>att-field =           1*(alpha-numeric)<br>att-value =           byte-string<br>sess-id =          1*(DIGIT)<br>                     ;should be unique for this originating username/host<br>sess-version =        1*(DIGIT)<br>                     ;0 is a new session<br>connection-address =   multicast-address<br>                     | addr<br>multicast-address = 3*(decimal-uchar &quot;.&quot;) decimal-uchar &quot;/&quot; ttl</li>
+</ol>
+<p>[ &quot;/&quot; integer ]<br>                     ;multicast addresses may be in the range<br>                     ;224.0.0.0 to 239.255.255.255<br>ttl =                 decimal-uchar<br>start-time =       time | &quot;0&quot;<br>stop-time =           time | &quot;0&quot;<br>time =             POS-DIGIT 9*(DIGIT)<br>                     ;sufficient for 2 more centuries<br>repeat-interval =     typed-time<br>typed-time =       1*(DIGIT) [fixed-len-time-unit]<br>fixed-len-time-unit = &quot;d&quot; | &quot;h&quot; | &quot;m&quot; | &quot;s&quot;<br>bwtype =              1*(alpha-numeric)<br>bandwidth =           1*(DIGIT)<br>username =          safe<br>                     ;pretty wide definition, but doesn’t include space<br>email-address =    email | email &quot;(&quot; email-safe &quot;)&quot; |<br>                     email-safe &quot;&lt;&quot; email &quot;&gt;&quot;<br>email =             ;defined in RFC822<br>uri=                ;defined in RFC1630<br>phone-number =        phone | phone &quot;(&quot; email-safe &quot;)&quot; |<br>                     email-safe &quot;&lt;&quot; phone &quot;&gt;&quot;<br>phone =             &quot;+&quot; POS-DIGIT 1*(space | &quot;-&quot; | DIGIT)<br>                     ;there must be a space or hyphen between the<br>                     ;international code and the rest of the number.<br>nettype =          &quot;IN&quot;<br>                     ;list to be extended<br>addrtype =          &quot;IP4&quot; | &quot;IP6&quot;<br>                     ;list to be extended<br>addr =             FQDN | unicast-address<br>FQDN =             4*(alpha-numeric|&quot;-&quot;|&quot;.&quot;)<br>                     ;fully qualified domain name as specified in RFC1035<br>unicast-address =     IP4-address | IP6-address<br>IP4-address =       b1 &quot;.&quot; decimal-uchar &quot;.&quot; decimal-uchar &quot;.&quot; b4<br>b1 =                decimal-uchar<br>                     ;less than &quot;224&quot;; not &quot;0&quot; or &quot;127&quot;<br>b4 =                decimal-uchar<br>                     ;not &quot;0&quot;<br>IP6-address =       ;to be defined<br>text =             byte-string<br>                     ;default is to interpret this as IS0-10646 UTF8<br>                     ;ISO 8859-1 requires a &quot;a=charset:ISO-8859-1&quot;<br>                     ;session-level attribute to be used<br>byte-string =       1*(0x01..0x09|0x0b|0x0c|0x0e..0xff)<br>                     ;any byte except NUL, CR or LF<br>decimal-uchar =    DIGIT<br>                     | POS-DIGIT DIGIT<br>                     | (&quot;1&quot; 2*(DIGIT))<br>                     | (&quot;2&quot; (&quot;0&quot;|&quot;1&quot;|&quot;2&quot;|&quot;3&quot;|&quot;4&quot;) DIGIT)<br>                     | (&quot;2&quot; &quot;5&quot; (&quot;0&quot;|&quot;1&quot;|&quot;2&quot;|&quot;3&quot;|&quot;4&quot;|&quot;5&quot;))<br>integer =          POS-DIGIT <em>(DIGIT)<br>alpha-numeric =    ALPHA | DIGIT<br>DIGIT =             &quot;0&quot; | POS-DIGIT<br>POS-DIGIT =           &quot;1&quot;|&quot;2&quot;|&quot;3&quot;|&quot;4&quot;|&quot;5&quot;|&quot;6&quot;|&quot;7&quot;|&quot;8&quot;|&quot;9&quot;<br>ALPHA =             &quot;a&quot;|&quot;b&quot;|&quot;c&quot;|&quot;d&quot;|&quot;e&quot;|&quot;f&quot;|&quot;g&quot;|&quot;h&quot;|&quot;i&quot;|&quot;j&quot;|&quot;k&quot;|<br>                     &quot;l&quot;|&quot;m&quot;|&quot;n&quot;|&quot;o &quot;|&quot;p&quot;|&quot;q&quot;|&quot;r&quot;|&quot;s&quot;|&quot;t&quot;|&quot;u&quot;|&quot;v&quot;|<br>                     &quot;w&quot;|&quot;x&quot;|&quot;y&quot;|&quot;z&quot;|&quot;A&quot;|&quot;B&quot;|&quot;C &quot;|&quot;D&quot;|&quot;E&quot;|&quot;F&quot;|&quot;G&quot;|<br>                     &quot;H&quot;|&quot;I&quot;|&quot;J&quot;|&quot;K&quot;|&quot;L&quot;|&quot;M&quot;|&quot;N&quot;|&quot;O&quot;|&quot;P&quot;|&quot; Q&quot;|&quot;R&quot;|<br>                     &quot;S&quot;|&quot;T&quot;|&quot;U&quot;|&quot;V&quot;|&quot;W&quot;|&quot;X&quot;|&quot;Y&quot;|&quot;Z&quot;<br>email-safe =       safe | space | tab<br>safe =             alpha-numeric |<br>                     &quot;’&quot; | &quot;’&quot; | &quot;-&quot; | &quot;.&quot; | &quot;/&quot; | &quot;:&quot; | &quot;?&quot; | &quot;&quot;&quot; |<br>                     &quot;#&quot; | &quot;$&quot; | &quot;&amp;&quot; | &quot;</em>&quot; | &quot;;&quot; | &quot;=&quot; | &quot;@&quot; | &quot;[&quot; |<br>                     &quot;]&quot; | &quot;^&quot; | &quot;_&quot; | &quot;`&quot; | &quot;{&quot; | &quot;|&quot; | &quot;}&quot; | &quot;+&quot; |<br>                     &quot;~&quot; | &quot;<br>space =             %d32<br>tab =                 %d9<br>CRLF =             %d13.10</p>
+<p>常见的如下：</p>
+<p>a=rtpmap:103 ISAC/16000<br>a=rtpmap:102 iLBC/8000<br>a=rtpmap:3 GSM/8000<br>a=rtpmap:106 telephone-event/8000<br>a=rtpmap:13 CN/8000<br>a=rtpmap:117 red/8000<br>a=rtpmap:18 G729a/8000<br>a=rtpmap:0 PCMU/8000<br>a=rtpmap:2 G726-32/8000<br>a=rtpmap:4 G723/8000<br>a=rtpmap:8 PCMA/8000<br>a=rtpmap:96 G726-40/8000<br>a=rtpmap:97 G726-24/8000<br>a=rtpmap:98 G726-16/8000<br>a=rtpmap:100 NSE/8000<br>a=rtpmap:101 telephone-event/8000<br>a=rtpmap:0 pcmu/8000<br>a=rtpmap:8 pcma/8000<br>a=rtpmap:3 gsm/8000<br>a=rtpmap:18 G729/8000<br>a=rtpmap:98 iLBC/8000<br>a=rtpmap:97 speex/8000<br>a=rtpmap:101 telephone-event/8000</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/SDL(Simple%20DirectMedia%20Layer)/" rel="prev" title="SDL(Simple DirectMedia Layer)">
+      <i class="fa fa-chevron-left"></i> SDL(Simple DirectMedia Layer)
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/sdtf%20%20card%20%20u%20%E4%BF%AE%E5%A4%8D/" rel="next" title="sdtf  card  u 修复">
+      sdtf  card  u 修复 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Edward"
+      src="/uploads/avatar.gif">
+  <p class="site-author-name" itemprop="name">Edward</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">570</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Edward</span>
+</div>
+
+        
+
+
+
+
+
+
+<script>
+  (function() {
+    function leancloudSelector(url) {
+      url = encodeURI(url);
+      return document.getElementById(url).querySelector('.leancloud-visitors-count');
+    }
+
+    function addCount(Counter) {
+      var visitors = document.querySelector('.leancloud_visitors');
+      var url = decodeURI(visitors.id);
+      var title = visitors.dataset.flagTitle;
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          if (results.length > 0) {
+            var counter = results[0];
+            leancloudSelector(url).innerText = counter.time + 1;
+            Counter('put', '/classes/Counter/' + counter.objectId, { time: { '__op': 'Increment', 'amount': 1 } })
+              .catch(error => {
+                console.error('Failed to save visitor count', error);
+              });
+          } else {
+              Counter('post', '/classes/Counter', { title, url, time: 1 })
+                .then(response => response.json())
+                .then(() => {
+                  leancloudSelector(url).innerText = 1;
+                })
+                .catch(error => {
+                  console.error('Failed to create', error);
+                });
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    function showTime(Counter) {
+      var visitors = document.querySelectorAll('.leancloud_visitors');
+      var entries = [...visitors].map(element => {
+        return decodeURI(element.id);
+      });
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url: { '$in': entries } })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          for (let url of entries) {
+            let target = results.find(item => item.url === url);
+            leancloudSelector(url).innerText = target ? target.time : 0;
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    let { app_id, app_key, server_url } = {"enable":true,"app_id":"wxYx0BX9gaKA3XC4LuO2of0v-gzGzoHsz","app_key":"LQMcs6IDIE4YAm10vMsn9IYq","server_url":"https://wxyx0bx9.lc-cn-n1-shared.com","security":false};
+    function fetchData(api_server) {
+      var Counter = (method, url, data) => {
+        return fetch(`${api_server}/1.1${url}`, {
+          method,
+          headers: {
+            'X-LC-Id'     : app_id,
+            'X-LC-Key'    : app_key,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data)
+        });
+      };
+      if (CONFIG.page.isPost) {
+        if (CONFIG.hostname !== location.hostname) return;
+        addCount(Counter);
+      } else if (document.querySelectorAll('.post-title-link').length >= 1) {
+        showTime(Counter);
+      }
+    }
+
+    let api_server = app_id.slice(-9) !== '-MdYXbMMI' ? server_url : `https://${app_id.slice(0, 8).toLowerCase()}.api.lncldglobal.com`;
+
+    if (api_server) {
+      fetchData(api_server);
+    } else {
+      fetch('https://app-router.leancloud.cn/2/route?appId=' + app_id)
+        .then(response => response.json())
+        .then(({ api_server }) => {
+          fetchData('https://' + api_server);
+        });
+    }
+  })();
+</script>
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

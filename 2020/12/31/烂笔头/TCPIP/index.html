@@ -1,0 +1,997 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"edward.org.cn","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="TCP&#x2F;IP整理资料 第一章 概述 1、英文缩写全称： NII：国家信息基础设施 CNII：我国的国家信息基础设施 GII：全球信息基础设施 IAB：因特网体系结构委员会（Internet Architecture Board） ICCB：因特网配置控制委员会 IETF：因特网工程任务组（Internet Engineering Task Force） IRTF：因特网研究任务组（Internet">
+<meta property="og:type" content="article">
+<meta property="og:title" content="TCPIP">
+<meta property="og:url" content="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/TCPIP/index.html">
+<meta property="og:site_name" content="点点滴滴">
+<meta property="og:description" content="TCP&#x2F;IP整理资料 第一章 概述 1、英文缩写全称： NII：国家信息基础设施 CNII：我国的国家信息基础设施 GII：全球信息基础设施 IAB：因特网体系结构委员会（Internet Architecture Board） ICCB：因特网配置控制委员会 IETF：因特网工程任务组（Internet Engineering Task Force） IRTF：因特网研究任务组（Internet">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-12-31T06:48:01.700Z">
+<meta property="article:modified_time" content="2020-01-16T04:37:31.964Z">
+<meta property="article:author" content="Edward">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/TCPIP/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>TCPIP | 点点滴滴</title>
+  
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?a92ed22eafce466e7a7b17546bb0dc6f";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">点点滴滴</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/TCPIP/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/avatar.gif">
+      <meta itemprop="name" content="Edward">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="点点滴滴">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          TCPIP
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-12-31 14:48:01" itemprop="dateCreated datePublished" datetime="2020-12-31T14:48:01+08:00">2020-12-31</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-01-16 12:37:31" itemprop="dateModified" datetime="2020-01-16T12:37:31+08:00">2020-01-16</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%83%82%E7%AC%94%E5%A4%B4/" itemprop="url" rel="index"><span itemprop="name">烂笔头</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/TCPIP/" class="post-meta-item leancloud_visitors" data-flag-title="TCPIP" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>TCP/IP整理资料</p>
+<p>第一章 概述</p>
+<p>1、英文缩写全称：</p>
+<p>NII：国家信息基础设施</p>
+<p>CNII：我国的国家信息基础设施</p>
+<p>GII：全球信息基础设施</p>
+<p>IAB：因特网体系结构委员会（Internet Architecture Board）</p>
+<p>ICCB：因特网配置控制委员会</p>
+<p>IETF：因特网工程任务组（Internet Engineering Task Force）</p>
+<p>IRTF：因特网研究任务组（Internet Research Task Force）</p>
+<p>IESG：因特网工程指导组（Internet Engineering Steering Group）</p>
+<p>InterNIC：因特网网络信息中心（Internet Network Information Center） </p>
+<p>CNNIC：中国互联网络信息中心（China Internet Network Information Center）</p>
+<p>ICANN：因特网名称与数字地址分配机构 (Internet Corporation for Assigned Names and Numbers)</p>
+<p>WWW协会W3C（World Wide Web Consortium）</p>
+<p>2、RFC：请求注解（Request For Comments），是一系列关于因特网的技术文档</p>
+<p>RFC2821: 简单邮件传输协议</p>
+<p>RFC2616: 超文本传输协议</p>
+<p>第二章 计算机网络与因特网体系结构</p>
+<p>1、OSI：开放系统互连参考模型</p>
+<p>ISO：国际标准化组织 </p>
+<p>2、计算机网络的分类 </p>
+<p>按照网络的拓扑结构，网络可以划分为总线型网，星型网，环型网和格状网。</p>
+<p>按照网络的覆盖范围，网络可以划分为：</p>
+<p>广域网（Wide Area Network，WAN）</p>
+<p>城域网（Metropolitan Area Network，MAN）</p>
+<p>局域网（Local Area Network，LAN）</p>
+<p>个域网（Personal Area Network，PAN）</p>
+<p>3、网络协议</p>
+<p>协议包括三个要素：语法、语义、同步规则</p>
+<p>通常采用分层的网络协议，分层的好处：</p>
+<p>网络协议的分层有利于将复杂的问题分解成多个简单的问题，从而分而治之；</p>
+<p>分层可以屏蔽下层的变化，新的底层技术的引入，不会对上层的应用协议产生影响；</p>
+<p>分层有利于网络的互联，进行协议转换时只需考虑某一个或几个层次而不是所有层次。</p>
+<p>4、SAP：服务访问点</p>
+<p>服务是垂直的，协议是水平的</p>
+<p>5、OSI各层</p>
+<p>（1）物理层：</p>
+<p>物理层涉及网络接口和传输介质的机械、电气、功能和规程方面的特性。具体包括接口和介质的物理特性、二进制位的编码解码、传输速率、位同步、传输模式、物理拓扑、线路连接等。物理层的数据单位是二进制位（Bit）。</p>
+<p>（2）数据链路层</p>
+<p>数据链路层将不可靠的物理层转变成一个无差错的链路。具体功能包括数据成帧、介质访问控制、物理寻址、差错控制、流量控制等。数据链路层的数据单位是帧（Frame）。</p>
+<p>数据链路层又分为介质访问控制（MAC）和逻辑链路控制（LLC）两个子层。</p>
+<p>（3）网络层</p>
+<p>网络层负责分组（Packet）从源主机到目的主机的端到端传输过程。具体功能包括跨网络逻辑寻址、路由选择、流量控制、拥塞控制等。网络层涉及的数据单位是分组。</p>
+<p>*以上三层属于通信支持层。</p>
+<p>（4）传输层</p>
+<p>传输层负责整个报文（Message）在不同主机进程间的传输。具体功能包括连接控制、流量控制、差错控制、报文的分段和组装、主机进程寻址等。传输层关注的是报文的完整和有序问题。传输层实现了高层与通信子网的隔离层。 </p>
+<p>（5）会话层</p>
+<p>会话层负责网络会话的控制。具体功能包括会话的建立、维护和交互过程中的同步。</p>
+<p>（6）表示层</p>
+<p>表示层负责信息的表示和转换。具体功能包括数据的加密/解密、压缩/解压、与标准格式间的转换等。</p>
+<p>（7）应用层</p>
+<p>应用层负责向用户提供访问网络资源的接口。应用层包括一些常用的应用程序和服务，如电子邮件、文件传输、网络虚拟终端、WWW服务、目录服务等。</p>
+<p>*顶上的三层是用户支持层。</p>
+<p>6、WiMAX：工业贸易联盟组织，被广义地理解为IEEE 802.16标准系列的别称，是一个与无线城域网标准相关的组织，又是无线城域网的技术标准。</p>
+<p>  Wi-Fi：致力于推进IEEE 802.11标准的联盟，被用作IEEE 802.11标准系列的别称。 </p>
+<p>• WiMAX=WMAN（无限城域网）技术</p>
+<p>• Wi-Fi=WLAN（无线局域网）技术</p>
+<p>7、因特网使用TCP/IP协议，分为4个协议层</p>
+<p>• 网络接口层实际上包含OSI模型的物理层和链路层，TCP/IP并未对这层进行定义，因此它支持现有的各种底层网络技术和标准。</p>
+<p>• 网络层又称为互联网层或IP层，该层处理IP数据报的传输、路由选择、流量控制和拥塞控制。该层包含因特网协议IP，因特网控制报文协议ICMP，因特网组管理协议IGMP， 地址解析协议ARP，反向地址解析协议RARP等协议</p>
+<p>• 传输层为两台主机上的应用程序提供端到端的进程通信。包含传输控制协议TCP和用户数据报协议UDP。</p>
+<p>• 应用层为用户提供一些常用的网络应用接口。该层包含大量的应用协议。</p>
+<p>8、OSI/RM（简称OSI）与TCP/IP的关系 </p>
+<p>OSI/RM与TCP/IP协议层次的对应关系：</p>
+<p>除了层次结构的差异外，ISO/OSI与TCP/IP还存在下列差异。 </p>
+<p>IOS/OSI</p>
+<p>TCP/IP</p>
+<p>IOS/OSI是抽象的概念模型</p>
+<p>TCP/IP是具体协议与实现</p>
+<p>IOS/OSI复杂、效率低、大而全</p>
+<p>TCP/IP单纯、简单、实用</p>
+<p>IOS/OSI力量单薄，产品少</p>
+<p>TCP/IP得到产业界的支持，应用广</p>
+<p>IOS/OSI进展缓慢</p>
+<p>TCP/IP完善速度快（IPv6）</p>
+<p>9、TCP/IP是一个协议簇，其构成如图2-17所示</p>
+<p>第三章 IP地址</p>
+<p>1、IP结构可以表示为：</p>
+<p>网络号（Network-Number）</p>
+<p>主机号（Host-number）</p>
+<p>网络号的长度决定因特网能包含多少个网络，</p>
+<p>主机号的长度决定每个网络能容纳多少台主机。</p>
+<p>IP地址的分类（IPv4规定，IP地址32位）</p>
+<p>0              8</p>
+<p>     32</p>
+<p>A类</p>
+<p>0</p>
+<p>网络号</p>
+<p>主机号</p>
+<p>B类</p>
+<p>1</p>
+<p>0</p>
+<p>网络号</p>
+<p>主机号</p>
+<p>C类</p>
+<p>1</p>
+<p>1</p>
+<p>0</p>
+<p>网络号</p>
+<p>主机号</p>
+<p>D类</p>
+<p>1</p>
+<p>1</p>
+<p>1</p>
+<p>0</p>
+<p>组标识符</p>
+<p>E类</p>
+<p>1</p>
+<p>1</p>
+<p>1</p>
+<p>1</p>
+<p>0</p>
+<p>保留</p>
+<p>• A类地址第一个字节的最高位固定为0，另外7比特的网络号可以标识27 = 128个网络（0～127），但其中0一般不用，127用作环回地址。所以可表示126个A类网络。A类地址的24比特主机号可以标识16 777 216台主机（224  =16777216），但主机号为全0时用于表示本网络，主机号为全1时用于表示广播地址，这两个主机号不能用来标识主机。所以，每个A类网络最多可以容纳16 777 214台主机。A类地址用于大型网。A类地址的第一个字节的取值范围为0～127。</p>
+<p>• A类地址范围   0.0.0.0  ~ 127.255.255.255</p>
+<p>• B类地址第一个字节的最高2比特固定为10，另外14比特的网络号可以标识214= 16384个B类网络。16比特主机号可以标识65 536台主机（216 =65536），由于主机号不能为全0和全1。所以，每个B类网络最多可以容纳65 534台主机。B类地址用于中型网。B类地址的第一个字节的取值范围为128～191。 </p>
+<p>• B类地址范围 128.0.0.0-191.255.255.255</p>
+<p>• C类地址第一个字节的最高3比特固定为110，另外21比特的网络号可以标识221 =2097152个C类网络。8比特主机号可以标识256台主机(28 =256)，由于主机号不能为全0和全1。所以，每个C类网络最多可以容纳254台主机。C类地址用于小型网。C类地址的第一个字节的取值范围为192～223。</p>
+<p>• C类地址范围 192.0.0.0  ~ 223.255.255.255</p>
+<p>• D类地址为组播地址（multicasting）。D类地址最高4比特固定为1110 ，范围为224.0.0.0～239.255.255.255。每个地址对应一个组，发往某一组播地址的数据将被该组中的所有成员设备接收。D类地址不能分配给主机，只能作为信息的目的地址。D类地址的第一个字节的取值范围为224～239。</p>
+<p>• D类地址范围 224.0.0.0  ~ 239.255.255.255</p>
+<p>• E类地址为保留地址，可以用于实验目的。E类地址最高5比特固定为11110。E类地址的第一个字节的取值范围为240～255。 </p>
+<p>• E类地址范围 240.0.0.0  ~ 247.255.255.255</p>
+<p>2、特殊IP地址（能用来指派给设备的网络接口）</p>
+<p>   包括：网络地址、直接广播地址、有限广播地址、本网络地址、环回地址</p>
+<p>．网络地址</p>
+<p>因特网上每个网络也有一个IP地址，其主机号部分全为“0”。该类地址用于标识网络，不能分配给主机或其它设备。网络地址的使用可以减小路由表的规模。</p>
+<p>．直接广播地址</p>
+<p>    TCP/IP规定，主机号各位全为“1”的IP地址用于广播，叫作广播地址，不能分配给设备。直接广播是向某个网络上所有的主机发送报文。直接广播地址只能作为信息的目的地址。</p>
+<p>．受限广播地址</p>
+<p>TCP/IP规定，32比特全为“1”的IP地址用于本网络内的广播。受限广播地址的点分十进制表示为：255.255.255.255。受限广播地址只能作为信息的目的地址。</p>
+<p>．本网络地址</p>
+<p>TCP/IP规定，网络号各位全部为“0”时表示本网络。本网络地址分为两种情况：本网络特定主机地址和本网络本主机地址。本网络特定主机地址只能作为目的地址。本网络本主机地址的点分十进制表示为：0.0.0.0。本网络本主机地址只能作为源地址。</p>
+<p>无盘工作站启动时没有IP地址，此时发送的信息采用网络号和主机号都为“0”的本网络本主机地址作为源地址。 </p>
+<p>．环回地址</p>
+<p>环回地址（Loopback Address）是用于网络软件测试以及本机进程之间通信的特殊地址。 A类网络地址127被用作环回地址。当使用环回地址作为目标地址发送数据时，数据将不会被发送到网络上，而是回送给本机的有关进程。 </p>
+<p>3、IP地址配置原则</p>
+<p>同一物理网络上的所有设备应该具有相同的网络号；</p>
+<p>   因特网上的网络号必须是惟一的；</p>
+<p>   在一个网络中主机号必须是惟一的；</p>
+<p>   主机号不能为全“0”(主机号为全“0”表示网络)；</p>
+<p>   主机号不能为全“1”(主机号为全“1”是广播地址)；</p>
+<p>   网络号不能为全“0”(“0”表示本地网)；</p>
+<p>   网络号不能为全“1”；   </p>
+<p>   网络号不能以127开头(127是环回地址)。</p>
+<p>4、DHCP（Dynamic Host Configuration Protocol）动态主机配置协议。该协议自动进行IP地址分配，确保不会出现地址重复。</p>
+<p>5、子网划分及子网掩码 </p>
+<p>² 划分子网的原因：</p>
+<p>（1）A类网络和B类网络的地址空间都很大，不进一步进行划分，地址很难得到有效的利用。</p>
+<p>（2）将一个大的网络划分为多个与单位部门相对应的小的子网络，便于进行管理。</p>
+<p>（3）划分子网，并使用路由器连接子网，可以隔离广播和通信，减少网络拥塞。</p>
+<p>（4）出于安全方面的考虑，希望将管理网络和服务网络分开。</p>
+<p>² 划分子网的方法是将IP地址的主机号拿出一部分来标识子网。</p>
+<p>² 子网地址</p>
+<p>IP地址的网络号加子网号可以惟一地标识一个子网，这两部分合起来再加上全“0”的主机号就形成子网地址</p>
+<p>² 子网掩码</p>
+<p>对应于网络号和子网号的所有比特都被设为1，而对应于主机号的所有比特都被设为0。</p>
+<p>² 获得子网地址的方法</p>
+<p>将IP地址和子网掩码进行按位“与”运算。</p>
+<p>² 子网地址中子网号和主机号的获得：（这取决于所需子网的数量和子网的规模）</p>
+<p>假设网络的主机号的长度为p比特，如果从p比特主机号中拿出m比特来划分子网，则剩下n=p-m比特用于标识主机。 m比特决定子网的最大个数，n比特决定子网的最大规模。</p>
+<p>子网的m比特可以标识2m个子网，但一般不建议使用m比特全“0”和全“1”的子网。这样，m比特实际可以划分2m -2个可用的子网。</p>
+<p>主机的n比特可以标识2n台主机，但n比特为全“0”时用于标识子网，为全“1”时用于表示子网广播地址。这样，n比特主机号实际可以标识2n -2台主机。 </p>
+<p>例题，见P56-57</p>
+<p>6、超网</p>
+<p>网络号（Network-number）</p>
+<p>主机号（Host-number）</p>
+<p>N位</p>
+<p>超网号（Supernet-number）</p>
+<p>主机号（Host-number）</p>
+<p>超网的IP地址结构</p>
+<p>² 超网掩码</p>
+<p>对应于超网号的所有比特都被设为1，对应于主机号的所有比特都被设为0。</p>
+<p>² 获得超网地址的方法也是将IP地址和超网掩码进行按位“与”运算。</p>
+<p>² 在构造超网时，须注意以下3点：</p>
+<p>（1）待合并的地址块必须是连续的。</p>
+<p>（2）待合并的地址块的数量必须是2n（n=1，2，…）。</p>
+<p>（3）被合并的C类地址块的第一个地址的第三字节的值必须是待合并的地址块数量的整数倍。</p>
+<p>² 构造超网时，从网络号的最低位起拿出n比特作为主机号来合并2n个地址块，写出超网掩码，将其与各个IP地址按位“与”得超网地址。</p>
+<p>7、无类地址</p>
+<p>² 对每个无类地址块的要求是：地址块由2n个连续的IP地址构成，地址块的起始地址必须是能够被2n整除的地址。</p>
+<p>² 在无类地址中常采用的是斜线表示法（Slash Notation），其格式为：W.X.Y.Z/n。斜线前面是IP地址，斜线后面是前缀长度。前缀是指IP地址中的网络号部分，因此前缀长度是指掩码中连续“1”的个数。 如：11.126.60.41/27</p>
+<p>8、网络地址转换（NAT）</p>
+<p>第四章 地址解析（逻辑地址（IP地址）与物理地址之间的映射）</p>
+<p>4.1地址解析协议ARP (Address Resolution Protocol)：用于从IP地址到物理地址的映射</p>
+<p>1. 源主机与目的主机位于同一子网</p>
+<p>（1）发送站检查本地ARP高速缓存</p>
+<p>当试图确定同一子网上目的主机的物理地址时，ARP首先检查本地的ARP高速缓存，看是否含有目的主机的IP地址与物理地址的映射。如果包含，则取出目的主机的物理地址，将IP数据报封装成帧后通过网络底层发往此物理地址。</p>
+<p>（2）向目的主机发送ARP请求</p>
+<p>若ARP高速缓存不包含目的主机的地址映射，主机就会形成一个ARP请求，以物理广播地址作为目的地址在本子网上广播，并等待目的主机的应答。</p>
+<p>（3）目的站将请求者的地址信息写入高速缓存</p>
+<p>由于ARP请求是子网上的广播，因而该子网上的每台主机都会收到广播，并将自己的IP地址和该ARP请求中的目的主机IP地址进行比较。如果不匹配，则ARP请求被忽略；如果匹配，则目的主机就将发送方的地址映射关系写入到本机的ARP高速缓存中。</p>
+<p>（4）向请求者发送ARP响应</p>
+<p>然后目的主机就向请求主机以单播方式发出一个ARP应答（此时目的主机已经知道了请求主机的物理地址）。</p>
+<p> （5）请求方更新ARP高速缓存</p>
+<p>请求主机收到ARP应答后，将目的主机的地址映射其写入它的ARP高速缓存。至此，双方都已知道了对方的地址映射，完成了地址解析，下面就可以进行两主机之间的通信了</p>
+<p>2. 源主机与目的主机位于不同的子网</p>
+<p>（1）检查本地高速缓存</p>
+<p>当一台设备确认目的IP地址不属于本子网时，它会根据本身的路由表找到去往目的网络的路由器的IP地址。然后根据此IP地址确定路由器该端口的硬件地址，ARP首先检查本地的ARP高速缓存，确定它是否含有路由器对应端口的IP地址与物理地址的映射。如果包含，则ARP取出路由器端口的硬件地址，并以此物理地址为目的地址完成数据帧的封装和传输。</p>
+<p>（2）向下一跳路由器发送ARP请求</p>
+<p>如果在ARP高速缓存中没有发现路由器IP地址的映射，则主机A必须向该路由器发送ARP请求广播，并等待答复。该ARP请求包含发送者的IP地址和硬件地址，以及路由器的IP地址。</p>
+<p>（3）刷新ARP缓存</p>
+<p>由于ARP请求是子网上的广播，因而网络上的每台设备都能接收到该数据包，并将自己的IP地址和该ARP请求中所指定的IP地址相比较。若不匹配，则忽略；若相匹配，则刷新本地ARP高速缓存。当路由器有多个网络接口时，每个接口都维护各自的高速缓存。</p>
+<p>（4）路由器将ARP应答传给源主机</p>
+<p>路由器向源主机发出一个ARP应答，应答给出了路由器与主机A所在网络的接口的IP地址解析。</p>
+<p>（5）源主机刷新自己的ARP高速缓存</p>
+<p>源主机刷新自己的ARP高速缓存，使其包含从ARP应答中得到的路由器的IP地址-物理地址映射。</p>
+<p>（6）源主机向路由器发送数据</p>
+<p>完成路由器地址的解析后，将数据传给路由器。</p>
+<p>（7）路由器进行转发前查询ARP高速缓存</p>
+<p>数据被传送到路由器后，路由器根据IP数据报中目的主机的IP地址和路由表确定数据是否已到达最后一跳路由器。若不是，则继续向下一跳路由器转发；否则，可以直接发往目的主机。</p>
+<p>（8）向目的主机发送ARP请求</p>
+<p>如果在路由器的ARP高速缓存中没有找到目的主机的地址映射，则路由器就必须向通往目的网络的接口广播一个ARP请求，并等待答复。</p>
+<p>（ 9）刷新ARP高速缓存</p>
+<p>目的子网上的所有主机均能接收到ARP广播，并将自己的IP地址与ARP请求中所指定的IP地址进行比较。如果不相匹配，则抛弃该ARP请求；如果匹配，则目的主机刷新它的ARP高速缓存表目。</p>
+<p>（10）目的主机将ARP应答发送回路由器  </p>
+<p>目的主机向路由器发回一个ARP应答。应答中包含对目的主机地址的解析结果。</p>
+<p>（11）路由器刷新高速缓存</p>
+<p>路由器收到应答后，刷新自己的高速缓存，使其包含目的主机的地址映射。</p>
+<p>（12）路由器向目的主机转发数据</p>
+<p>完成目的主机地址的解析后，路由器根据目的主机的物理地址进行物理数据帧的封装，然后将数据传给目的主机。</p>
+<p>注意：数据包在从源主机到目的主机的转发过程中数据包的分组首部的IP地址是不发生变化的，而帧首部的物理地址在每一跳都会发生变化。</p>
+<p>4.2 反向地址解析协议RARP (Reverse ARP)：用于从物理地址到IP地址的映射</p>
+<p>RARP过程：</p>
+<p>（1）无盘计算机以广播方式发出携带本机物理地址的RARP请求帧。注意这里是帧的广播，即目的MAC地址为全“1”。</p>
+<p>（2）网上所有的计算机均收到该请求，但只有RARP服务器会根据请求者的物理地址查地址映射表，然后形成应答。应答以单播方式发送。</p>
+<p>ARP和RARP的不同之处：</p>
+<p>• ARP是根据另一个设备的IP地址求其物理地址，而RARP则是根据设备或其他设备的物理地址求其IP地址。</p>
+<p>• ARP不需要专门的服务器，而RARP需要有RARP服务器完成解析 。</p>
+<p>4.3 地址解析报文 </p>
+<p>1、</p>
+<p>以太网：硬件类型=1</p>
+<p>IP协议：协议类型=0x0800</p>
+<p>操作：ARP请求=1      ARP响应=2</p>
+<p>      RARP请求=3    RARP响应=4</p>
+<p>2、ARP/RARP报文是直接封装在物理帧中进行传输的。</p>
+<p>• 在发送ARP广播或者RARP广播时，帧的目的地址字段放的是48个1(以太网的广播地址)。</p>
+<p>• 由于ARP和RARP报文较短（28个字节），后面必须增加18个字节的填充字段PAD，以达到以太网最小帧长度的要求。</p>
+<p>第五章 IP协议</p>
+<p>1、网络层的作用：通过IP地址实现了底层物理地址的统一；并通过IP数据报实现了底层物理数据帧的统一。网络层通过以上两个统一向上屏蔽了网络底层的差异。</p>
+<p>2、ARP和RARP报文不被封装在IP数据报中，而ICMP和IGMP的数据则要封装在IP数据报中进行传输。</p>
+<p>3、 IP协议特点：不可靠、无连接的传输协议，提供的是尽力而为的传输服务，所以IP协议效率非常高，实现起来也较简单</p>
+<p>4、IP数据报传输：IP数据报最终要通过底层物理网络的帧来传输，为此传送时要进行封装(encapsulation）：将数据报封装到底层物理网络的帧</p>
+<p>5、IP协议不对数据报的数据部分进行校验。</p>
+<p>原因：上层传输层是端到端的协议，由传输层对数据部分进行端到端的校验比网络层进行点到点的校验开销小得多，在通信线路较好的情况尤其如此。另外，上层协议可以根据对数据可靠性的要求，还选择进行校验或不校验，甚至可以选择采用何种校验方法，这给系统带来很大的灵活性。</p>
+<p>IP协议只对数据报的首部进行校验。原因：</p>
+<p>– IP首部内容属于网络层的内容，不可能由上层协议处理。</p>
+<p>– IP首部中的部分字段在点到点的传递过程中是不断变化的，因此必须在相邻点之间完成校验。</p>
+<p>6、IP数据报格式</p>
+<p>服务类型：D：时延  T：吞吐量 R：可靠性  C：代价</p>
+<p>校验和的求解：见P85</p>
+<p>7、数据分片与重组 </p>
+<p>² 最大传输单元MTU：指可以封装在一个帧中的最大数据长度。</p>
+<p>² 数据报分片</p>
+<p> 与分片相关的字段是标识字段、标志字段和片偏移字段。</p>
+<p>1)数据报标识字段(16b长)是分片所属数据报的关键信息，也是分片重组的依据。各分片的标识字段和原数据报相同。 </p>
+<p>2)标志字段由3位构成，低两位有效，最高位未使用；中间的D位表示是否允许该数据报进行分片(0表示允许分片)；最低的M位表示该片是否是分片的最后一片(0表示最后一个分片) 。</p>
+<p> 3)片偏移字段以8个字节为单位指出本片中起始数据在原始数据报数据区中的偏移量。由于各分片独立传输，其到达信宿机的顺序无法保证，信宿机将根据片偏移字段实现数据报的重组。</p>
+<p>分片必须满足两个条件：</p>
+<p>• 前面各片尽可能大，但必须能被帧封装，</p>
+<p>• 片中数据的大小必须为8字节的整数倍，否则IP无法表达其偏移量。 </p>
+<p>² 重组（分片的重组只能在信宿机上进行）</p>
+<p>8、IP数据报选项</p>
+<p>选项：选项码（1字节），选项长度（1字节），选项数据（字节数由长度决定）</p>
+<p>选项码：复制位（1比特）、选项类（2比特）、选项号（5比特）</p>
+<p>选项类：两位IP选项类字段定义了四种选项类型，00用于IP数据报路径的控制和测试；10用于时间戳的测试；01类和11类未用。每一选项类又由选项号进行细分，其中00类中常用的有5个选项号，10类中只有1个选项号。</p>
+<p>选项类  选项号  长度字段        含义</p>
+<p>   0000000无         单字节结束选项</p>
+<p>   0000001无       单字节填充选项</p>
+<p>   0000011     有        宽松源路由</p>
+<p>   0000111     有        记录路径</p>
+<p>   0001001有        严格源路由</p>
+<p>   1000100有        时间戳</p>
+<p>第6章  差错与控制报文协议</p>
+<p>6.1  因特网控制报文协议（ICMP）</p>
+<p>• 位置：ICMP与IP协议位于同一层（IP层），但ICMP协议位于IP协议之上，所以ICMP报文是封装在IP数据报中进行传输的。 </p>
+<p>• 作用：ICMP协议是IP协议的补充，用于IP层的差错报告、拥塞控制、路径控制以及路由器或主机信息的获取。（不仅用于传输差错报告，而且大量用于传输控制报文）</p>
+<p>6.2  ICMP报文格式与类型</p>
+<p>分类：</p>
+<p>6.3  ICMP差错报告报文</p>
+<p>• ICMP差错报告报文的数据区包含出错的IP数据报的首部及其前64位数据，这些信息有助于信源或管理人员发现错误原因。</p>
+<p>• ICMP差错报告具有以下特点：</p>
+<p>   1）只报告差错，但不负责纠正，纠错留给高层协议去处理。</p>
+<p>   2）只向信源报告差错。</p>
+<p>   3）差错报告作为一般数据传输，不享受特别优先权和可靠性。</p>
+<p>   4）产生差错报告的同时，会丢弃出错的IP数据报。</p>
+<p>• 以下情况不会产生ICMP差错报告：</p>
+<p>1）ICMP差错报文本身不会再产生ICMP差错报告。</p>
+<p>2）IP数据报的非第一个分片不会产生ICMP差错报告。</p>
+<p>3）组播报文不会产生ICMP差错报告。</p>
+<p>4）特殊地址127.0.0.0和0.0.0.0的报文不会产生ICMP差错报告。 </p>
+<p>ICMP差错报告可分为：信宿不可达报告，数据报超时报告，数据报参数错报告。</p>
+<p>6.3.1  信宿不可达报告 </p>
+<p>当路由器无法根据路由表转发数据报时或信宿机无法向上层协议或端口提交数据报时，将丢弃当前的数据报，并向信源产生信宿不可达差错报告。</p>
+<p>6.3.2  数据报超时报告</p>
+<p>• 数据报首部的TTL值用于防止数据报因路由表出错而无休止地在网络中传输。当TTL值减为0时，路由器会丢弃当前的数据报，并向源主机发送一个ICMP数据报超时报告。</p>
+<p>• 另外，在信宿进行分片重组时会启动重组定时器，一旦重组定时器超时，信宿机就会丢弃当前正在重组的数据报，并向源主机发送一个ICMP数据报超时报告。</p>
+<p>6.3.3  数据报参数错报告</p>
+<p>数据报参数错报告是由于数据报首部中字段值不明确或空缺而引起的。一旦路由器或信宿机发现此种错误，便抛弃该数据报，并向信源发送数据报参数错报文。</p>
+<p>6.4  ICMP控制报文</p>
+<p>ICMP控制报文包括源抑制报文和重定向报文</p>
+<p>• 源抑制报文——用于拥塞控制</p>
+<p>• 重定向报文——用于路径控制</p>
+<p>6.4.1  源抑制报文</p>
+<p>ICMP利用源抑制的方法来进行拥塞控制。通过源抑制来减缓信源发出数据报的速率。</p>
+<p>源抑制包括三个阶段：发现拥塞阶段、解决拥塞阶段和恢复阶段。</p>
+<p>6.4.2  重定向报文</p>
+<p>    ICMP重定向报文就是解决主机路由表的更新问题的。</p>
+<p>主机路由表所给出的去往某信宿下一跳路由器可能并非是去往信宿的最佳下一跳路由器，当下一跳路由器收到数据报后，该路由器根据它的路由表判断本路由器是否是去往信宿的最佳选择，如果不是，该路由器仍然会向信宿网络转发该数据报，但同时会向信源产生一个ICMP重定向报文，通知信源修改它的路由表，重定向报文中将给出信源的最佳下一跳路由器的入口IP地址。</p>
+<p>6.5  ICMP请求与应答报文对</p>
+<p>• 可以由因特网上任何主机或路由器向其他主机或路由器发送ICMP请求报文并获得应答。</p>
+<p>• 通过ICMP请求与应答报文对，网络管理人员、用户或应用程序可以对网络进行检测，可了解：</p>
+<p>– 设备的可达性</p>
+<p>– 地址掩码的设置</p>
+<p>– 时钟的同步等情况</p>
+<p>• 方便对网络进行故障诊断和控制。</p>
+<p>6.5.1  回应请求与应答报文</p>
+<p>作用：不仅用来测试设备的可达性，还可以测试设备中IP协议的工作情况。</p>
+<p>6.5.2  时间戳请求与应答报文（用于设备时钟的同步）</p>
+<p>请求方与应答方的时钟差异的估算：首先要计算出时间戳请求和应答的往返延迟，然后据此计算出单程传输延迟，最后由两设备的时间戳和单程传输延迟计算出两台设备之间的时间差，将此作为实现设备时钟同步的依据。</p>
+<p>往返延迟时间可以用下式计算：</p>
+<p>往返时间＝(t当前－t初始)－(t发送－t接收)</p>
+<p>假设传输请求的时延和传输应答的时延相同，那么单程时延就等于往返时间的一半。</p>
+<p>  两设备时间差＝t接收－(t初始＋单程时延) </p>
+<p>6.5.3  地址掩码请求与应答报文</p>
+<p>作用：可使得一台设备获得某一台设备所在子网的子网掩码。</p>
+<p>应用：无盘机通过RARP获得自己的IP地址后，可以利用ICMP地址掩码请求来获得所在子网的子网掩码。</p>
+<p>6.5.4  路由器请求与通告报文</p>
+<p>作用：用来获得路由器的地址和路由器是否工作等信息。</p>
+<p>6.6  ICMP报文封装</p>
+<p>ICMP协议将上层的请求转变为ICMP报文，然后封装在IP协议中进行发送。IP数据报首部中的协议字段为“1” 时表示数据报的数据为ICMP报文。</p>
+<p>第7章  IP路由</p>
+<p>7.1  直接传递与间接传递</p>
+<p>• 直接传递是指在物理网络内部直接传到最终信宿的传输过程。</p>
+<p>• 间接传递是指当信源和信宿位于不同物理网络时，所经过的一些中间传递过程。</p>
+<p>  因此，数据报传递由一个直接传递和零到多个间接传递所组成。</p>
+<p>7.2  IP路由</p>
+<p>Ø 路由表的使用。即根据路由表进行路由选择。主机和路由器上的IP协议负责使用路由表，完成数据报传送的路由选择。</p>
+<p>Ø 路由表的建立与刷新。路由表要随着网络的变化而变化，以反映网络的真实情况。路由器路由表的建立与刷新由专门的路由协议负责；而主机路由表的建立与刷新可由ICMP路由器请求与通告报文和ICMP重定向报文实现。 </p>
+<p>路由表的刷新： ICMP重定向报文为主机路由表进行刷新；网络层和应用层的动态路由协议负责对路由器的路由表进行刷新。</p>
+<p>7.3  路由表</p>
+<p>1、路由表的功能是指明数据报去往某信宿应该使用哪条路径。</p>
+<p>2、 路由表是一个二维表，每个表项由多个字段构成。最基本的信息：信宿地址+去往信宿的路径。</p>
+<p>3、在路由表中使用信宿网络地址，而不采用信宿主机地址的好处：</p>
+<p>1）可以大大减小路由表的规模。</p>
+<p>2）与网络的抽象拓扑结构相对应。网络的抽象结构中只有网络，没有主机。</p>
+<p>3）增强了路由表对网络变化的适应性。主机的增加和删去不会对路由表产生任何影响。</p>
+<p>4）减轻了路由表维护以及路由选择的开销，同时也简化了路由设备的设计和实现。</p>
+<p>3、在路由表中只采用下一跳地址而不用完整路径的好处：</p>
+<p>1）减小了路由表的规模。</p>
+<p>2）去掉了路由表中关于相同路径的冗余信息。</p>
+<p>3）使路由表变得简单，便于维护。</p>
+<p>4、路由表中除了信宿地址和下一跳地址外，通常还包括子网掩码、去往下一跳的输出接口和度量。</p>
+<p>5、路由表中的特殊表项</p>
+<p>• 特定主机路由：用主机地址作为信宿地址的表项，表项的子网掩码为255.255.255.255。 目的：网络管理人员可以给去往某台特定主机的信息设置路由，用于安全性和网络测试。</p>
+<p>• 默认路由：用0.0.0.0作为信宿地址的表项，且子网掩码也为0.0.0.0。默认路由一般作为路由表的最后一条表项，可将去往多个网络的表项合为一个表项。目的：进一步隐藏细节、缩小路由表。</p>
+<p>7.4  静态路由 </p>
+<p>静态路由方式：路由器只能发现和它直接相连的网络，而不能发现没有直接连接的那些网络，此时需要以手工方式在路由表中添加表项。</p>
+<p>静态路由的不足：在大型网络上手工编辑路由表是一件非常困难的工作，不仅工作量大，而且不能及时地反映网络的频繁变化，还可能造成难以管理的冗余路径。</p>
+<p>7.5  动态路由</p>
+<p>动态路由：路由器使用路由协议进行路由表的动态建立和刷新。</p>
+<p>路由协议进行路由选择的原则：最短路径优先。</p>
+<p>路由器自动获取网络路径信息的算法有两种：</p>
+<p>– 向量—距离算法(又称为距离—向量算法)</p>
+<p>– 链路—状态算法。</p>
+<p>1、 向量—距离算法的优点：简单，易于实现。</p>
+<p>– 缺点：</p>
+<p>– 收敛速度慢：当网络某处结构发生变化时，变化信息的传输和扩散需要一段时间，因此在所有的路由器获得这种变化信息之前，部分路由表不能正确地反映网络的真实情况，即在收敛过程中，各路由器的路由表是不一致的。因此，该算法不适合结构频繁变化的或大型的网络。</p>
+<p>– 信息交换量较大：相邻路由器每次交换路由信息时，传输的是整个路由表，而且所有的路由器都要参与信息的交换。</p>
+<p>2、链路—状态(Link-Status，简称L-S)算法，又称最短路径优先(Shortest Path First，SPF)算法。</p>
+<p>3、动态路由协议包括两种：内部网关协议(IGP)和外部网关协议(EGP)。</p>
+<p>• 内部网关协议用于自治系统内部的路径信息交换和路由表刷新。常用的有：</p>
+<p>– 路由信息协议RIP(Routing Information Protocol)</p>
+<p>– 开放最短路径优先OSPF(Open Shortest Path First)协议。</p>
+<p>• 外部网关协议用于自治系统之间的路径信息交换和路由表刷新。常用的有：</p>
+<p>– 外部网关协议EGP(Exterior Gateway Protocol)</p>
+<p>– 边界网关协议BGP (Border Gateway Protocol)</p>
+<p>7.5.1  路由信息协议(RIP)</p>
+<p>• RIP协议采用V-D算法进行路径信息交换和路由表刷新。RIP要求路由器每30秒钟向相邻路由器广播一个V-D报文，报文中的V-D信息来自于本地的路由表。</p>
+<p>1、RIP协议解决的问题</p>
+<p>RIP协议在V-D算法的基础上，增加了对路由环路、相同距离路径、失效路径以及慢收敛问题的处理。</p>
+<p>• 路由环路问题：由于V-D算法收敛慢，所有路由器不能同时或接近同时地完成路由表的更新，因此有可能会产生路由环路。 解决办法：RIP规定，一条有效路径的距离(路径上的跳数)不能超过15，距离为16时表示此路径不存在。</p>
+<p>• 相同距离路径问题：若去往某一网络存在多条相同距离的路径，RIP采用先入为主的原则，路由器以最先收到的路径报文决定下一跳，后来收到的相同距离的路径报文不会引起路由表的刷新。</p>
+<p>• 失效路径问题：RIP协议为每条路由表项设置一个定时器，如果发现某一条路由在3分钟(6个周期)内没有收到与它相关的路径信息，就将该路由的度量值设置成16，并标注为删除。标注后并不立即删除，等过一段时间，该路径失效信息被传播开去后，才将该路由从路由表中删除。</p>
+<p>2、为了防止计数到无穷，可以采用以下三种技术。</p>
+<p>1）水平分割法(Split Horizon)</p>
+<p>   路由器从某个接口收到的更新信息不允许再从这个接口发回去。</p>
+<p>2）保持法(Hold Down)</p>
+<p>• 计数到无穷的发生是因为在R1将不可达信息发出去之前先收到了来自R2的V-D报文，所产生的刷新操作导致不可达信息丢失。</p>
+<p>• 为了解决这一问题，保持法要求路由器在得知某网络不可到达后的一段时间内，保持此信息不变，路由器在保持时间内不接受关于此网络的任何可达性信息。这样，保证有充足的时间将路径失效信息传播出去。</p>
+<p>3）毒性逆转法(Poison Reverse)</p>
+<p>• 毒性逆转法是水平分割法的一种变型。当从某一接口发出V-D报文时，凡是从这一接口进来的信息，V-D报文中对应表项的距离值都设为无穷(16)，以免对邻机的路由表产生错误的刷新。 </p>
+<p>3、RIP报文及其传输：RIP是应用层协议，RIP报文被封装在UDP数据报中传输。RIP接收方进程使用UDP 520端口。</p>
+<p>4、RIPv1简单，易于实现。但存在以下不足：</p>
+<p>1）RIPv1不支持子网；</p>
+<p>2）RIPv1没有报文鉴别机制；</p>
+<p>3）RIPv1采用广播方式进行路由通告；</p>
+<p>4）RIPv1只能用于小型网络，因为最大路径长度15限制了它在大型网络上的应用。</p>
+<p>RFC 1388中对RIPv1进行了扩充，扩充后的RIP协议称为RIPv2。</p>
+<p>5、RIPv2可以传送子网掩码，可以支持可变长子网掩码和无类别域间路由CIDR。</p>
+<p>RIPv2提供了简单的报文鉴别机制，采用口令方式。</p>
+<p>RIPv2支持组播，使用组播传送路由通告，组播地址224.0.0.9对应所有支持RIPv2的路由器</p>
+<p>7.5.2  开放最短路径优先（OSPF）</p>
+<p>• 好处：区域的划分不仅使得广播得到了更好的管理，而且使OSPF能够支持大规模的网络。并且层次概念的引入，减少了每一个路由器需要知道的信息总量。</p>
+<p>• 在区域的边界一般至少有一个边界路由器(ABR)。作用：汇总该区域的信息，并送往其他区域。</p>
+<p>• 在每个自治系统的所以区域中都有一个主干区域，其他区域都连到主干区域上。主干区域中的路由器称为主干路由器。</p>
+<p>• 每个区域有一个区域标识，区域标识也采用点分十进制数表示，主干区域的标识是0.0.0.0。 </p>
+<p>• OSPF采用链路—状态协议</p>
+<p>• OSPF是网络层协议，OSPF报文直接使用IP数据包进行封装。在其IP首部，对应的协议字段的值为89。</p>
+<p>• OSPF特点：</p>
+<p>    1）支持服务类型路由。OSPF可根据目的IP地址和该数据所要求的服务类型进行路由选择。</p>
+<p>    2）能够给路由器每个接口指派费用。费用可以是吞吐率、传输延迟、可靠性等性能。</p>
+<p>   3）能够提供负载均衡。当去往一个目的地址存在多个相同费用的路由时，OSPF可以在这些路由上平均分配流量。</p>
+<p>4） OSPF的层次结构支持扩展，易于管理。</p>
+<p>    5）支持特定主机路由、特定子网、分类网络路由以及无类网络路由。</p>
+<p>    6）支持CIDR，可以节约IP地址。</p>
+<p>    7）支持多种鉴别机制，不同的区域可以使用不同的鉴别方法。</p>
+<p>    8）采用组播，减少不参与OSPF的系统的负载。</p>
+<p>        由于OSPF具有强大的功能和灵活的扩展性，势必逐步取代RIP协议。</p>
+<p>7.5.3  边界网关协议（BGP）</p>
+<p>用于在自治系统之间交换路由信息。</p>
+<p>采用的是与向量—距离算法类似的向量—路径算法。</p>
+<p>• BGP协议位于应用层，使用TCP作为传输层协议。两个路由器在交换BGP路由信息时必须先建立一条TCP连接。</p>
+<p>第8章  传输层协议</p>
+<p>传输层通过TCP和UDP协议向上层提供统一的两种类型的服务。  </p>
+<p>8.1  进程间通信</p>
+<p>TCP/IP采用端口来标识主机上的通信进程。</p>
+<p>端口：端口是应用层与传输层的服务访问点。从通信角度看，端口是通信进程的标识，进程与端口建立关联后，传输层传给该端口的数据都会被相应的进程所接收。</p>
+<p>• 网络中要全局唯一标识一个进程必须采用一个三元组：（协议，主机地址，端口号）</p>
+<p>• 网络通信的本质是两个进程之间的通信，并且通信双方采用的传输层协议是相同的，所以可以用一个五元组来描述这个通信：（协议, 本地主机地址, 本地端口号, 远地主机地址, 远地端口号）  </p>
+<p>因特网通信通常采用客户机/服务器模型</p>
+<p>• 每一个标准的服务器进程都拥有一个熟知的端口号：TCP和UDP规定，0～1023的端口号用作熟知端口，又称为保留端口。如，FTP服务器控制进程固定使用TCP 21端口， FTP服务器数据进程固定使用TCP 20端口， SMTP服务器进程使用TCP 25端口，DHCP服务器进程使用UDP 67端口。</p>
+<p>• TCP传输的数据单元称为TCP段。TCP段不定长，被封装在IP数据报中传输。</p>
+<p>• 但IP协议是无连接的、不可靠的，不能保证数据的按序到达，还可能造成数据的丢失或毁坏，但在其上的TCP通过一系列处理后(例如流量控制，拥塞控制和差错控制等)，TCP向上层提供的是可靠的、无差错的传输服务。</p>
+<p>8.2  TCP段格式</p>
+<p>8.3  TCP连接的建立和拆除</p>
+<p>8.3.1 TCP连接的建立</p>
+<p>超时重传</p>
+<p>解决重复连接的办法：采用序号字段对主机发出的所有TCP段进行编号，序号字段为段数据部分第一个字节的字节编号。</p>
+<p>建立连接由三次握手完成。拆除连接由四次握手完成。</p>
+<p>第一次握手：由客户向服务器发出SYN段，该段首部的同步标志SYN置1，还包括了客户的初始序号SEQ（例如SEQ=26500）。</p>
+<p>第二次握手：服务器收到请求后，发回SYN + ACK段，该段首部中的同步标志SYN置1，首部中的确认标志ACK置1，表示对所接收的段的确认，同时确认号字段给出准备接收的对方下一段序号,该段还给出了服务器的初始序号。此时完成了一个方向上连接。</p>
+<p>第三次握手：客户向服务器发出ACK段，段首部中的确认标志ACK置1，表示对接收信息的确认，同时确认号字段被设置为收到的段序号加1(ACK 29011)。此时完成了另一个方向上的连接。</p>
+<p>拆除：</p>
+<p>解决：TCP采用四次握手来断开连接。可以将断开连接操作视为在两个方向上分别断开半连接的操作。</p>
+<p>一方发出断开连接请求后并不马上拆除连接，而是等待收到对方确认报文后，才拆除半连接（即不发数据了但还可接收数据）。对方发送完数据后，对方再发送断开连接请求，并在收到应答后断开另一个方向上的半连接。</p>
+<p>8.4  TCP流量控制</p>
+<p>• TCP主要特点是高可靠性。表现在：TCP传输一个无报文丢失、重复和失序的正确的数据流。</p>
+<p>• TCP采用的可靠性技术：</p>
+<p>– 流量控制</p>
+<p>– 拥塞控制</p>
+<p>– 差错控制</p>
+<p>8.8  用户数据报协议UDP</p>
+<p>是TCP/IP传输层的另一个协议</p>
+<p>TCP可靠，UDP高效</p>
+<p>UDP同IP协议一样提供无连接数据报传输，因此UDP在IP协议上只增加了进程通信能力，还提供了简单的差错控制。UDP不提供流量控制，也不对UDP数据报进行确认。 </p>
+<p>UDP提供无连接的服务。</p>
+<p>表8-1  TCP和UDP的特点比较</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/tcp_client/" rel="prev" title="tcp_client">
+      <i class="fa fa-chevron-left"></i> tcp_client
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/test/" rel="next" title="test">
+      test <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Edward"
+      src="/uploads/avatar.gif">
+  <p class="site-author-name" itemprop="name">Edward</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">570</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Edward</span>
+</div>
+
+        
+
+
+
+
+
+
+<script>
+  (function() {
+    function leancloudSelector(url) {
+      url = encodeURI(url);
+      return document.getElementById(url).querySelector('.leancloud-visitors-count');
+    }
+
+    function addCount(Counter) {
+      var visitors = document.querySelector('.leancloud_visitors');
+      var url = decodeURI(visitors.id);
+      var title = visitors.dataset.flagTitle;
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          if (results.length > 0) {
+            var counter = results[0];
+            leancloudSelector(url).innerText = counter.time + 1;
+            Counter('put', '/classes/Counter/' + counter.objectId, { time: { '__op': 'Increment', 'amount': 1 } })
+              .catch(error => {
+                console.error('Failed to save visitor count', error);
+              });
+          } else {
+              Counter('post', '/classes/Counter', { title, url, time: 1 })
+                .then(response => response.json())
+                .then(() => {
+                  leancloudSelector(url).innerText = 1;
+                })
+                .catch(error => {
+                  console.error('Failed to create', error);
+                });
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    function showTime(Counter) {
+      var visitors = document.querySelectorAll('.leancloud_visitors');
+      var entries = [...visitors].map(element => {
+        return decodeURI(element.id);
+      });
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url: { '$in': entries } })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          for (let url of entries) {
+            let target = results.find(item => item.url === url);
+            leancloudSelector(url).innerText = target ? target.time : 0;
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    let { app_id, app_key, server_url } = {"enable":true,"app_id":"wxYx0BX9gaKA3XC4LuO2of0v-gzGzoHsz","app_key":"LQMcs6IDIE4YAm10vMsn9IYq","server_url":"https://wxyx0bx9.lc-cn-n1-shared.com","security":false};
+    function fetchData(api_server) {
+      var Counter = (method, url, data) => {
+        return fetch(`${api_server}/1.1${url}`, {
+          method,
+          headers: {
+            'X-LC-Id'     : app_id,
+            'X-LC-Key'    : app_key,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data)
+        });
+      };
+      if (CONFIG.page.isPost) {
+        if (CONFIG.hostname !== location.hostname) return;
+        addCount(Counter);
+      } else if (document.querySelectorAll('.post-title-link').length >= 1) {
+        showTime(Counter);
+      }
+    }
+
+    let api_server = app_id.slice(-9) !== '-MdYXbMMI' ? server_url : `https://${app_id.slice(0, 8).toLowerCase()}.api.lncldglobal.com`;
+
+    if (api_server) {
+      fetchData(api_server);
+    } else {
+      fetch('https://app-router.leancloud.cn/2/route?appId=' + app_id)
+        .then(response => response.json())
+        .then(({ api_server }) => {
+          fetchData('https://' + api_server);
+        });
+    }
+  })();
+</script>
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

@@ -1,0 +1,756 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"edward.org.cn","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="1、自定义View的属性，首先在res&#x2F;values&#x2F;  下建立一个attrs.xml  format是值该属性的取值类型:  string,color,demension,integer,enum,reference,float,boolean,fraction,flag;    string：字符串类型；  integer：整数类型；  float：浮点型；  dimension：尺寸，后面必">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android 自定义View">
+<meta property="og:url" content="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/Android%20%E8%87%AA%E5%AE%9A%E4%B9%89View/index.html">
+<meta property="og:site_name" content="点点滴滴">
+<meta property="og:description" content="1、自定义View的属性，首先在res&#x2F;values&#x2F;  下建立一个attrs.xml  format是值该属性的取值类型:  string,color,demension,integer,enum,reference,float,boolean,fraction,flag;    string：字符串类型；  integer：整数类型；  float：浮点型；  dimension：尺寸，后面必">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-12-31T06:48:00.916Z">
+<meta property="article:modified_time" content="2020-01-16T04:37:33.741Z">
+<meta property="article:author" content="Edward">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/Android%20%E8%87%AA%E5%AE%9A%E4%B9%89View/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>Android 自定义View | 点点滴滴</title>
+  
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?a92ed22eafce466e7a7b17546bb0dc6f";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">点点滴滴</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/Android%20%E8%87%AA%E5%AE%9A%E4%B9%89View/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/avatar.gif">
+      <meta itemprop="name" content="Edward">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="点点滴滴">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Android 自定义View
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-12-31 14:48:00" itemprop="dateCreated datePublished" datetime="2020-12-31T14:48:00+08:00">2020-12-31</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-01-16 12:37:33" itemprop="dateModified" datetime="2020-01-16T12:37:33+08:00">2020-01-16</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%83%82%E7%AC%94%E5%A4%B4/" itemprop="url" rel="index"><span itemprop="name">烂笔头</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/Android%20%E8%87%AA%E5%AE%9A%E4%B9%89View/" class="post-meta-item leancloud_visitors" data-flag-title="Android 自定义View" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>1、自定义View的属性，首先在res/values/  下建立一个attrs.xml </p>
+<p>format是值该属性的取值类型:  string,color,demension,integer,enum,reference,float,boolean,fraction,flag; </p>
+<ol>
+<li> string：字符串类型；</li>
+<li> integer：整数类型；</li>
+<li> float：浮点型；</li>
+<li> dimension：尺寸，后面必须跟dp、dip、px、sp等单位；</li>
+<li> Boolean：布尔值；</li>
+<li> reference：引用类型，传入的是某一资源的ID，必须以“@”符号开头；</li>
+<li> color：颜色，必须是“#”符号开头；</li>
+<li> fraction：百分比，必须是“%”符号结尾；</li>
+<li> enum：枚举类型</li>
+</ol>
+<p>&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;  </p>
+<p>&lt;resources&gt; </p>
+<p>&lt;attr name=&quot;titleText&quot; format=&quot;string&quot; /&gt;</p>
+<p> &lt;attr name=&quot;titleTextColor&quot; format=&quot;color&quot; /&gt;  </p>
+<p>   &lt;declare-styleable name=&quot;CustomTitleView&quot;&gt;       </p>
+<p>         &lt;attr name=&quot;titleText&quot; /&gt;  </p>
+<p>        &lt;attr name=&quot;titleTextColor&quot; </p>
+<p>    &lt;/declare-styleable&gt;    </p>
+<p>&lt;/resources&gt;  </p>
+<p> 自定义属性的命名空间：xmlns:app=&quot;<a target="_blank" rel="noopener" href="http://schemas.android.com/apk/res-auto">http://schemas.android.com/apk/res-auto</a>&quot;</p>
+<p> 自定义namespace的名称可以自己定义，不一定非得是app</p>
+<ol start="2">
+<li>在自定义View / ViewGroup中，我们可以通过TypedArray获取到自定义的属性。 </li>
+</ol>
+<p>TypedArray a = context.getTheme().obtainStyledAttributes(attrs, R.styleable.CustomMenu, defStyleAttr, 0);<br>    int indexCount = a.getIndexCount();<br>    for (int i = 0; i &lt; indexCount; i++) {<br>        int attr = a.getIndex(i);<br>        switch (attr) {<br>            case R.styleable.CustomMenu_rightPadding:<br>                mMenuRightPadding = a.getDimensionPixelSize(attr, 0);<br>                break;<br>        }<br>    }<br>    a.recycle();</p>
+<p>TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.DashboardView, defStyleAttr, 0);<br>mRadius = a.getDimensionPixelSize(R.styleable.DashboardView_radius, dpToPx(80));<br>mStartAngle = a.getInteger(R.styleable.DashboardView_startAngle, 180);</p>
+<p>在TypedArray使用结束后，需要调用recycle()方法回收它。</p>
+<p>3 重写onDraw，onMesure</p>
+<ol start="4">
+<li> View绘制过程</li>
+</ol>
+<p>protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {} </p>
+<p>　onMeasure()方法中主要负责测量，决定控件本身或其子控件所占的宽高。</p>
+<p>我们可以通过onMeasure()方法提供的参数widthMeasureSpec和heightMeasureSpec来分别获取控件宽度和高度的测量模式和测量值（测量 = 测量模式 + 测量值）。</p>
+<p>　　widthMeasureSpec和heightMeasureSpec虽然只是int类型的值，但它们是通过MeasureSpec类进行了编码处理的，其中封装了测量模式和测量值，因此我们可以分别通过MeasureSpec.getMode(xMeasureSpec)和MeasureSpec. getSize(xMeasureSpec)来获取到控件或其子View的测量模式和测量值。</p>
+<p>　　测量模式分为以下三种情况：</p>
+<ol>
+<li> EXACTLY：当宽高值设置为具体值时使用，如100DIP、match_parent等，此时取出的size是精确的尺寸；</li>
+<li> AT_MOST：当宽高值设置为wrap_content时使用，此时取出的size是控件最大可获得的空间；</li>
+<li> UNSPECIFIED：当没有指定宽高值时使用（很少见）。</li>
+</ol>
+<p>　　onMeasure()方法中常用的方法：</p>
+<ol>
+<li> getChildCount()：获取子View的数量；</li>
+<li> getChildAt(i)：获取第i个子控件；</li>
+<li> subView.getLayoutParams().width/height：设置或获取子控件的宽或高；</li>
+<li> measureChild(child, widthMeasureSpec, heightMeasureSpec)：测量子View的宽高；</li>
+<li> child.getMeasuredHeight/width()：执行完measureChild()方法后就可以通过这种方式获取子View的宽高值；</li>
+<li> getPaddingLeft/Right/Top/Bottom()：获取控件的四周内边距；</li>
+<li> setMeasuredDimension(width, height)：重新设置控件的宽高。如果写了这句代码，就需要删除“super. onMeasure(widthMeasureSpec, heightMeasureSpec);”这行代码。</li>
+</ol>
+<p>　　注意：onMeasure()方法可能被调用多次，这是因为控件中的内容或子View可能对分配给自己的空间“不满意”，因此向父空间申请重新分配空间。</p>
+<p>public static int getDefaultSize(int size, int measureSpec) {  </p>
+<p>    int result = size;  </p>
+<p>    int specMode = MeasureSpec.getMode(measureSpec);  </p>
+<p>    int specSize = MeasureSpec.getSize(measureSpec);  </p>
+<p>    switch (specMode) {  </p>
+<p>    case MeasureSpec.UNSPECIFIED:  </p>
+<p>        result = size;  </p>
+<p>        break;  </p>
+<p>    case MeasureSpec.AT_MOST:  </p>
+<p>    case MeasureSpec.EXACTLY:  </p>
+<p>        result = specSize;  </p>
+<p>        break;  </p>
+<p>    }  </p>
+<p>    return result;  </p>
+<p>}  </p>
+<p>protected void onLayout(boolean changed, int left, int top, int right, int bottom) { }</p>
+<p>protected void onDraw(Canvas canvas) { }</p>
+<p>requestLayout  View重新调用一次layout过程。</p>
+<p>invalidate  View重新调用一次draw过程</p>
+<p>forceLayout   标识View在下一次重绘，需要重新调用layout过程。</p>
+<p>  如果在使用自定义view时，用了wrap_content。那么在onMeasure中就要调用setMeasuredDimension，</p>
+<p>  来指定view的宽高。如果使用的fill_parent或者一个具体的dp值。那么直接使用super.onMeasure即可。</p>
+<p>  如果是一个ViewGroup，重写onMeasure时要注意： </p>
+<p>  测量子view的方式有：</p>
+<p>getChildAt(int index).可以拿到index上的子view。 </p>
+<p>       通过getChildCount得到子view的数目，再循环遍历出子view。</p>
+<p>       接着，subView.measure(int wSpec, int hSpec); //使用子view自身的测量方法</p>
+<p>    或者调用viewGroup的测量子view的方法：</p>
+<p>//某一个子view，多宽，多高, 内部加上了viewGroup的padding值</p>
+<p>measureChild(subView, int wSpec, int hSpec); </p>
+<p>//所有子view 都是 多宽，多高, 内部调用了measureChild方法</p>
+<p>measureChildren(int wSpec, int hSpec);</p>
+<p>//某一个子view，多宽，多高, 内部加上了viewGroup的padding值、margin值和传入的宽高wUsed、hUsed  </p>
+<p>measureChildWithMargins(subView, intwSpec, int wUsed, int hSpec, int hUsed); </p>
+<p>onDraw()</p>
+<p>　　onDraw()方法负责绘制，即如果我们希望得到的效果在Android原生控件中没有现成的支持，那么我们就需要自己绘制我们的自定义控件的显示效果。</p>
+<p>　　要学习onDraw()方法，我们就需要学习在onDraw()方法中使用最多的两个类：Paint和Canvas。</p>
+<p>　　注意：每次触摸了自定义View/ViewGroup时都会触发onDraw()方法。</p>
+<p>5.1、Paint类</p>
+<p>　　Paint画笔对象，这个类中包含了如何绘制几何图形、文字和位图的样式和颜色信息，指定了如何绘制文本和图形。画笔对象右很多设置方法，大体上可以分为两类：一类与图形绘制有关，一类与文本绘制有关。</p>
+<p>　　Paint类中有如下方法：</p>
+<p>　　1、图形绘制：</p>
+<ol>
+<li> setArgb(int a, int r, int g, int b)：设置绘制的颜色，a表示透明度，r、g、b表示颜色值；</li>
+<li> setAlpha(int a)：设置绘制的图形的透明度；</li>
+<li> setColor(int color)：设置绘制的颜色；</li>
+<li> setAntiAlias(boolean a)：设置是否使用抗锯齿功能，抗锯齿功能会消耗较大资源，绘制图形的速度会减慢；</li>
+<li> setDither(boolean b)：设置是否使用图像抖动处理，会使图像颜色更加平滑饱满，更加清晰；</li>
+<li> setFileterBitmap(Boolean b)：设置是否在动画中滤掉Bitmap的优化，可以加快显示速度；</li>
+<li> setMaskFilter(MaskFilter mf)：设置MaskFilter来实现滤镜的效果；</li>
+<li> setColorFilter(ColorFilter cf)：设置颜色过滤器，可以在绘制颜色时实现不同颜色的变换效果；</li>
+<li> setPathEffect(PathEffect pe)：设置绘制的路径的效果；</li>
+<li>setShader(Shader s)：设置Shader绘制各种渐变效果；</li>
+<li>setShadowLayer(float r, int x, int y, int c)：在图形下面设置阴影层，r为阴影角度，x和y为阴影在x轴和y轴上的距离，c为阴影的颜色；</li>
+<li>setStyle(Paint.Style s)：设置画笔的样式：FILL实心；STROKE空心；FILL_OR_STROKE同时实心与空心；</li>
+<li>setStrokeCap(Paint.Cap c)：当设置画笔样式为STROKE或FILL_OR_STROKE时，设置笔刷的图形样式；</li>
+<li>setStrokeJoin(Paint.Join j)：设置绘制时各图形的结合方式；</li>
+<li>setStrokeWidth(float w)：当画笔样式为STROKE或FILL_OR_STROKE时，设置笔刷的粗细度；</li>
+<li>setXfermode(Xfermode m)：设置图形重叠时的处理方式；</li>
+</ol>
+<p>　　2、文本绘制：</p>
+<ol>
+<li> setTextAlign(Path.Align a)：设置绘制的文本的对齐方式；</li>
+<li> setTextScaleX(float s)：设置文本在X轴的缩放比例，可以实现文字的拉伸效果；</li>
+<li> setTextSize(float s)：设置字号；</li>
+<li> setTextSkewX(float s)：设置斜体文字，s是文字倾斜度；</li>
+<li> setTypeFace(TypeFace tf)：设置字体风格，包括粗体、斜体等；</li>
+<li> setUnderlineText(boolean b)：设置绘制的文本是否带有下划线效果；</li>
+<li> setStrikeThruText(boolean b)：设置绘制的文本是否带有删除线效果；</li>
+<li> setFakeBoldText(boolean b)：模拟实现粗体文字，如果设置在小字体上效果会非常差；</li>
+<li> setSubpixelText(boolean b)：如果设置为true则有助于文本在LCD屏幕上显示效果；</li>
+</ol>
+<p>　　3、其他方法：</p>
+<ol>
+<li> getTextBounds(String t, int s, int e, Rect b)：将页面中t文本从s下标开始到e下标结束的所有字符所占的区域宽高封装到b这个矩形中；</li>
+<li> clearShadowLayer()：清除阴影层；</li>
+<li> measureText(String t, int s, int e)：返回t文本中从s下标开始到e下标结束的所有字符所占的宽度；</li>
+<li> reset()：重置画笔为默认值。</li>
+</ol>
+<p>　　这里需要就几个方法解释一下：</p>
+<p>1、setPathEffect(PathEffect pe)：设置绘制的路径的效果：</p>
+<p>　　常见的有以下几种可选方案：</p>
+<ol>
+<li> CornerPathEffect：可以用圆角来代替尖锐的角；</li>
+<li> DathPathEffect：虚线，由短线和点组成；</li>
+<li> DiscretePathEffect：荆棘状的线条；</li>
+<li> PathDashPathEffect：定义一种新的形状并将其作为原始路径的轮廓标记；</li>
+<li> SumPathEffect：在一条路径中顺序添加参数中的效果；</li>
+<li> ComposePathEffect：将两种效果组合起来，先使用第一种效果，在此基础上应用第二种效果。</li>
+</ol>
+<p>2、setXfermode(Xfermode m)：设置图形重叠时的处理方式：</p>
+<p>　　关于Xfermode的多种效果，我们可以参考下面一张图：</p>
+<p>　　在使用的时候，我们需要通过paint. setXfermode(new PorterDuffXfermode(PorterDuff.Mode.XXX))来设置，XXX是上图中的某种模式对应的常量参数，如DST_OUT。</p>
+<p>　　这16中情况的具体解释如下：</p>
+<p>1.PorterDuff.Mode.CLEAR：所绘制不会提交到画布上。<br>2.PorterDuff.Mode.SRC：显示上层绘制图片<br>3.PorterDuff.Mode.DST：显示下层绘制图片<br>4.PorterDuff.Mode.SRC_OVER：正常绘制显示，上下层绘制叠盖。<br>5.PorterDuff.Mode.DST_OVER：上下层都显示。下层居上显示。<br>6.PorterDuff.Mode.SRC_IN：取两层绘制交集。显示上层。<br>7.PorterDuff.Mode.DST_IN：取两层绘制交集。显示下层。<br>8.PorterDuff.Mode.SRC_OUT：上层绘制非交集部分。<br>9.PorterDuff.Mode.DST_OUT：取下层绘制非交集部分。<br>10.PorterDuff.Mode.SRC_ATOP：取下层非交集部分与上层交集部分<br>11.PorterDuff.Mode.DST_ATOP：取上层非交集部分与下层交集部分<br>12.PorterDuff.Mode.XOR：异或：去除两图层交集部分<br>13.PorterDuff.Mode.DARKEN：取两图层全部区域，交集部分颜色加深<br>14.PorterDuff.Mode.LIGHTEN：取两图层全部，点亮交集部分颜色<br>15.PorterDuff.Mode.MULTIPLY：取两图层交集部分叠加后颜色<br>16.PorterDuff.Mode.SCREEN：取两图层全部区域，交集部分变为透明色</p>
+<p>5.2、Canvas类</p>
+<p>　　Canvas即画布，其上可以使用Paint画笔对象绘制很多东西。</p>
+<p>　　Canvas对象中可以绘制：</p>
+<ol>
+<li> drawArc()：绘制圆弧；</li>
+<li> drawBitmap()：绘制Bitmap图像；</li>
+<li> drawCircle()：绘制圆圈；</li>
+<li> drawLine()：绘制线条；</li>
+<li> drawOval()：绘制椭圆；</li>
+<li> drawPath()：绘制Path路径；</li>
+<li> drawPicture()：绘制Picture图片；</li>
+<li> drawRect()：绘制矩形；</li>
+<li> drawRoundRect()：绘制圆角矩形；</li>
+<li>drawText()：绘制文本；</li>
+<li>drawVertices()：绘制顶点。</li>
+</ol>
+<p>　　Canvas对象的其他方法：</p>
+<ol>
+<li> canvas.save()：把当前绘制的图像保存起来，让后续的操作相当于是在一个新图层上绘制；</li>
+<li> canvas.restore()：把当前画布调整到上一个save()之前的状态；</li>
+<li> canvas.translate(dx, dy)：把当前画布的原点移到(dx, dy)点，后续操作都以(dx, dy)点作为参照；</li>
+<li> canvas.scale(x, y)：将当前画布在水平方向上缩放x倍，竖直方向上缩放y倍；</li>
+<li> canvas.rotate(angle)：将当前画布顺时针旋转angle度。</li>
+</ol>
+<p>6、onLayout()</p>
+<p>　　onLayout()方法负责布局，大多数情况是在自定义ViewGroup中才会重写，主要用来确定子View在这个布局空间中的摆放位置。</p>
+<p>　　onLayout(boolean changed, int l, int t, int r, int b)方法有5个参数，其中changed表示这个控件是否有了新的尺寸或位置；l、t、r、b分别表示这个View相对于父布局的左/上/右/下方的位置。</p>
+<p>　　以下是onLayout()方法中常用的方法：</p>
+<ol>
+<li> getChildCount()：获取子View的数量；</li>
+<li> getChildAt(i)：获取第i个子View</li>
+<li> getWidth/Height()：获取onMeasure()中返回的宽度和高度的测量值；</li>
+<li> child.getLayoutParams()：获取到子View的LayoutParams对象；</li>
+<li> child.getMeasuredWidth/Height()：获取onMeasure()方法中测量的子View的宽度和高度值；</li>
+<li> getPaddingLeft/Right/Top/Bottom()：获取控件的四周内边距；</li>
+<li> child.layout(l, t, r, b)：设置子View布局的上下左右边的坐标。</li>
+</ol>
+<p>7、其他方法</p>
+<p>7.1、generateLayoutParams()</p>
+<p>　　generateLayoutParams()方法用在自定义ViewGroup中，用来指明子控件之间的关系，即与当前的ViewGroup对应的LayoutParams。我们只需要在方法中返回一个我们想要使用的LayoutParams类型的对象即可。</p>
+<p>　　在generateLayoutParams()方法中需要传入一个AttributeSet对象作为参数，这个对象是这个ViewGroup的属性集，系统根据这个ViewGroup的属性集来定义子View的布局规则，供子View使用。</p>
+<p>　　例如，在自定义流式布局中，我们只需要关心子控件之间的间隔关系，因此我们需要在generateLayoutParams()方法中返回一个new MarginLayoutParams()即可。</p>
+<p>7.2、onTouchEvent()</p>
+<p>　　onTouchEvent()方法用来监测用户手指操作。我们通过方法中MotionEvent参数对象的getAction()方法来实时获取用户的手势，有UP、DOWN和MOVE三个枚举值，分别表示用于手指抬起、按下和滑动的动作。每当用户有操作时，就会回掉onTouchEvent()方法。</p>
+<p>7.3、onScrollChanged()</p>
+<p>　　如果我们的自定义View / ViewGroup是继承自ScrollView / HorizontalScrollView等可以滚动的控件，就可以通过重写onScrollChanged()方法来监听控件的滚动事件。</p>
+<p>　　这个方法中有四个参数：l和t分别表示当前滑动到的点在水平和竖直方向上的坐标；oldl和oldt分别表示上次滑动到的点在水平和竖直方向上的坐标。我们可以通过这四个值对滑动进行处理，如添加属性动画等。</p>
+<p>7.4、invalidate()</p>
+<p>　　invalidate()方法的作用是请求View树进行重绘，即draw()方法，如果视图的大小发生了变化，还会调用layout()方法。</p>
+<p>　　一般会引起invalidate()操作的函数如下：</p>
+<ol>
+<li> 直接调用invalidate()方法，请求重新draw()，但只会绘制调用者本身；</li>
+<li> 调用setSelection()方法，请求重新draw()，但只会绘制调用者本身；</li>
+<li> 调用setVisibility()方法，会间接调用invalidate()方法，继而绘制该View；</li>
+<li> 调用setEnabled()方法，请求重新draw()，但不会重新绘制任何视图，包括调用者本身。</li>
+</ol>
+<p>7.5、postInvalidate()</p>
+<p>　　功能与invalidate()方法相同，只是postInvalidate()方法是异步请求重绘视图。</p>
+<p>7.6、requestLayout()</p>
+<p>　　requestLayout()方法只是对View树进行重新布局layout过程（包括measure()过程和layout()过程），不会调用draw()过程，即不会重新绘制任何视图，包括该调用者本身。</p>
+<p>7.7、requestFocus()</p>
+<p>　　请求View树的draw()过程，但只会绘制需要重绘的视图，即哪个View或ViewGroup调用了这个方法，就重绘哪个视图。</p>
+<p>8、总结</p>
+<p>　　最后，让我们来总览一下自定义View / ViewGroup时调用的各种函数的顺序，如下图所示：</p>
+<p>　　在这些方法中：</p>
+<p>onMeasure()会在初始化之后调用一到多次来测量控件或其中的子控件的宽高；</p>
+<p>onLayout()会在onMeasure()方法之后被调用一次，将控件或其子控件进行布局；</p>
+<p>onDraw()会在onLayout()方法之后调用一次，也会在用户手指触摸屏幕时被调用多次，来绘制控件。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/Android%20%E6%B7%BB%E5%8A%A0%E8%87%AA%E5%AE%9A%E4%B9%89%E7%B3%BB%E7%BB%9F%E6%9C%8D%E5%8A%A1/" rel="prev" title="Android 添加自定义系统服务">
+      <i class="fa fa-chevron-left"></i> Android 添加自定义系统服务
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/Android.mk%20%E5%AF%BC%E5%85%A5%E7%AC%AC%E4%B8%89%E6%96%B9%20jar%20%E5%8C%85/" rel="next" title="Android">
+      Android <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Edward"
+      src="/uploads/avatar.gif">
+  <p class="site-author-name" itemprop="name">Edward</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">570</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Edward</span>
+</div>
+
+        
+
+
+
+
+
+
+<script>
+  (function() {
+    function leancloudSelector(url) {
+      url = encodeURI(url);
+      return document.getElementById(url).querySelector('.leancloud-visitors-count');
+    }
+
+    function addCount(Counter) {
+      var visitors = document.querySelector('.leancloud_visitors');
+      var url = decodeURI(visitors.id);
+      var title = visitors.dataset.flagTitle;
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          if (results.length > 0) {
+            var counter = results[0];
+            leancloudSelector(url).innerText = counter.time + 1;
+            Counter('put', '/classes/Counter/' + counter.objectId, { time: { '__op': 'Increment', 'amount': 1 } })
+              .catch(error => {
+                console.error('Failed to save visitor count', error);
+              });
+          } else {
+              Counter('post', '/classes/Counter', { title, url, time: 1 })
+                .then(response => response.json())
+                .then(() => {
+                  leancloudSelector(url).innerText = 1;
+                })
+                .catch(error => {
+                  console.error('Failed to create', error);
+                });
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    function showTime(Counter) {
+      var visitors = document.querySelectorAll('.leancloud_visitors');
+      var entries = [...visitors].map(element => {
+        return decodeURI(element.id);
+      });
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url: { '$in': entries } })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          for (let url of entries) {
+            let target = results.find(item => item.url === url);
+            leancloudSelector(url).innerText = target ? target.time : 0;
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    let { app_id, app_key, server_url } = {"enable":true,"app_id":"wxYx0BX9gaKA3XC4LuO2of0v-gzGzoHsz","app_key":"LQMcs6IDIE4YAm10vMsn9IYq","server_url":"https://wxyx0bx9.lc-cn-n1-shared.com","security":false};
+    function fetchData(api_server) {
+      var Counter = (method, url, data) => {
+        return fetch(`${api_server}/1.1${url}`, {
+          method,
+          headers: {
+            'X-LC-Id'     : app_id,
+            'X-LC-Key'    : app_key,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data)
+        });
+      };
+      if (CONFIG.page.isPost) {
+        if (CONFIG.hostname !== location.hostname) return;
+        addCount(Counter);
+      } else if (document.querySelectorAll('.post-title-link').length >= 1) {
+        showTime(Counter);
+      }
+    }
+
+    let api_server = app_id.slice(-9) !== '-MdYXbMMI' ? server_url : `https://${app_id.slice(0, 8).toLowerCase()}.api.lncldglobal.com`;
+
+    if (api_server) {
+      fetchData(api_server);
+    } else {
+      fetch('https://app-router.leancloud.cn/2/route?appId=' + app_id)
+        .then(response => response.json())
+        .then(({ api_server }) => {
+          fetchData('https://' + api_server);
+        });
+    }
+  })();
+</script>
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"edward.org.cn","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="Android 4.1.2系统添加重启功能 2013-06-28 11:12:11 分类： Android平台 对于Android的的手机或者平板长期使用，感觉会出现慢的情况，所以偶尔还是需要重启一下，而长按电源键弹出的菜单又没有重启选项，所以特在此记录自己添加这个功能的过程。首先关机的那个弹出菜单是在frameworks&#x2F;base&#x2F;policy&#x2F;src&#x2F;com&#x2F;android&#x2F;internal&#x2F;">
+<meta property="og:type" content="article">
+<meta property="og:title" content="添加重启">
+<meta property="og:url" content="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/%E6%B7%BB%E5%8A%A0%E9%87%8D%E5%90%AF/index.html">
+<meta property="og:site_name" content="点点滴滴">
+<meta property="og:description" content="Android 4.1.2系统添加重启功能 2013-06-28 11:12:11 分类： Android平台 对于Android的的手机或者平板长期使用，感觉会出现慢的情况，所以偶尔还是需要重启一下，而长按电源键弹出的菜单又没有重启选项，所以特在此记录自己添加这个功能的过程。首先关机的那个弹出菜单是在frameworks&#x2F;base&#x2F;policy&#x2F;src&#x2F;com&#x2F;android&#x2F;internal&#x2F;">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-12-31T06:48:02.136Z">
+<meta property="article:modified_time" content="2020-01-16T04:37:32.592Z">
+<meta property="article:author" content="Edward">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/%E6%B7%BB%E5%8A%A0%E9%87%8D%E5%90%AF/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>添加重启 | 点点滴滴</title>
+  
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?a92ed22eafce466e7a7b17546bb0dc6f";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">点点滴滴</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/%E6%B7%BB%E5%8A%A0%E9%87%8D%E5%90%AF/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/avatar.gif">
+      <meta itemprop="name" content="Edward">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="点点滴滴">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          添加重启
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-12-31 14:48:02" itemprop="dateCreated datePublished" datetime="2020-12-31T14:48:02+08:00">2020-12-31</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-01-16 12:37:32" itemprop="dateModified" datetime="2020-01-16T12:37:32+08:00">2020-01-16</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%83%82%E7%AC%94%E5%A4%B4/" itemprop="url" rel="index"><span itemprop="name">烂笔头</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/%E6%B7%BB%E5%8A%A0%E9%87%8D%E5%90%AF/" class="post-meta-item leancloud_visitors" data-flag-title="添加重启" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>Android 4.1.2系统添加重启功能 2013-06-28 11:12:11</p>
+<p>分类： Android平台</p>
+<p>对于Android的的手机或者平板长期使用，感觉会出现慢的情况，所以偶尔还是需要重启一下，而长按电源键弹出的菜单又没有重启选项，所以特在此记录自己添加这个功能的过程。<br>首先关机的那个弹出菜单是在frameworks/base/policy/src/com/android/internal/policy/impl/GlobalActions.java这个文件中创建的： </p>
+<p>点击(此处)折叠或打开</p>
+<p>/**<br> * Create the global actions dialog.<br> * @return A new dialog.<br> */<br>private GlobalActionsDialog createDialog() {<br>// Simple toggle style if there’s no vibrator, otherwise use a tri-state<br>if (!mHasVibrator) {<br>        mSilentModeAction = new SilentModeToggleAction();<br>} else {<br>        mSilentModeAction = new SilentModeTriStateAction(mContext, mAudioManager, mHandler);<br>}<br>    mAirplaneModeOn = new ToggleAction(<br>            R.drawable.ic_lock_airplane_mode,<br>            R.drawable.ic_lock_airplane_mode_off,<br>            R.string.global_actions_toggle_airplane_mode,<br>            R.string.global_actions_airplane_mode_on_status,<br>            R.string.global_actions_airplane_mode_off_status) {<br>void onToggle(boolean on) {<br>if (mHasTelephony &amp;&amp; Boolean.parseBoolean(<br>                    SystemProperties.get(TelephonyProperties.PROPERTY_INECM_MODE))) {<br>                mIsWaitingForEcmExit = true;<br>// Launch ECM exit dialog<br>                Intent ecmDialogIntent =<br>new Intent(TelephonyIntents.ACTION_SHOW_NOTICE_ECM_BLOCK_OTHERS, null);<br>                ecmDialogIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);<br>                mContext.startActivity(ecmDialogIntent);<br>} else {<br>                changeAirplaneModeSystemSetting(on);<br>}<br>}<br>        @Override<br>protected void changeStateFromPress(boolean buttonOn) {<br>if (!mHasTelephony) return;<br>// In ECM mode airplane state cannot be changed<br>if (!(Boolean.parseBoolean(<br>                    SystemProperties.get(TelephonyProperties.PROPERTY_INECM_MODE)))) {<br>                mState = buttonOn ? State.TurningOn : State.TurningOff;<br>                mAirplaneState = mState;<br>}<br>}<br>public boolean showDuringKeyguard() {<br>return true;<br>}<br>public boolean showBeforeProvisioning() {<br>return false;<br>}<br>};<br>    onAirplaneModeChanged();<br>    mItems = new ArrayList&lt;Action&gt;();<br>// first: power off<br>    mItems.add(<br>new SinglePressAction(<br>                com.android.internal.R.drawable.ic_lock_power_off,<br>                R.string.global_action_power_off) {<br>public void onPress() {<br>// shutdown by making sure radio and power are handled accordingly.<br>                mWindowManagerFuncs.shutdown(true);<br>}<br>public boolean onLongPress() {<br>                mWindowManagerFuncs.rebootSafeMode(true);<br>return true;<br>}<br>public boolean showDuringKeyguard() {<br>return true;<br>}<br>public boolean showBeforeProvisioning() {<br>return true;<br>}<br>});    我们可以看到mItems.add函数是添加一个选项，该菜单的第一个选项就是关机选项，我们可以在此之后添加重启选项，代码如下： </p>
+<p>mItems.add(<br>new SinglePressAction(<br>        com.android.internal.R.drawable.ic_lock_power_off,<br>        R.string.global_action_reboot) {<br>public void onPress() {<br>// reboot<br>            mWindowManagerFuncs.reboot();<br>}<br>public boolean showDuringKeyguard() {<br>return true;<br>}<br>public boolean showBeforeProvisioning() {<br>return true;<br>}<br>});   上面的代码中使用了mWindowManagerFuncs.reboot函数和R.string.global_action_reboot资源，因此我们需要该资源并实现reboot函数。<br>首先在frameworks/base/core/java/android/view/WindowManagerPolicy.java中添加reboot接口： </p>
+<p>/**<br> * Interface for calling back in to the window manager that is private<br> * between it and the policy.<br> */<br>public interface WindowManagerFuncs {<br>…<br>/**<br>     * Switch the keyboard layout for the given device.<br>     * Direction should be +1 or -1 to go to the next or previous keyboard layout.<br>     */<br>public void switchKeyboardLayout(int deviceId, int direction);<br>public void shutdown();<br>public void reboot();<br>public void rebootSafeMode();<br>}   然后在frameworks/base/services/java/com/android/server/wm/WindowManagerService.java中实现该接口： </p>
+<p>// Called by window manager policy. Not exposed externally.<br>@Override<br>public void shutdown() {<br>    ShutdownThread.shutdown(mContext, true);<br>}<br>// Called by window manager policy. Not exposed externally.<br>@Override<br>public void reboot() {<br>    ShutdownThread.reboot(mContext, null, true);<br>}<br>// Called by window manager policy. Not exposed externally.<br>@Override<br>public void rebootSafeMode() {<br>    ShutdownThread.rebootSafeMode(mContext, true);<br>}   接下来，为了在按下重启选项之后，能出现”重启“之类的提示，还需要修改frameworks/base/services/java/com/android/server/pm/ShutdownThread.java中的shutdownInner函数和beginShutdownSequence函数： </p>
+<dl><dt>static void shutdownInner(final Context context, boolean confirm) {<br>// ensure that only one thread is trying to power down.<br>// any additional calls are just returned<br>synchronized (sIsStartedGuard) {<br>if (sIsStarted) {<br>Log.d(TAG, &quot;Request to shutdown already running, returning.&quot;);<br>return;<br>}<br>}<br>final int longPressBehavior = context.getResources().getInteger(<br>                    com.android.internal.R.integer.config_longPressOnPowerBehavior);<br>final int resourceId = mRebootSafeMode<br>? com.android.internal.R.string.reboot_safemode_confirm<br>: (longPressBehavior == 2<br>? com.android.internal.R.string.shutdown_confirm_question<br>: (mReboot ? com.android.internal.R.string.reboot_confirm :<br>                        com.android.internal.R.string.shutdown_confirm));<br>Log.d(TAG, &quot;Notifying thread to start shutdown longPressBehavior=&quot; + longPressBehavior);<br>if (confirm) {<br>final CloseDialogReceiver closer = new CloseDialogReceiver(context);<br>final AlertDialog dialog = new AlertDialog.Builder(context)<br>.setTitle(mRebootSafeMode<br>? com.android.internal.R.string.reboot_safemode_title</dt><dd>(mReboot ? com.android.internal.R.string.reboot :<br>                            com.android.internal.R.string.power_off))<br>.setMessage(resourceId)<br>.setPositiveButton(com.android.internal.R.string.yes, new DialogInterface.OnClickListener() {<br>public void onClick(DialogInterface dialog, int which) {<br>                        beginShutdownSequence(context);<br>}<br>})<br>.setNegativeButton(com.android.internal.R.string.no, null)<br>.create();<br>        closer.dialog = dialog;<br>dialog.setOnDismissListener(closer);<br>dialog.getWindow().setType(WindowManager.LayoutParams.TYPE_KEYGUARD_DIALOG);<br>dialog.show();<br>} else {<br>        beginShutdownSequence(context);<br>}<br>}<br>private static void beginShutdownSequence(Context context) {<br>synchronized (sIsStartedGuard) {<br>if (sIsStarted) {<br>Log.d(TAG, &quot;Shutdown sequence already running, returning.&quot;);<br>return;<br>}<br>       sIsStarted = true;<br>}<br>// throw up an indeterminate system dialog to indicate radio is<br>// shutting down.<br>   ProgressDialog pd = new ProgressDialog(context);<br>   pd.setTitle(context.getText(com.android.internal.R.string.power_off));<br>   pd.setMessage(context.getText(com.android.internal.R.string.shutdown_progress));<br>   pd.setIndeterminate(true);<br>   pd.setCancelable(false);<br>   pd.getWindow().setType(WindowManager.LayoutParams.TYPE_KEYGUARD_DIALOG);<br>   pd.show();<br>   sInstance.mContext = context;<br>   sInstance.mPowerManager = (PowerManager)context.getSystemService(Context.POWER_SERVICE);<br>// make sure we never fall asleep again<br>   sInstance.mCpuWakeLock = null;<br>try {<br>       sInstance.mCpuWakeLock = sInstance.mPowerManager.newWakeLock(<br>               PowerManager.PARTIAL_WAKE_LOCK, TAG + &quot;-cpu&quot;);<br>       sInstance.mCpuWakeLock.setReferenceCounted(false);<br>       sInstance.mCpuWakeLock.acquire();<br>} catch (SecurityException e) {<br>Log.w(TAG, &quot;No permission to acquire wake lock&quot;, e);<br>       sInstance.mCpuWakeLock = null;<br>}<br>// also make sure the screen stays on for better user experience<br>   sInstance.mScreenWakeLock = null;<br>if (sInstance.mPowerManager.isScreenOn()) {<br>try {<br>           sInstance.mScreenWakeLock = sInstance.mPowerManager.newWakeLock(<br>                   PowerManager.FULL_WAKE_LOCK, TAG + &quot;-screen&quot;);<br>           sInstance.mScreenWakeLock.setReferenceCounted(false);<br>           sInstance.mScreenWakeLock.acquire();<br>} catch (SecurityException e) {<br>Log.w(TAG, &quot;No permission to acquire wake lock&quot;, e);<br>           sInstance.mScreenWakeLock = null;<br>}<br>}<br>// start the thread that initiates shutdown<br>   sInstance.mHandler = new Handler() {<br>};<br>   sInstance.start();<br>}   至此关于代码部分的改动全部完成，接下来就需要添加使用到的资源了，就是前面用到的字符串。首先需要在frameworks/base/core/res/res/values/strings.xml中添加一下字符串： </dd></dl><p>&lt;string name=&quot;reboot&quot;&gt;Reboot&lt;/string&gt;<br>&lt;string name=&quot;reboot_progress&quot;&gt;Reboot\u2026&lt;/string&gt;<br>&lt;string name=&quot;reboot_confirm&quot; product=&quot;tablet&quot;&gt;Your tablet will reboot.&lt;/string&gt;<br>&lt;string name=&quot;reboot_confirm&quot; product=&quot;default&quot;&gt;Your phone will reboot.&lt;/string&gt;<br>&lt;!– label for item that reboot in phone options dialog –&gt;<br>&lt;string name=&quot;global_action_reboot&quot;&gt;Reboot&lt;/string&gt;   而后需要在frameworks/base/core/res/res/values/public.xml中声明这些资源，否则编译的时候会出现找不到该资源的错误。 </p>
+<p>&lt;java-symbol type=&quot;string&quot; name=&quot;reboot&quot; /&gt;<br>&lt;java-symbol type=&quot;string&quot; name=&quot;reboot_confirm&quot; /&gt;<br>&lt;java-symbol type=&quot;string&quot; name=&quot;reboot_progress&quot; /&gt;<br>&lt;java-symbol type=&quot;string&quot; name=&quot;global_action_reboot&quot; /&gt;   至此，全部修改完成，编译烧写即可。</p>
+<p>&lt;TextView android:id=&quot;@+id/am_pm&quot;</p>
+<p>            android:layout_width=&quot;wrap_content&quot;</p>
+<p>            android:layout_height=&quot;wrap_content&quot;</p>
+<p>            android:singleLine=&quot;true&quot;</p>
+<p>            android:ellipsize=&quot;none&quot;</p>
+<p>            android:textSize=&quot;22sp&quot;</p>
+<p>            android:layout_marginLeft=&quot;8dip&quot;</p>
+<p>            android:textAppearance=&quot;?android:attr/textAppearanceMedium&quot;</p>
+<p>            android:shadowColor=&quot;#C0000000&quot;</p>
+<p>            android:shadowDx=&quot;0&quot;</p>
+<p>            android:shadowDy=&quot;0&quot;</p>
+<p>            android:shadowRadius=&quot;3.0&quot;</p>
+<p>去掉锁屏时显示充电百分比在：</p>
+<p>　　frameworks/base/core/res/res/values-zh-rCN中strings.xml 的lockscreen_plugged_in 括号中的内容及括号 !!</p>
+<p>MTKAndroid4.2.1添加重启功能</p>
+<p>分类： Android成长之路 2013-07-01 17:18 154人阅读 评论(0) 收藏 举报</p>
+<p>android</p>
+<p>    接触Android框架层也有一段时间了，但是基本上都没有对遇到的问题写总结，当遇到同样的问题也只能凭着模糊的记忆去解决。打算从今天开始每天抽点时间对工作中遇到的问题进行总结。 </p>
+<p>今天要说的是为Android添加一个重启按钮，在Nine的客户需求中需要添加这项功能，在长按电源键弹出的菜单中没有重启选项，谨以此文记录自己添加这个功能的过程：</p>
+<p>修改涉及到的文件如下：</p>
+<p>frameworks\base\core\java\android\view\WindowManagerPolicy.java</p>
+<p>frameworks\base\core\res\res\values\strings.xml</p>
+<p>frameworks\base\core\res\res\values-zh-rCN\strings.xml</p>
+<p>frameworks\base\policy\src\com\android\internal\policy\impl\GlobalActions.java</p>
+<p>frameworks\base\services\java\com\android\server\wm\windowManagerService.java</p>
+<p>frameworks\base\services\java\com\android\server\power\ShutdownThread.java</p>
+<p>frameworks\base\core\res\res\values\symbols.xml</p>
+<p>首先找到长按电源键弹出的对话框，在frameworks\base\policy\src\com\android\internal\policy\impl\GlobalActions.java文件中 </p>
+<p>[java] view plaincopyprint?</p>
+<p>/**     * Create the global actions dialog.     * @return A new dialog.     */     private GlobalActionsDialog createDialog() {         …          …          mItems = new ArrayList&lt;Action&gt;();         // first: power off           mItems.add(              new SinglePressAction(                      com.android.internal.R.drawable.ic_lock_power_off,                      R.string.global_action_power_off) {                  public void onPress() {                      // shutdown by making sure radio and power are handled accordingly.                       mWindowManagerFuncs.shutdown(true);                  }                  public boolean onLongPress() {                      mWindowManagerFuncs.rebootSafeMode(true);                      return true;                  }                  public boolean showDuringKeyguard() {                      return true;                  }                  public boolean showBeforeProvisioning() {                      return true;                  }              });              //xiaoyuguang 20130616 add reboot item       mItems.add(              new SinglePressAction(                      com.android.internal.R.drawable.ic_lock_power_off,                      R.string.global_action_reboot) {                  public void onPress() {   // reboot                       mWindowManagerFuncs.reboot(true);   }                  public boolean onLongPress() {                      return true;                  }                  public boolean showDuringKeyguard() {                      return true;                  }                  public boolean showBeforeProvisioning() {                      return true;                  }              });   //end xiaoyuguang 20130616           …         …}    </p>
+<p>在GlobalActionsDialog方法可以看 mItems.add这个方法是添加菜单选项的，该菜单的添加的第一个选项就是关机选项。可以仿照关机的Item添加一个重启的选项，如上面的代码所示；这样就解决了在长按的电源键弹出的对话框中添加一个重启选项了。当然这仅仅是添加一个显示而已，接下来就为这个选项添加逻辑控制代码了。</p>
+<p>在上面的代码中使用的mWindowManagerFuncs.reboot方法和R.string.global_action_reboot资源（资源的添加放到最后说），默认是不存在的，所以需要在自己手动添加。</p>
+<p>首先在找到WindowManagerFuncs这个所在的位置，在frameworks\base\core\java\android\view\WindowManagerPolicy.java中</p>
+<p>[java] view plaincopyprint?</p>
+<p>/**   * Interface for calling back in to the window manager that is private   * between it and the policy.   */   public interface WindowManagerFuncs {       …       …       /**       * Switch the keyboard layout for the given device.       * Direction should be +1 or -1 to go to the next or previous keyboard layout.       */       public void switchKeyboardLayout(int deviceId, int direction);       public void shutdown(boolean confirm);       public void rebootSafeMode(boolean confirm)        //xiaoyuguang        public void reboot(boolean confirm);      }    </p>
+<p>添加reboot方法。但这只是添加接口而已，它的具体实现在呢？找了许久在frameworks\base\services\java\com\android\server\wm\windowManagerService.java中找到了这个接口的实现。</p>
+<p>[java] view plaincopyprint?</p>
+<p>/** {@hide} */   public class WindowManagerService extends IWindowManager.Stub            implements Watchdog.Monitor, WindowManagerPolicy.WindowManagerFuncs,                    DisplayManagerService.WindowManagerFuncs, DisplayManager.DisplayListener {        …        …        // Called by window manager policy.  Not exposed externally.        @Override       public void shutdown(boolean confirm) {            ShutdownThread.shutdown(mContext, confirm);       }       //xiaoyuguang 20130616 add reboot        @Override       public void reboot(boolean confirm){            ShutdownThread.reboot(mContext, null, confirm);       }       //end xiaoyuguang        // Called by window manager policy.  Not exposed externally.        @Override       public void rebootSafeMode(boolean confirm) {            ShutdownThread.rebootSafeMode(mContext, confirm);       }       …       …}    </p>
+<p>同样在仿照关机的原理添加reboot的具体实现代码，既然在ShutdownThread这个类中提供了shutdown和rebootSafeMode的方法，那按理也应该有reboot的方法，或者类似reboot的方法。找到Shutdown.java文件，在frameworks\base\services\java\com\android\server\power\ShutdownThread.java中，</p>
+<p>[java] view plaincopyprint?</p>
+<p>public final class ShutdownThread extends Thread {       …       …           /**       * Request a clean shutdown, waiting for subsystems to clean up their       * state etc.  Must be called from a Looper thread in which its UI       * is shown.       *       * @param context Context used to display the shutdown progress dialog.       * @param confirm true if user confirmation is needed before shutting down.       */       public static void shutdown(final Context context, boolean confirm) {       …       }            /**       * Request a clean shutdown, waiting for subsystems to clean up their       * state etc.  Must be called from a Looper thread in which its UI       * is shown.       *       * @param context Context used to display the shutdown progress dialog.       * @param reason code to pass to the kernel (e.g. &quot;recovery&quot;), or null.       * @param confirm true if user confirmation is needed before shutting down.       */       public static void reboot(final Context context, String reason, boolean confirm) {            mReboot = true;            mRebootSafeMode = false;            mRebootReason = reason;            Log.d(TAG, &quot;reboot&quot;);            shutdownInner(context, confirm);       }       …       …   }    </p>
+<p>其中提供了一个静态的reboot方法，所以在windowManagerService.java中的reboot实现中直接调用ShutdownThread中reboot即可。</p>
+<p> public static void reboot(final Context context, String reason, boolean confirm)；有三个参数，后两个参数解释如下： reason  如果值为是null，正常重启；如果是recovery，系统重启进入recovery mode ；confirm为true显示关机提示框，需要用户【确认】；false不显示提示框，直接关机。</p>
+<p>到此重启功能基本上可以使用了（除资源还没有添加之外），但是此时选择重启选项时，其提示还是不够关机的提示，所以还要修改选择“重启”时的对话框的提示。</p>
+<p>在frameworks\base\services\java\com\android\server\power\ShutdownThread.java中</p>
+<p>[java] view plaincopyprint?</p>
+<p>static void shutdownInner(final Context context, boolean confirm) {       …       …           final int resourceId = mRebootSafeMode                ? com.android.internal.R.string.reboot_safemode_confirm                : (longPressBehavior == 2                        ? com.android.internal.R.string.shutdown_confirm_question                        : com.android.internal.R.string.shutdown_confirm);       …        …                sConfirmDialog = new AlertDialog.Builder(context)                        .setTitle(mRebootSafeMode                                ? com.android.internal.R.string.reboot_safemode_title                                : com.android.internal.R.string.power_off)                        .setMessage(resourceId)       …       …   }    </p>
+<p>修改如下： </p>
+<p>[java] view plaincopyprint?</p>
+<p>final int resourceId = mReboot    ? com.android.internal.R.string.reboot_confirm   : (mRebootSafeMode        ? com.android.internal.R.string.reboot_safemode_confirm        : (longPressBehavior == 2                ? com.android.internal.R.string.shutdown_confirm_question                : com.android.internal.R.string.shutdown_confirm));             …             …                 sConfirmDialog = new AlertDialog.Builder(context)                     .setTitle(mReboot                    ? com.android.internal.R.string.global_action_reboot                    : (mRebootSafeMode                        ? com.android.internal.R.string.reboot_safemode_title                        : com.android.internal.R.string.power_off))                     .setMessage(resourceId)    </p>
+<p>至此关于代码部分的改动全部完成，接下就添加需要添加使用到的资源了，就是其中使用的字符串，为了简单起见就添加了英文和简体中文：</p>
+<p>在对应的资源文件中添加：</p>
+<p>frameworks\base\core\res\res\values\strings.xml</p>
+<p>[html] view plaincopyprint?</p>
+<p>&lt;!– xiaoyuguang 20130616 –&gt;   &lt;!– label for item that turns reboot in device options dialog –&gt;           &lt;string name=&quot;global_action_reboot&quot;&gt;Reboot&lt;/string&gt;          &lt;string name=&quot;reboot_confirm&quot;&gt; Do you want to reboot your device?&lt;/string&gt;   &lt;!– end xiaoyuguang 20130616 –&gt;    </p>
+<p>frameworks\base\core\res\res\values-zh-rCN\strings.xml</p>
+<p>[html] view plaincopyprint?</p>
+<p>&lt;!– xiaoyuguang 20130616 –&gt;   &lt;string name=&quot;global_action_reboot&quot;&gt;重启&lt;/string&gt;   &lt;string name=&quot;reboot_confirm&quot;&gt;您要重新启动您的设备吗?&lt;/string&gt;   &lt;!– end xiaoyuguang 20130616–&gt;    </p>
+<p>现在已经添加了好这些资源，但是现在还不能使用，此时编译会出现找不到该资源的错误，还需要在frameworks\base\core\res\res\values\symbols.xml（在4.1中是在frameworks\base\core\res\res\values\public.xml）文件中进行资源声明： </p>
+<p>[html] view plaincopyprint?</p>
+<p>&lt;java-symbol type=&quot;string&quot; name=&quot;global_action_reboot&quot; /&gt;   &lt;java-symbol type=&quot;string&quot; name=&quot;reboot_confirm&quot; /&gt;    </p>
+<p>至此重启功能添加完毕，在编译前执行./mk -t update-api （因为新添加了接口）。</p>
+<p>当然这仅仅是从框架层上进行修改，其底层的具体实现暂时还未探讨，有时间在去看看了。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/%E6%B7%BB%E5%8A%A0%E9%87%8D%E5%90%AF%20android4.4/" rel="prev" title="添加重启 android4">
+      <i class="fa fa-chevron-left"></i> 添加重启 android4
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/%E8%B0%83%E7%94%A8keyguardService/" rel="next" title="调用keyguardService">
+      调用keyguardService <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Edward"
+      src="/uploads/avatar.gif">
+  <p class="site-author-name" itemprop="name">Edward</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">570</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Edward</span>
+</div>
+
+        
+
+
+
+
+
+
+<script>
+  (function() {
+    function leancloudSelector(url) {
+      url = encodeURI(url);
+      return document.getElementById(url).querySelector('.leancloud-visitors-count');
+    }
+
+    function addCount(Counter) {
+      var visitors = document.querySelector('.leancloud_visitors');
+      var url = decodeURI(visitors.id);
+      var title = visitors.dataset.flagTitle;
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          if (results.length > 0) {
+            var counter = results[0];
+            leancloudSelector(url).innerText = counter.time + 1;
+            Counter('put', '/classes/Counter/' + counter.objectId, { time: { '__op': 'Increment', 'amount': 1 } })
+              .catch(error => {
+                console.error('Failed to save visitor count', error);
+              });
+          } else {
+              Counter('post', '/classes/Counter', { title, url, time: 1 })
+                .then(response => response.json())
+                .then(() => {
+                  leancloudSelector(url).innerText = 1;
+                })
+                .catch(error => {
+                  console.error('Failed to create', error);
+                });
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    function showTime(Counter) {
+      var visitors = document.querySelectorAll('.leancloud_visitors');
+      var entries = [...visitors].map(element => {
+        return decodeURI(element.id);
+      });
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url: { '$in': entries } })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          for (let url of entries) {
+            let target = results.find(item => item.url === url);
+            leancloudSelector(url).innerText = target ? target.time : 0;
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    let { app_id, app_key, server_url } = {"enable":true,"app_id":"wxYx0BX9gaKA3XC4LuO2of0v-gzGzoHsz","app_key":"LQMcs6IDIE4YAm10vMsn9IYq","server_url":"https://wxyx0bx9.lc-cn-n1-shared.com","security":false};
+    function fetchData(api_server) {
+      var Counter = (method, url, data) => {
+        return fetch(`${api_server}/1.1${url}`, {
+          method,
+          headers: {
+            'X-LC-Id'     : app_id,
+            'X-LC-Key'    : app_key,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data)
+        });
+      };
+      if (CONFIG.page.isPost) {
+        if (CONFIG.hostname !== location.hostname) return;
+        addCount(Counter);
+      } else if (document.querySelectorAll('.post-title-link').length >= 1) {
+        showTime(Counter);
+      }
+    }
+
+    let api_server = app_id.slice(-9) !== '-MdYXbMMI' ? server_url : `https://${app_id.slice(0, 8).toLowerCase()}.api.lncldglobal.com`;
+
+    if (api_server) {
+      fetchData(api_server);
+    } else {
+      fetch('https://app-router.leancloud.cn/2/route?appId=' + app_id)
+        .then(response => response.json())
+        .then(({ api_server }) => {
+          fetchData('https://' + api_server);
+        });
+    }
+  })();
+</script>
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

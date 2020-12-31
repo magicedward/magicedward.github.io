@@ -1,0 +1,1434 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"edward.org.cn","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="修改android  为平板模式 device\rockchip\rk30sdk\device.mk ro.rk.systembar.tabletUI&#x3D;true \ 或者 修改out\target\product\rk30sdk\system\build.prop ro.rk.systembar.tabletUI&#x3D;true \ 修改设置里面的渐变色背景图 frameworks\base\core\">
+<meta property="og:type" content="article">
+<meta property="og:title" content="android 4">
+<meta property="og:url" content="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/android%204.2/index.html">
+<meta property="og:site_name" content="点点滴滴">
+<meta property="og:description" content="修改android  为平板模式 device\rockchip\rk30sdk\device.mk ro.rk.systembar.tabletUI&#x3D;true \ 或者 修改out\target\product\rk30sdk\system\build.prop ro.rk.systembar.tabletUI&#x3D;true \ 修改设置里面的渐变色背景图 frameworks\base\core\">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-12-31T06:48:00.847Z">
+<meta property="article:modified_time" content="2020-01-16T04:37:32.919Z">
+<meta property="article:author" content="Edward">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/android%204.2/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>android 4 | 点点滴滴</title>
+  
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?a92ed22eafce466e7a7b17546bb0dc6f";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">点点滴滴</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/android%204.2/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/avatar.gif">
+      <meta itemprop="name" content="Edward">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="点点滴滴">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          android 4
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-12-31 14:48:00" itemprop="dateCreated datePublished" datetime="2020-12-31T14:48:00+08:00">2020-12-31</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-01-16 12:37:32" itemprop="dateModified" datetime="2020-01-16T12:37:32+08:00">2020-01-16</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%83%82%E7%AC%94%E5%A4%B4/" itemprop="url" rel="index"><span itemprop="name">烂笔头</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/android%204.2/" class="post-meta-item leancloud_visitors" data-flag-title="android 4" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>修改android  为平板模式</p>
+<p>device\rockchip\rk30sdk\device.mk</p>
+<p>ro.rk.systembar.tabletUI=true \</p>
+<p>或者</p>
+<p>修改out\target\product\rk30sdk\system\build.prop</p>
+<p>ro.rk.systembar.tabletUI=true \</p>
+<p>修改设置里面的渐变色背景图</p>
+<p>frameworks\base\core\res\res\drawable\background_holo_dark.xml</p>
+<p>            android:startColor=&quot;#ff1a1a1a&quot;</p>
+<p>            android:endColor=&quot;#ff1a1a1a&quot;</p>
+<p>修改锁屏界面 解锁部分</p>
+<p>frameworks\base\core\res\res\values\arrays.xml</p>
+<p>frameworks\base\core\res\res\layout\keyguard_glow_pad_view.xml</p>
+<p>整个应用程序的 宽高</p>
+<p>&lt;!– AppsCustomize –&gt;</p>
+<p>    &lt;dimen name=&quot;apps_customize_cell_width&quot;&gt;126dp&lt;/dimen&gt;</p>
+<p>    &lt;dimen name=&quot;apps_customize_cell_height&quot;&gt;126dp&lt;/dimen&gt;</p>
+<p>修改锁屏界面 添加桌面插件</p>
+<p>packages\apps\Calendar\res\xml\appwidget_info.xml</p>
+<p>修改桌面切换到app 的速度</p>
+<p>packages\apps\Launcher2\res\values\config.xml</p>
+<p> &lt;integer name=&quot;config_appsCustomizeZoomInTime&quot;&gt;350&lt;/integer&gt;</p>
+<p>    &lt;integer name=&quot;config_appsCustomizeZoomOutTime&quot;&gt;600&lt;/integer&gt;</p>
+<p>    &lt;integer name=&quot;config_appsCustomizeZoomScaleFactor&quot;&gt;7&lt;/integer&gt;</p>
+<p>    &lt;integer name=&quot;config_appsCustomizeFadeInTime&quot;&gt;250&lt;/integer&gt;</p>
+<p>    &lt;integer name=&quot;config_appsCustomizeFadeOutTime&quot;&gt;200&lt;/integer&gt;</p>
+<p>    &lt;integer name=&quot;config_appsCustomizeWorkspaceShrinkTime&quot;&gt;300&lt;/integer&gt;</p>
+<p>    &lt;integer name=&quot;config_appsCustomizeWorkspaceAnimationStagger&quot;&gt;40&lt;/integer&gt;</p>
+<p>    &lt;integer name=&quot;config_workspaceAppsCustomizeAnimationStagger&quot;&gt;100&lt;/integer&gt;</p>
+<p>修改  应用程序和小部件 切换的速度</p>
+<p>packages\apps\Launcher2\src\com\android\launcher2\AppsCustomizeTabHost.java</p>
+<p>diff –git a/packages/apps/Launcher2/src/com/android/launcher2/AppsCustomizeTabHost.java b/packages/apps/Launcher2/src/com/android/launcher2/AppsCustomizeTabHost.java</p>
+<p>index 5eb8483..404c494 100755</p>
+<p>— a/packages/apps/Launcher2/src/com/android/launcher2/AppsCustomizeTabHost.java</p>
+<p>+++ b/packages/apps/Launcher2/src/com/android/launcher2/AppsCustomizeTabHost.java</p>
+<p>@@ -249,7 +249,7 @@ public class AppsCustomizeTabHost extends TabHost implements LauncherTransitiona</p>
+<p>                     PagedViewWidget.setDeletePreviewsWhenDetachedFromWindow(false);</p>
+<p>                     mAppsCustomizePane.removeView(child);</p>
+<p>                     PagedViewWidget.setDeletePreviewsWhenDetachedFromWindow(true);</p>
+<ul>
+<li>                   mAnimationBuffer.setAlpha(1f);</li>
+</ul>
+<ul>
+<li>                   mAnimationBuffer.setAlpha(0f);</li>
+</ul>
+<p>                     mAnimationBuffer.setVisibility(View.VISIBLE);</p>
+<p>                     LayoutParams p = new FrameLayout.LayoutParams(child.getMeasuredWidth(),</p>
+<p>                             child.getMeasuredHeight());</p>
+<p>修改开机第一屏方向</p>
+<p>kernel\drivers\video\rockchip\rk_fb.c</p>
+<p>FB_ROTATE_UR //方向不改变</p>
+<p>FB_ROTATE_UD//上下颠倒</p>
+<p>FB_ROTATE_CW//顺时针旋转90度</p>
+<p>FB_ROTATE_CCW//逆时针旋转90度</p>
+<p>if  defined(CONFIG_LOGO_LINUX_BMP)</p>
+<p>if(fb_prepare_bmp_logo(fb_inf-&gt;fb[0], FB_ROTATE_CCW)) {</p>
+<p>/* Start display and show logo on boot */</p>
+<p>fb_set_cmap(&amp;fb_inf-&gt;fb[0]-&gt;cmap, fb_inf-&gt;fb[0]);</p>
+<p>fb_show_bmp_logo(fb_inf-&gt;fb[0], FB_ROTATE_CCW);</p>
+<p>fb_inf-&gt;fb[0]-&gt;fbops-&gt;fb_pan_display(&amp;(fb_inf-&gt;fb[0]-&gt;var), fb_inf-&gt;fb[0]);</p>
+<p>}</p>
+<p>#else</p>
+<p>if(fb_prepare_logo(fb_inf-&gt;fb[0], FB_ROTATE_CCW)) {</p>
+<p>/* Start display and show logo on boot */</p>
+<p>fb_set_cmap(&amp;fb_inf-&gt;fb[0]-&gt;cmap, fb_inf-&gt;fb[0]);</p>
+<p>fb_show_logo(fb_inf-&gt;fb[0], FB_ROTATE_CCW);</p>
+<p>fb_inf-&gt;fb[0]-&gt;fbops-&gt;fb_pan_display(&amp;(fb_inf-&gt;fb[0]-&gt;var), fb_inf-&gt;fb[0]);</p>
+<p>}</p>
+<p>#endif</p>
+<p>fb_inf-&gt;fb[0]-&gt;fbops-&gt;fb_ioctl(fb_inf-&gt;fb[0],RK_FBIOSET_CONFIG_DONE,NULL);</p>
+<p>修改默认动画（ANDROID）的方向</p>
+<p>frameworks\base\core\res\assets\images</p>
+<p>修改低电 电压图标方向</p>
+<p>kernel\drivers\video\fbmem.c</p>
+<p>#ifdef CONFIG_LOGO_LOWERPOWER_WARNING</p>
+<p>if(1 ==  get_battery_status()){</p>
+<p>/<em>yu del</em>/// y = fb_show_logo_line(info, rotate, fb_logo.logo, 0,</p>
+<p>y = fb_show_logo_line(info, FB_ROTATE_UR, fb_logo.logo, 0,</p>
+<p>    1);</p>
+<p>}else{</p>
+<p>y = fb_show_logo_line(info, rotate, fb_logo.logo, 0,</p>
+<p>     num_online_cpus());</p>
+<p>}</p>
+<p>#else</p>
+<p>y = fb_show_logo_line(info, rotate, fb_logo.logo, 0,</p>
+<p>     num_online_cpus());</p>
+<p>#endif</p>
+<p>摄像头状态栏 不随方向转动</p>
+<p>packages\apps\Gallery2\AndroidManifest.xml</p>
+<p>                android:windowSoftInputMode=&quot;stateAlwaysHidden|adjustPan&quot;</p>
+<ul>
+<li>android:screenOrientation=&quot;landscape&quot;&gt;</li>
+</ul>
+<p>去掉setting hdmi 1080p</p>
+<p>packages\apps\Settings\res\values\arrays.xml</p>
+<p>    &lt;string-array name=&quot;hdmi_resolution_entries&quot;&gt;</p>
+<p> -       &lt;item&gt;1920x1080p_50Hz &lt;/item&gt;</p>
+<p> -       &lt;item&gt;1920x1080p_60Hz&lt;/item&gt;</p>
+<p>        &lt;item&gt;1280x720p_50Hz&lt;/item&gt;</p>
+<p>        &lt;item&gt;1280x720p_60Hz&lt;/item&gt;</p>
+<p>        &lt;item&gt;720x576p_50Hz &lt;/item&gt;</p>
+<p>        &lt;item&gt;720x480p_60Hz &lt;/item&gt;</p>
+<p>    &lt;/string-array&gt;</p>
+<p>    &lt;string-array name=&quot;hdmi_resolution_values&quot;&gt;</p>
+<ul>
+<li><p>       &lt;item&gt;1&lt;/item&gt;</p>
+</li>
+<li><p>       &lt;item&gt;2&lt;/item&gt;</p>
+</li>
+</ul>
+<p>        &lt;item&gt;3&lt;/item&gt;</p>
+<p>        &lt;item&gt;4&lt;/item&gt;</p>
+<p>        &lt;item&gt;5&lt;/item&gt;</p>
+<p>        &lt;item&gt;6&lt;/item&gt;</p>
+<p>    &lt;/string-array&gt;</p>
+<p>packages\apps\Settings\res\xml\hdmi_settings.xml</p>
+<p>&lt;ListPreference</p>
+<p> android:key=&quot;hdmi_resolution&quot;</p>
+<p>          android:title=&quot;@string/hdmi_resolution_title&quot;</p>
+<p>          android:persistent=&quot;true&quot;</p>
+<p> android:dependency=&quot;hdmi&quot;</p>
+<p>          android:entries=&quot;@array/hdmi_resolution_entries&quot;</p>
+<p>          android:entryValues=&quot;@array/hdmi_resolution_values&quot;</p>
+<p>          android:defaultValue=&quot;3&quot;/&gt;</p>
+<p>packages\apps\Settings\res\xml\hdmi_settings_timeout.xml</p>
+<p>&lt;ListPreference</p>
+<p> android:key=&quot;hdmi_resolution&quot;</p>
+<p>          android:title=&quot;@string/hdmi_resolution_title&quot;</p>
+<p>          android:persistent=&quot;true&quot;</p>
+<p> android:dependency=&quot;hdmi&quot;</p>
+<p>          android:entries=&quot;@array/hdmi_resolution_entries&quot;</p>
+<p>          android:entryValues=&quot;@array/hdmi_resolution_values&quot;</p>
+<p>          android:defaultValue=&quot;3&quot;/&gt;</p>
+<p>packages\apps\Settings\src\com\android\settings\HdmiReceiver.java</p>
+<p>   SharedPreferences preferences = context.getSharedPreferences(&quot;Settings&quot;, context.MODE_PRIVATE);</p>
+<p>            int enable = preferences.getInt(&quot;enable&quot;, 1);</p>
+<p>int resol = preferences.getInt(&quot;resolution&quot;, 3); //2 改成 3</p>
+<p>设置   显示 添加 从不休眠  选项</p>
+<p>packages\apps\Settings\res\values\strings.xml</p>
+<ul>
+<li>&lt;string name=&quot;nevertimeout&quot;&gt;Never timeout &lt;/string&gt;</li>
+</ul>
+<p>packages\apps\Settings\res\values-zh-rCN\strings.xml</p>
+<ul>
+<li>&lt;string name=&quot;nevertimeout&quot;&gt;永不休眠&lt;/string&gt;</li>
+</ul>
+<p>packages\apps\Settings\res\xml\display_settings.xml</p>
+<p>把</p>
+<p>        &lt;ListPreference</p>
+<p>                android:key=&quot;screen_timeout&quot;</p>
+<p>                android:title=&quot;@string/screen_timeout&quot;</p>
+<p>                android:summary=&quot;@string/screen_timeout_summary&quot;</p>
+<p>                android:persistent=&quot;false&quot;</p>
+<p>                android:entries=&quot;@array/screen_timeout_entries&quot;</p>
+<p>                android:entryValues=&quot;@array/screen_timeout_values&quot; /&gt;</p>
+<p>改成</p>
+<p>        &lt;ListPreference</p>
+<p>                android:key=&quot;screen_timeout&quot;</p>
+<p>                android:title=&quot;@string/screen_timeout&quot;</p>
+<p>                android:summary=&quot;@string/screen_timeout_summary&quot;</p>
+<p>                android:persistent=&quot;false&quot;</p>
+<p>                android:entries=&quot;@array/dream_timeout_entries&quot;</p>
+<p>                android:entryValues=&quot;@array/dream_timeout_values&quot; /&gt;</p>
+<p>packages\apps\Settings\src\com\android\settings\DisplaySettings.java</p>
+<p>        mScreenTimeoutPreference = (ListPreference) findPreference(KEY_SCREEN_TIMEOUT);</p>
+<p>        final long currentTimeout = Settings.System.getLong(resolver, SCREEN_OFF_TIMEOUT,</p>
+<p>                FALLBACK_SCREEN_TIMEOUT_VALUE);</p>
+<ul>
+<li><p>       if(currentTimeout &gt; 1800000)</p>
+</li>
+<li><p>mScreenTimeoutPreference.setValue(String.valueOf(0));</p>
+</li>
+<li><p>else</p>
+</li>
+</ul>
+<p>mScreenTimeoutPreference.setValue(String.valueOf(currentTimeout));</p>
+<p>            } else {</p>
+<p>                int best = 0;</p>
+<p>                for (int i = 0; i &lt; values.length; i++) {</p>
+<p>                    long timeout = Long.parseLong(values[i].toString());</p>
+<p>                    if (currentTimeout &gt;= timeout) {</p>
+<p>                        best = i;</p>
+<p>                    }</p>
+<p>                }</p>
+<ul>
+<li><p>if(currentTimeout &gt; 1800000 || currentTimeout &lt;=0){     </p>
+</li>
+<li><p>summary = preference.getContext().getString(R.string.nevertimeout ,&quot;&quot;);</p>
+</li>
+<li><p>}</p>
+</li>
+<li><p>else</p>
+</li>
+</ul>
+<p>                summary = preference.getContext().getString(R.string.screen_timeout_summary,</p>
+<p>                        entries[best]);</p>
+<p>    public boolean onPreferenceChange(Preference preference, Object objValue) {</p>
+<p>        final String key = preference.getKey();</p>
+<p>        if (KEY_SCREEN_TIMEOUT.equals(key)) {</p>
+<p>            int value = Integer.parseInt((String) objValue);</p>
+<p>            try {</p>
+<ul>
+<li><p>if(value &lt;= 0)</p>
+</li>
+<li><p>Settings.System.putInt(getContentResolver(), SCREEN_OFF_TIMEOUT, Integer.MAX_VALUE);</p>
+</li>
+<li><p>else</p>
+</li>
+</ul>
+<p>                Settings.System.putInt(getContentResolver(), SCREEN_OFF_TIMEOUT, value);</p>
+<p>hdmi 添加中文  屏幕休眠</p>
+<p>packages\apps\Settings\res\values-zh-rCN\arrays.xml</p>
+<p>  &lt;string-array name=&quot;security_settings_premium_sms_values&quot;&gt;</p>
+<p>    &lt;item msgid=&quot;7389829271787670252&quot;&gt;&quot;询问&quot;&lt;/item&gt;</p>
+<p>    &lt;item msgid=&quot;5077768429488260031&quot;&gt;&quot;永不允许&quot;&lt;/item&gt;</p>
+<p>    &lt;item msgid=&quot;1417929597727989746&quot;&gt;&quot;始终允许&quot;&lt;/item&gt;</p>
+<p>  &lt;/string-array&gt;</p>
+<ul>
+<li><p> &lt;string-array name=&quot;hdmi_lcd_timeout_entries&quot;&gt;</p>
+</li>
+<li><p>      &lt;item&gt;10秒&lt;/item&gt;</p>
+</li>
+</ul>
+<p> +      &lt;item&gt;20秒&lt;/item&gt;</p>
+<p> +      &lt;item&gt;30秒&lt;/item&gt;</p>
+<p> +     &lt;item&gt;永不休眠&lt;/item&gt;</p>
+<ul>
+<li>&lt;/string-array&gt;</li>
+</ul>
+<p>修改应用程序列表 背景半透明</p>
+<p>diff –git a/res/layout/apps_customize_pane.xml b/res/layout/apps_customize_pane.xml</p>
+<p>index 41ba9e2..cbdd76b 100644</p>
+<p>— a/res/layout/apps_customize_pane.xml</p>
+<p>+++ b/res/layout/apps_customize_pane.xml</p>
+<p>@@ -16,14 +16,15 @@</p>
+<p> &lt;com.android.launcher2.AppsCustomizeTabHost</p>
+<p>     xmlns:android=&quot;<a target="_blank" rel="noopener" href="http://schemas.android.com/apk/res/android">http://schemas.android.com/apk/res/android</a>&quot;</p>
+<p>     xmlns:launcher=&quot;<a target="_blank" rel="noopener" href="http://schemas.android.com/apk/res/com.android.launcher">http://schemas.android.com/apk/res/com.android.launcher</a>&quot;</p>
+<ul>
+<li>   android:background=&quot;#FF000000&quot;&gt;</li>
+</ul>
+<ul>
+<li>   android:background=&quot;#00000000&quot;&gt;</li>
+</ul>
+<p>     &lt;LinearLayout</p>
+<p>         android:id=&quot;@+id/apps_customize_content&quot;</p>
+<p>         android:orientation=&quot;vertical&quot;</p>
+<p>         android:layout_width=&quot;match_parent&quot;</p>
+<p>         android:layout_height=&quot;match_parent&quot;</p>
+<p>         android:visibility=&quot;gone&quot;</p>
+<ul>
+<li>       android:layoutDirection=&quot;ltr&quot;&gt;</li>
+</ul>
+<ul>
+<li><p>       android:layoutDirection=&quot;ltr&quot;</p>
+</li>
+<li><p>       android:background=&quot;#00000000&quot;&gt;</p>
+</li>
+</ul>
+<p>         &lt;!– The layout_width of the tab bar gets overriden to align the content</p>
+<p>              with the text in the tabs in AppsCustomizeTabHost. –&gt;</p>
+<p>         &lt;FrameLayout</p>
+<p>@@ -31,7 +32,8 @@</p>
+<p>             android:layout_width=&quot;wrap_content&quot;</p>
+<p>             android:layout_height=&quot;@dimen/apps_customize_tab_bar_height&quot;</p>
+<p>             android:layout_marginTop=&quot;@dimen/apps_customize_tab_bar_margin_top&quot;</p>
+<ul>
+<li>           android:layout_gravity=&quot;center_horizontal&quot;&gt;</li>
+</ul>
+<ul>
+<li><p>           android:layout_gravity=&quot;center_horizontal&quot;</p>
+</li>
+<li><p>           &gt;</p>
+</li>
+</ul>
+<p>             &lt;com.android.launcher2.FocusOnlyTabWidget</p>
+<p>                 android:id=&quot;@android:id/tabs&quot;</p>
+<p>                 android:layout_width=&quot;match_parent&quot;</p>
+<p>……..</p>
+<p> &lt;FrameLayout</p>
+<p>                android:id=&quot;@+id/animation_buffer&quot;</p>
+<p>                android:layout_width=&quot;match_parent&quot;</p>
+<p>                android:layout_height=&quot;match_parent&quot;</p>
+<ul>
+<li>               android:background=&quot;#50000000&quot;</li>
+</ul>
+<p>                android:visibility=&quot;gone&quot; /&gt;</p>
+<p>diff –git a/src/com/android/launcher2/Launcher.java b/src/com/android/launcher2/Launcher.java</p>
+<p>index a4ed91f..4da8632 100644</p>
+<p>— a/src/com/android/launcher2/Launcher.java</p>
+<p>+++ b/src/com/android/launcher2/Launcher.java</p>
+<p>@@ -722,6 +722,7 @@ public final class Launcher extends Activity</p>
+<p>         if (mOnResumeState == State.WORKSPACE) {</p>
+<p>             showWorkspace(false);</p>
+<p>         } else if (mOnResumeState == State.APPS_CUSTOMIZE) {</p>
+<ul>
+<li>           Log.d(&quot;Launcher&quot;,&quot;onResume APPS_CUSTOMIZE&quot;);</li>
+</ul>
+<p>             showAllApps(false);</p>
+<p>         }</p>
+<p>         mOnResumeState = State.NONE;</p>
+<p>@@ -2386,7 +2387,7 @@ public final class Launcher extends Activity</p>
+<p>         if (isAllAppsVisible()) {</p>
+<p>             if (mAppsCustomizeTabHost != null &amp;&amp;</p>
+<p>                     !mAppsCustomizeTabHost.isTransitioning()) {</p>
+<ul>
+<li>               updateWallpaperVisibility(false);</li>
+</ul>
+<ul>
+<li>               updateWallpaperVisibility(true);</li>
+</ul>
+<p>             }</p>
+<p>         }</p>
+<p>     }</p>
+<p>@@ -2558,7 +2559,8 @@ public final class Launcher extends Activity</p>
+<p>                         hideDockDivider();</p>
+<p>                     }</p>
+<p>                     if (!animationCancelled) {</p>
+<ul>
+<li>                       updateWallpaperVisibility(false);</li>
+</ul>
+<ul>
+<li><p>                       //modify by dzy for wallpaper visibility</p>
+</li>
+<li><p>                       updateWallpaperVisibility(true);</p>
+</li>
+</ul>
+<p>                     }</p>
+<p>                     // Hide the search bar</p>
+<p>@@ -2650,7 +2652,8 @@ public final class Launcher extends Activity</p>
+<p>             dispatchOnLauncherTransitionPrepare(toView, animated, false);</p>
+<p>             dispatchOnLauncherTransitionStart(toView, animated, false);</p>
+<p>             dispatchOnLauncherTransitionEnd(toView, animated, false);</p>
+<ul>
+<li>           updateWallpaperVisibility(false);</li>
+</ul>
+<ul>
+<li><p>           //modify by dzy for wallpaper visible</p>
+</li>
+<li><p>           updateWallpaperVisibility(true);</p>
+</li>
+</ul>
+<p>         }</p>
+<p>     }</p>
+<p>截图方向</p>
+<p>frameworks\base\packages\SystemUI\src\com\android\systemui\screenshot\GlobalScreenshot.java</p>
+<p>private float getDegreesForRotation(int value) {</p>
+<p>        if (mHardwareRotation % 2 != 0) {</p>
+<p>            value = (value + mHardwareRotation) % 4;</p>
+<p>        }</p>
+<p>Log.d(&quot;AAA&quot;,&quot;———-value+=:&quot;+value);</p>
+<p>        switch (value) {</p>
+<p>        case Surface.ROTATION_90:</p>
+<p>            //return 360f - 90f;</p>
+<p>            return 360f - 270f;</p>
+<p>        case Surface.ROTATION_180:</p>
+<p>           // return 360f - 180f;</p>
+<p>           return 0f;</p>
+<p>        case Surface.ROTATION_270:</p>
+<p>            //return 360f - 270f;</p>
+<p>            return 360f - 90f;</p>
+<p>        }</p>
+<p>       // return 0f;</p>
+<p>       return 360f - 180f;</p>
+<p>    }</p>
+<p>修改 状态栏 12小时 时间显示am  pm</p>
+<p>frameworks\base\packages\SystemUI\src\com\android\systemui\statusbar\policy\Clock.java</p>
+<p>private static final int AM_PM_STYLE_NORMAL  = 0;</p>
+<p>    private static final int AM_PM_STYLE_SMALL   = 1;</p>
+<p>    private static final int AM_PM_STYLE_GONE    = 2;</p>
+<p>    private static final int AM_PM_STYLE = AM_PM_STYLE_NORMAL;//AM_PM_STYLE_GONE;</p>
+<p>修改锁屏时间显示 am  pm</p>
+<p>diff –git a/frameworks/base/policy/src/com/android/internal/policy/impl/keyguard/ClockView.java b/frameworks/base/policy/src/com/android/internal/policy/impl/keyguard/</p>
+<p>index 6c701c7..760b608 100755</p>
+<p>— a/frameworks/base/policy/src/com/android/internal/policy/impl/keyguard/ClockView.java</p>
+<p>+++ b/frameworks/base/policy/src/com/android/internal/policy/impl/keyguard/ClockView.java</p>
+<p>@@ -35,13 +35,15 @@ import java.lang.ref.WeakReference;</p>
+<p> import java.text.DateFormatSymbols;</p>
+<p> import java.util.Calendar;</p>
+<p> import com.android.internal.R;</p>
+<p>-</p>
+<p>+import android.util.Log;</p>
+<p> /**</p>
+<p>  * Displays the time</p>
+<p>  */</p>
+<p> public class ClockView extends RelativeLayout {</p>
+<ul>
+<li><p>   private static final String ANDROID_CLOCK_FONT_FILE = &quot;/system/fonts/AndroidClock.ttf&quot;;</p>
+</li>
+<li><p>   private final static String M12 = &quot;h:mm&quot;;</p>
+</li>
+</ul>
+<p>+//    private static final String ANDROID_CLOCK_FONT_FILE = &quot;/system/fonts/AndroidClock.ttf&quot;;</p>
+<ul>
+<li>private static final String ANDROID_CLOCK_FONT_FILE = &quot;/system/fonts/DroidSansFallback.ttf&quot;;</li>
+</ul>
+<p>+//    private final static String M12 = &quot;h:mm&quot;;</p>
+<p>+private final static String M12 = &quot;h:mmaa&quot;;</p>
+<p>     private final static String M24 = &quot;kk:mm&quot;;</p>
+<p>     private Calendar mCalendar;</p>
+<p>@@ -154,6 +156,9 @@ public class ClockView extends RelativeLayout {</p>
+<p>     protected void onFinishInflate() {</p>
+<p>         super.onFinishInflate();</p>
+<p>         mTimeView = (TextView) findViewById(R.id.clock_text);</p>
+<ul>
+<li>       mTimeView.setTextSize(mTimeView.getTextSize()-120);   </li>
+</ul>
+<p>         mTimeView.setTypeface(Typeface.createFromFile(ANDROID_CLOCK_FONT_FILE));</p>
+<p>         mAmPm = new AmPm(this, null);</p>
+<p>         mCalendar = Calendar.getInstance();</p>
+<p>@@ -209,12 +214,11 @@ public class ClockView extends RelativeLayout {</p>
+<p>         updateTime();</p>
+<p>     }</p>
+<p>机器关机充电电池百分比</p>
+<p>system\core\charger\charger.c</p>
+<ul>
+<li>int batt_per = 10;</li>
+</ul>
+<p>static void draw_battery(struct charger *charger)</p>
+<p>{</p>
+<p>    struct animation *batt_anim = charger-&gt;batt_anim;</p>
+<p>    struct frame *frame = &amp;batt_anim-&gt;frames[batt_anim-&gt;cur_frame];</p>
+<ul>
+<li>char str[4]={0};</li>
+</ul>
+<p>    if (batt_anim-&gt;num_frames != 0) {</p>
+<p>        draw_surface_centered(charger, frame-&gt;surface);</p>
+<p>        LOGV(&quot;drawing frame #%d name=%s min_cap=%d time=%d\n&quot;,</p>
+<p>             batt_anim-&gt;cur_frame, frame-&gt;name, frame-&gt;min_capacity,</p>
+<p>             frame-&gt;disp_time);</p>
+<p>   +          batt_per = batt_per - 1;</p>
+<p>    +         if(batt_per == 0)</p>
+<p>     +         {</p>
+<p>      +     sprintf(str,&quot;%d%%&quot;,batt_anim-&gt;capacity);     </p>
+<p>        +                      gr_color(127,255,0,255); </p>
+<p>          +                    draw_text(str, 385, 550);</p>
+<p>            +                  batt_per = 1;</p>
+<p>              +              }</p>
+<p>    }</p>
+<p>}</p>
+<p>机器的右上角显示电池百分比</p>
+<p> diff –git a/frameworks/base/packages/SystemUI/res/layout/status_bar.xml b/frameworks/base/packages/SystemUI/res/layout/status_bar.xml<br>index bf20e9d..c686e95 100644<br>— a/frameworks/base/packages/SystemUI/res/layout/status_bar.xml<br>+++ b/frameworks/base/packages/SystemUI/res/layout/status_bar.xml<br>@@ -100,7 +100,17 @@<br>                     android:layout_height=&quot;wrap_content&quot;<br>                     android:layout_width=&quot;wrap_content&quot;<br>                     android:paddingLeft=&quot;4dip&quot;<br>-                    /&gt;<br>+                   /&gt;<br>+               &lt;TextView<br>+                android:id=&quot;@+id/battery_text&quot;<br>+                android:textAppearance=&quot;@style/TextAppearance.StatusBar.Clock&quot;<br>+                android:layout_width=&quot;wrap_content&quot;<br>+                android:layout_height=&quot;wrap_content&quot;<br>+                android:layout_gravity=&quot;left|center_vertical&quot;<br>+                android:paddingRight=&quot;2dp&quot;<br>+                android:singleLine=&quot;true&quot;<br>+                android:text=&quot;@string/status_bar_settings_settings_button&quot;<br>+                /&gt;<br>             &lt;/LinearLayout&gt;<br>             &lt;com.android.systemui.statusbar.policy.Clock<br>diff –git a/frameworks/base/packages/SystemUI/src/com/android/systemui/statusbar/phone/PhoneStatusBar.java b/frameworks/base/packages/SystemUI/src/com/android/systemui/stat<br>index 7f92e75..4513a3b 100755<br>— a/frameworks/base/packages/SystemUI/src/com/android/systemui/statusbar/phone/PhoneStatusBar.java<br>+++ b/frameworks/base/packages/SystemUI/src/com/android/systemui/statusbar/phone/PhoneStatusBar.java<br>@@ -629,6 +629,7 @@ public class PhoneStatusBar extends BaseStatusBar {<br>         mLocationController = new LocationController(mContext); // will post a notification<br>         mBatteryController = new BatteryController(mContext);<br>         mBatteryController.addIconView((ImageView)mStatusBarView.findViewById(R.id.battery));<br>+               mBatteryController.addLabelView((TextView)mStatusBarView.findViewById(R.id.battery_text));<br>         mNetworkController = new NetworkController(mContext);<br>         mBluetoothController = new BluetoothController(mContext);<br>         final SignalClusterView signalCluster =</p>
+<p>android4.2 Launcher2界面两边的渐变的去除方法</p>
+<p>diff –git a/packages/apps/Launcher2/res/layout-sw720dp/launcher.xml b/packages/apps/Launcher2/res/layout-sw720dp/launcher.xml</p>
+<p>old mode 100644</p>
+<p>new mode 100755</p>
+<p>index 81a8f37..1ed2fcf</p>
+<p>— a/packages/apps/Launcher2/res/layout-sw720dp/launcher.xml</p>
+<p>+++ b/packages/apps/Launcher2/res/layout-sw720dp/launcher.xml</p>
+<p>@@ -21,15 +21,13 @@</p>
+<p>     android:id=&quot;@+id/launcher&quot;</p>
+<p>     android:layout_width=&quot;match_parent&quot;</p>
+<ul>
+<li><p>   android:layout_height=&quot;match_parent&quot;</p>
+</li>
+<li><p>   android:background=&quot;@drawable/workspace_bg&quot;&gt;</p>
+</li>
+</ul>
+<ul>
+<li>   android:layout_height=&quot;match_parent&quot;&gt;</li>
+</ul>
+<p>     &lt;com.android.launcher2.DragLayer</p>
+<p>         xmlns:android=&quot;<a target="_blank" rel="noopener" href="http://schemas.android.com/apk/res/android">http://schemas.android.com/apk/res/android</a>&quot;</p>
+<p>         xmlns:launcher=&quot;<a target="_blank" rel="noopener" href="http://schemas.android.com/apk/res/com.android.launcher">http://schemas.android.com/apk/res/com.android.launcher</a>&quot;</p>
+<p>         android:id=&quot;@+id/drag_layer&quot;</p>
+<ul>
+<li>       android:background=&quot;@drawable/workspace_bg&quot;</li>
+</ul>
+<p>         android:layout_width=&quot;match_parent&quot;</p>
+<p>         android:layout_height=&quot;match_parent&quot;</p>
+<p>         android:fitsSystemWindows=&quot;true&quot;&gt;</p>
+<p>diff –git a/packages/apps/Launcher2/src/com/android/launcher2/Launcher.java b/packages/apps/Launcher2/src/com/android/launcher2/Launcher.java</p>
+<p>index 9aa3d3d..2d01118 100755</p>
+<p>— a/packages/apps/Launcher2/src/com/android/launcher2/Launcher.java</p>
+<p>+++ b/packages/apps/Launcher2/src/com/android/launcher2/Launcher.java</p>
+<p>    private void setWorkspaceBackground(boolean workspace) {</p>
+<ul>
+<li><p>       mLauncherView.setBackground(workspace ?</p>
+</li>
+<li><p>               mWorkspaceBackgroundDrawable : mBlackBackgroundDrawable);</p>
+</li>
+</ul>
+<ul>
+<li><p>     //  mLauncherView.setBackground(workspace ?</p>
+</li>
+<li><p>     //          mWorkspaceBackgroundDrawable : mBlackBackgroundDrawable);</p>
+</li>
+</ul>
+<p>     }</p>
+<p>设置  –  电池 — 无法获取使用数据</p>
+<p>packages\apps\Settings\src\com\android\settings\fuelgauge\PowerUsageSummary.java</p>
+<p>        if (mPowerProfile.getAveragePower(PowerProfile.POWER_SCREEN_FULL) &lt; 0) {</p>
+<p>拔掉耳机音乐停止 或者 拔掉hdmi  音乐停止</p>
+<p>packages\apps\Music\AndroidManifest.xml</p>
+<p>这可能发生在当一个用户用耳机听音乐时忽然断开了耳机连接．音频从扬声器播放可能不是用户期望的．</p>
+<p>你可以通过处理ACTION_AUDIO_BECOMING_NOISYintent 来保证你的应用在此情况下停止播放音乐</p>
+<p> &lt;action android:name=&quot;android.media.AUDIO_BECOMING_NOISY&quot; /&gt;</p>
+<p>去掉屏幕唤醒时的背景（对焦）</p>
+<p>diff –git a/frameworks/base/policy/src/com/android/internal/policy/impl/keyguard/KeyguardWidgetFrame.java b/frameworks/base/policy/src/com/android/internal/policy/impl/keyg</p>
+<p>index babb9cb..550a793 100644</p>
+<p>— a/frameworks/base/policy/src/com/android/internal/policy/impl/keyguard/KeyguardWidgetFrame.java</p>
+<p>+++ b/frameworks/base/policy/src/com/android/internal/policy/impl/keyguard/KeyguardWidgetFrame.java</p>
+<p>@@ -236,7 +236,7 @@ public class KeyguardWidgetFrame extends FrameLayout {</p>
+<p>         if (ENABLE_HOVER_OVER_DELETE_DROP_TARGET_OVERLAY) {</p>
+<p>             canvas.save();</p>
+<p>         }</p>
+<ul>
+<li>       drawBg(canvas);</li>
+</ul>
+<ul>
+<li>       //drawBg(canvas);</li>
+</ul>
+<p>         super.dispatchDraw(canvas);</p>
+<p>         drawGradientOverlay(canvas);</p>
+<p>         if (ENABLE_HOVER_OVER_DELETE_DROP_TARGET_OVERLAY) {</p>
+<p>(END)</p>
+<p>音乐播放   超过两秒之后 点击  上一曲 就是上一曲而不是本曲的开头</p>
+<p>packages\apps\Music\src\com\android\music\MediaPlaybackActivity.java</p>
+<p>    private View.OnClickListener mPrevListener = new View.OnClickListener() {</p>
+<p>        public void onClick(View v) {</p>
+<p>            if (mService == null) return;</p>
+<p>            try {</p>
+<p>             -                   if (mService.position() &lt; 2000) {</p>
+<p>      +      if (true){</p>
+<p>      + if(mService.getRepeatMode() == 1){</p>
+<p>      + mService.seek(0);</p>
+<p>      +           mService.play();</p>
+<p>      + }else{</p>
+<p>                    mService.prev();</p>
+<p>      + }</p>
+<p>                } else {</p>
+<p>                    mService.seek(0);</p>
+<p>                    mService.play();</p>
+<p>packages\apps\Music\src\com\android\music\MediaPlaybackService.java</p>
+<p>    public int onStartCommand(Intent intent, int flags, int startId) {</p>
+<p>        mServiceStartId = startId;</p>
+<p>        mDelayedStopHandler.removeCallbacksAndMessages(null);</p>
+<p>        if (intent != null) {</p>
+<p>            String action = intent.getAction();</p>
+<p>            String cmd = intent.getStringExtra(&quot;command&quot;);</p>
+<p>            MusicUtils.debugLog(&quot;onStartCommand &quot; + action + &quot; / &quot; + cmd);</p>
+<p>            if (CMDNEXT.equals(cmd) || NEXT_ACTION.equals(action)) {</p>
+<p>                gotoNext(true);</p>
+<p>            } else if (CMDPREVIOUS.equals(cmd) || PREVIOUS_ACTION.equals(action)) {</p>
+<p>                -   position() &lt; 2000) {</p>
+<p>                +  if (true){</p>
+<p>拔tf卡时 如果是本机音乐  音乐不停止播放</p>
+<p>packages\apps\Music\src\com\android\music\MediaPlaybackActivity.java</p>
+<ul>
+<li>  import android.content.SharedPreferences;</li>
+</ul>
+<p>    private ServiceConnection osc = new ServiceConnection() {</p>
+<p>            public void onServiceConnected(ComponentName classname, IBinder obj) {</p>
+<p>                mService = IMediaPlaybackService.Stub.asInterface(obj);</p>
+<p>                startPlayback();</p>
+<p>                try {</p>
+<p>                    // Assume something is playing when the service says it is,</p>
+<p>                    // but also if the audio ID is valid but the service is paused.</p>
+<p>                    if (mService.getAudioId() &gt;= 0 || mService.isPlaying() ||</p>
+<p>                            mService.getPath() != null) {</p>
+<p>//加上下面一段代码</p>
+<p>//get the current music ‘s real path </p>
+<p>if(mService.getPath() != null){</p>
+<p>                Uri uri = Uri.parse(mService.getPath());</p>
+<p>ContentResolver cr = getContentResolver();  </p>
+<p>                         Cursor c = cr.query(uri, null, null, null, null);</p>
+<p>                         String strPath = null;</p>
+<p>                         if(c != null)</p>
+<p>                         {</p>
+<p>                                while(c.moveToNext())</p>
+<p>                                 {</p>
+<p>                                         strPath = c.getString(1);</p>
+<p>                                         break;</p>
+<p>                                }</p>
+<p>                                c.close();</p>
+<p>                        }</p>
+<p>if(strPath != null)</p>
+<p>                         {</p>
+<p>                                 SharedPreferences pf = getSharedPreferences(&quot;current&quot;, 0);</p>
+<p>                                 SharedPreferences.Editor editor = pf.edit();</p>
+<p>                                 editor.putString(&quot;CurrentMusic&quot;, strPath);</p>
+<p>                                 editor.commit();</p>
+<p>                         }</p>
+<p>}</p>
+<p>                //   Log.d(&quot;edward&quot;,&quot;DisplayPath:=&quot;+strPath);</p>
+<p>//结束</p>
+<p>packages\apps\Music\src\com\android\music\MediaPlaybackService.java</p>
+<p>    public void closeExternalStorageFiles(String storagePath) {</p>
+<p>        // stop playback and clean up if the SD card is going to be unmounted.</p>
+<p>       // Log.d(&quot;edward&quot;,&quot;storagePath:=&quot;+storagePath);</p>
+<p> //加以下代码      </p>
+<p>        SharedPreferences spf = getSharedPreferences(&quot;current&quot;, 0);</p>
+<p>              String music = spf.getString(&quot;CurrentMusic&quot;, &quot;null&quot;);</p>
+<p>               if(!music.contains(storagePath))</p>
+<p>               {</p>
+<p>                       return;</p>
+<p>               }</p>
+<p>//结束</p>
+<p>        stop(true);</p>
+<p>if (mPlayer != null)</p>
+<p>hdmi  休眠 背光修改</p>
+<p>kernel\arch\arm\mach-rk30\board-rk3168-86v.c</p>
+<p>static struct rk29_bl_info rk29_bl_info = {</p>
+<p>  .min_brightness = 0,     </p>
+<p>frameworks\base\core\res\res\values\config.xml</p>
+<p>&lt;integer name=&quot;config_screenBrightnessSettingMinimum&quot;&gt;0&lt;/integer&gt;</p>
+<p>packages\apps\Settings\src\com\android\settings\BrightnessPreference.java</p>
+<p>public BrightnessPreference(Context context, AttributeSet attrs) {</p>
+<p>        super(context, attrs);</p>
+<p>        PowerManager pm = (PowerManager)context.getSystemService(Context.POWER_SERVICE);</p>
+<ul>
+<li>     //  mScreenBrightnessMinimum = pm.getMinimumScreenBrightnessSetting();</li>
+</ul>
+<p> +     mScreenBrightnessMinimum = pm.getMinimumScreenBrightnessSetting() + 45;</p>
+<p>frameworks\base\packages\SystemUI\src\com\android\systemui\statusbar\policy\BrightnessController.java</p>
+<p>mMinimumBacklight = pm.getMinimumScreenBrightnessSetting() + 45;</p>
+<p>packages\apps\Settings\src\com\android\settings\widget\SettingsAppWidgetProvider.java</p>
+<p>if (brightnessMode == Settings.System.SCREEN_BRIGHTNESS_MODE_AUTOMATIC) {</p>
+<p>      -        //      brightness = pm.getMinimumScreenBrightnessSetting();</p>
+<p>       +                 brightness = pm.getMinimumScreenBrightnessSetting();</p>
+<p>                    brightnessMode = Settings.System.SCREEN_BRIGHTNESS_MODE_MANUAL;</p>
+<p>                } else if (brightness &lt; pm.getDefaultScreenBrightnessSetting()) {</p>
+<p>                    brightness = pm.getDefaultScreenBrightnessSetting();</p>
+<p>                } else if (brightness &lt; pm.getMaximumScreenBrightnessSetting()) {</p>
+<p>                    brightness = pm.getMaximumScreenBrightnessSetting();</p>
+<p>                } else {</p>
+<p>                    brightnessMode = Settings.System.SCREEN_BRIGHTNESS_MODE_AUTOMATIC;</p>
+<p>          -    //     brightness = pm.getMinimumScreenBrightnessSetting();</p>
+<p>           +         brightness = pm.getMinimumScreenBrightnessSetting();</p>
+<p>                }</p>
+<p>单屏模式 壁纸不滚动</p>
+<p>packages/apps/Launcher2/src/com/android/launcher2/Workspace.java</p>
+<p>final boolean enableWallpaperEffects = isHardwareAccelerated();<br>改成：<br>final boolean enableWallpaperEffects = false;</p>
+<p>客户的壁纸是1280 x 1280为了确保壁纸不被放大 显得模糊</p>
+<p>packages\apps\Launcher2\src\com\android\launcher2\Workspace.java</p>
+<p> protected void setWallpaperDimension() {</p>
+<p>…….</p>
+<p>if (LauncherApplication.isScreenLarge()) {</p>
+<p>            mWallpaperWidth = 1280;//(int) (maxDim * wallpaperTravelToScreenWidthRatio(maxDim, minDim));</p>
+<p>            mWallpaperHeight = maxDim;</p>
+<p>        } else {</p>
+<p>8846 pmu 关机有时开不起来</p>
+<p>kernel\arch\arm\mach-rk30\board-rk3168-86v.c</p>
+<p>static void rk30_pm_power_off(void)</p>
+<p>{</p>
+<p>/<em>yu del</em>/ //act8846_device_shutdown();</p>
+<p>修改应用程序背景—–加统一的背景托盘</p>
+<p>packages\apps\Launcher2\src\com\android\launcher2\Utilities.java</p>
+<p>import android.graphics.BitmapFactory;</p>
+<p>import android.graphics.Matrix; </p>
+<p>static Bitmap createIconBitmap(Drawable icon, Context context) {</p>
+<p>…….</p>
+<p>final boolean debug = false;</p>
+<p>            if (debug) {</p>
+<p>                // draw a big box for the icon for debugging</p>
+<p>                canvas.drawColor(sColors[sColorIndex]);</p>
+<p>                if (++sColorIndex &gt;= sColors.length) sColorIndex = 0;</p>
+<p>                Paint debugPaint = new Paint();</p>
+<p>                debugPaint.setColor(0xffcccc00);</p>
+<p>                canvas.drawRect(left, top, left+width, top+height, debugPaint);</p>
+<p>            }</p>
+<p>//yu add</p>
+<p>if (true) </p>
+<p>            {</p>
+<p>                Bitmap backBitmap = BitmapFactory.decodeResource(context.getResources(),</p>
+<p>                        R.drawable.icon_blue_bg);</p>
+<p>                int backWidth = backBitmap.getWidth();</p>
+<p>                int backHeight = backBitmap.getHeight();</p>
+<p>                if(backWidth != sIconWidth || backHeight != sIconHeight)</p>
+<p>                {</p>
+<p>                    Matrix matrix = new Matrix();</p>
+<p>                    matrix.postScale((float)sIconWidth/backWidth, (float)sIconHeight/backHeight);</p>
+<p>                    canvas.drawBitmap(Bitmap.createBitmap(backBitmap, 0, 0, backWidth, backHeight, matrix, true),</p>
+<p>                            0.0f, 0.0f, null);</p>
+<p>                }else</p>
+<p>                {</p>
+<p>                    canvas.drawBitmap(backBitmap, 0.0f, 0.0f, null);</p>
+<p>                }</p>
+<p>            }</p>
+<p>//yu add end</p>
+<p>            sOldBounds.set(icon.getBounds());</p>
+<p>            icon.setBounds(left, top, left+width, top+height);</p>
+<p>            icon.draw(canvas);</p>
+<p>            icon.setBounds(sOldBounds);</p>
+<p>            canvas.setBitmap(null);</p>
+<p>            return bitmap;</p>
+<p>        }</p>
+<p> 设置—Andriod键盘设置—高级设置–按键音量设置显示“-100”</p>
+<p>packages\inputmethods\LatinIME\java\src\com\android\inputmethod\latin\SettingsValues.java</p>
+<p>public static float getCurrentKeypressSoundVolume(final SharedPreferences prefs,</p>
+<p>            final Resources res) {</p>
+<p>        // TODO: use mVibrationDurationSettingsRawValue instead of reading it again here</p>
+<p>        final float volume = prefs.getFloat(Settings.PREF_KEYPRESS_SOUND_VOLUME, -1.0f);</p>
+<p>        if (volume &gt;= 0) {</p>
+<p>            return volume;</p>
+<p>        }</p>
+<ul>
+<li><p>if (volume &lt; 0) {</p>
+</li>
+<li><p>           return 0;</p>
+</li>
+</ul>
+<p>  +      }</p>
+<p>        return Float.parseFloat(ResourceUtils.getDeviceOverrideValue(</p>
+<p>                res, R.array.keypress_volumes, &quot;-1.0f&quot;));</p>
+<p>    }</p>
+<p>取消长按home功能（相对应的statusbar/phone/phoneStatusBar.java也有此功能 ）</p>
+<p>diff –git a/frameworks/base/packages/SystemUI/src/com/android/systemui/statusbar/tablet/TabletStatusBar.java b/frameworks/base/packages/SystemUI/src/com/android/system</p>
+<p>index 66bba81..22da1cd 100755</p>
+<p>— a/frameworks/base/packages/SystemUI/src/com/android/systemui/statusbar/tablet/TabletStatusBar.java</p>
+<p>+++ b/frameworks/base/packages/SystemUI/src/com/android/systemui/statusbar/tablet/TabletStatusBar.java</p>
+<p>@@ -212,15 +212,15 @@ public class TabletStatusBar extends BaseStatusBar implements</p>
+<p>         public boolean onTouch(View v, MotionEvent event) {</p>
+<p>             switch(event.getAction()) {</p>
+<p>                 case MotionEvent.ACTION_DOWN:</p>
+<ul>
+<li><p>                   if (!shouldDisableNavbarGestures() &amp;&amp; !inKeyguardRestrictedInputMode()) {</p>
+</li>
+<li><p>                       mHandler.removeCallbacks(mShowSearchPanel);</p>
+</li>
+<li><p>                       mHandler.postDelayed(mShowSearchPanel, mShowSearchHoldoff);</p>
+</li>
+<li><p>                   }</p>
+</li>
+</ul>
+<ul>
+<li><p>                //   if (!shouldDisableNavbarGestures() &amp;&amp; !inKeyguardRestrictedInputMode()) {</p>
+</li>
+<li><p>                //       mHandler.removeCallbacks(mShowSearchPanel);</p>
+</li>
+<li><p>                //       mHandler.postDelayed(mShowSearchPanel, mShowSearchHoldoff);</p>
+</li>
+<li><p>                //   }</p>
+</li>
+</ul>
+<p>                 break;</p>
+<p>                 case MotionEvent.ACTION_UP:</p>
+<p>                 case MotionEvent.ACTION_CANCEL:</p>
+<ul>
+<li>                   mHandler.removeCallbacks(mShowSearchPanel);</li>
+</ul>
+<ul>
+<li>               //    mHandler.removeCallbacks(mShowSearchPanel);</li>
+</ul>
+<p>                 break;</p>
+<p>             }</p>
+<p>             return false;</p>
+<p>添加3g dongle 支持列表</p>
+<p>packages\apps\Settings\res\xml\wireless_settings.xml</p>
+<p>&lt;PreferenceScreen</p>
+<p>android:key=&quot;_3g_dongle_supportlists&quot;</p>
+<p>android:title=&quot;@string/_3g_dongle_supportlist&quot;&gt;</p>
+<p>       &lt;/PreferenceScreen&gt;</p>
+<p>packages\apps\Settings\res\values\string.xml</p>
+<p>&lt;string name=&quot;_3g_dongle_supportlist&quot; translatable=&quot;false&quot;&gt;3G dongle support list&lt;/string&gt;</p>
+<p>packages\apps\Settings\src\com\android\settings\WirelessSettings.java</p>
+<p>+import android.net.Uri;</p>
+<p>+import java.io.File;</p>
+<p>+import android.util.Log;</p>
+<p>    private static final String KEY_MOBILE_NETWORK_SETTINGS = &quot;mobile_network_settings&quot;;</p>
+<p>    private static final String KEY_TOGGLE_NSD = &quot;toggle_nsd&quot;; //network service discovery</p>
+<p>    private static final String KEY_CELL_BROADCAST_SETTINGS = &quot;cell_broadcast_settings&quot;;</p>
+<p>    private static final String KEY_ETHERNET_SETTINGS = &quot;ethernet_settings&quot;;</p>
+<ul>
+<li>private static final String KEY_3G_DONGLE_SETTINGS = &quot;_3g_dongle_supportlists&quot;;</li>
+</ul>
+<p>    private NfcEnabler mNfcEnabler;</p>
+<p>    private NfcAdapter mNfcAdapter;</p>
+<p>    private NsdEnabler mNsdEnabler;</p>
+<ul>
+<li>private PreferenceScreen dongleSupport;</li>
+</ul>
+<p>    public boolean onPreferenceTreeClick(PreferenceScreen preferenceScreen, Preference preference) {</p>
+<p>        if (preference == mAirplaneModePreference &amp;&amp; Boolean.parseBoolean(</p>
+<p>                SystemProperties.get(TelephonyProperties.PROPERTY_INECM_MODE))) {</p>
+<p>            // In ECM mode launch ECM app dialog</p>
+<p>            startActivityForResult(</p>
+<p>                new Intent(TelephonyIntents.ACTION_SHOW_NOTICE_ECM_BLOCK_OTHERS, null),</p>
+<p>                REQUEST_CODE_EXIT_ECM);</p>
+<p>            return true;</p>
+<p>  +      }else if(preference == dongleSupport){</p>
+<ul>
+<li><p>Intent intent = new Intent();</p>
+</li>
+<li><p>     intent.setClassName(&quot;com.android.htmlviewer&quot;,&quot;com.android.htmlviewer.HTMLViewerActivity&quot;);</p>
+</li>
+<li><p>    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);</p>
+</li>
+<li><p>   Uri uri = Uri.fromFile(new File(&quot;/system/media/donglesupportlist.html&quot;));</p>
+</li>
+</ul>
+<p> +   intent.setDataAndType(uri, &quot;text/plain&quot;);    </p>
+<p>  +  getActivity().startActivity(intent);</p>
+<p>}</p>
+<p>    public void onCreate(Bundle savedInstanceState) {</p>
+<p>        super.onCreate(savedInstanceState);</p>
+<p>        mHasAirplane = false;</p>
+<p>        mHasAirplane = getResources()</p>
+<p>                .getBoolean(R.bool.config_airplane_capable);</p>
+<p>        addPreferencesFromResource(R.xml.wireless_settings);        </p>
+<p>        final Activity activity = getActivity();</p>
+<p>        mAirplaneModePreference = (CheckBoxPreference) findPreference(KEY_TOGGLE_AIRPLANE);</p>
+<p>        if(mHasAirplane) {</p>
+<p>            findPreference(KEY_MOBILE_NETWORK_SETTINGS).setDependency(KEY_TOGGLE_AIRPLANE);</p>
+<p>        } else {            </p>
+<p>            getPreferenceScreen().removePreference(mAirplaneModePreference);</p>
+<p>        }</p>
+<p>        CheckBoxPreference nfc = (CheckBoxPreference) findPreference(KEY_TOGGLE_NFC);</p>
+<p>        PreferenceScreen androidBeam = (PreferenceScreen) findPreference(KEY_ANDROID_BEAM_SETTINGS);</p>
+<p>        CheckBoxPreference nsd = (CheckBoxPreference) findPreference(KEY_TOGGLE_NSD);</p>
+<ul>
+<li><p>   dongleSupport = (PreferenceScreen) findPreference(KEY_3G_DONGLE_SETTINGS);</p>
+</li>
+<li><p>String isShow = SystemProperties.get(&quot;ro.bx.dongleSupportList&quot;,&quot;false&quot;);</p>
+</li>
+<li><p>Log.d(&quot;edward&quot;,&quot;show dongleSupportList = &quot;+isShow);</p>
+</li>
+<li><p>if(isShow.equals(&quot;false&quot;)){</p>
+</li>
+<li><p>getPreferenceScreen().removePreference(dongleSupport);</p>
+</li>
+<li><p>}</p>
+</li>
+</ul>
+<p>out\target\product\rk2928sdk\system\build.prop</p>
+<p>ro.bx.dongleSupportList=true</p>
+<p>上层反左右声道</p>
+<p>\hardware\rk29\audio\alsa_pcm.c</p>
+<p>#define LR_TO_RL  1</p>
+<p>int pcm_write(struct pcm *pcm, void *data, unsigned count)</p>
+<p>{</p>
+<p>    struct snd_xferi x;</p>
+<p>    if (pcm-&gt;flags &amp; PCM_IN)</p>
+<p>        return -EINVAL;</p>
+<p>    x.buf = data;</p>
+<p>    x.frames = (pcm-&gt;flags &amp; PCM_MONO) ? (count / 2) : (count / 4); </p>
+<p>//增加</p>
+<p>#if LR_TO_RL</p>
+<p>if(!(pcm-&gt;flags &amp; PCM_MONO))</p>
+<p>{</p>
+<p>short *leftCh = (short *)data; </p>
+<p>short *rightCh = leftCh + 1;</p>
+<p>int index = 0;</p>
+<p>for( index = 0; index &lt; x.frames;index++)</p>
+<p>{</p>
+<p>*leftCh =  *leftCh ^ *rightCh;</p>
+<p>*rightCh = *leftCh ^ *rightCh;</p>
+<p>*leftCh = *leftCh ^ *rightCh;</p>
+<p>leftCh++;</p>
+<p>rightCh++;</p>
+<p>}</p>
+<p>}</p>
+<p>#endif</p>
+<p>修改默认蓝牙的名称</p>
+<p>device\common\libbt_mtk6622\bdroid_buildcfg.h</p>
+<p>或者</p>
+<p>device\rockchip\rk30sdk\bluetooth\bdroid_buildcfg.h</p>
+<p>#define BTM_DEF_LOCAL_NAME &quot;PH70DR8NSCN&quot;</p>
+<p>以按键的方向为标准</p>
+<p>修改竖屏游戏时 方向为靠近按键的方向</p>
+<p>build.prop</p>
+<p>ro.sf.fakerotation=false</p>
+<p>ro.sf.hwrotation=0</p>
+<p>修改插入hdmi 本机的方向</p>
+<p>frameworks\base\policy\src\com\android\internal\policy\impl\PhoneWindowManager.java</p>
+<p>else if (mHdmiPlugged &amp;&amp; mHdmiRotationLock) {</p>
+<p>                // Ignore sensor when plugged into HDMI.</p>
+<p>                // Note that the dock orientation overrides the HDMI orientation.</p>
+<p>             /<em>yu add</em>/   mHdmiRotation = Surface.ROTATION_270;</p>
+<p>                preferredRotation = mHdmiRotation;</p>
+<p>                return mHdmiRotation;</p>
+<p>…….</p>
+<p>修改 横屏游戏时的方向</p>
+<p> } else {</p>
+<p>                // No overriding preference.</p>
+<p>                // We will do exactly what the application asked us to do.</p>
+<p>              //yu del  preferredRotation = -1;</p>
+<p>                preferredRotation = Surface.ROTATION_270;</p>
+<p>开机logo  为800 x1280</p>
+<p>动画为 800 x1280   desc 800 1280</p>
+<p>如果是使用默认  低电警告</p>
+<p>kernel\drivers\video\fbmem.c</p>
+<p>#ifdef CONFIG_LOGO_LOWERPOWER_WARNING</p>
+<p>if(1 == get_battery_status()){</p>
+<p>// image.dx = (info-&gt;var.xres/2)-(logo-&gt;width)/2;</p>
+<p>// image.dy = (info-&gt;var.yres/2)-(logo-&gt;height)/2;</p>
+<p>image.dy = (info-&gt;var.xres/2)-(logo-&gt;height)/2;</p>
+<p>image.dx = (info-&gt;var.yres/2)-(logo-&gt;width)/2;</p>
+<p>#ifdef CONFIG_LOGO_LOWERPOWER_WARNING</p>
+<p>if(1 ==  get_battery_status()){</p>
+<p>// y = fb_show_logo_line(info, rotate, fb_logo.logo, 0,</p>
+<p>//     1);</p>
+<p>y = fb_show_logo_line(info, FB_ROTATE_CW, fb_logo.logo, 0,</p>
+<p>    1);</p>
+<p>}else{</p>
+<p>如果竖屏状态下要显示竖屏的充电图标</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/Android%204.0%20Wifi%20%E5%AD%90%E7%B3%BB%E7%BB%9F/" rel="prev" title="Android 4">
+      <i class="fa fa-chevron-left"></i> Android 4
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/Android%20BT%20%E9%80%9A%E8%AE%AF/" rel="next" title="Android BT 通讯">
+      Android BT 通讯 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Edward"
+      src="/uploads/avatar.gif">
+  <p class="site-author-name" itemprop="name">Edward</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">570</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Edward</span>
+</div>
+
+        
+
+
+
+
+
+
+<script>
+  (function() {
+    function leancloudSelector(url) {
+      url = encodeURI(url);
+      return document.getElementById(url).querySelector('.leancloud-visitors-count');
+    }
+
+    function addCount(Counter) {
+      var visitors = document.querySelector('.leancloud_visitors');
+      var url = decodeURI(visitors.id);
+      var title = visitors.dataset.flagTitle;
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          if (results.length > 0) {
+            var counter = results[0];
+            leancloudSelector(url).innerText = counter.time + 1;
+            Counter('put', '/classes/Counter/' + counter.objectId, { time: { '__op': 'Increment', 'amount': 1 } })
+              .catch(error => {
+                console.error('Failed to save visitor count', error);
+              });
+          } else {
+              Counter('post', '/classes/Counter', { title, url, time: 1 })
+                .then(response => response.json())
+                .then(() => {
+                  leancloudSelector(url).innerText = 1;
+                })
+                .catch(error => {
+                  console.error('Failed to create', error);
+                });
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    function showTime(Counter) {
+      var visitors = document.querySelectorAll('.leancloud_visitors');
+      var entries = [...visitors].map(element => {
+        return decodeURI(element.id);
+      });
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url: { '$in': entries } })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          for (let url of entries) {
+            let target = results.find(item => item.url === url);
+            leancloudSelector(url).innerText = target ? target.time : 0;
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    let { app_id, app_key, server_url } = {"enable":true,"app_id":"wxYx0BX9gaKA3XC4LuO2of0v-gzGzoHsz","app_key":"LQMcs6IDIE4YAm10vMsn9IYq","server_url":"https://wxyx0bx9.lc-cn-n1-shared.com","security":false};
+    function fetchData(api_server) {
+      var Counter = (method, url, data) => {
+        return fetch(`${api_server}/1.1${url}`, {
+          method,
+          headers: {
+            'X-LC-Id'     : app_id,
+            'X-LC-Key'    : app_key,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data)
+        });
+      };
+      if (CONFIG.page.isPost) {
+        if (CONFIG.hostname !== location.hostname) return;
+        addCount(Counter);
+      } else if (document.querySelectorAll('.post-title-link').length >= 1) {
+        showTime(Counter);
+      }
+    }
+
+    let api_server = app_id.slice(-9) !== '-MdYXbMMI' ? server_url : `https://${app_id.slice(0, 8).toLowerCase()}.api.lncldglobal.com`;
+
+    if (api_server) {
+      fetchData(api_server);
+    } else {
+      fetch('https://app-router.leancloud.cn/2/route?appId=' + app_id)
+        .then(response => response.json())
+        .then(({ api_server }) => {
+          fetchData('https://' + api_server);
+        });
+    }
+  })();
+</script>
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

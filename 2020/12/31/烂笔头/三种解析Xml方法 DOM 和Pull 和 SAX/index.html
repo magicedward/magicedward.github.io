@@ -1,0 +1,725 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"edward.org.cn","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="一般来说，解析Xml 有三种方法 分别是 DOM 和Pull 和 SAX DOM一般用去解析比较小的XML文件。因为DOM要把整个文件读取才解析的，如果是很大的文件，那就是卡死了。 SAX，听说是一种事件驱动型的轻量级的解析器，用DOM来解析，比较节省内存。 Pull呢，与SAX差不多，Android本身附带的解析器，与Sax的区别在于，pull解析时，解析过程是可控的，解析完所要的内容后即可停止">
+<meta property="og:type" content="article">
+<meta property="og:title" content="三种解析Xml方法 DOM 和Pull 和 SAX">
+<meta property="og:url" content="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/%E4%B8%89%E7%A7%8D%E8%A7%A3%E6%9E%90Xml%E6%96%B9%E6%B3%95%20DOM%20%E5%92%8CPull%20%E5%92%8C%20SAX/index.html">
+<meta property="og:site_name" content="点点滴滴">
+<meta property="og:description" content="一般来说，解析Xml 有三种方法 分别是 DOM 和Pull 和 SAX DOM一般用去解析比较小的XML文件。因为DOM要把整个文件读取才解析的，如果是很大的文件，那就是卡死了。 SAX，听说是一种事件驱动型的轻量级的解析器，用DOM来解析，比较节省内存。 Pull呢，与SAX差不多，Android本身附带的解析器，与Sax的区别在于，pull解析时，解析过程是可控的，解析完所要的内容后即可停止">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-12-31T06:48:02.027Z">
+<meta property="article:modified_time" content="2020-01-16T04:37:32.129Z">
+<meta property="article:author" content="Edward">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/%E4%B8%89%E7%A7%8D%E8%A7%A3%E6%9E%90Xml%E6%96%B9%E6%B3%95%20DOM%20%E5%92%8CPull%20%E5%92%8C%20SAX/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>三种解析Xml方法 DOM 和Pull 和 SAX | 点点滴滴</title>
+  
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?a92ed22eafce466e7a7b17546bb0dc6f";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">点点滴滴</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/%E4%B8%89%E7%A7%8D%E8%A7%A3%E6%9E%90Xml%E6%96%B9%E6%B3%95%20DOM%20%E5%92%8CPull%20%E5%92%8C%20SAX/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/avatar.gif">
+      <meta itemprop="name" content="Edward">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="点点滴滴">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          三种解析Xml方法 DOM 和Pull 和 SAX
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-12-31 14:48:02" itemprop="dateCreated datePublished" datetime="2020-12-31T14:48:02+08:00">2020-12-31</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-01-16 12:37:32" itemprop="dateModified" datetime="2020-01-16T12:37:32+08:00">2020-01-16</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%83%82%E7%AC%94%E5%A4%B4/" itemprop="url" rel="index"><span itemprop="name">烂笔头</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/%E4%B8%89%E7%A7%8D%E8%A7%A3%E6%9E%90Xml%E6%96%B9%E6%B3%95%20DOM%20%E5%92%8CPull%20%E5%92%8C%20SAX/" class="post-meta-item leancloud_visitors" data-flag-title="三种解析Xml方法 DOM 和Pull 和 SAX" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>一般来说，解析Xml 有三种方法</p>
+<p>分别是 DOM 和Pull 和 SAX</p>
+<p>DOM一般用去解析比较小的XML文件。因为DOM要把整个文件读取才解析的，如果是很大的文件，那就是卡死了。</p>
+<p>SAX，听说是一种事件驱动型的轻量级的解析器，用DOM来解析，比较节省内存。</p>
+<p>Pull呢，与SAX差不多，Android本身附带的解析器，与Sax的区别在于，pull解析时，解析过程是可控的，解析完所要的内容后即可停止。</p>
+<p>下面用三种方法解析以下Xml文件：</p>
+<p>这是在做快递查询工具时所用的Xml：</p>
+<p>&lt;?xml  version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;</p>
+<p>&lt;xml&gt;</p>
+<p>&lt;message&gt;ok&lt;/message&gt;</p>
+<p>&lt;status&gt;1&lt;/status&gt;</p>
+<p>&lt;data&gt;</p>
+<p>&lt;time&gt;2011-09-12 18:43:00&lt;/time&gt;</p>
+<p>&lt;context&gt;签收人是：星祺绿&lt;/context&gt;</p>
+<p>&lt;/data&gt;</p>
+<p>&lt;/xml&gt;</p>
+<p>首先，要把Xml转化为输入流。下面在本地读取Xml</p>
+<p>private InputStream readLocalXml()  </p>
+<p>     {       </p>
+<p>      InputStream inStream =  null;  </p>
+<p>try {  </p>
+<p>     inStream =  this.getResources().getAssets().open(&quot;test.xml&quot;);  </p>
+<p>       }  catch (IOException e) {  </p>
+<p>//  TODO  Auto-generated catch block  </p>
+<p>      e.printStackTrace();  </p>
+<p>      }  </p>
+<p>       Log.d(&quot;XML&quot;,inStream.toString());</p>
+<p>return inStream;  </p>
+<p>     }  </p>
+<p>也可以从网上直接读取，可惜，大一新生来之后，学校的GPRS都很不给力了。经常得不到所要的Xml，所以我把Xml存在本地再来解析。下面是从网上获取Xml：</p>
+<p>private InputStream readFromServer() {</p>
+<p>       URL infoUrl =  null;</p>
+<p>       InputStream inStream =  null;</p>
+<p>try {</p>
+<p>           infoUrl =  new URL(&quot;<a target="_blank" rel="noopener" href="http://api.kuaidi100.com/apione?com=shunfeng&amp;nu=107184228871&amp;show=1">http://api.kuaidi100.com/apione?com=shunfeng&amp;nu=107184228871&amp;show=1</a>&quot;);</p>
+<p>           URLConnection connection = infoUrl.openConnection();</p>
+<p>           inStream = connection.getInputStream();</p>
+<p>       }  catch (Exception e) {</p>
+<p>//  TODO  Auto-generated catch block</p>
+<p>           e.printStackTrace();</p>
+<p>       }</p>
+<p>return inStream;</p>
+<p>    }</p>
+<p>得到输入流之后呢，就可以解析了。</p>
+<p>DOM解析</p>
+<p>public  void readXmlByDOM(InputStream in) {</p>
+<p>factory = DocumentBuilderFactory.newInstance();</p>
+<p>try {</p>
+<p>builder =  factory.newDocumentBuilder();</p>
+<p>document =  builder.parse(in);</p>
+<p>document.normalize();</p>
+<p>           Log.d(&quot;XML&quot;,  &quot;______Parse By DOM&quot;);</p>
+<p>           NodeList nodes =  document.getElementsByTagName(&quot;*&quot;);//根</p>
+<p>           Log.d(&quot;XML&quot;,  &quot;____________root:&quot; + nodes.item(0).getNodeName());         </p>
+<p>//根据元素标签来查找</p>
+<p>           NodeList nodes11 =  document.getElementsByTagName(&quot;message&quot;);</p>
+<p>           String message = nodes11.item(0).getNodeName();//元素</p>
+<p>           Log.d(&quot;XML&quot;,  &quot;___________&quot; + message +  &quot;:&quot;</p>
+<p>                  + nodes11.item(0).getFirstChild().getNodeValue());//内容</p>
+<p>           NodeList nodes12 =  document.getElementsByTagName(&quot;status&quot;);</p>
+<p>           String status = nodes12.item(0).getNodeName();</p>
+<p>           Log.d(&quot;XML&quot;,  &quot;___________&quot; + status +  &quot;:&quot;</p>
+<p>                  + nodes12.item(0).getFirstChild().getNodeValue());</p>
+<p>           NodeList nodes13 =  document.getElementsByTagName(&quot;time&quot;);</p>
+<p>           String time = nodes13.item(0).getNodeName();</p>
+<p>           Log.d(&quot;XML&quot;,  &quot;___________&quot; + time +  &quot;:&quot;</p>
+<p>                  + nodes13.item(0).getFirstChild().getNodeValue());</p>
+<p>           NodeList nodes1 =  document.getElementsByTagName(&quot;context&quot;);</p>
+<p>           String context = nodes1.item(0).getNodeName();</p>
+<p>           Log.d(&quot;XML&quot;,  &quot;___________&quot; + context +  &quot;:&quot;</p>
+<p>                  + nodes1.item(0).getFirstChild().getNodeValue());</p>
+<p>       }  catch (Exception e) {</p>
+<p>           Log.d(&quot;XML&quot;, e.toString());</p>
+<p>       }</p>
+<p>    }</p>
+<p>SAX解析：</p>
+<p>public  void readXmlSaxParser(InputStream in) {</p>
+<p>       SAXParserFactory spf = SAXParserFactory.newInstance();</p>
+<p>try {</p>
+<p>           SAXParser parser = spf.newSAXParser();</p>
+<p>           parser.parse(in,  new XmlContentHandler());</p>
+<p>           Log.d(&quot;XML&quot;,  &quot;______Parse By SAX&quot;);</p>
+<p>       }  catch (Exception e) {         </p>
+<p>       }</p>
+<p>    }</p>
+<p>Sax解析，需要一个Handler来监控各种事件</p>
+<p>public  class XmlContentHandler  extends DefaultHandler {</p>
+<p>     String  localName=&quot;&quot;;</p>
+<p>@Override</p>
+<p>public  void startDocument()  throws SAXException {</p>
+<p>       Log.d(&quot;XML&quot;,  &quot;_________start&quot;);</p>
+<p>    }</p>
+<p>@Override</p>
+<p>public  void startElement(String uri, String localName, String qName, Attributes attributes)  throws SAXException {</p>
+<p>this.localName = localName;</p>
+<p>    }  </p>
+<p>@Override</p>
+<p>public  void endDocument()  throws SAXException {</p>
+<p>//  TODO  Auto-generated method stub</p>
+<p>       Log.d(&quot;XML&quot;,  &quot;_________end&quot;);</p>
+<p>    }</p>
+<p>@Override</p>
+<p>public  void characters(char[] ch,  int start,  int length)  throws SAXException {</p>
+<p>if(localName.equals(&quot;message&quot;)){</p>
+<p>       String  text =  newString(ch,start,length);      </p>
+<p>        Log.d(&quot;XML&quot;,  &quot;<strong><strong>____</strong></strong>&lt;&lt;&lt;message:&quot; + text);}</p>
+<p>if(localName.equals(&quot;status&quot;)){</p>
+<p>              String  text =  newString(ch,start,length);      </p>
+<p>               Log.d(&quot;XML&quot;,  &quot;<strong><strong>____</strong></strong>&lt;&lt;&lt;status:&quot; + text);}</p>
+<p>if(localName.equals(&quot;time&quot;)){</p>
+<p>              String  text =  newString(ch,start,length);      </p>
+<p>               Log.d(&quot;XML&quot;,  &quot;<strong><strong>____</strong></strong>&lt;&lt;&lt;time:&quot; + text);}</p>
+<p>if(localName.equals(&quot;context&quot;)){</p>
+<p>              String  text =  newString(ch,start,length);      </p>
+<p>               Log.d(&quot;XML&quot;,  &quot;<strong><strong>____</strong></strong>&lt;&lt;&lt;context:&quot; + text);}</p>
+<p>    }</p>
+<p>@Override</p>
+<p>public  void endElement(String uri, String localName, String qName)  throws SAXException {</p>
+<p>this.localName=&quot;&quot;;</p>
+<p>    }</p>
+<p>Pull解析，轻量级，简单好用。一般我选用这种。</p>
+<p>public  void readXmlByPull(InputStream in) {</p>
+<p>       Log.d(&quot;XML&quot;,  &quot;______Parse By Pull&quot;);</p>
+<p>try {</p>
+<p>// 方式一:使用工厂类XmlPullParserFactory</p>
+<p>// XmlPullParserFactory pullFactory = XmlPullParserFactory</p>
+<p>// .newInstance();</p>
+<p>// XmlPullParser xmlPullParser = pullFactory.newPullParser();</p>
+<p>// 方式二:使用Android提供的实用工具类android.util.Xml</p>
+<p>           XmlPullParser xmlPullParser = Xml.newPullParser();</p>
+<p>           xmlPullParser.setInput(in,  &quot;utf-8&quot;);         </p>
+<p>int eventType = xmlPullParser.getEventType();</p>
+<p>boolean isDone =  false;//退出标志,读完所需至true即可退出</p>
+<p>while ((eventType != XmlPullParser.END_DOCUMENT)</p>
+<p>                  &amp;&amp; (isDone !=  true)) {</p>
+<p>              String localName =  null;</p>
+<p>switch (eventType) {</p>
+<p>case XmlPullParser.START_DOCUMENT:</p>
+<p>                  Log.d(&quot;XML&quot;,  &quot;begin to pull the xml&quot;);</p>
+<p>break;</p>
+<p>case XmlPullParser.START_TAG:</p>
+<p>                  localName = xmlPullParser.getName();</p>
+<p>if (&quot;message&quot;.equals(localName)) {</p>
+<p>                     String message = xmlPullParser.nextText();</p>
+<p>                     Log.d(&quot;XML&quot;,  &quot;<strong><strong>____</strong></strong>&lt;&lt;&lt;message:&quot; + message);</p>
+<p>                  }  else  if (&quot;status&quot;.equals(localName)) {</p>
+<p>                     String status = xmlPullParser.nextText();</p>
+<p>                     Log.d(&quot;XML&quot;,  &quot;<strong><strong>____</strong></strong>&lt;&lt;&lt;status:&quot; + status);</p>
+<p>                  }  else  if (&quot;time&quot;.equals(localName)) {</p>
+<p>                     String time = xmlPullParser.nextText();</p>
+<p>                     Log.d(&quot;XML&quot;,  &quot;<strong><strong>____</strong></strong>&lt;&lt;&lt;time:&quot; + time);</p>
+<p>                  }  else  if (&quot;context&quot;.equals(localName)) {</p>
+<p>                     String context = xmlPullParser.nextText();</p>
+<p>                     Log.d(&quot;XML&quot;,  &quot;<strong><strong>____</strong></strong>&lt;&lt;&lt;context:&quot; + context);</p>
+<p>                  }</p>
+<p>break;</p>
+<p>case XmlPullParser.END_TAG:</p>
+<p>                  localName = xmlPullParser.getName();</p>
+<p>if (&quot;context&quot;.equals(localName)) {</p>
+<p>                     isDone =  true;</p>
+<p>                     Log.d(&quot;XML&quot;,  &quot;_finish pullParser!&quot;);</p>
+<p>                  }</p>
+<p>break;</p>
+<p>              }</p>
+<p>              eventType = xmlPullParser.next();</p>
+<p>           }</p>
+<p>       }  catch (Exception e) {</p>
+<p>           Log.d(&quot;XML&quot;, e.toString());</p>
+<p>       }</p>
+<p>    }</p>
+<p>Pull解析和Sax解析很相似，都是轻量级的解析，在Android的内核中已经嵌入了Pull，所以我们不需要再添加第三方jar包来支持Pull。Pull解析和Sax解析不一样的地方有(1)pull读取xml文件后触发相应的事件调用方法返回的是数字(2)pull可以在程序中控制想解析到哪里就可以停止解析。看实例：</p>
+<p>book.xml如下：</p>
+<p>Xml代码   </p>
+<p>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;    &lt;books&gt;        &lt;book id=&quot;12&quot;&gt;            &lt;name&gt;thinking in java&lt;/name&gt;            &lt;price&gt;85.5&lt;/price&gt;        &lt;/book&gt;        &lt;book id=&quot;15&quot;&gt;            &lt;name&gt;Spring in Action&lt;/name&gt;            &lt;price&gt;39.0&lt;/price&gt;        &lt;/book&gt;    &lt;/books&gt;    </p>
+<p>Pull解析的代码如下PullParseService.java</p>
+<p>Java代码   </p>
+<p>import java.io.InputStream;    import java.util.ArrayList;    import java.util.List;        import org.xmlpull.v1.XmlPullParser;        import android.util.Xml;        import com.xtlh.cn.entity.Book;        public class PullParseService {        public static List&lt;Book&gt; getBooks(InputStream inputStream) throws Exception{            List&lt;Book&gt; books = null;            Book book = null;            XmlPullParser parser = Xml.newPullParser();            parser.setInput(inputStream, &quot;UTF-8&quot;);                        int event = parser.getEventType();//产生第一个事件            while(event!=XmlPullParser.END_DOCUMENT){                switch(event){                case XmlPullParser.START_DOCUMENT://判断当前事件是否是文档开始事件                    books = new ArrayList&lt;Book&gt;();//初始化books集合                    break;                case XmlPullParser.START_TAG://判断当前事件是否是标签元素开始事件                    if(&quot;book&quot;.equals(parser.getName())){//判断开始标签元素是否是book                        book = new Book();                        book.setId(Integer.parseInt(parser.getAttributeValue(0)));//得到book标签的属性值，并设置book的id                    }                    if(book!=null){                        if(&quot;name&quot;.equals(parser.getName())){//判断开始标签元素是否是name                            book.setName(parser.nextText());                        }else if(&quot;price&quot;.equals(parser.getName())){//判断开始标签元素是否是price                            book.setPrice(Float.parseFloat(parser.nextText()));                        }                    }                    break;                case XmlPullParser.END_TAG://判断当前事件是否是标签元素结束事件                    if(&quot;book&quot;.equals(parser.getName())){//判断结束标签元素是否是book                        books.add(book);//将book添加到books集合                        book = null;                    }                    break;                }                event = parser.next();//进入下一个元素并触发相应事件            }//end while            return books;        }    }    </p>
+<p> 里面使用到的Book.java类</p>
+<p>Java代码   </p>
+<p>public class Book {        private int id;        private String name;        private float price;        public int getId() {            return id;        }        public void setId(int id) {            this.id = id;        }        public String getName() {            return name;        }        public void setName(String name) {            this.name = name;        }        public float getPrice() {            return price;        }        public void setPrice(float price) {            this.price = price;        }        @Override        public String toString(){            return this.id+&quot;:&quot;+this.name+&quot;:&quot;+this.price;        }    }    </p>
+<p> 测试使用的是android的单元测试，代码如下：</p>
+<p>Java代码   </p>
+<p>import java.io.InputStream;    import java.util.List;        import android.test.AndroidTestCase;    import android.util.Log;        import com.xtlh.cn.entity.Book;    import com.xtlh.cn.service.PullParseService;        public class testPullParseService extends AndroidTestCase{        private static final String TAG = &quot;testPullParseService&quot;;        public void testPull() throws Exception{            InputStream input = this.getClass().getClassLoader().getResourceAsStream(&quot;book.xml&quot;);            PullParseService pull = new PullParseService();            List&lt;Book&gt; books = pull.getBooks(input);            for(Book book : books){                Log.i(TAG,book.toString());            }        }    }    </p>
+<p> 要使用android的单元测试，需要在AndroidManifest.xml文件中加入声明，AndroidManifest.xml如下：</p>
+<p>Xml代码   </p>
+<p>&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;    &lt;manifest xmlns:android=&quot;<a target="_blank" rel="noopener" href="http://schemas.android.com/apk/res/android">http://schemas.android.com/apk/res/android</a>&quot;          package=&quot;com.xlth.cn.demo&quot;          android:versionCode=&quot;1&quot;          android:versionName=&quot;1.0&quot;&gt;        &lt;application android:icon=&quot;@drawable/icon&quot; android:label=&quot;@string/app_name&quot;&gt;        &lt;uses-library android:name=&quot;android.test.runner&quot; /&gt;            &lt;activity android:name=&quot;.PullParseDemo&quot;                      android:label=&quot;@string/app_name&quot;&gt;                &lt;intent-filter&gt;                    &lt;action android:name=&quot;android.intent.action.MAIN&quot; /&gt;                    &lt;category android:name=&quot;android.intent.category.LAUNCHER&quot; /&gt;                &lt;/intent-filter&gt;            &lt;/activity&gt;            &lt;/application&gt;        &lt;uses-sdk android:minSdkVersion=&quot;7&quot; /&gt;        &lt;instrumentation android:name=&quot;android.test.InstrumentationTestRunner&quot;          android:targetPackage=&quot;com.xlth.cn.demo&quot; android:label=&quot;Tests for My App&quot; /&gt;    &lt;/manifest&gt;     </p>
+<p> Pull解析可以用于很多场合，例如接受google天气，rss新闻等，希望对大家有帮助！</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/%E5%A6%82%E6%9E%9C%E4%BD%A0%E4%B8%8D%E7%A1%AE%E5%AE%9A%E6%89%8B%E4%B8%ADiPhone%E6%98%AF%E5%90%A6%E8%A2%AB%E8%8B%B9%E6%9E%9C%E5%AE%98%E6%96%B9%E2%80%9C%E9%99%90%E9%80%9F%E2%80%9D%EF%BC%8C%E5%8F%AF%E4%BB%A5%E4%B8%8B%E8%BD%BDCPUDasherX/" rel="prev" title="如果你不确定手中iPhone是否被苹果官方“限速”，可以下载CPUDasherX">
+      <i class="fa fa-chevron-left"></i> 如果你不确定手中iPhone是否被苹果官方“限速”，可以下载CPUDasherX
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/%E8%AE%BE%E5%A4%87%E9%A9%B1%E5%8A%A8%E5%9F%BA%E7%A1%80%20demo/" rel="next" title="设备驱动基础 demo">
+      设备驱动基础 demo <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Edward"
+      src="/uploads/avatar.gif">
+  <p class="site-author-name" itemprop="name">Edward</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">570</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Edward</span>
+</div>
+
+        
+
+
+
+
+
+
+<script>
+  (function() {
+    function leancloudSelector(url) {
+      url = encodeURI(url);
+      return document.getElementById(url).querySelector('.leancloud-visitors-count');
+    }
+
+    function addCount(Counter) {
+      var visitors = document.querySelector('.leancloud_visitors');
+      var url = decodeURI(visitors.id);
+      var title = visitors.dataset.flagTitle;
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          if (results.length > 0) {
+            var counter = results[0];
+            leancloudSelector(url).innerText = counter.time + 1;
+            Counter('put', '/classes/Counter/' + counter.objectId, { time: { '__op': 'Increment', 'amount': 1 } })
+              .catch(error => {
+                console.error('Failed to save visitor count', error);
+              });
+          } else {
+              Counter('post', '/classes/Counter', { title, url, time: 1 })
+                .then(response => response.json())
+                .then(() => {
+                  leancloudSelector(url).innerText = 1;
+                })
+                .catch(error => {
+                  console.error('Failed to create', error);
+                });
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    function showTime(Counter) {
+      var visitors = document.querySelectorAll('.leancloud_visitors');
+      var entries = [...visitors].map(element => {
+        return decodeURI(element.id);
+      });
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url: { '$in': entries } })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          for (let url of entries) {
+            let target = results.find(item => item.url === url);
+            leancloudSelector(url).innerText = target ? target.time : 0;
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    let { app_id, app_key, server_url } = {"enable":true,"app_id":"wxYx0BX9gaKA3XC4LuO2of0v-gzGzoHsz","app_key":"LQMcs6IDIE4YAm10vMsn9IYq","server_url":"https://wxyx0bx9.lc-cn-n1-shared.com","security":false};
+    function fetchData(api_server) {
+      var Counter = (method, url, data) => {
+        return fetch(`${api_server}/1.1${url}`, {
+          method,
+          headers: {
+            'X-LC-Id'     : app_id,
+            'X-LC-Key'    : app_key,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data)
+        });
+      };
+      if (CONFIG.page.isPost) {
+        if (CONFIG.hostname !== location.hostname) return;
+        addCount(Counter);
+      } else if (document.querySelectorAll('.post-title-link').length >= 1) {
+        showTime(Counter);
+      }
+    }
+
+    let api_server = app_id.slice(-9) !== '-MdYXbMMI' ? server_url : `https://${app_id.slice(0, 8).toLowerCase()}.api.lncldglobal.com`;
+
+    if (api_server) {
+      fetchData(api_server);
+    } else {
+      fetch('https://app-router.leancloud.cn/2/route?appId=' + app_id)
+        .then(response => response.json())
+        .then(({ api_server }) => {
+          fetchData('https://' + api_server);
+        });
+    }
+  })();
+</script>
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

@@ -1,0 +1,891 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"edward.org.cn","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="参考：S5PV210显示驱动分析与移植（android）这篇文章中转载的成分比较多，不过大部分内容是从芯片手册上翻译过来。Framebuffer部分是黄冈老师–《嵌入式Linux之我行》这一系列博客中的，嵌入式Linux之我行这系列博客写的非常精，我刚学习Linux时经常拜读他的博客。这部分内容比较固定，三星的芯片跟新了好多代，不过这部分变化不大，技术是一个积累的过程，感谢那些前辈给我们整理比较好">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android LCD(三)：Samsung LCD接口篇">
+<meta property="og:url" content="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/Android%20LCD(%E4%B8%89)%EF%BC%9ASamsung%20LCD%E6%8E%A5%E5%8F%A3%E7%AF%87/index.html">
+<meta property="og:site_name" content="点点滴滴">
+<meta property="og:description" content="参考：S5PV210显示驱动分析与移植（android）这篇文章中转载的成分比较多，不过大部分内容是从芯片手册上翻译过来。Framebuffer部分是黄冈老师–《嵌入式Linux之我行》这一系列博客中的，嵌入式Linux之我行这系列博客写的非常精，我刚学习Linux时经常拜读他的博客。这部分内容比较固定，三星的芯片跟新了好多代，不过这部分变化不大，技术是一个积累的过程，感谢那些前辈给我们整理比较好">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-12-31T06:48:00.875Z">
+<meta property="article:modified_time" content="2020-01-16T04:37:32.382Z">
+<meta property="article:author" content="Edward">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/Android%20LCD(%E4%B8%89)%EF%BC%9ASamsung%20LCD%E6%8E%A5%E5%8F%A3%E7%AF%87/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>Android LCD(三)：Samsung LCD接口篇 | 点点滴滴</title>
+  
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?a92ed22eafce466e7a7b17546bb0dc6f";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">点点滴滴</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/Android%20LCD(%E4%B8%89)%EF%BC%9ASamsung%20LCD%E6%8E%A5%E5%8F%A3%E7%AF%87/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/avatar.gif">
+      <meta itemprop="name" content="Edward">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="点点滴滴">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Android LCD(三)：Samsung LCD接口篇
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-12-31 14:48:00" itemprop="dateCreated datePublished" datetime="2020-12-31T14:48:00+08:00">2020-12-31</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-01-16 12:37:32" itemprop="dateModified" datetime="2020-01-16T12:37:32+08:00">2020-01-16</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%83%82%E7%AC%94%E5%A4%B4/" itemprop="url" rel="index"><span itemprop="name">烂笔头</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/Android%20LCD(%E4%B8%89)%EF%BC%9ASamsung%20LCD%E6%8E%A5%E5%8F%A3%E7%AF%87/" class="post-meta-item leancloud_visitors" data-flag-title="Android LCD(三)：Samsung LCD接口篇" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>参考：S5PV210显示驱动分析与移植（android）<br>这篇文章中转载的成分比较多，不过大部分内容是从芯片手册上翻译过来。Framebuffer部分是黄冈老师–《嵌入式Linux之我行》这一系列博客中的，嵌入式Linux之我行这系列博客写的非常精，我刚学习Linux时经常拜读他的博客。这部分内容比较固定，三星的芯片跟新了好多代，不过这部分变化不大，技术是一个积累的过程，感谢那些前辈给我们整理比较好的学习资料，有比较好的技术继承。<br>这篇从LCD控制器、接口信号硬件接口 寄存器、Framebuffer 、接口函数的实现及寄存器的操作来讲解，同事补充两个知点：如何阅读LCD、PWM概述；</p>
+<p>一、     LCD控制器<br>功能模块的实现其实是芯片里面集成了一个相应的控制器，比如IIC有IIC控制器，UART有UART控制器等，像其他功能模块一样LCD也有一个控制器，来实现图形信息的处理。LCD控制器可以通过编程支持不同LCD屏的要求，例如行和列像素数，数据总线宽度，接口时序和刷新频率等。LCD控制器的主要作用，是将定位在系统存储器中的显示缓冲区中的LCD图像数据传送到外部LCD驱动器，并产生必要的控制信号，例如RGB_VSYNC,RGB_HSYNC, RGB_VCLK等。<br>如下图所示，在Exynos4412规格书中截图，LCD控制器的构成。</p>
+<p>（下面这部分来自网络翻译，规格书中的描述）</p>
+<p>主要由VSFR,VDMA, VPRCS , VTIME和视频时钟产生器几个模块组成：</p>
+<p>（1）、VSFR由121个可编程控制器组，一套gamma LUT寄存器组（包括64个寄存器），一套i80命令寄存器组（包括12个寄存器）和5块256*32调色板存储器组成，主要用于对lcd控制器进行配置。</p>
+<p>（2）、VDMA是LCD专用的DMA传输通道，可以自动从系统总线上获取视频数据传送到VPRCS，无需CPU干涉。</p>
+<p>（3）、VPRCS收到数据后组成特定的格式（如16bpp或24bpp），然后通过数据接口（RGB_VD, VEN_VD, V656_VD or SYS_VD）传送到外部LCD屏上。</p>
+<p>（4）、VTIME模块由可编程逻辑组成，负责不同lcd驱动器的接口时序控制需求。VTIME模块产生 RGB_VSYNC, RGB_HSYNC, RGB_VCLK, RGB_VDEN,VEN_VSYNC等信号。</p>
+<p>主要特性：</p>
+<p>（1）、支持4种接口类型：RGB/i80/ITU 601(656)/YTU444<br>（2）、支持单色、4级灰度、16级灰度、256色的调色板显示模式<br>（3）、支持64K和16M色非调色板显示模式<br>（4）、支持多种规格和分辨率的LCD<br>（5）、虚拟屏幕最大可达16MB<br>（6）、5个256*32位调色板内存<br>（7）、支持透明叠加<br>二、接口信号<br>FIMD显示控制器全部信号定义如下所示</p>
+<p>Signal</p>
+<p>I/O</p>
+<p>Description</p>
+<p>LCD Type</p>
+<p>LCD_HSYNC</p>
+<p>O</p>
+<p>水平同步信号</p>
+<p>RGB I/F</p>
+<p>LCD_VSYNC</p>
+<p>O</p>
+<p>垂直同步信号</p>
+<p>LCD_VDEN</p>
+<p>O</p>
+<p>数据使能</p>
+<p>LCD_VCLK</p>
+<p>O</p>
+<p>视频时钟</p>
+<p>LCD_VD[23:0]</p>
+<p>O</p>
+<p>LCD像素数据输出</p>
+<p>SYS_OE</p>
+<p>O</p>
+<p>输出使能</p>
+<p>VSYNC_LDI</p>
+<p>O</p>
+<p>Indirect i80接口，垂直同步信号</p>
+<p>i80 I/F</p>
+<p>SYS_CS0</p>
+<p>O</p>
+<p>Indirect i80接口，片选LCD0</p>
+<p>SYS_CS1</p>
+<p>O</p>
+<p>Indirect i80接口，片选LCD1</p>
+<p>SYS_RS</p>
+<p>O</p>
+<p>Indirect i80接口，寄存器选择信号</p>
+<p>SYS_WE</p>
+<p>O</p>
+<p>Indirect i80接口，写使能信号</p>
+<p>SYS_VD[23:0]</p>
+<p>IO</p>
+<p>Indirect i80接口，视频数据输入输出</p>
+<p>SYS_OE</p>
+<p>O</p>
+<p>Indirect i80接口，输出使能信号</p>
+<p>VEN_HSYNC</p>
+<p>O</p>
+<p>601接口水平同步信号</p>
+<p>ITU 601/656 I/F</p>
+<p>VEN_VSYNC</p>
+<p>O</p>
+<p>601接口垂直同步信号</p>
+<p>VEN_HREF</p>
+<p>O</p>
+<p>601接口数据使能</p>
+<p>V601_CLK</p>
+<p>O</p>
+<p>601接口数据时钟</p>
+<p>VEN_DATA[7:0]</p>
+<p>O</p>
+<p>601接口YUV422格式数据输出</p>
+<p>V656_DATA[7:0]</p>
+<p>O</p>
+<p>656接口YUV422格式数据输出</p>
+<p>V656_CLK</p>
+<p>O</p>
+<p>656接口数据时钟</p>
+<p>VEN_FIELD</p>
+<p>O</p>
+<p>601接口域信号</p>
+<p>1、其中主要的RGB接口信号：<br>（1）、LCD_HSYNC:行同步信号，表示一行数据的开始，LCD控制器在整个水平线（整行）数据移入LCD驱动器后，插入一个LCD_HSYNC信号；<br>（2）、LCD_VSYNC: 帧同步信号，表示一帧数据的开始，LCD控制器在一个完整帧显示完成后立即插入一个LCD_VSYNC信号，开始新一帧的显示；VSYNC信号出现的频率表示一秒钟内能显示多少帧图像，称为“显示器的频率”<br>（3）、LCD_VCLK：像素时钟信号，表示正在传输一个像素的数据；<br>（4）、LCD_VDEN:数据使能信号；<br>（5）、 LCD_VD[23:0]: LCD像素数据输出端口<br>2、RGB信号的时序<br>下图是LCDRGB接口工作时序图：</p>
+<p>（1）、上面时序图上各时钟延时参数的含义如下：这些配置可以在LCD规格书中查取</p>
+<p>VBPD(vertical back porch)：表示在一帧图像开始时，垂直同步信号以后的无效的行数</p>
+<p>VFBD(vertical front porch)：表示在一帧图像结束后，垂直同步信号以前的无效的行数VSPW(vertical sync pulse width)：表示垂直同步脉冲的宽度，用行数计算</p>
+<p>HBPD(horizontal back porch)：表示从水平同步信号开始到一行的有效数据开始之间的VCLK的个数HFPD(horizontal front porth)：表示一行的有效数据结束到下一个水平同步信号开始之间的VCLK的个数</p>
+<p>HSPW(horizontal sync pulse width)：表示水平同步信号的宽度，用VCLK计算<br>（2）、帧的传输过程<br>VSYNC信号有效时，表示一帧数据的开始，   信号宽度为（VSPW +1）个HSYNC信号周期，即（VSPW +1）个无效行；</p>
+<p>VSYNC信号脉冲之后，总共还要经过（VBPD+ 1）个HSYNC信号周期，有效的行数据才出现； 所以，在VSYNC信号有效之后，还要经过（VSPW +1  + VBPD + 1）个无效的行；</p>
+<p>随即发出（LINEVAL + 1）行的有效数据；</p>
+<p>最后是（VFPD + 1）个无效的行；</p>
+<p>（3）、行中像素数据的传输过程<br>HSYNC信号有效时，表示一行数据的开始，信号宽度为（HSPW+ 1）个VCLK信号周期，即（HSPW +1）个无效像素；<br>HSYNC信号脉冲之后，还要经过（HBPD +1）个VCLK信号周期，有效的像素数据才出现；<br>随后发出（HOZVAL+ 1）个像素的有效数据；<br>最后是（HFPD +1）个无效的像素；<br>（4）、将VSYNC、HSYNC、VCLK等信号的时间参数设置好之后，并将帧内存的地址告诉LCD控制器，它即可自动地发起DMA传输从帧内存中得到图像数据，最终在上述信号的控制下出现在数据总线VD[23:0]上。用户只需要把要显示的图像数据写入帧内存中。<br>       其实现实的图像有像素点主城行、行组成场、场组成动画、动画叠加也就是3D的出现，也就是我们所说的“点动成线、线动成面、面动成体”。</p>
+<p>三、LCD的硬件接口</p>
+<p>1、16M（24BPP）色的显示模式</p>
+<p>用24位的数据来表示一个像素的颜色，每种颜色使用8位。 LCD控制器从内存中获得某个像素的24为颜色值后，直接通过VD[23:0]数据线发送给LCD；在内存中，使用4个字节（32位）来表示一个像素，其中的3个字节从高到低分别表示红、绿、蓝，剩余的1个字节无效；<br>2、64K（16BPP）色的显示模式<br>用16位的数据来表示一个像素的颜色；格式又分为两种： 5：6：5 ——使用5位来表示红色，6位表示绿色，5位表示蓝色 ； 5：5：5：1——分别使用5位来表示红、绿、蓝，最后一位表示透明度；    <br>3、16BPP<br>4、serialRGB<br>不同的BPP接线方式如下所示：</p>
+<p>四、寄存器<br>主要寄存器如下：<br>VIDCON0:配置视频输出格式，显示使能<br>VIDCON1:RGB 接口控制信号<br>VIDCON2: 输出数据格式控制<br>VIDCON3: 图像增强控制<br>I80IFCONx:i80接口控制信号<br>ITUIFCON: ITU接口控制信号<br>VIDTCONx:配置视频输出时序及显示大小<br>WINCONx:每个窗口特性设置<br>VIDOSDxA,B: 窗口位置设置</p>
+<p>VIDOSDxC,D:OSD大小设置</p>
+<p>五、Framebuffer驱动部分<br>这部分是：分析的比较好，我刚学linux的时候就拿个mini2440的板子对着他的博客练习)。其实这部分也是博主从S3c2440上分析的，三星芯片更新了这么多代，这块的原理还是不变的。就像一些协议一样，这么多年基本上不会变化，唯一出现的结果就是出来新的接口替代。LCD这块就是：TTL、LVDS、EDP、MIPI、HDMI等等…………速度更快，接线、PCB走线更简单，这就是集成化的好处。<br>1、简介<br>帧缓冲是Linux为显示设备提供的一个接口，它把一些显示设备描述成一个缓冲区，允许应用程序通过FrameBuffer定义好的接口访问这些图形设备，从而不用去关心具体的硬件细节。对于帧缓冲设备而言，只要在显示缓冲区与显示点对应的区域写入颜色值，对应的颜色就会自动的在屏幕上显示。下面来看一下在不同色位模式下缓冲区与显示点的对应关系：</p>
+<p>2、驱动结构<br>帧缓冲设备为标准的字符型设备，在Linux中主设备号29，定义在/linux/major.h中的FB_MAJOR，次设备号定义帧缓冲的个数，最大允许有32个FrameBuffer，定义在/include/linux/fb.h中的FB_MAX，对应于文件系统下/dev/fb%d设备文件。<br>帧缓冲设备驱动在Linux子系统中的结构如下：</p>
+<p>我们从上面这幅图看，帧缓冲设备在Linux中也可以看做是一个完整的子系统，大体由fbmem.c和xxxfb.c（对应我们的s3cfb.c）组成。向上给应用程序提供完善的设备文件操作接口(即对FrameBuffer设备进行read、write、ioctl等操作)，接口在Linux提供的fbmem.c文件中实现；向下提供了硬件操作的接口，只是这些接口Linux并没有提供实现，因为这要根据具体的LCD控制器硬件进行设置，所以这就是我们要做的事情了(即s3cfb.c部分的实现)。<br>3、数据结构及接口函数<br>从帧缓冲设备驱动程序结构看，该驱动主要跟fb_info结构体有关，该结构体记录了帧缓冲设备的全部信息，包括设备的设置参数、状态以及对底层硬件操作的函数指针。在Linux中，每一个帧缓冲设备都必须对应一个fb_info，fb_info在/linux/fb.h中的定义如下：(只列出重要的一些) </p>
+<p>[cpp] view plain copy</p>
+<p>struct fb_info {  </p>
+<p>int node;  </p>
+<p>int flags;  </p>
+<p>struct fb_var_screeninfo var;/<em>LCD可变参数结构体</em>/  </p>
+<p>struct fb_fix_screeninfo fix;/<em>LCD固定参数结构体</em>/  </p>
+<p>struct fb_monspecs monspecs; /<em>LCD显示器标准</em>/  </p>
+<p>struct work_struct queue;    /<em>帧缓冲事件队列</em>/  </p>
+<p>struct fb_pixmap pixmap;     /<em>图像硬件mapper</em>/  </p>
+<p>struct fb_pixmap sprite;     /<em>光标硬件mapper</em>/  </p>
+<p>struct fb_cmap cmap;         /<em>当前的颜色表</em>/  </p>
+<p>struct fb_videomode *mode;   /<em>当前的显示模式</em>/  </p>
+<p>#ifdef CONFIG_FB_BACKLIGHT  </p>
+<p>struct backlight_device *bl_dev;/<em>对应的背光设备</em>/  </p>
+<p>struct mutex bl_curve_mutex;  </p>
+<p>    u8 bl_curve[FB_BACKLIGHT_LEVELS];/<em>背光调整</em>/  </p>
+<p>#endif  </p>
+<p>#ifdef CONFIG_FB_DEFERRED_IO  </p>
+<p>struct delayed_work deferred_work;  </p>
+<p>struct fb_deferred_io *fbdefio;  </p>
+<p>#endif  </p>
+<p>struct fb_ops *fbops; /<em>对底层硬件操作的函数指针</em>/  </p>
+<p>struct device *device;  </p>
+<p>struct device *dev;   /<em>fb设备</em>/  </p>
+<p>int class_flag;      </p>
+<p>#ifdef CONFIG_FB_TILEBLITTING  </p>
+<p>struct fb_tile_ops *tileops; /<em>图块Blitting</em>/  </p>
+<p>#endif  </p>
+<p>char __iomem *screen_base;   /<em>虚拟基地址</em>/  </p>
+<p>    unsigned long screen_size;   /<em>LCD IO映射的虚拟内存大小</em>/   </p>
+<p>void *pseudo_palette;        /<em>伪16色颜色表</em>/   </p>
+<p>#define FBINFO_STATE_RUNNING    0  </p>
+<p>#define FBINFO_STATE_SUSPENDED  1  </p>
+<p>    u32 state;  /<em>LCD的挂起或恢复状态</em>/  </p>
+<p>void *fbcon_par;  </p>
+<p>void *par;      </p>
+<p>};  </p>
+<p>其中，比较重要的成员有struct fb_var_screeninfo var、structfb_fix_screeninfo fix和struct fb_ops *fbops，他们也都是结构体。<br>fb_var_screeninfo结构体主要记录用户可以修改的控制器的参数，比如屏幕的分辨率和每个像素的比特数等，该结构体定义如下：</p>
+<p>[cpp] view plain copy</p>
+<p>struct fb_var_screeninfo {  </p>
+<p>    __u32 xres;                /<em>可见屏幕一行有多少个像素点</em>/  </p>
+<p>    __u32 yres;                /<em>可见屏幕一列有多少个像素点</em>/  </p>
+<p>    __u32 xres_virtual;        /<em>虚拟屏幕一行有多少个像素点</em>/          </p>
+<p>    __u32 yres_virtual;        /<em>虚拟屏幕一列有多少个像素点</em>/  </p>
+<p>    __u32 xoffset;             /<em>虚拟到可见屏幕之间的行偏移</em>/  </p>
+<p>    __u32 yoffset;             /<em>虚拟到可见屏幕之间的列偏移</em>/  </p>
+<p>    __u32 bits_per_pixel;      /<em>每个像素的位数即BPP</em>/  </p>
+<p>    __u32 grayscale;           /<em>非0时，指的是灰度</em>/  </p>
+<p>struct fb_bitfield red;    /<em>fb缓存的R位域</em>/  </p>
+<p>struct fb_bitfield green;  /<em>fb缓存的G位域</em>/  </p>
+<p>struct fb_bitfield blue;   /<em>fb缓存的B位域</em>/  </p>
+<p>struct fb_bitfield transp; /<em>透明度</em>/      </p>
+<p>    __u32 nonstd;              /* != 0 非标准像素格式*/  </p>
+<p>    __u32 activate;                  </p>
+<p>    __u32 height;              /<em>高度</em>/  </p>
+<p>    __u32 width;               /<em>宽度</em>/  </p>
+<p>    __u32 accel_flags;      </p>
+<p>/<em>定时：除了pixclock本身外，其他的都以像素时钟为单位</em>/  </p>
+<p>    __u32 pixclock;            /<em>像素时钟(皮秒)</em>/  </p>
+<p>    __u32 left_margin;         /<em>行切换，从同步到绘图之间的延迟</em>/  </p>
+<p>    __u32 right_margin;        /<em>行切换，从绘图到同步之间的延迟</em>/  </p>
+<p>    __u32 upper_margin;        /<em>帧切换，从同步到绘图之间的延迟</em>/  </p>
+<p>    __u32 lower_margin;        /<em>帧切换，从绘图到同步之间的延迟</em>/  </p>
+<p>    __u32 hsync_len;           /<em>水平同步的长度</em>/  </p>
+<p>    __u32 vsync_len;           /<em>垂直同步的长度</em>/  </p>
+<p>    __u32 sync;  </p>
+<p>    __u32 vmode;  </p>
+<p>    __u32 rotate;  </p>
+<p>    __u32 reserved[5];         /<em>保留</em>/  </p>
+<p>};   </p>
+<p>而fb_fix_screeninfo结构体又主要记录用户不可以修改的控制器的参数，比如屏幕缓冲区的物理地址和长度等，该结构体的定义如下：</p>
+<p>[cpp] view plain copy</p>
+<p>struct fb_fix_screeninfo {  </p>
+<p>char id[16];                /*字符串形式的标示符 */  </p>
+<p>    unsigned long smem_start;   /*fb缓存的开始位置 */  </p>
+<p>    __u32 smem_len;             /*fb缓存的长度 */  </p>
+<p>    __u32 type;                 /<em>看FB_TYPE_</em> */  </p>
+<p>    __u32 type_aux;             /<em>分界</em>/  </p>
+<p>    __u32 visual;               /<em>看FB_VISUAL_</em> */   </p>
+<p>    __u16 xpanstep;             /*如果没有硬件panning就赋值为0 */  </p>
+<p>    __u16 ypanstep;             /*如果没有硬件panning就赋值为0 */  </p>
+<p>    __u16 ywrapstep;            /*如果没有硬件ywrap就赋值为0 */  </p>
+<p>    __u32 line_length;          /*一行的字节数 */  </p>
+<p>    unsigned long mmio_start;   /<em>内存映射IO的开始位置</em>/  </p>
+<p>    __u32 mmio_len;             /<em>内存映射IO的长度</em>/  </p>
+<p>    __u32 accel;  </p>
+<p>    __u16 reserved[3];          /<em>保留</em>/  </p>
+<p>};  </p>
+<p>fb_ops结构体是对底层硬件操作的函数指针，该结构体中定义了对硬件的操作有:(这里只列出了常用的操作) </p>
+<p>[cpp] view plain copy</p>
+<p>struct fb_ops {  </p>
+<p>struct module *owner;  </p>
+<p>//检查可变参数并进行设置  </p>
+<p>int (*fb_check_var)(struct fb_var_screeninfo *var, struct fb_info *info);  </p>
+<p>//根据设置的值进行更新，使之有效  </p>
+<p>int (*fb_set_par)(struct fb_info *info);  </p>
+<p>//设置颜色寄存器  </p>
+<p>int (*fb_setcolreg)(unsigned regno, unsigned red, unsigned green,  </p>
+<p>             unsigned blue, unsigned transp, struct fb_info *info);  </p>
+<p>//显示空白  </p>
+<p>int (*fb_blank)(int blank, struct fb_info *info);  </p>
+<p>//矩形填充  </p>
+<p>void (*fb_fillrect) (struct fb_info *info, const struct fb_fillrect *rect);  </p>
+<p>//复制数据  </p>
+<p>void (*fb_copyarea) (struct fb_info *info, const struct fb_copyarea *region);  </p>
+<p>//图形填充  </p>
+<p>void (*fb_imageblit) (struct fb_info *info, const struct fb_image *image);  </p>
+<p>}；  </p>
+<p>六、Framebuffer设备注册<br>S3cfb.c中的s3cfb_probe设备探测，是驱动注册的主要函数，</p>
+<p>/<em>定义一个结构体用来维护驱动程序中各函数中用到的变量<br>先别看结构体要定义这些成员，到各函数使用的地方就明白了</em>/</p>
+<p>[cpp] view plain copy</p>
+<p>static int __devinit s3cfb_probe(struct platform_device *pdev)  </p>
+<p>{  </p>
+<p>struct s3c_platform_fb *pdata;/<em>LCD屏配置信息结构体</em>/  </p>
+<p>struct s3cfb_global *fbdev;/<em>驱动程序全局变量结构体</em>/  </p>
+<p>struct resource *res; /<em>用来保存从LCD平台设备中获取的LCD资源</em>/  </p>
+<p>int i, j, ret = 0;  </p>
+<p>    printk(&quot;%s\n&quot;,<strong>func</strong>);  </p>
+<p>    fbdev = kzalloc(sizeof(struct s3cfb_global), GFP_KERNEL);  </p>
+<p>if (!fbdev) {  </p>
+<p>        dev_err(&amp;pdev-&gt;dev, &quot;failed to allocate for &quot;  </p>
+<p>&quot;global fb structure\n&quot;);  </p>
+<p>        ret = -ENOMEM;  </p>
+<p>goto err_global;  </p>
+<p>    }  </p>
+<p>    fbdev-&gt;dev = &amp;pdev-&gt;dev;  </p>
+<p>    fbdev-&gt;regulator = regulator_get(&amp;pdev-&gt;dev, &quot;pd&quot;);  </p>
+<p>if (!fbdev-&gt;regulator) {  </p>
+<p>        dev_err(fbdev-&gt;dev, &quot;failed to get regulator\n&quot;);  </p>
+<p>        ret = -EINVAL;  </p>
+<p>goto err_regulator;  </p>
+<p>    }  </p>
+<p>    ret = regulator_enable(fbdev-&gt;regulator);  </p>
+<p>if (ret &lt; 0) {  </p>
+<p>        dev_err(fbdev-&gt;dev, &quot;failed to enable regulator\n&quot;);  </p>
+<p>        ret = -EINVAL;  </p>
+<p>goto err_regulator;  </p>
+<p>    }  </p>
+<p>/<em>获取LCD参数信息</em>/  </p>
+<p>    pdata = to_fb_plat(&amp;pdev-&gt;dev);  </p>
+<p>if (!pdata) {  </p>
+<p>        dev_err(fbdev-&gt;dev, &quot;failed to get platform data\n&quot;);  </p>
+<p>        ret = -EINVAL;  </p>
+<p>goto err_pdata;  </p>
+<p>    }  </p>
+<p>    fbdev-&gt;lcd = (struct s3cfb_lcd *)pdata-&gt;lcd;  </p>
+<p>/<em>配置GPIO端口</em>/  </p>
+<p>if (pdata-&gt;cfg_gpio)  </p>
+<p>        pdata-&gt;cfg_gpio(pdev);  </p>
+<p>/<em>设置时钟参数</em>/  </p>
+<p>if (pdata-&gt;clk_on)  </p>
+<p>        pdata-&gt;clk_on(pdev, &amp;fbdev-&gt;clock);  </p>
+<p>/<em>获取LCD平台设备所使用的IO端口资源，注意这个IORESOURCE_MEM标志和LCD平台设备定义中的一致</em>/  </p>
+<p>    res = platform_get_resource(pdev, IORESOURCE_MEM, 0);  </p>
+<p>if (!res) {  </p>
+<p>        dev_err(fbdev-&gt;dev, &quot;failed to get io memory region\n&quot;);  </p>
+<p>        ret = -EINVAL;  </p>
+<p>goto err_io;  </p>
+<p>    }  </p>
+<p>/<em>申请LCD IO端口所占用的IO空间(注意理解IO空间和内存空间的区别),request_mem_region定义在ioport.h中</em>/  </p>
+<p>    res = request_mem_region(res-&gt;start,  </p>
+<p>                 res-&gt;end - res-&gt;start + 1, pdev-&gt;name);  </p>
+<p>if (!res) {  </p>
+<p>        dev_err(fbdev-&gt;dev, &quot;failed to request io memory region\n&quot;);  </p>
+<p>        ret = -EINVAL;  </p>
+<p>goto err_io;  </p>
+<p>    }  </p>
+<p>/*将LCD的IO端口占用的这段IO空间映射到内存的虚拟地址，ioremap定义在io.h中 </p>
+<p>         注意：IO空间要映射后才能使用，以后对虚拟地址的操作就是对IO空间的操作*/  </p>
+<p>    fbdev-&gt;regs = ioremap(res-&gt;start, res-&gt;end - res-&gt;start + 1);  </p>
+<p>if (!fbdev-&gt;regs) {  </p>
+<p>        dev_err(fbdev-&gt;dev, &quot;failed to remap io region\n&quot;);  </p>
+<p>        ret = -EINVAL;  </p>
+<p>goto err_mem;  </p>
+<p>    }  </p>
+<p>#ifdef CONFIG_FB_S3C_LTE480WV  </p>
+<p>/<em>设置寄存器初始状态</em>/  </p>
+<p>    s3cfb_pre_init_para(fbdev);   </p>
+<p>#endif  </p>
+<p>/<em>设置gamma 值</em>/   </p>
+<p>    s3cfb_set_gamma(fbdev);  </p>
+<p>/<em>设置VSYNC中断</em>/  </p>
+<p>    s3cfb_set_vsync_interrupt(fbdev, 1);  </p>
+<p>/<em>设置全局中断</em>/  </p>
+<p>    s3cfb_set_global_interrupt(fbdev, 1);  </p>
+<p>/<em>fb设备参数信息初始化</em>/  </p>
+<p>    s3cfb_init_global(fbdev);  </p>
+<p>/<em>为framebuffer分配空间，进行内存映射，填充fb_info</em>/  </p>
+<p>if (s3cfb_alloc_framebuffer(fbdev)) {  </p>
+<p>        ret = -ENOMEM;  </p>
+<p>goto err_alloc;  </p>
+<p>    }  </p>
+<p>/<em>注册fb设备到系统中</em>/  </p>
+<p>if (s3cfb_register_framebuffer(fbdev)) {  </p>
+<p>        ret = -EINVAL;  </p>
+<p>goto err_register;  </p>
+<p>    }  </p>
+<p>    s3cfb_set_clock(fbdev);  </p>
+<p>    s3cfb_set_window(fbdev, pdata-&gt;default_win, 1);  </p>
+<p>    s3cfb_display_on(fbdev);  </p>
+<p>    fbdev-&gt;irq = platform_get_irq(pdev, 0);  </p>
+<p>if (request_irq(fbdev-&gt;irq, s3cfb_irq_frame, IRQF_SHARED,  </p>
+<p>            pdev-&gt;name, fbdev)) {  </p>
+<p>        dev_err(fbdev-&gt;dev, &quot;request_irq failed\n&quot;);  </p>
+<p>        ret = -EINVAL;  </p>
+<p>goto err_irq;  </p>
+<p>    }  </p>
+<p>#ifdef CONFIG_FB_S3C_LCD_INIT  </p>
+<p>if (pdata-&gt;backlight_on)  </p>
+<p>        pdata-&gt;backlight_on(pdev);  </p>
+<p>if (!bootloaderfb &amp;&amp; pdata-&gt;reset_lcd)  </p>
+<p>        pdata-&gt;reset_lcd(pdev);  </p>
+<p>if (pdata-&gt;lcd_on)  </p>
+<p>        pdata-&gt;lcd_on(pdev);  </p>
+<p>#endif  </p>
+<p>#ifdef CONFIG_HAS_EARLYSUSPEND  </p>
+<p>    fbdev-&gt;early_suspend.suspend = s3cfb_early_suspend;  </p>
+<p>    fbdev-&gt;early_suspend.resume = s3cfb_late_resume;  </p>
+<p>    fbdev-&gt;early_suspend.level = EARLY_SUSPEND_LEVEL_DISABLE_FB;  </p>
+<p>    register_early_suspend(&amp;fbdev-&gt;early_suspend);  </p>
+<p>#endif  </p>
+<p>/<em>对设备文件系统的支持，创建fb设备文件</em>/  </p>
+<p>    ret = device_create_file(&amp;(pdev-&gt;dev), &amp;dev_attr_win_power);  </p>
+<p>if (ret &lt; 0)  </p>
+<p>        dev_err(fbdev-&gt;dev, &quot;failed to add sysfs entries\n&quot;);  </p>
+<p>    dev_info(fbdev-&gt;dev, &quot;registered successfully\n&quot;);  </p>
+<p>/<em>显示开机logo</em>/  </p>
+<p>#if !defined(CONFIG_FRAMEBUFFER_CONSOLE) &amp;&amp; defined(CONFIG_LOGO)  </p>
+<p>if (fb_prepare_logo( fbdev-&gt;fb[pdata-&gt;default_win], FB_ROTATE_UR)) {  </p>
+<p>        printk(&quot;Start display and show logo\n&quot;);  </p>
+<p>/* Start display and show logo on boot */  </p>
+<p>        fb_set_cmap(&amp;fbdev-&gt;fb[pdata-&gt;default_win]-&gt;cmap, fbdev-&gt;fb[pdata-&gt;default_win]);  </p>
+<p>        fb_show_logo(fbdev-&gt;fb[pdata-&gt;default_win], FB_ROTATE_UR);  </p>
+<p>    }  </p>
+<p>#endif  </p>
+<p>return 0;  </p>
+<p>}  </p>
+<p>七、如何阅读LCD规格书<br>首先我们调试LCD的时候要获得的一些参数，没必要把整个规格书通读一遍，我刚开始调试屏的时候拿到一个规格书不知道从何入手，也不知那些参数有用，比较模糊，其实只提取一些有用的信息就可以，下面这些对初学者也许有点用处。</p>
+<p>1、GeneralSpecification<br>尺寸、分辨率、位数、色彩、像素时钟频率、接口类型<br>（1）、尺寸：</p>
+<p>（2）、分辨率：1920 1200；</p>
+<p>（3）、接口：双通道LVDS；</p>
+<p>（4）、色彩：16.7M，这里可以确认数据位数8bitRGB三色：3*8=24，2的24次方=16.7M</p>
+<p>6bitRGB 三色：3*6=18，2的18次方=262 144;</p>
+<p>所以当看到色彩是1.7M是，说明LCD是24bit的，如果是262 144（26M）说明LCD是18bit的。</p>
+<p>2、Timing Characteristics</p>
+<p>（1）、Frame rate :是60HZ，也就是帧率；<br>（2）、clock frequency:像素时钟，这里面有最大值、中间值和最小值，这个屏默认值为：76.36MHz；<br>（3）、Vertical Seciton：VSWidth +Back Porc+Front Porch，前间距、后间距。这个我们再RGB信号哪里详细解释，这个我们前面有说过；<br>（4）、Horizontal Section：HS Width +Back Porc+Front Porch，这个跟VS的Porch相同。</p>
+<p>3、LCD  Timing diagram信号时序图，如下所示</p>
+<p>有些读者会问，为什么没有行、场、数据等信号。其实这个是LVDS信号的时序，这个根据屏厂的习惯，有的画的是LVDS输入的信号时序，有的是TTL（RGB）的时序。</p>
+<p>上面我们以一个例子说明，做驱动的（软件方面）要知道的一些参数，如果是硬件方面的问题，可以再对一下接口。其实一个LCD规格书要了解的也就这么多，调试软件就够用：<br>（1）、General Specification中可得到，尺寸、分辨率、位数、色彩、像素时钟频率、接口类型；<br>（2）、Timing Characteristics中可以得到一些具体的参数；<br>（3）、LCD  Timing diagram信号时序图，可以看到一些信号的时序、极性等；</p>
+<p>八、PWM概述<br>1、先解释两个名词：<br>PWM：脉冲宽度调制(PWM)，是英文“Pulse WidthModulation”的缩写，简称脉宽调制。<br>占空比：占空比(DutyRation)在电信领域中有如下含义：<br>在一串理想的脉冲周期序列中（如方波），正脉冲的持续时间与脉冲总周期的比值。例如：（假设脉冲为3V）<br>脉冲宽度 1μs，信号周期4μs的脉冲序列占空比为0.25，平均电压为：3*0.25=0.75V；<br>脉冲宽度 0μs，信号周期4μs的脉冲序列占空比为0，平均电压为：0V；<br>脉冲宽度 4μs，信号周期4μs的脉冲序列占空比为1，平均电压为：3V；</p>
+<p>平均电压的变化成阶梯型变化，如果T足够小，成线性。</p>
+<p>看下芯片片规格书中的描述：寄存器填不同值是，脉冲宽度不一样。</p>
+<p>2、samusng 中的PWM控制器</p>
+<p>PWM时钟分频。跟单片机里面的有点像。死区控制器：这个是根据晶体管的特性，设置这个功能的，不过我工作中还没有用到死区控制这块。了解有这个概念。</p>
+<p>看这些寄存器，记得用MINI2440写裸机程序的时候，直接写这些寄存器，记得上学时把s3c2440当单片机玩，有点浪费。学生时代，已经逝去的青春？？</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/Android%20LCD(%E4%BA%8C)%EF%BC%9ALCD%E5%B8%B8%E7%94%A8%E6%8E%A5%E5%8F%A3%E5%8E%9F%E7%90%86%E7%AF%87/" rel="prev" title="Android LCD(二)：LCD常用接口原理篇">
+      <i class="fa fa-chevron-left"></i> Android LCD(二)：LCD常用接口原理篇
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/Android%20LCD(%E5%9B%9B)%EF%BC%9ALCD%E9%A9%B1%E5%8A%A8%E8%B0%83%E8%AF%95%E7%AF%87/" rel="next" title="Android LCD(四)：LCD驱动调试篇">
+      Android LCD(四)：LCD驱动调试篇 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Edward"
+      src="/uploads/avatar.gif">
+  <p class="site-author-name" itemprop="name">Edward</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">570</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Edward</span>
+</div>
+
+        
+
+
+
+
+
+
+<script>
+  (function() {
+    function leancloudSelector(url) {
+      url = encodeURI(url);
+      return document.getElementById(url).querySelector('.leancloud-visitors-count');
+    }
+
+    function addCount(Counter) {
+      var visitors = document.querySelector('.leancloud_visitors');
+      var url = decodeURI(visitors.id);
+      var title = visitors.dataset.flagTitle;
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          if (results.length > 0) {
+            var counter = results[0];
+            leancloudSelector(url).innerText = counter.time + 1;
+            Counter('put', '/classes/Counter/' + counter.objectId, { time: { '__op': 'Increment', 'amount': 1 } })
+              .catch(error => {
+                console.error('Failed to save visitor count', error);
+              });
+          } else {
+              Counter('post', '/classes/Counter', { title, url, time: 1 })
+                .then(response => response.json())
+                .then(() => {
+                  leancloudSelector(url).innerText = 1;
+                })
+                .catch(error => {
+                  console.error('Failed to create', error);
+                });
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    function showTime(Counter) {
+      var visitors = document.querySelectorAll('.leancloud_visitors');
+      var entries = [...visitors].map(element => {
+        return decodeURI(element.id);
+      });
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url: { '$in': entries } })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          for (let url of entries) {
+            let target = results.find(item => item.url === url);
+            leancloudSelector(url).innerText = target ? target.time : 0;
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    let { app_id, app_key, server_url } = {"enable":true,"app_id":"wxYx0BX9gaKA3XC4LuO2of0v-gzGzoHsz","app_key":"LQMcs6IDIE4YAm10vMsn9IYq","server_url":"https://wxyx0bx9.lc-cn-n1-shared.com","security":false};
+    function fetchData(api_server) {
+      var Counter = (method, url, data) => {
+        return fetch(`${api_server}/1.1${url}`, {
+          method,
+          headers: {
+            'X-LC-Id'     : app_id,
+            'X-LC-Key'    : app_key,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data)
+        });
+      };
+      if (CONFIG.page.isPost) {
+        if (CONFIG.hostname !== location.hostname) return;
+        addCount(Counter);
+      } else if (document.querySelectorAll('.post-title-link').length >= 1) {
+        showTime(Counter);
+      }
+    }
+
+    let api_server = app_id.slice(-9) !== '-MdYXbMMI' ? server_url : `https://${app_id.slice(0, 8).toLowerCase()}.api.lncldglobal.com`;
+
+    if (api_server) {
+      fetchData(api_server);
+    } else {
+      fetch('https://app-router.leancloud.cn/2/route?appId=' + app_id)
+        .then(response => response.json())
+        .then(({ api_server }) => {
+          fetchData('https://' + api_server);
+        });
+    }
+  })();
+</script>
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

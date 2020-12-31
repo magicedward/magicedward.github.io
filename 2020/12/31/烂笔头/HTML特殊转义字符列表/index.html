@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"edward.org.cn","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="HTML特殊转义字符列表 最常用的字符实体Character Entities  显示  说明  实体名称  实体编号  半方大的空白  &amp;ensp;  &amp;#8194;  全方大的空白  &amp;emsp;  &amp;#8195;  不断行的空白格  &amp;nbsp;  &amp;#160;  &lt;  小于  &amp;lt;  &amp;#60;  &gt;  大于">
+<meta property="og:type" content="article">
+<meta property="og:title" content="HTML特殊转义字符列表">
+<meta property="og:url" content="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/HTML%E7%89%B9%E6%AE%8A%E8%BD%AC%E4%B9%89%E5%AD%97%E7%AC%A6%E5%88%97%E8%A1%A8/index.html">
+<meta property="og:site_name" content="点点滴滴">
+<meta property="og:description" content="HTML特殊转义字符列表 最常用的字符实体Character Entities  显示  说明  实体名称  实体编号  半方大的空白  &amp;ensp;  &amp;#8194;  全方大的空白  &amp;emsp;  &amp;#8195;  不断行的空白格  &amp;nbsp;  &amp;#160;  &lt;  小于  &amp;lt;  &amp;#60;  &gt;  大于">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-12-31T06:48:01.177Z">
+<meta property="article:modified_time" content="2020-01-16T04:37:32.816Z">
+<meta property="article:author" content="Edward">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/HTML%E7%89%B9%E6%AE%8A%E8%BD%AC%E4%B9%89%E5%AD%97%E7%AC%A6%E5%88%97%E8%A1%A8/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>HTML特殊转义字符列表 | 点点滴滴</title>
+  
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?a92ed22eafce466e7a7b17546bb0dc6f";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">点点滴滴</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/HTML%E7%89%B9%E6%AE%8A%E8%BD%AC%E4%B9%89%E5%AD%97%E7%AC%A6%E5%88%97%E8%A1%A8/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/avatar.gif">
+      <meta itemprop="name" content="Edward">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="点点滴滴">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          HTML特殊转义字符列表
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-12-31 14:48:01" itemprop="dateCreated datePublished" datetime="2020-12-31T14:48:01+08:00">2020-12-31</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-01-16 12:37:32" itemprop="dateModified" datetime="2020-01-16T12:37:32+08:00">2020-01-16</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%83%82%E7%AC%94%E5%A4%B4/" itemprop="url" rel="index"><span itemprop="name">烂笔头</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/HTML%E7%89%B9%E6%AE%8A%E8%BD%AC%E4%B9%89%E5%AD%97%E7%AC%A6%E5%88%97%E8%A1%A8/" class="post-meta-item leancloud_visitors" data-flag-title="HTML特殊转义字符列表" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>HTML特殊转义字符列表</p>
+<p>最常用的字符实体<br>Character Entities </p>
+<p>显示  说明  实体名称  实体编号 </p>
+<p>半方大的空白  &amp;ensp;  &amp;#8194; </p>
+<p>全方大的空白  &amp;emsp;  &amp;#8195; </p>
+<p>不断行的空白格  &amp;nbsp;  &amp;#160; </p>
+<p>&lt;  小于  &amp;lt;  &amp;#60; </p>
+<p>&gt;  大于  &amp;gt;  &amp;#62; </p>
+<p>&amp;  &amp;符号  &amp;amp;  &amp;#38; </p>
+<p>&quot;  双引号  &amp;quot;  &amp;#34; </p>
+<p>©  版权  &amp;copy;  &amp;#169; </p>
+<p>®  已注册商标  &amp;reg;  &amp;#174; </p>
+<p>™  商标（美国）  ™  &amp;#8482; </p>
+<p>×  乘号  &amp;times;  &amp;#215; </p>
+<p>÷  除号  &amp;divide;  &amp;#247; </p>
+<p>ISO 8859-1 (Latin-1)字符集</p>
+<p>HTML 4.01 支持 ISO 8859-1 (Latin-1) 字符集。</p>
+<p>备注：为了方便起见，以下表格中，“实体名称”简称为“名称”，“实体编号”简称为“编号”</p>
+<p>显示  名称  编号  显示  名称  编号  显示  名称  编号  显示  名称  编号  显示  名称  编号 </p>
+<p>&amp;nbsp;  &amp;#160;  ¡  &amp;iexcl;  &amp;#161;  ¢  &amp;cent;  &amp;#162;  £  &amp;pound;  &amp;#163;  ¤  &amp;curren;  &amp;#164; </p>
+<p>¥  &amp;yen;  &amp;#165;  ¦  &amp;brvbar;  &amp;#166;  §  &amp;sect;  &amp;#167;  ¨  &amp;uml;  &amp;#168;  ©  &amp;copy;  &amp;#169; </p>
+<p>ª  &amp;ordf;  &amp;#170;  «  &amp;laquo;  &amp;#171;  ¬  &amp;not;  &amp;#172;    &amp;shy;  &amp;#173;  ®  &amp;reg;  &amp;#174; </p>
+<p>¯  &amp;macr;  &amp;#175;  °  &amp;deg;  &amp;#176;  ±  &amp;plusmn;  &amp;#177;  ²  &amp;sup2;  &amp;#178;  ³  &amp;sup3;  &amp;#179; </p>
+<p>´  &amp;acute;  &amp;#180;  µ  &amp;micro;  &amp;#181;  ¶  &amp;para;  &amp;#182;  ·  &amp;middot;  &amp;#183;  ¸  &amp;cedil;  &amp;#184; </p>
+<p>¹  &amp;sup1;  &amp;#185;  º  &amp;ordm;  &amp;#186;  »  &amp;raquo;  &amp;#187;  ¼  &amp;frac14;  &amp;#188;  ½  &amp;frac12;  &amp;#189; </p>
+<p>¾  &amp;frac34;  &amp;#190;  ¿  &amp;iquest;  &amp;#191;  À  &amp;Agrave;  &amp;#192;  Á  &amp;Aacute;  &amp;#193;  Â  &amp;Acirc;  &amp;#194; </p>
+<p>Ã  &amp;Atilde;  &amp;#195;  Ä  &amp;Auml;  &amp;#196;  Å  &amp;Aring;  &amp;#197;  Æ  &amp;AElig;  &amp;#198;  Ç  &amp;Ccedil;  &amp;#199; </p>
+<p>È  &amp;Egrave;  &amp;#200;  É  &amp;Eacute;  &amp;#201;  Ê  &amp;Ecirc;  &amp;#202;  Ë  &amp;Euml;  &amp;#203;  Ì  &amp;Igrave;  &amp;#204; </p>
+<p>Í  &amp;Iacute;  &amp;#205;  Î  &amp;Icirc;  &amp;#206;  Ï  &amp;Iuml;  &amp;#207;  Ð  &amp;ETH;  &amp;#208;  Ñ  &amp;Ntilde;  &amp;#209; </p>
+<p>Ò  &amp;Ograve;  &amp;#210;  Ó  &amp;Oacute;  &amp;#211;  Ô  &amp;Ocirc;  &amp;#212;  Õ  &amp;Otilde;  &amp;#213;  Ö  &amp;Ouml;  &amp;#214; </p>
+<p>×  &amp;times;  &amp;#215;  Ø  &amp;Oslash;  &amp;#216;  Ù  &amp;Ugrave;  &amp;#217;  Ú  &amp;Uacute;  &amp;#218;  Û  &amp;Ucirc;  &amp;#219; </p>
+<p>Ü  &amp;Uuml;  &amp;#220;  Ý  &amp;Yacute;  &amp;#221;  Þ  &amp;THORN;  &amp;#222;  ß  &amp;szlig;  &amp;#223;  à  &amp;agrave;  &amp;#224; </p>
+<p>á  &amp;aacute;  &amp;#225;  â  &amp;acirc;  &amp;#226;  ã  &amp;atilde;  &amp;#227;  ä  &amp;auml;  &amp;#228;  å  &amp;aring;  &amp;#229; </p>
+<p>æ  &amp;aelig;  &amp;#230;  ç  &amp;ccedil;  &amp;#231;  è  &amp;egrave;  &amp;#232;  é  &amp;eacute;  &amp;#233;  ê  &amp;ecirc;  &amp;#234; </p>
+<p>ë  &amp;euml;  &amp;#235;  ì  &amp;igrave;  &amp;#236;  í  &amp;iacute;  &amp;#237;  î  &amp;icirc;  &amp;#238;  ï  &amp;iuml;  &amp;#239; </p>
+<p>ð  &amp;eth;  &amp;#240;  ñ  &amp;ntilde;  &amp;#241;  ò  &amp;ograve;  &amp;#242;  ó  &amp;oacute;  &amp;#243;  ô  &amp;ocirc;  &amp;#244; </p>
+<p>õ  &amp;otilde;  &amp;#245;  ö  &amp;ouml;  &amp;#246;  ÷  &amp;divide;  &amp;#247;  ø  &amp;oslash;  &amp;#248;  ù  &amp;ugrave;  &amp;#249; </p>
+<p>ú  &amp;uacute;  &amp;#250;  û  &amp;ucirc;  &amp;#251;  ü  &amp;uuml;  &amp;#252;  ý  &amp;yacute;  &amp;#253;  þ  &amp;thorn;  &amp;#254; </p>
+<p>ÿ  &amp;yuml;  &amp;#255; </p>
+<p>数学和希腊字母标志<br>symbols, mathematical symbols, and Greek letters   </p>
+<p>显示  名称  编号  显示  名称  编号  显示  名称  编号  显示  名称  编号  显示  名称  编号 </p>
+<p>ƒ  &amp;fnof;  &amp;#402;  Α  &amp;Alpha;  &amp;#913;  Β  &amp;Beta;  &amp;#914;  Γ  &amp;Gamma;  &amp;#915;  Δ  &amp;Delta;  &amp;#916; </p>
+<p>Ε  &amp;Epsilon;  &amp;#917;  Ζ  &amp;Zeta;  &amp;#918;  Η  &amp;Eta;  &amp;#919;  Θ  &amp;Theta;  &amp;#920;  Ι  &amp;Iota;  &amp;#921; </p>
+<p>Κ  &amp;Kappa;  &amp;#922;  Λ  &amp;Lambda;  &amp;#923;  Μ  &amp;Mu;  &amp;#924;  Ν  &amp;Nu;  &amp;#925;  Ξ  &amp;Xi;  &amp;#926; </p>
+<p>Ο  &amp;Omicron;  &amp;#927;  Π  &amp;Pi;  &amp;#928;  Ρ  &amp;Rho;  &amp;#929;  Σ  &amp;Sigma;  &amp;#931;  Τ  &amp;Tau;  &amp;#932; </p>
+<p>Υ  &amp;Upsilon;  &amp;#933;  Φ  &amp;Phi;  &amp;#934;  Χ  &amp;Chi;  &amp;#935;  Ψ  &amp;Psi;  &amp;#936;  Ω  &amp;Omega;  &amp;#937; </p>
+<p>α  &amp;alpha;  &amp;#945;  β  &amp;beta;  &amp;#946;  γ  &amp;gamma;  &amp;#947;  δ  &amp;delta;  &amp;#948;  ε  &amp;epsilon;  &amp;#949; </p>
+<p>ζ  &amp;zeta;  &amp;#950;  η  &amp;eta;  &amp;#951;  θ  &amp;theta;  &amp;#952;  ι  &amp;iota;  &amp;#953;  κ  &amp;kappa;  &amp;#954; </p>
+<p>λ  &amp;lambda;  &amp;#955;  μ  &amp;mu;  &amp;#956;  ν  &amp;nu;  &amp;#957;  ξ  &amp;xi;  &amp;#958;  ο  &amp;omicron;  &amp;#959; </p>
+<p>π  &amp;pi;  &amp;#960;  ρ  &amp;rho;  &amp;#961;  ς  &amp;sigmaf;  &amp;#962;  σ  &amp;sigma;  &amp;#963;  τ  &amp;tau;  &amp;#964; </p>
+<p>υ  &amp;upsilon;  &amp;#965;  φ  &amp;phi;  &amp;#966;  χ  &amp;chi;  &amp;#967;  ψ  &amp;psi;  &amp;#968;  ω  &amp;omega;  &amp;#969; </p>
+<p>?  &amp;thetasym;  &amp;#977;  ?  &amp;upsih;  &amp;#978;  ?  &amp;piv;  &amp;#982;  •  &amp;bull;  &amp;#8226;  …  &amp;hellip;  &amp;#8230; </p>
+<p>′  &amp;prime;  &amp;#8242;  ″  &amp;Prime;  &amp;#8243;  ‾  &amp;oline;  &amp;#8254;  ⁄  &amp;frasl;  &amp;#8260;  ℘  &amp;weierp;  &amp;#8472; </p>
+<p>ℑ  &amp;image;  &amp;#8465;  ℜ  &amp;real;  &amp;#8476;  ™  &amp;trade;  &amp;#8482;  ℵ  &amp;alefsym;  &amp;#8501;  ←  &amp;larr;  &amp;#8592; </p>
+<p>↑  &amp;uarr;  &amp;#8593;  →  &amp;rarr;  &amp;#8594;  ↓  &amp;darr;  &amp;#8595;  ↔  &amp;harr;  &amp;#8596;  ↵  &amp;crarr;  &amp;#8629; </p>
+<p>⇐  &amp;lArr;  &amp;#8656;  ⇑  &amp;uArr;  &amp;#8657;  ⇒  &amp;rArr;  &amp;#8658;  ⇓  &amp;dArr;  &amp;#8659;  ⇔  &amp;hArr;  &amp;#8660; </p>
+<p>∀  &amp;forall;  &amp;#8704;  ∂  &amp;part;  &amp;#8706;  ∃  &amp;exist;  &amp;#8707;  ∅  &amp;empty;  &amp;#8709;  ∇  &amp;nabla;  &amp;#8711; </p>
+<p>∈  &amp;isin;  &amp;#8712;  ∉  &amp;notin;  &amp;#8713;  ∋  &amp;ni;  &amp;#8715;  ∏  &amp;prod;  &amp;#8719;  ∑  &amp;sum;  &amp;#8721; </p>
+<p>−  &amp;minus;  &amp;#8722;  ∗  &amp;lowast;  &amp;#8727;  √  &amp;radic;  &amp;#8730;  ∝  &amp;prop;  &amp;#8733;  ∞  &amp;infin;  &amp;#8734; </p>
+<p>∠  &amp;ang;  &amp;#8736;  ∧  &amp;and;  &amp;#8743;  ∨  &amp;or;  &amp;#8744;  ∩  &amp;cap;  &amp;#8745;  ∪  &amp;cup;  &amp;#8746; </p>
+<p>∫  &amp;int;  &amp;#8747;  ∴  &amp;there4;  &amp;#8756;  ∼  &amp;sim;  &amp;#8764;  ∝  &amp;cong;  &amp;#8773;  ≈  &amp;asymp;  &amp;#8776; </p>
+<p>≠  &amp;ne;  &amp;#8800;  ≡  &amp;equiv;  &amp;#8801;  ≤  &amp;le;  &amp;#8804;  ≥  &amp;ge;  &amp;#8805;  ⊂  &amp;sub;  &amp;#8834; </p>
+<p>⊃  &amp;sup;  &amp;#8835;  ⊄  &amp;nsub;  &amp;#8836;  ⊆  &amp;sube;  &amp;#8838;  ⊇  &amp;supe;  &amp;#8839;  ⊕  &amp;oplus;  &amp;#8853; </p>
+<p>⊗  &amp;otimes;  &amp;#8855;  ⊥  &amp;perp;  &amp;#8869;  ⋅  &amp;sdot;  &amp;#8901;  ?  &amp;lceil;  &amp;#8968;  ?  &amp;rceil;  &amp;#8969; </p>
+<p>?  &amp;lfloor;  &amp;#8970;  ?  &amp;rfloor;  &amp;#8971;  ?  &amp;lang;  &amp;#9001;  ?  &amp;rang;  &amp;#9002;  ◊  &amp;loz;  &amp;#9674; </p>
+<p>♠  &amp;spades; </p>
+<p>重要的国际标记<br>markup-significant and internationalization characters   </p>
+<p>显示  名称  编号  显示  名称  编号  显示  名称  编号  显示  名称  编号  显示  名称  编号 </p>
+<p>&quot;  &amp;quot;  &amp;#34;  &amp;  &amp;amp;  &amp;#38;  &lt;  &amp;lt;  &amp;#60;  &gt;  &amp;gt;  &amp;#62;  Œ  &amp;OElig;  &amp;#338; </p>
+<p>œ  &amp;oelig;  &amp;#339;  Š  &amp;Scaron;  &amp;#352;  š  &amp;scaron;  &amp;#353;  Ÿ  &amp;Yuml;  &amp;#376;  ˆ  &amp;circ;  &amp;#710; </p>
+<p>˜  &amp;tilde;  &amp;#732;     &amp;ensp;  &amp;#8194;     &amp;emsp;  &amp;#8195;     &amp;thinsp;  &amp;#8201;  ‌  &amp;zwnj;  &amp;#8204; </p>
+<p>‍  &amp;zwj;  &amp;#8205;  ‎  &amp;lrm;  &amp;#8206;  ‏  &amp;rlm;  &amp;#8207;  –  &amp;ndash;  &amp;#8211;  —  &amp;mdash;  &amp;#8212; </p>
+<p>‘  &amp;lsquo;  &amp;#8216;  ’  &amp;rsquo;  &amp;#8217;  ‚  &amp;sbquo;  &amp;#8218;  “  &amp;ldquo;  &amp;#8220;  ”  &amp;rdquo;  &amp;#8221; </p>
+<p>„  &amp;bdquo;  &amp;#8222;  †  &amp;dagger;  &amp;#8224;  ‡  &amp;Dagger;  &amp;#8225;  ‰  &amp;permil;  &amp;#8240;  ‹  &amp;lsaquo;  &amp;#8249; </p>
+<p>›  &amp;rsaquo;  &amp;#8250;  €  &amp;euro;  &amp;#8364 </p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/HOME%E6%A1%8C%E9%9D%A2%E8%8F%9C%E5%8D%95MENU/" rel="prev" title="HOME桌面菜单MENU">
+      <i class="fa fa-chevron-left"></i> HOME桌面菜单MENU
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/HttpURLConnection%20post/" rel="next" title="HttpURLConnection post">
+      HttpURLConnection post <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Edward"
+      src="/uploads/avatar.gif">
+  <p class="site-author-name" itemprop="name">Edward</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">570</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Edward</span>
+</div>
+
+        
+
+
+
+
+
+
+<script>
+  (function() {
+    function leancloudSelector(url) {
+      url = encodeURI(url);
+      return document.getElementById(url).querySelector('.leancloud-visitors-count');
+    }
+
+    function addCount(Counter) {
+      var visitors = document.querySelector('.leancloud_visitors');
+      var url = decodeURI(visitors.id);
+      var title = visitors.dataset.flagTitle;
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          if (results.length > 0) {
+            var counter = results[0];
+            leancloudSelector(url).innerText = counter.time + 1;
+            Counter('put', '/classes/Counter/' + counter.objectId, { time: { '__op': 'Increment', 'amount': 1 } })
+              .catch(error => {
+                console.error('Failed to save visitor count', error);
+              });
+          } else {
+              Counter('post', '/classes/Counter', { title, url, time: 1 })
+                .then(response => response.json())
+                .then(() => {
+                  leancloudSelector(url).innerText = 1;
+                })
+                .catch(error => {
+                  console.error('Failed to create', error);
+                });
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    function showTime(Counter) {
+      var visitors = document.querySelectorAll('.leancloud_visitors');
+      var entries = [...visitors].map(element => {
+        return decodeURI(element.id);
+      });
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url: { '$in': entries } })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          for (let url of entries) {
+            let target = results.find(item => item.url === url);
+            leancloudSelector(url).innerText = target ? target.time : 0;
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    let { app_id, app_key, server_url } = {"enable":true,"app_id":"wxYx0BX9gaKA3XC4LuO2of0v-gzGzoHsz","app_key":"LQMcs6IDIE4YAm10vMsn9IYq","server_url":"https://wxyx0bx9.lc-cn-n1-shared.com","security":false};
+    function fetchData(api_server) {
+      var Counter = (method, url, data) => {
+        return fetch(`${api_server}/1.1${url}`, {
+          method,
+          headers: {
+            'X-LC-Id'     : app_id,
+            'X-LC-Key'    : app_key,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data)
+        });
+      };
+      if (CONFIG.page.isPost) {
+        if (CONFIG.hostname !== location.hostname) return;
+        addCount(Counter);
+      } else if (document.querySelectorAll('.post-title-link').length >= 1) {
+        showTime(Counter);
+      }
+    }
+
+    let api_server = app_id.slice(-9) !== '-MdYXbMMI' ? server_url : `https://${app_id.slice(0, 8).toLowerCase()}.api.lncldglobal.com`;
+
+    if (api_server) {
+      fetchData(api_server);
+    } else {
+      fetch('https://app-router.leancloud.cn/2/route?appId=' + app_id)
+        .then(response => response.json())
+        .then(({ api_server }) => {
+          fetchData('https://' + api_server);
+        });
+    }
+  })();
+</script>
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

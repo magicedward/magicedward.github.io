@@ -123,11 +123,6 @@
     <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
 
   </li>
-        <li class="menu-item menu-item-tags">
-
-    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
-
-  </li>
         <li class="menu-item menu-item-categories">
 
     <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
@@ -192,7 +187,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://edward.org.cn/2020/12/31/%E9%9F%B3%E8%A7%86%E9%A2%91/%E6%96%87%E6%A1%A300-%E9%9F%B3%E8%A7%86%E9%A2%91%E6%A0%BC%E5%BC%8F%E5%B0%81%E8%A3%85%E5%8E%9F%E7%90%86/">
+    <link itemprop="mainEntityOfPage" href="http://edward.org.cn/2020/12/31/Android/packages%20above%20can%20set%20RTC_WAKEUP%20ELAPSED_REALTIME_WAKEUP%20alarm/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/uploads/avatar.gif">
@@ -206,7 +201,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2020/12/31/%E9%9F%B3%E8%A7%86%E9%A2%91/%E6%96%87%E6%A1%A300-%E9%9F%B3%E8%A7%86%E9%A2%91%E6%A0%BC%E5%BC%8F%E5%B0%81%E8%A3%85%E5%8E%9F%E7%90%86/" class="post-title-link" itemprop="url">00-音视频格式封装原理</a>
+            <a href="/2020/12/31/Android/packages%20above%20can%20set%20RTC_WAKEUP%20ELAPSED_REALTIME_WAKEUP%20alarm/" class="post-title-link" itemprop="url">packages above can set RTC_WAKEUP ELAPSED_REALTIME_WAKEUP alarm</a>
         </h2>
 
         <div class="post-meta">
@@ -215,12 +210,34 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              
 
-              <time title="创建时间：2020-12-31 10:38:42 / 修改时间：10:47:53" itemprop="dateCreated datePublished" datetime="2020-12-31T10:38:42+08:00">2020-12-31</time>
+              <time title="创建时间：2020-12-31 15:36:43" itemprop="dateCreated datePublished" datetime="2020-12-31T15:36:43+08:00">2020-12-31</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-10-10 17:56:09" itemprop="dateModified" datetime="2020-10-10T17:56:09+08:00">2020-10-10</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Android/" itemprop="url" rel="index"><span itemprop="name">Android</span></a>
+                </span>
             </span>
 
           
+            <span id="/2020/12/31/Android/packages%20above%20can%20set%20RTC_WAKEUP%20ELAPSED_REALTIME_WAKEUP%20alarm/" class="post-meta-item leancloud_visitors" data-flag-title="packages above can set RTC_WAKEUP ELAPSED_REALTIME_WAKEUP alarm" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
 
         </div>
       </header>
@@ -231,140 +248,7 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h3 id="视频解码基础01-封裝格式"><a href="#视频解码基础01-封裝格式" class="headerlink" title="视频解码基础01-封裝格式"></a>视频解码基础01-封裝格式</h3><p>​        我们播放的视频文件一般都是用一种<strong>封装格式</strong>封装起来的，封装格式的作用是什么呢？一般视频文件里不光有视频，还有音频，封装格式的作用就是把视频和音频打包起来。 所以我们先要<strong>解封装格式</strong>，看有哪些视频流和哪些音频流，此时的音频流和视频流都还是<strong>压缩数据</strong>，不能直接用于显示的，这就需要<strong>解码</strong>。下面是播放一个视频文件时的流程图。</p>
-<p><img src="/img/4.png" alt="1"></p>
-<p>FFmpeg  视频文件  是一个容器  (视频流（H264）  音频流(aac))</p>
-<h4 id="二、视频文件封装格式"><a href="#二、视频文件封装格式" class="headerlink" title="二、视频文件封装格式"></a>二、视频文件封装格式</h4><p>封装格式（也叫容器），就是将已经编码压缩好的视频轨和音频轨按照一定的格式放到一个文件中，也就是说仅仅是一个外壳，或者大家把它当成一个放视频轨和音频轨的文件夹也可以。说得通俗点，视频轨相当于饭，而音频轨相当于菜，封装格式就是一个碗，或者一个锅，用来盛放饭菜的容器。 下面是几种常用的 <strong>视频文件后缀类型</strong> 与其相对应的 <strong>封装格式</strong>。</p>
-<table>
-<thead>
-<tr>
-<th>视频文件格式</th>
-<th>视频封装格式</th>
-</tr>
-</thead>
-<tbody><tr>
-<td><strong>.avi</strong></td>
-<td>AVI（Audio Video Interleaved）</td>
-</tr>
-<tr>
-<td><strong>.wmv、.asf</strong></td>
-<td>WMV（Windows Media Video）</td>
-</tr>
-<tr>
-<td><strong>.mpg、.mpeg、.vob、.dat、.3gp、.mp4</strong></td>
-<td>MPEG（Moving Picture Experts Group）</td>
-</tr>
-<tr>
-<td><strong>.mkv</strong></td>
-<td>Matroska</td>
-</tr>
-<tr>
-<td><strong>.rm、.rmvb</strong></td>
-<td>Real Video</td>
-</tr>
-<tr>
-<td><strong>.mov</strong></td>
-<td>QuickTime File Format</td>
-</tr>
-<tr>
-<td><strong>.flv</strong></td>
-<td>Flash Video</td>
-</tr>
-</tbody></table>
-<h4 id="三、-音视频编码方式简介"><a href="#三、-音视频编码方式简介" class="headerlink" title="三、 音视频编码方式简介"></a>三、 音视频编码方式简介</h4><h5 id="1、视频编码方式"><a href="#1、视频编码方式" class="headerlink" title="1、视频编码方式"></a>1、视频编码方式</h5><ul>
-<li><strong>视频编码的作用：</strong> 将视频像素数据（<strong>RGB，YUV</strong> 等）压缩成视频码流，从而降低视频的数据量。</li>
-</ul>
-<table>
-<thead>
-<tr>
-<th><strong>HEVC（H.265）</strong></th>
-<th><strong>MPEG/ITU-T</strong></th>
-<th>2013</th>
-<th>研发中</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>名称</td>
-<td>推出机构</td>
-<td>推出时间</td>
-<td>目前使用领域</td>
-</tr>
-<tr>
-<td><strong>H.264</strong></td>
-<td><strong>MPEG/ITU-T</strong></td>
-<td>2003</td>
-<td>各个领域</td>
-</tr>
-<tr>
-<td><strong>MPEG4</strong></td>
-<td><strong>MPEG</strong></td>
-<td>2001</td>
-<td>不温不火</td>
-</tr>
-<tr>
-<td><strong>MPEG2</strong></td>
-<td><strong>MPEG</strong></td>
-<td>1994</td>
-<td>数字电视</td>
-</tr>
-<tr>
-<td><strong>VP9</strong></td>
-<td>Google</td>
-<td>2013</td>
-<td>研发中</td>
-</tr>
-<tr>
-<td><strong>VP8</strong></td>
-<td>Google</td>
-<td>2008</td>
-<td>不普及</td>
-</tr>
-<tr>
-<td><strong>VC-1</strong></td>
-<td>Microsoft Inc.</td>
-<td>2006</td>
-<td>微软平台</td>
-</tr>
-</tbody></table>
-<h3 id=""><a href="#" class="headerlink" title=""></a></h3><h4 id="四-音频编码方式"><a href="#四-音频编码方式" class="headerlink" title="四, 音频编码方式"></a>四, 音频编码方式</h4><p><strong>音频编码的作用：</strong> 将音频采样数据（<strong>PCM</strong> 等）压缩成音频码流，从而降低音频的数据量。 常用的音频编码方式有以下几种：</p>
-<table>
-<thead>
-<tr>
-<th>名称</th>
-<th>推出机构</th>
-<th>推出时间</th>
-<th>目前使用领域</th>
-</tr>
-</thead>
-<tbody><tr>
-<td><strong>AAC</strong></td>
-<td><strong>MPEG</strong></td>
-<td>1997</td>
-<td>各个领域（新）</td>
-</tr>
-<tr>
-<td><strong>MP3</strong></td>
-<td><strong>MPEG</strong></td>
-<td>1993</td>
-<td>各个领域（旧）</td>
-</tr>
-<tr>
-<td><strong>WMV</strong></td>
-<td><strong>Microsoft Inc.</strong></td>
-<td>1999</td>
-<td>微软平台</td>
-</tr>
-<tr>
-<td><strong>AC-3</strong></td>
-<td><strong>Dolby Inc.</strong></td>
-<td>1992</td>
-<td>电影</td>
-</tr>
-</tbody></table>
-<h5 id="1-MP3"><a href="#1-MP3" class="headerlink" title="1  MP3"></a>1  MP3</h5><p><strong>MP3</strong>，英文全称 <strong>MPEG-1 or MPEG-2 Audio Layer III</strong>，是曾经非常流行的一种数字音频编码和有损压缩格式，它被设计来大幅降低音频数据量。它是在 <strong>1991</strong> 年，由位于德国埃尔朗根的研究组织 <strong>Fraunhofer-Gesellschaft</strong> 的一组工程师发明和标准化的。<strong>MP3</strong> 的普及，曾对音乐产业造成极大的冲击与影响。</p>
-<h5 id="2-AAC"><a href="#2-AAC" class="headerlink" title="2 AAC"></a>2 AAC</h5><p><strong>AAC</strong>，英文全称 <strong>Advanced Audio Coding</strong>，是由 <strong>Fraunhofer IIS</strong>、杜比实验室、<strong>AT&amp;T</strong>、<strong>Sony</strong> 等公司共同开发，在 <strong>1997</strong> 年推出的基于 <strong>MPEG-2</strong> 的音频编码技术。<strong>2000</strong> 年，<strong>MPEG-4</strong> 标准出现后，<strong>AAC</strong> 重新集成了其特性，加入了 <strong>SBR</strong> 技术和 <strong>PS</strong> 技术，为了区别于传统的 <strong>MPEG-2 AAC</strong> 又称为 <strong>MPEG-4 AAC</strong>。 <strong>AAC</strong> 比 <strong>MP3</strong> 有更高的压缩比，同样大小的音频文件，<strong>AAC</strong> 的音质更高。</p>
-<h5 id="3-WMA"><a href="#3-WMA" class="headerlink" title="3 WMA"></a>3 WMA</h5><p><strong>WMA</strong>，英文全称 <strong>Windows Media Audio</strong>，由微软公司开发的一种数字音频压缩格式，本身包括有损和无损压缩格式。</p>
-
+          <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"> </span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> String[] sAlarmWhiteList = &#123;</span><br><span class="line">      <span class="string">&quot;com.car.carservice&quot;</span>,</span><br><span class="line">  &#125;;</span><br><span class="line">	</span><br><span class="line">  <span class="comment">/* </span></span><br><span class="line"><span class="comment">   * Only packages above can set RTC_WAKEUP/ELAPSED_REALTIME_WAKEUP alarm.</span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line">  <span class="function"><span class="keyword">private</span> <span class="keyword">int</span> <span class="title">filterType</span><span class="params">(<span class="keyword">int</span> type, PendingIntent operation)</span> </span>&#123;</span><br><span class="line">      <span class="keyword">if</span>( type == AlarmManager.RTC_WAKEUP || type == AlarmManager.ELAPSED_REALTIME_WAKEUP  ) &#123;</span><br><span class="line">          String pakeageName = operation==<span class="keyword">null</span>?<span class="keyword">null</span>:operation.getTargetPackage();</span><br><span class="line">          <span class="keyword">for</span>(String packet : sAlarmWhiteList) &#123;</span><br><span class="line">              <span class="keyword">if</span>( packet.equals(pakeageName) ) &#123;</span><br><span class="line">                  <span class="keyword">return</span> type;</span><br><span class="line">              &#125;</span><br><span class="line">          &#125;</span><br><span class="line">String values = SystemProperties.get(<span class="string">&quot;sys.rtc.packages&quot;</span>, <span class="string">&quot;&quot;</span>);</span><br><span class="line"><span class="keyword">if</span> (values.length() &gt; <span class="number">0</span>) &#123;</span><br><span class="line">	String[] list = values.split(<span class="string">&quot;,&quot;</span>);</span><br><span class="line">	<span class="keyword">for</span> (String p: list) &#123;</span><br><span class="line">              		<span class="keyword">if</span>( p.equals(pakeageName) ) &#123;</span><br><span class="line">                  			<span class="keyword">return</span> type;</span><br><span class="line">              		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line">          type = (type == AlarmManager.RTC_WAKEUP )? AlarmManager.RTC : AlarmManager.ELAPSED_REALTIME;</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="keyword">return</span> type;</span><br><span class="line">  &#125;    </span><br><span class="line">  </span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">setImplLocked</span><span class="params">(<span class="keyword">int</span> type, <span class="keyword">long</span> when, <span class="keyword">long</span> whenElapsed, <span class="keyword">long</span> windowLength,</span></span></span><br><span class="line"><span class="function"><span class="params">          <span class="keyword">long</span> maxWhen, <span class="keyword">long</span> interval, PendingIntent operation, <span class="keyword">boolean</span> isStandalone,</span></span></span><br><span class="line"><span class="function"><span class="params">          <span class="keyword">boolean</span> doValidate, WorkSource workSource, AlarmManager.AlarmClockInfo alarmClock,</span></span></span><br><span class="line"><span class="function"><span class="params">          <span class="keyword">int</span> userId, <span class="keyword">boolean</span> mNeedGrouping)</span> </span>&#123;</span><br><span class="line">      Alarm a = <span class="keyword">new</span> Alarm(filterType(type, operation), when, whenElapsed, windowLength, maxWhen, interval,</span><br><span class="line">              operation, workSource, alarmClock, userId, mNeedGrouping);</span><br><span class="line">      removeLocked(operation);</span><br></pre></td></tr></table></figure>
       
     </div>
 
@@ -383,7 +267,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://edward.org.cn/2020/12/31/%E9%9F%B3%E8%A7%86%E9%A2%91/%E6%96%87%E6%A1%A301-%E8%A7%86%E9%A2%91%E5%8E%8B%E7%BC%A9%E5%8E%9F%E7%90%86/">
+    <link itemprop="mainEntityOfPage" href="http://edward.org.cn/2020/12/31/Android/Adding%20for%20auto%20update%20FW%20in%20vold/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/uploads/avatar.gif">
@@ -397,7 +281,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2020/12/31/%E9%9F%B3%E8%A7%86%E9%A2%91/%E6%96%87%E6%A1%A301-%E8%A7%86%E9%A2%91%E5%8E%8B%E7%BC%A9%E5%8E%9F%E7%90%86/" class="post-title-link" itemprop="url">01-视频压缩原理</a>
+            <a href="/2020/12/31/Android/Adding%20for%20auto%20update%20FW%20in%20vold/" class="post-title-link" itemprop="url">Adding for auto update FW in vold</a>
         </h2>
 
         <div class="post-meta">
@@ -406,12 +290,34 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              
 
-              <time title="创建时间：2020-12-31 10:38:42 / 修改时间：10:46:29" itemprop="dateCreated datePublished" datetime="2020-12-31T10:38:42+08:00">2020-12-31</time>
+              <time title="创建时间：2020-12-31 15:36:43" itemprop="dateCreated datePublished" datetime="2020-12-31T15:36:43+08:00">2020-12-31</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-10-10 18:20:33" itemprop="dateModified" datetime="2020-10-10T18:20:33+08:00">2020-10-10</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Android/" itemprop="url" rel="index"><span itemprop="name">Android</span></a>
+                </span>
             </span>
 
           
+            <span id="/2020/12/31/Android/Adding%20for%20auto%20update%20FW%20in%20vold/" class="post-meta-item leancloud_visitors" data-flag-title="Adding for auto update FW in vold" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
 
         </div>
       </header>
@@ -422,104 +328,9 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <p>H264视频压缩算法现在无疑是所有视频压缩技术中使用最广泛，</p>
-<p>最流行的。随着 x264/openh264以及ffmpeg等开源库的推出，大多数使用者无需再对H264的细节做过多的研究，这大降低了人们使用H264的成本。</p>
-<p>但为了用好H264，我们还是要对H264的基本原理弄清楚才行。今天我们就来看看H264的基本原理。</p>
-<h2 id="H264概述"><a href="#H264概述" class="headerlink" title="H264概述"></a>H264概述</h2><p><img src="/img/30.png" alt="img"></p>
-<p>H264压缩技术主要采用了以下几种方法对视频数据进行压缩。包括：</p>
-<p>　　帧内预测压缩，解决的是空域数据冗余问题。<br>　　帧间预测压缩（运动估计与补偿），解决的是时域数据冗徐问题。<br>　　整数离散余弦变换（DCT），将空间上的相关性变为频域上无关的数据然后进行量化。<br>　　CABAC压缩。</p>
-<p>经过压缩后的帧分为：I帧，P帧和B帧:</p>
-<p>　　I帧：关键帧，采用帧内压缩技术。<br>　　P帧：向前参考帧，在压缩时，只参考前面已经处理的帧。采用帧音压缩技术。<br>　　B帧：双向参考帧，在压缩时，它即参考前而的帧，又参考它后面的帧。采用帧间压缩技术。</p>
-<p>除了I/P/B帧外，还有图像序列GOP。</p>
-<p>　　GOP:两个I帧之间是一个图像序列，在一个图像序列中只有一个I帧。如下图所示：</p>
-<p><img src="/img/31.png" alt="img"></p>
-<p>下面我们就来详细描述一下H264压缩技术。</p>
-<h2 id="H264压缩技术"><a href="#H264压缩技术" class="headerlink" title="H264压缩技术"></a>H264压缩技术</h2><p>H264的基本原理其实非常简单，下我们就简单的描述一下H264压缩数据的过程。通过摄像头采集到的视频帧（按每秒 30 帧算），被送到 H264 编码器的缓冲区中。编码器先要为每一幅图片划分宏块。</p>
-<p>以下面这张图为例:</p>
-<p> <img src="/img/32.png" alt="img"></p>
-<h3 id="划分宏块"><a href="#划分宏块" class="headerlink" title="划分宏块"></a>划分宏块</h3><p>H264默认是使用 16X16 大小的区域作为一个宏块，也可以划分成 8X8 大小。</p>
-<p> <img src="/img/33.png" alt="img"></p>
-<p>划分好宏块后，计算宏块的象素值。</p>
-<p> <img src="/img/34.png" alt="img"></p>
-<p>以此类推，计算一幅图像中每个宏块的像素值，所有宏块都处理完后如下面的样子。</p>
-<p> <img src="/img/35.png" alt="img"></p>
-<h3 id="划分子块"><a href="#划分子块" class="headerlink" title="划分子块"></a>划分子块</h3><p>H264对比较平坦的图像使用 16X16 大小的宏块。但为了更高的压缩率，还可以在 16X16 的宏块上更划分出更小的子块。子块的大小可以是 8X16､ 16X8､ 8X8､ 4X8､ 8X4､ 4X4非常的灵活。</p>
-<p> <img src="/img/36.png" alt="img"></p>
-<p>上幅图中，红框内的 16X16 宏块中大部分是蓝色背景，而三只鹰的部分图像被划在了该宏块内，为了更好的处理三只鹰的部分图像，H264就在 16X16 的宏块内又划分出了多个子块。</p>
-<p> <img src="/img/37.png" alt="img"></p>
-<p>这样再经过帧内压缩，可以得到更高效的数据。下图是分别使用mpeg-2和H264对上面宏块进行压缩后的结果。其中左半部分为MPEG-2子块划分后压缩的结果，右半部分为H264的子块划压缩后的结果，可以看出H264的划分方法更具优势。</p>
-<p> <img src="/img/39.png" alt="img"></p>
-<p>宏块划分好后，就可以对H264编码器缓存中的所有图片进行分组了。</p>
-<h3 id="帧分组"><a href="#帧分组" class="headerlink" title="帧分组"></a>帧分组</h3><p>对于视频数据主要有两类数据冗余，一类是时间上的数据冗余，另一类是空间上的数据冗余。其中时间上的数据冗余是最大的。下面我们就先来说说视频数据时间上的冗余问题。</p>
-<p>为什么说时间上的冗余是最大的呢？假设摄像头每秒抓取30帧，这30帧的数据大部分情况下都是相关联的。也有可能不止30帧的的数据，可能几十帧，上百帧的数据都是关联特别密切的。</p>
-<p>对于这些关联特别密切的帧，其实我们只需要保存一帧的数据，其它帧都可以通过这一帧再按某种规则预测出来，所以说视频数据在时间上的冗余是最多的。</p>
-<p>为了达到相关帧通过预测的方法来压缩数据，就需要将视频帧进行分组。那么如何判定某些帧关系密切，可以划为一组呢？我们来看一下例子，下面是捕获的一组运动的台球的视频帧，台球从右上角滚到了左下角。</p>
-<p> <img src="/img/40.png" alt="img"></p>
-<p><img src="/img/41.png" alt="img"></p>
-<p>H264编码器会按顺序，每次取出两幅相邻的帧进行宏块比较，计算两帧的相似度。如下图：</p>
-<p> <img src="/img/42.png" alt="img"></p>
-<p>通过宏块扫描与宏块搜索可以发现这两个帧的关联度是非常高的。进而发现这一组帧的关联度都是非常高的。因此，上面这几帧就可以划分为一组。其算法是：<strong>在相邻几幅图像画面中，一般有差别的像素只有10%以内的点,亮度差值变化不超过2%，而色度差值的变化只有1%以内，我们认为这样的图可以分到一组。</strong></p>
-<p>在这样一组帧中，经过编码后，我们只保留第一帖的完整数据，其它帧都通过参考上一帧计算出来。我们称第一帧为<strong>IDR／I帧</strong>，其它帧我们称为<strong>P／B帧</strong>，这样编码后的数据帧组我们称为<strong>GOP</strong>。</p>
-<h3 id="运动估计与补偿"><a href="#运动估计与补偿" class="headerlink" title="运动估计与补偿"></a>运动估计与补偿</h3><p>在H264编码器中将帧分组后，就要计算帧组内物体的运动矢量了。还以上面运动的台球视频帧为例，我们来看一下它是如何计算运动矢量的。</p>
-<p>H264编码器首先按顺序从缓冲区头部取出两帧视频数据，然后进行宏块扫描。当发现其中一幅图片中有物体时，就在另一幅图的邻近位置（搜索窗口中）进行搜索。如果此时在另一幅图中找到该物体，那么就可以计算出物体的运动矢量了。下面这幅图就是搜索后的台球移动的位置。</p>
-<p> <img src="/img/43.png" alt="img"></p>
-<p> 抖音 —-》视频  1M  9M   </p>
-<p>通过上图中台球位置相差，就可以计算出台图运行的方向和距离。H264依次把每一帧中球移动的距离和方向都记录下来就成了下面的样子。</p>
-<p> <img src="/img/44.png" alt="img"></p>
-<p>运动矢量计算出来后，将相同部分（也就是绿色部分）减去，就得到了补偿数据。我们最终只需要将补偿数据进行压缩保存，以后在解码时就可以恢复原图了。压缩补偿后的数据只需要记录很少的一点数据。如下所示：</p>
-<p> <img src="/img/45.png" alt="img"></p>
-<p>我们把运动矢量与补偿称为<strong>帧间压缩技术</strong>，它解决的是视频帧在时间上的数据冗余。除了帧间压缩，帧内也要进行数据压缩，帧内数据压缩解决的是空间上的数据冗余。下面我们就来介绍一下帧内压缩技术。</p>
-<h3 id="帧内预测"><a href="#帧内预测" class="headerlink" title="帧内预测"></a>帧内预测</h3><p>人眼对图象都有一个识别度，对低频的亮度很敏感，对高频的亮度不太敏感。所以基于一些研究，可以将一幅图像中人眼不敏感的数据去除掉。这样就提出了帧内预测技术。</p>
-<p>H264的帧内压缩与JPEG很相似。一幅图像被划分好宏块后，对每个宏块可以进行 9 种模式的预测。找出与原图最接近的一种预测模式。</p>
-<p> <img src="/img/46.png" alt="img"></p>
-<p>下面这幅图是对整幅图中的每个宏块进行预测的过程。</p>
-<p> <img src="/img/1307424-20181107191243491-673612486.png" alt="img"></p>
-<p>帧内预测后的图像与原始图像的对比如下：</p>
-<p> <img src="/img/1307424-20181107191249101-214889465.png" alt="img"></p>
-<p>然后，将原始图像与帧内预测后的图像相减得残差值。</p>
-<p> <img src="/img/1307424-20181107191253955-1987839456.png" alt="img"></p>
-<p>再将我们之前得到的预测模式信息一起保存起来，这样我们就可以在解码时恢复原图了。效果如下：</p>
-<p> <img src="/img/1307424-20181107191259057-1084466018.png" alt="img"></p>
-<p>经过帧内与帧间的压缩后，虽然数据有大幅减少，但还有优化的空间。</p>
-<h3 id="对残差数据做DCT"><a href="#对残差数据做DCT" class="headerlink" title="对残差数据做DCT"></a>对残差数据做DCT</h3><p>可以将残差数据做整数离散余弦变换，去掉数据的相关性，进一步压缩数据。如下图所示，左侧为原数据的宏块，右侧为计算出的残差数据的宏块。</p>
-<p> <img src="/img/1307424-20181107191314043-1719104258.png" alt="img"></p>
-<p>将残差数据宏块数字化后如下图所示：</p>
-<p> <img src="/img/1307424-20181107191318906-1060673182.png" alt="img"></p>
-<p>将残差数据宏块进行 DCT 转换。</p>
-<p> <img src="/img/1307424-20181107191325145-505363573.png" alt="img"></p>
-<p>去掉相关联的数据后，我们可以看出数据被进一步压缩了。</p>
-<p> <img src="/img/1307424-20181107191330244-1287304627.png" alt="img"></p>
-<p>做完 DCT 后，还不够，还要进行 CABAC 进行无损压缩。</p>
-<h3 id="DCT原理大白话"><a href="#DCT原理大白话" class="headerlink" title="DCT原理大白话"></a>DCT原理大白话</h3><p> 这是第一帧画面：P1（我们的参考帧） </p>
-<p><img src="/img/50.jpg" alt="50"></p>
-<p> 这是第二帧画面：P2（需要编码的帧） </p>
-<p><img src="/img/51.jpg" alt="50"></p>
-<p> 从视频中截取的两张间隔1-2秒的画面，和实际情况类似，下面我们进行几次运动搜索： </p>
-<p> 这是一个演示程序，鼠标选中P2上任意<strong>16x16</strong>的Block，即可搜索出<strong>P1上的 BestMatch</strong> 宏块。虽然车辆在运动，从远到近，但是依然找到了最接近的宏块坐标。 </p>
-<p><img src="/img/53.jpg" alt="50"></p>
-<p> 这是一个演示程序，鼠标选中P2上任意16x16的Block，即可搜索出P1上的 BestMatch 宏块。虽然车辆在运动，从远到近，但是依然找到了最接近的宏块坐标。 </p>
-<p> 搜索演示2：空中电线交叉位置（上图P1，下图P2） </p>
-<p><img src="/img/55.jpg" alt="50"></p>
-<p><img src="/img/54.jpg" alt="50"></p>
-<p> 同样顺利在P1中找到最接近P2里海报的宏块位置。 </p>
-<p> 图片全搜索：根据P1和运动矢量数据（在P2中搜索到每一个宏块在P1中最相似的位置集合）还原出来的P2’，即完全用P1各个位置的宏块拼凑出来最像P2的图片P2’，效果如下： </p>
-<p><img src="/img/56.jpg" alt="50"></p>
-<h5 id="仔细观察，有些支离破碎对吧？肯定啊，拼凑出来的东西就是这样，现在我们用P2-和P2像素相减，得到差分图-D2-P2’-P2-2-0x80："><a href="#仔细观察，有些支离破碎对吧？肯定啊，拼凑出来的东西就是这样，现在我们用P2-和P2像素相减，得到差分图-D2-P2’-P2-2-0x80：" class="headerlink" title="仔细观察，有些支离破碎对吧？肯定啊，拼凑出来的东西就是这样，现在我们用P2`和P2像素相减，得到差分图 D2 = (P2’ - P2) / 2 + 0x80："></a>仔细观察，有些支离破碎对吧？肯定啊，拼凑出来的东西就是这样，现在我们用P2`和P2像素相减，得到差分图 D2 = (P2’ - P2) / 2 + 0x80：</h5><p><img src="/img/57.jpg" alt="50"></p>
-<p> 这就是之前支离破碎的 P2` 加上误差 D2之后变成了清晰可见的样子，基本还原了原图P2。 </p>
-<p><img src="/img/58.jpg" alt="50"></p>
-<p> 由于D2仅仅占5KB，加上压缩过后的运动矢量不过7KB，所以参考P1我们只需要额外 7KB的数据量就可以完整表示P2了，而如果独立将P2用质量尚可的有损压缩方式独立压缩，则至少要去到50-60KB，这一下节省了差不多8倍的空间，正就是所谓运动编码的基本原理。 </p>
-<p> 实际在使用中，参考帧并不一定是前面一帧，也不一定是同一个GOP的I帧，因为GOP间隔较长时，后面的图片离I帧变化可能已经很大了，因此常见做法是最近15帧中选择一帧误差最小的作为参考帧，虽然彩色画面有YUV三个分量，但是大量的预测工作和最有选择通常是根据Y分量的灰度帧进行判断的。 </p>
-<p> 再者误差我们保存的是（P2-P2’）/2 + 0x80，实际使用时我们会用更有效率的方式，比如让[-64,64]之间的色差精度为1，[-255,-64], [64, 255] 之间的色差精度为2-3，这样会更加真实一些。 </p>
-<p> 同时上文很多地方用的是直接lzma2进行简单存储，实际使用时一般会引入熵编码，对数据进行一定层次的整理然后再压缩，性能会好不少。 </p>
-<h3 id="CABAC"><a href="#CABAC" class="headerlink" title="CABAC"></a>CABAC</h3><p>上面的帧内压缩是属于有损压缩技术。也就是说图像被压缩后，无法完全复原。而CABAC属于无损压缩技术。</p>
-<p>无损压缩技术大家最熟悉的可能就是哈夫曼编码了，给高频的词一个短码，给低频词一个长码从而达到数据压缩的目的。MPEG-2中使用的VLC就是这种算法，我们以 A-Z 作为例子，A属于高频数据，Z属于低频数据。看看它是如何做的。</p>
-<p> <img src="/img/1307424-20181107191345116-277907586.png" alt="img"></p>
-<p>CABAC也是给高频数据短码，给低频数据长码。同时还会根据上下文相关性进行压缩，这种方式又比VLC高效很多。其效果如下：</p>
-<p> <img src="/img/1307424-20181107191350500-1400387362.png" alt="img"></p>
-<p>现在将 A-Z 换成视频帧，它就成了下面的样子。</p>
-<p> <img src="/img/1307424-20181107191355172-2085276841.png" alt="img"></p>
-<p>从上面这张图中明显可以看出采用 CACBA 的无损压缩方案要比 VLC 高效的多。</p>
+          <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment">//CM: Adding for auto update FW in vold</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> MAX_CM_UPDATE_PATH_LEN    256</span></span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">bool</span> <span class="title">chkUpFile</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *label, <span class="keyword">char</span> *upFile)</span></span>&#123;</span><br><span class="line">    <span class="keyword">const</span> <span class="keyword">char</span> *FILE_NAME = <span class="string">&quot;cm_update.zip&quot;</span>;</span><br><span class="line">    <span class="keyword">char</span> UPDATE_FILE_NAME[<span class="number">256</span>];</span><br><span class="line">    <span class="keyword">char</span> UPDATE_FILE_PATH[<span class="number">256</span>];</span><br><span class="line">    <span class="keyword">char</span> UPDATE_FILE_PATH_NEW[<span class="number">256</span>];</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Check if OTA update file exists or not</span></span><br><span class="line">    <span class="built_in">snprintf</span>(UPDATE_FILE_PATH, <span class="keyword">sizeof</span>(UPDATE_FILE_PATH), <span class="string">&quot;%s/%s&quot;</span>, label, FILE_NAME);</span><br><span class="line">    <span class="keyword">if</span> (access(UPDATE_FILE_PATH, F_OK|R_OK) &lt; <span class="number">0</span>)&#123;</span><br><span class="line">        SLOGW(<span class="string">&quot;CheckUpdate update file %s is not exist&quot;</span>, UPDATE_FILE_PATH);</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Rename OTA update files to prevent updating at next boot/plugin</span></span><br><span class="line">    <span class="built_in">strncpy</span>(UPDATE_FILE_NAME, FILE_NAME, <span class="keyword">sizeof</span>(UPDATE_FILE_NAME));</span><br><span class="line">    <span class="keyword">char</span> *dot = <span class="built_in">strrchr</span>(UPDATE_FILE_NAME, <span class="string">&#x27;.&#x27;</span>);</span><br><span class="line">    <span class="keyword">if</span> (dot != <span class="literal">NULL</span>)&#123;</span><br><span class="line">        *dot = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">char</span> *prefix = UPDATE_FILE_NAME;</span><br><span class="line">        <span class="keyword">char</span> *postfix = dot+<span class="number">1</span>;</span><br><span class="line">        <span class="built_in">snprintf</span>(UPDATE_FILE_PATH_NEW, <span class="keyword">sizeof</span>(UPDATE_FILE_PATH_NEW), <span class="string">&quot;%s/%s-%ld.%s&quot;</span>, label, prefix, time(<span class="literal">NULL</span>), postfix);</span><br><span class="line">    &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">        <span class="built_in">snprintf</span>(UPDATE_FILE_PATH_NEW, <span class="keyword">sizeof</span>(UPDATE_FILE_PATH_NEW), <span class="string">&quot;%s/%s-%ld&quot;</span>, label, UPDATE_FILE_NAME, time(<span class="literal">NULL</span>));</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">if</span> (rename(UPDATE_FILE_PATH, UPDATE_FILE_PATH_NEW) &lt; <span class="number">0</span>)&#123;</span><br><span class="line">        SLOGW(<span class="string">&quot;CheckUpdate rename %s to %s failure&quot;</span>, UPDATE_FILE_PATH, UPDATE_FILE_PATH_NEW);</span><br><span class="line">        <span class="built_in">snprintf</span>(upFile, MAX_CM_UPDATE_PATH_LEN, <span class="string">&quot;%s&quot;</span>, UPDATE_FILE_PATH);</span><br><span class="line">    &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">        <span class="built_in">snprintf</span>(upFile, MAX_CM_UPDATE_PATH_LEN, <span class="string">&quot;%s&quot;</span>, UPDATE_FILE_PATH_NEW);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    SLOGI(<span class="string">&quot;CheckUpdate updateFile = %s&quot;</span>, upFile);</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">bool</span> <span class="title">chkUpFolder</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *label, <span class="keyword">char</span> *upFile)</span></span>&#123;</span><br><span class="line">    <span class="keyword">const</span> <span class="keyword">char</span> *FOLDER_NAME = <span class="string">&quot;cm_update&quot;</span>;</span><br><span class="line">    <span class="keyword">char</span> UPDATE_PATH[<span class="number">256</span>];</span><br><span class="line">    <span class="keyword">char</span> FOLDER_NAME_NEW[<span class="number">256</span>];</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">dirent</span> *<span class="title">entry</span> =</span> <span class="literal">NULL</span>;</span><br><span class="line">    <span class="keyword">bool</span> isUpdate = <span class="literal">false</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Check if OTA update folder exists or not</span></span><br><span class="line">    <span class="built_in">snprintf</span>(UPDATE_PATH, <span class="keyword">sizeof</span>(UPDATE_PATH), <span class="string">&quot;%s/%s&quot;</span>, label, FOLDER_NAME);</span><br><span class="line">    DIR *dirptr = opendir(UPDATE_PATH);</span><br><span class="line">    <span class="keyword">if</span> (dirptr == <span class="literal">NULL</span>)&#123;</span><br><span class="line">        SLOGW(<span class="string">&quot;CheckUpdate update folder %s is not exist&quot;</span>, UPDATE_PATH);</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">while</span> ((entry = readdir(dirptr)) != <span class="literal">NULL</span>)&#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;entry: %s\n&quot;</span>, entry-&gt;d_name);</span><br><span class="line">        <span class="keyword">if</span> ((entry-&gt;d_type == DT_REG) || (entry-&gt;d_type == DT_UNKNOWN)) &#123;</span><br><span class="line">            <span class="keyword">if</span> ( <span class="built_in">strstr</span>(entry-&gt;d_name, <span class="string">&quot;.bin&quot;</span>) || <span class="built_in">strstr</span>(entry-&gt;d_name, <span class="string">&quot;.img&quot;</span>))</span><br><span class="line">                isUpdate = <span class="literal">true</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    closedir(dirptr);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> ( isUpdate == <span class="literal">false</span> )</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Rename OTA update files to prevent updating at next boot/plugin</span></span><br><span class="line">    <span class="built_in">snprintf</span>(FOLDER_NAME_NEW, <span class="keyword">sizeof</span>(FOLDER_NAME_NEW), <span class="string">&quot;%s/%s-%ld&quot;</span>, label, FOLDER_NAME, time(<span class="literal">NULL</span>));</span><br><span class="line">    <span class="keyword">if</span> (rename(UPDATE_PATH, FOLDER_NAME_NEW) &lt; <span class="number">0</span>)&#123;</span><br><span class="line">        <span class="built_in">snprintf</span>(upFile, MAX_CM_UPDATE_PATH_LEN, <span class="string">&quot;%s/boot.img&quot;</span>, UPDATE_PATH);</span><br><span class="line">    &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">        <span class="built_in">snprintf</span>(upFile, MAX_CM_UPDATE_PATH_LEN, <span class="string">&quot;%s/boot.img&quot;</span>, FOLDER_NAME_NEW);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    SLOGI(<span class="string">&quot;CheckUpdate updateFile = %s&quot;</span>, upFile);</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">bool</span> <span class="title">prepareRecovery</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *upFile)</span></span>&#123;</span><br><span class="line">    <span class="keyword">const</span> <span class="keyword">char</span> *RECOVERY_DIR = <span class="string">&quot;/cache/recovery&quot;</span>;</span><br><span class="line">    <span class="keyword">const</span> <span class="keyword">char</span> *COMMAND_FILE = <span class="string">&quot;/cache/recovery/command&quot;</span>;</span><br><span class="line">    <span class="keyword">char</span> UPDATE_ARG[<span class="number">256</span>];</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">if</span>( upFile == <span class="literal">NULL</span> || <span class="built_in">strlen</span>(upFile) &lt;= <span class="number">0</span> )</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Remove recovery folder</span></span><br><span class="line">    remove(COMMAND_FILE);</span><br><span class="line">    mkdir(RECOVERY_DIR, <span class="number">0777</span>);</span><br><span class="line">    <span class="keyword">if</span> (access(RECOVERY_DIR, F_OK|R_OK|W_OK|X_OK) &lt; <span class="number">0</span>)&#123;</span><br><span class="line">        SLOGE(<span class="string">&quot;CheckUpdate create RECOVERY_DIR:%s failure&quot;</span>, RECOVERY_DIR);</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// Create recovery data file</span></span><br><span class="line">    <span class="keyword">int</span> fd = creat(COMMAND_FILE, <span class="number">0666</span>);</span><br><span class="line">    <span class="keyword">if</span> (fd &lt; <span class="number">0</span>)&#123;</span><br><span class="line">        SLOGE(<span class="string">&quot;CheckUpdate create COMMAND_FILE:%s failure&quot;</span>, COMMAND_FILE);</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Write recovery arg</span></span><br><span class="line">    <span class="built_in">snprintf</span>(UPDATE_ARG, <span class="keyword">sizeof</span>(UPDATE_ARG), <span class="string">&quot;--update_package=%s\n&quot;</span>, upFile);</span><br><span class="line">    <span class="keyword">int</span> length = <span class="built_in">strlen</span>(UPDATE_ARG);</span><br><span class="line">    <span class="keyword">int</span> written = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">do</span>&#123;</span><br><span class="line">        <span class="keyword">int</span> n = write(fd, UPDATE_ARG+written, length-written);</span><br><span class="line">        <span class="keyword">if</span> (n &lt; <span class="number">0</span>)&#123;</span><br><span class="line">            SLOGE(<span class="string">&quot;CheckUpdate write UPDATE_ARG:%s failure&quot;</span>, UPDATE_ARG);</span><br><span class="line">            close(fd);</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        written += n;</span><br><span class="line">    &#125;<span class="keyword">while</span> (written &lt; length);</span><br><span class="line">    </span><br><span class="line">    close(fd);</span><br><span class="line">    SLOGI(<span class="string">&quot;CheckUpdate write %s is success&quot;</span>, COMMAND_FILE);</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// Synchronize files</span></span><br><span class="line">    system(<span class="string">&quot;sync&quot;</span>);</span><br><span class="line">    sleep(<span class="number">5</span>);</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">checkUpdate</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *label)</span></span>&#123;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">if</span> (label == <span class="literal">NULL</span>)&#123;</span><br><span class="line">        SLOGW(<span class="string">&quot;CheckUpdate label is NULL&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// label must be contain sdcard</span></span><br><span class="line">    SLOGI(<span class="string">&quot;CheckUpdate label:%s&quot;</span>, label);</span><br><span class="line">    <span class="keyword">if</span> (<span class="built_in">strstr</span>(label, <span class="string">&quot;sdcard&quot;</span>) == <span class="literal">NULL</span>)&#123;</span><br><span class="line">        SLOGW(<span class="string">&quot;CheckUpdate skipped&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// check android properties</span></span><br><span class="line">    <span class="keyword">const</span> <span class="keyword">char</span> *prop = <span class="string">&quot;persist.updatefw.auto&quot;</span>;</span><br><span class="line">    <span class="keyword">char</span> prop_value[PROPERTY_VALUE_MAX];</span><br><span class="line">    <span class="keyword">if</span> (property_get(prop, prop_value, <span class="string">&quot;1&quot;</span>) &lt; <span class="number">0</span>)&#123;</span><br><span class="line">        SLOGW(<span class="string">&quot;CheckUpdate get android prop error&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    SLOGI(<span class="string">&quot;CheckUpdate %s: %s&quot;</span>, prop, prop_value);</span><br><span class="line">    <span class="keyword">if</span> (prop_value[<span class="number">0</span>] == <span class="string">&#x27;0&#x27;</span> &amp;&amp; prop_value[<span class="number">1</span>] == <span class="string">&#x27;\0&#x27;</span>)&#123;</span><br><span class="line">        SLOGI(<span class="string">&quot;CheckUpdate android prop: disable auto update&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Check label is exist</span></span><br><span class="line">    <span class="keyword">if</span> (access(label, F_OK|R_OK|X_OK) &lt; <span class="number">0</span>)&#123;</span><br><span class="line">        SLOGW(<span class="string">&quot;CheckUpdate label:%s is not exist&quot;</span>, label);</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    SLOGI(<span class="string">&quot;CheckUpdate fork parent process:%d&quot;</span>, getpid());</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">pid_t</span> pid = fork();</span><br><span class="line">    <span class="keyword">if</span> (pid &lt; <span class="number">0</span>)&#123;</span><br><span class="line">        SLOGE(<span class="string">&quot;CheckUpdate fork failure&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;<span class="keyword">else</span> <span class="keyword">if</span> (pid &gt; <span class="number">0</span>)&#123;</span><br><span class="line">        SLOGI(<span class="string">&quot;CheckUpdate forked child process:%d&quot;</span>, pid);</span><br><span class="line">        <span class="comment">// wait child process exit to avoid it become zombie(defunct)</span></span><br><span class="line">        <span class="keyword">if</span> (waitpid(pid, <span class="literal">NULL</span>, <span class="number">0</span>) == pid ) &#123;</span><br><span class="line">            SLOGI(<span class="string">&quot;CheckUpdate child(%d) completed.&quot;</span>, pid);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// Child process...</span></span><br><span class="line">    sleep(<span class="number">10</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">char</span> updateFile[MAX_CM_UPDATE_PATH_LEN];</span><br><span class="line">    <span class="built_in">memset</span>(updateFile, <span class="number">0</span>, MAX_CM_UPDATE_PATH_LEN);</span><br><span class="line">    <span class="keyword">if</span> ( chkUpFile(label, updateFile) == <span class="literal">false</span> )&#123;</span><br><span class="line">        chkUpFolder(label, updateFile);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">if</span> ( prepareRecovery(updateFile) ) &#123;</span><br><span class="line">        <span class="comment">// Reboot to recovery</span></span><br><span class="line">        SLOGI(<span class="string">&quot;CheckUpdate reboot to recovery&quot;</span>);</span><br><span class="line">        <span class="keyword">if</span> (execlp(<span class="string">&quot;reboot&quot;</span>, <span class="string">&quot;reboot&quot;</span>, <span class="string">&quot;recovery&quot;</span>, <span class="literal">NULL</span>) &lt; <span class="number">0</span>)&#123;</span><br><span class="line">            SLOGE(<span class="string">&quot;CheckUpdate run command \&quot;reboot recovery\&quot; failure&quot;</span>);</span><br><span class="line">            <span class="built_in">exit</span>(<span class="number">1</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="built_in">exit</span>(<span class="number">0</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">VolumeManager::mountVolume</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *label)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">...</span><br><span class="line"></span><br><span class="line">    <span class="comment">//CM: Adding for auto update FW in vold</span></span><br><span class="line">    <span class="comment">//return v-&gt;mountVol();</span></span><br><span class="line">    <span class="keyword">int</span> ret = v-&gt;mountVol();</span><br><span class="line">    <span class="keyword">if</span> (ret == <span class="number">0</span>)&#123;</span><br><span class="line">        checkUpdate(label);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> ret;</span><br></pre></td></tr></table></figure>
       
     </div>
 
@@ -538,7 +349,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://edward.org.cn/2020/12/31/%E9%9F%B3%E8%A7%86%E9%A2%91/%E6%96%87%E6%A1%A302-%E5%B8%A7%E5%86%85%E9%A2%84%E6%B5%8B/">
+    <link itemprop="mainEntityOfPage" href="http://edward.org.cn/2020/12/31/Android/Uevent%E5%8F%91%E9%80%81%EF%BC%88%E7%83%AD%E6%8F%92%E6%8B%94%EF%BC%89%E4%BA%8B%E4%BB%B6%E5%88%B0%E7%94%A8%E6%88%B7%E7%A9%BA%E9%97%B4/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/uploads/avatar.gif">
@@ -552,7 +363,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2020/12/31/%E9%9F%B3%E8%A7%86%E9%A2%91/%E6%96%87%E6%A1%A302-%E5%B8%A7%E5%86%85%E9%A2%84%E6%B5%8B/" class="post-title-link" itemprop="url">02-帧内预测</a>
+            <a href="/2020/12/31/Android/Uevent%E5%8F%91%E9%80%81%EF%BC%88%E7%83%AD%E6%8F%92%E6%8B%94%EF%BC%89%E4%BA%8B%E4%BB%B6%E5%88%B0%E7%94%A8%E6%88%B7%E7%A9%BA%E9%97%B4/" class="post-title-link" itemprop="url">Uevent发送（热插拔）事件到用户空间</a>
         </h2>
 
         <div class="post-meta">
@@ -561,12 +372,34 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              
 
-              <time title="创建时间：2020-12-31 10:38:42 / 修改时间：10:47:41" itemprop="dateCreated datePublished" datetime="2020-12-31T10:38:42+08:00">2020-12-31</time>
+              <time title="创建时间：2020-12-31 15:36:43" itemprop="dateCreated datePublished" datetime="2020-12-31T15:36:43+08:00">2020-12-31</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-10-10 18:39:39" itemprop="dateModified" datetime="2020-10-10T18:39:39+08:00">2020-10-10</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Android/" itemprop="url" rel="index"><span itemprop="name">Android</span></a>
+                </span>
             </span>
 
           
+            <span id="/2020/12/31/Android/Uevent%E5%8F%91%E9%80%81%EF%BC%88%E7%83%AD%E6%8F%92%E6%8B%94%EF%BC%89%E4%BA%8B%E4%BB%B6%E5%88%B0%E7%94%A8%E6%88%B7%E7%A9%BA%E9%97%B4/" class="post-meta-item leancloud_visitors" data-flag-title="Uevent发送（热插拔）事件到用户空间" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
 
         </div>
       </header>
@@ -577,114 +410,30 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h4 id="H264编码-帧内预测"><a href="#H264编码-帧内预测" class="headerlink" title="H264编码(帧内预测)"></a>H264编码(帧内预测)</h4><blockquote>
-<p><strong>预测？</strong>总感觉这个词有股神奇的力量,能够将你引向未来</p>
-<p>是不是这样呢~</p>
-<p>那么</p>
-<p>帧内预测是不是力量更大呢</p>
-<p>它又有什么样的作用呢？</p>
-<p>帧内预测可以防止视频产生锯齿现象。</p>
-</blockquote>
-<p>在帧内预测模式中，预测块P是基于已编码重建块和当前块形成的。对亮度像素而言，P块用于4×4子块或者16×16宏块的相关操作。4×4亮度子块有9种可选预测模式，独立预测每一个4×4亮度子块，适用于带有大量细节的图像编码；16×16亮度块有4种预测模式，预测整个16×16亮度块，适用于平坦区域图像编码；色度块也有4种预测模式，类似于16×16亮度块预测模式。编码器通常选择使P块和编码块之间差异最小的预测模式。</p>
-<p>4×4亮度预测模式</p>
-<p>如图6.14所示，4×4亮度块的上方和左方像素A～M为已编码和重构像素，用作编解码器中的预测参考像素。a～p为待预测像素，利用A～M值和9种模式实现。其中模式2(DC预测)根据A～M中已编码像素预测，而其余模式只有在所需预测像素全部提供才能使用。图6.15箭头表明了每种模式预测方向。对模式3～8，预测像素由A～M加权平均而得。例如，模式4中，d=round(B/4+C/2+D/4)。</p>
-<p><img src="/img/13.png" alt="img"></p>
-<p><img src="/img/14.png" alt="img"></p>
-<p><img src="/img/15.png" alt="img"></p>
-<table>
-<thead>
-<tr>
-<th align="left">模式</th>
-<th align="left">描 述</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="left">模式0（垂直）</td>
-<td align="left">由A、B、C、D 垂直推出相应像素值</td>
-</tr>
-<tr>
-<td align="left">模式1（水平）</td>
-<td align="left">由I、J、K、L 水平推出相应像素值</td>
-</tr>
-<tr>
-<td align="left">模式2（DC）</td>
-<td align="left">由A<del>D 及I</del>L 平均值推出所有像素值</td>
-</tr>
-<tr>
-<td align="left">模式3（下左对角线）</td>
-<td align="left">由45°方向像素内插得出相应像素值</td>
-</tr>
-<tr>
-<td align="left">模式4（下右对角线）</td>
-<td align="left">由45°方向像素内插得出相应像素值</td>
-</tr>
-<tr>
-<td align="left">模式5（右垂直）</td>
-<td align="left">由26.6°方向像素值内插得出相应像素值</td>
-</tr>
-<tr>
-<td align="left">模式6（下水平）</td>
-<td align="left">由26.6°方向像素值内插得出相应像素值</td>
-</tr>
-<tr>
-<td align="left">模式7（左垂直）</td>
-<td align="left">由26.6° 方向像素值内插得出相应像素值</td>
-</tr>
-<tr>
-<td align="left">模式8（上水平）</td>
-<td align="left">由26.6° 方向像素值内插得出相应像素值</td>
-</tr>
-</tbody></table>
-<p><img src="/img/16.png" alt="img"></p>
-<p><img src="/img/17.png" alt="img"></p>
-<p>表2 16×16预测模式</p>
-<p><img src="/img/18.png" alt="img"></p>
-<table>
-<thead>
-<tr>
-<th align="left">模式</th>
-<th align="left">描 述</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="left">模式0（垂直）</td>
-<td align="left">由上边像素推出相应像素值</td>
-</tr>
-<tr>
-<td align="left">模式1（水平）</td>
-<td align="left">由左边像素推出相应像素值</td>
-</tr>
-<tr>
-<td align="left">模式2（DC）</td>
-<td align="left">由上边和左边像素平均值推出相应像素值</td>
-</tr>
-<tr>
-<td align="left">模式3（平面）</td>
-<td align="left">利用线形“plane”函数及左、上像素推出相应像素值，适用于亮度变化平缓区域</td>
-</tr>
-</tbody></table>
-<p>8×8色度块预测模式</p>
-<p>每个帧内编码宏块的8×8色度成分由已编码左上方色度像素预测而得，两种色度成分常用同一种预测模式。</p>
-<p>4种预测模式类似于帧内16×16预测的4种预测模式，只是模式编号不同。其中DC（模式0）、水平（模式1）、垂直（模式2）、平面（模式3）。</p>
-<p><img src="/img/19.png" alt="img"></p>
-<p>对于当前块C, 编解码器按照如下方法计算</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">probableprediction mode＝</span><br><span class="line"></span><br><span class="line">​          min&#123;prediction mode of A, predictionmodes of B&#125;</span><br><span class="line"></span><br><span class="line">当A (或者 B）的预测模式不可用时，</span><br><span class="line"></span><br><span class="line">​         prediction mode of A＝ 2.</span><br></pre></td></tr></table></figure>
+          <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">resume_set_reasen</span><span class="params">(<span class="keyword">char</span> * reasen)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">        <span class="keyword">char</span> name_buf[<span class="number">120</span>];</span><br><span class="line">        <span class="keyword">char</span> state_buf[<span class="number">120</span>];</span><br><span class="line">        <span class="keyword">char</span> *prop_buf;</span><br><span class="line">        <span class="keyword">char</span> *envp[<span class="number">3</span>];</span><br><span class="line">        <span class="keyword">int</span> env_offset = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">int</span> length;</span><br><span class="line"></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">resume_dev</span> *<span class="title">sdev</span> =</span> &amp;sdev_g;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">snprintf</span>(state_buf, <span class="keyword">sizeof</span>(state_buf),<span class="string">&quot;resume_reason=%s&quot;</span>,reasen);</span><br><span class="line">    envp[env_offset++] = state_buf;</span><br><span class="line"></span><br><span class="line">    envp[env_offset] = <span class="literal">NULL</span>;</span><br><span class="line"></span><br><span class="line">    kobject_uevent_env(&amp;sdev-&gt;dev-&gt;kobj, KOBJ_CHANGE, envp);</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line">EXPORT_SYMBOL_GPL(resume_set_state);</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 
-
-<p>例如</p>
-<p>  A 和 B块的预测模式分别为 3 和1</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">most probable mode for block C &#x3D;1</span><br></pre></td></tr></table></figure>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//system\vold\NetlinkHandler.cpp</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">NetlinkHandler::onEvent</span><span class="params">(NetlinkEvent *evt)</span> </span>&#123;</span><br><span class="line">    VolumeManager *vm = VolumeManager::Instance();</span><br><span class="line">    <span class="keyword">const</span> <span class="keyword">char</span> *subsys = evt-&gt;getSubsystem();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (!subsys) &#123;</span><br><span class="line">        SLOGW(<span class="string">&quot;No subsystem found in netlink event&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (!<span class="built_in">strcmp</span>(subsys, <span class="string">&quot;resume_wake&quot;</span>)) &#123;</span><br><span class="line">        <span class="keyword">const</span> <span class="keyword">char</span> *resume_reason = evt-&gt;findParam(<span class="string">&quot;resume_reason&quot;</span>);</span><br><span class="line">        ALOGD(<span class="string">&quot;resume_reason %s\n&quot;</span>,resume_reason);        </span><br><span class="line">		vm-&gt;getBroadcaster()-&gt;sendBroadcast(<span class="number">697</span>,resume_reason, <span class="literal">false</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (!<span class="built_in">strcmp</span>(subsys, <span class="string">&quot;video4linux&quot;</span>)) &#123;</span><br><span class="line">        <span class="keyword">int</span> action = evt-&gt;getAction();</span><br><span class="line">        <span class="keyword">const</span> <span class="keyword">char</span> *path = evt-&gt;findParam(<span class="string">&quot;DEVPATH&quot;</span>);</span><br><span class="line">        <span class="keyword">char</span> usbcam_path[<span class="number">32</span>];</span><br><span class="line">        ALOGI(<span class="string">&quot;video4linux path: %s&quot;</span>, path);</span><br><span class="line">        <span class="built_in">memset</span>(usbcam_path, <span class="number">0</span>, <span class="keyword">sizeof</span>(usbcam_path));</span><br><span class="line">        <span class="comment">//default message: &quot;uvc&quot;</span></span><br><span class="line">        <span class="built_in">strcpy</span>(usbcam_path, <span class="string">&quot;uvc&quot;</span>);</span><br><span class="line">        stripUSBCamNode(path, usbcam_path);</span><br><span class="line">        </span><br><span class="line">		<span class="keyword">if</span>(action == NetlinkEvent::NlActionAdd)&#123;</span><br><span class="line">            updateUSBCameraProp(path, usbcam_path);</span><br><span class="line">	        vm-&gt;getBroadcaster()-&gt;sendBroadcast(<span class="number">698</span>, usbcam_path, <span class="literal">false</span>);</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">if</span>(action == NetlinkEvent::NlActionRemove)&#123;</span><br><span class="line">            ALOGE(<span class="string">&quot;USBCam NetlinkEvent::NlActionRemove, Force Power Off &quot;</span>);</span><br><span class="line">			vm-&gt;getBroadcaster()-&gt;sendBroadcast(<span class="number">699</span>, usbcam_path, <span class="literal">false</span>);</span><br><span class="line">		&#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
 
 
 
+<p>Linux kernel – Uevent发送（热插拔）事件到用户空间</p>
+<p>Jackson_csdn 2016-07-15 14:16:30  14825  收藏 11<br>分类专栏： Linux内核<br>版权<br>Uevent是一种在内核空间和用户空间之间通信的机制，主要用于热插拔事件（hotplug）。</p>
+<p>uevent事件<br>根据include/linux/kobject.h中的定义，kobject对应的动作可分为以下几种：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">enum</span> <span class="title">kobject_action</span> &#123;</span></span><br><span class="line">    KOBJ_ADD,</span><br><span class="line">    KOBJ_REMOVE,</span><br><span class="line">    KOBJ_CHANGE,</span><br><span class="line">    KOBJ_MOVE,</span><br><span class="line">    KOBJ_ONLINE,</span><br><span class="line">    KOBJ_OFFLINE,</span><br><span class="line">    KOBJ_MAX</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
 
-<p>编码器为每个4x4 块发送一个标记 flag,解码器按照如下方式 解码</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">Ifflag&#x3D;&#x3D;1, prediction mode&#x3D;most_probable_mode</span><br><span class="line"></span><br><span class="line">Ifflag&#x3D;&#x3D;0</span><br><span class="line"></span><br><span class="line">   If rem_intra4×4_pred_mode&lt; most_probable_mode</span><br><span class="line"></span><br><span class="line">​     prediction mode&#x3D;rem_intra4×4_pred_mode</span><br><span class="line"></span><br><span class="line">   else</span><br><span class="line"></span><br><span class="line">​     prediction mode&#x3D;rem_intra4×4_pred_mode+1</span><br></pre></td></tr></table></figure>
+<p>这些动作对应的事件相应有以下几种：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">static</span> <span class="keyword">const</span> <span class="keyword">char</span> *kobject_actions[] = &#123;</span><br><span class="line">    [KOBJ_ADD] =        <span class="string">&quot;add&quot;</span>,</span><br><span class="line">    [KOBJ_REMOVE] =     <span class="string">&quot;remove&quot;</span>,</span><br><span class="line">    [KOBJ_CHANGE] =     <span class="string">&quot;change&quot;</span>,</span><br><span class="line">    [KOBJ_MOVE] =       <span class="string">&quot;move&quot;</span>,</span><br><span class="line">    [KOBJ_ONLINE] =     <span class="string">&quot;online&quot;</span>,</span><br><span class="line">    [KOBJ_OFFLINE] =    <span class="string">&quot;offline&quot;</span>,</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
 
-
-<p>这样表示9中预测模式只需要8个值 (0 to 7)</p>
-<p><img src="/img/20.png" alt="img"></p>
-
+<p>说明：本文所有的源代码均取自内核2.6.32。</p>
+<p>uevent环境变量<br>Uevent事件具体以环境变量（即字符串）的形式发送到用户空间。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2020/12/31/Android/Uevent%E5%8F%91%E9%80%81%EF%BC%88%E7%83%AD%E6%8F%92%E6%8B%94%EF%BC%89%E4%BA%8B%E4%BB%B6%E5%88%B0%E7%94%A8%E6%88%B7%E7%A9%BA%E9%97%B4/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
@@ -703,7 +452,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://edward.org.cn/2020/12/31/%E9%9F%B3%E8%A7%86%E9%A2%91/%E6%96%87%E6%A1%A303-%E5%88%87%E7%89%87/">
+    <link itemprop="mainEntityOfPage" href="http://edward.org.cn/2020/12/31/MarkDown%E5%9F%BA%E6%9C%AC%E8%AF%AD%E6%B3%95/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/uploads/avatar.gif">
@@ -717,7 +466,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2020/12/31/%E9%9F%B3%E8%A7%86%E9%A2%91/%E6%96%87%E6%A1%A303-%E5%88%87%E7%89%87/" class="post-title-link" itemprop="url">03-切片 }}</a>
+            <a href="/2020/12/31/MarkDown%E5%9F%BA%E6%9C%AC%E8%AF%AD%E6%B3%95/" class="post-title-link" itemprop="url">MarkDown基本语法</a>
         </h2>
 
         <div class="post-meta">
@@ -726,12 +475,25 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              
 
-              <time title="创建时间：2020-12-31 10:38:42 / 修改时间：10:47:32" itemprop="dateCreated datePublished" datetime="2020-12-31T10:38:42+08:00">2020-12-31</time>
+              <time title="创建时间：2020-12-31 15:36:43" itemprop="dateCreated datePublished" datetime="2020-12-31T15:36:43+08:00">2020-12-31</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-07-14 10:09:15" itemprop="dateModified" datetime="2020-07-14T10:09:15+08:00">2020-07-14</time>
+              </span>
 
           
+            <span id="/2020/12/31/MarkDown%E5%9F%BA%E6%9C%AC%E8%AF%AD%E6%B3%95/" class="post-meta-item leancloud_visitors" data-flag-title="MarkDown基本语法" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
 
         </div>
       </header>
@@ -742,34 +504,15 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <p>视频流H264的组装</p>
-<h4 id="1-H264介绍"><a href="#1-H264介绍" class="headerlink" title="1 H264介绍"></a>1 H264介绍</h4><blockquote>
-<p> 我们了解了什么是宏快，宏快作为压缩视频的最小的一部分，需要被组织，然后在网络之间做相互传输。</p>
-</blockquote>
-<p>H264更深层次    —》宏块   太浅了</p>
-<p>​        如果单纯的用<strong>宏快</strong>来发送数据是<strong>杂乱无章</strong>的，就好像在没有<strong>集装箱</strong> 出现之前，货物总是随意被堆放到船上。</p>
-<p>上货（编码），下货是非常痛苦的。 当集装箱出现之后，一切都发生了改变，传输效率大大增高。</p>
-<p>​        集装箱可以理解成<strong>H264编码标准</strong>，他制定了相互传输的格式，将宏快 有组织，有结构，有顺序的形成一系列的码流。这种码流既可 通过 InputStream 网络流的数据进行传输，也可以封装成一个文件进行保存</p>
-<p><strong>H264: H264/AVC是广泛采用的一种编码方式。</strong>主要作用是为了传输</p>
-<h4 id="1-1-H264码流组成"><a href="#1-1-H264码流组成" class="headerlink" title="1.1 H264码流组成"></a>1.1 H264码流组成</h4><p><strong>组成H264码流的结构中 包含以下几部分 ，从大到小排序依次是</strong> </p>
-<blockquote>
-<p><strong>H264视频序列，图像，片组，片，NALU，宏块 ，像素。</strong> </p>
-<p>类似 地球 国家 城市  镇 村落</p>
-</blockquote>
-<p><img src="/img/66.png"></p>
-<h5 id="1-1-1-H264编码分层"><a href="#1-1-1-H264编码分层" class="headerlink" title="1.1.1  H264编码分层"></a>1.1.1  H264编码分层</h5><ul>
-<li><strong>NAL层:（Network Abstraction Layer,视频数据网络抽象层）</strong>：  它的作用是H264只要在网络上传输，在传输的过程每个包以太网是1500字节，而H264的帧往往会大于1500字节，所以要进行拆包，将一个帧拆成多个包进行传输，所有的拆包或者组包都是通过NAL层去处理的。</li>
-<li><strong>VCL层:（Video Coding Layer,视频数据编码层）</strong>： 对视频原始数据进行压缩</li>
-</ul>
-<h5 id="1-1-2-H264的传输"><a href="#1-1-2-H264的传输" class="headerlink" title="1.1.2  H264的传输"></a>1.1.2  H264的传输</h5><p>​    <strong>H264是一种码流</strong>  类似与一种不见头，也不见尾的一条<strong>河流</strong>。如何从和流中取到自己想要的<strong>数据</strong>呢，</p>
-<p>在H264的标砖中有这样的一个封装格式叫做”Annex-B”的字节流格式。 它是H264编码的主要字节流格式。</p>
-<p>几乎市面上的编码器是以这种格式进行输出的。<strong>起始码0x 00 00 00 01 或者 0x 00 00 01</strong> 作为<strong>分隔符</strong>。 </p>
-<p>两个 0x 00 00 00 01之间的字节数据 是表示一个NAL Unit</p>
-<p><img src="/img/67.png"></p>
-<h5 id="1-1-3-编码结构"><a href="#1-1-3-编码结构" class="headerlink" title="1.1.3  编码结构"></a>1.1.3  编码结构</h5><p><img src="/img/68.jpg"></p>
-<p> <strong>切片头</strong>：包含了一组片的信息，比如片的数量，顺序等等 </p>
-<h5 id="1-1-4-H264码流分层结构图"><a href="#1-1-4-H264码流分层结构图" class="headerlink" title="1.1.4  H264码流分层结构图"></a>1.1.4  H264码流分层结构图</h5><p><img src="/img/69.jpg"></p>
-
+          <h1 id="我展示的是一级标题"><a href="#我展示的是一级标题" class="headerlink" title="我展示的是一级标题"></a>我展示的是一级标题</h1><h2 id="我展示的是二级标题"><a href="#我展示的是二级标题" class="headerlink" title="我展示的是二级标题"></a>我展示的是二级标题</h2><h1 id="一级标题"><a href="#一级标题" class="headerlink" title="一级标题"></a>一级标题</h1><h2 id="二级标题"><a href="#二级标题" class="headerlink" title="二级标题"></a>二级标题</h2><h3 id="三级标题"><a href="#三级标题" class="headerlink" title="三级标题"></a>三级标题</h3><h4 id="四级标题"><a href="#四级标题" class="headerlink" title="四级标题"></a>四级标题</h4><h5 id="五级标题"><a href="#五级标题" class="headerlink" title="五级标题"></a>五级标题</h5><h6 id="六级标题"><a href="#六级标题" class="headerlink" title="六级标题"></a>六级标题</h6><h3 id="段落"><a href="#段落" class="headerlink" title="段落"></a>段落</h3><p>Markdown 段落没有特殊的格式，直接编写文字就好，段落的换行是使用两个以上空格加上回车。<br>当然也可以在段落后面使用一个空行来表示重新开始一个段落。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2020/12/31/MarkDown%E5%9F%BA%E6%9C%AC%E8%AF%AD%E6%B3%95/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
@@ -788,7 +531,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://edward.org.cn/2020/12/31/%E9%9F%B3%E8%A7%86%E9%A2%91/%E6%96%87%E6%A1%A304-H264%E5%88%86%E5%B1%82/">
+    <link itemprop="mainEntityOfPage" href="http://edward.org.cn/2020/12/31/Spring/%EF%BC%88Container%20Overview%EF%BC%89Spring%E7%AC%94%E8%AE%B0/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/uploads/avatar.gif">
@@ -802,7 +545,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2020/12/31/%E9%9F%B3%E8%A7%86%E9%A2%91/%E6%96%87%E6%A1%A304-H264%E5%88%86%E5%B1%82/" class="post-title-link" itemprop="url">04-H264分层</a>
+            <a href="/2020/12/31/Spring/%EF%BC%88Container%20Overview%EF%BC%89Spring%E7%AC%94%E8%AE%B0/" class="post-title-link" itemprop="url">（Container Overview）Spring笔记</a>
         </h2>
 
         <div class="post-meta">
@@ -811,12 +554,34 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              
 
-              <time title="创建时间：2020-12-31 10:38:42 / 修改时间：10:48:19" itemprop="dateCreated datePublished" datetime="2020-12-31T10:38:42+08:00">2020-12-31</time>
+              <time title="创建时间：2020-12-31 15:36:43" itemprop="dateCreated datePublished" datetime="2020-12-31T15:36:43+08:00">2020-12-31</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-07-14 11:14:46" itemprop="dateModified" datetime="2020-07-14T11:14:46+08:00">2020-07-14</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Spring/" itemprop="url" rel="index"><span itemprop="name">Spring</span></a>
+                </span>
             </span>
 
           
+            <span id="/2020/12/31/Spring/%EF%BC%88Container%20Overview%EF%BC%89Spring%E7%AC%94%E8%AE%B0/" class="post-meta-item leancloud_visitors" data-flag-title="（Container Overview）Spring笔记" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
 
         </div>
       </header>
@@ -827,48 +592,26 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h4 id="音视频高手课07-视频流H264码流分析实战"><a href="#音视频高手课07-视频流H264码流分析实战" class="headerlink" title="音视频高手课07-视频流H264码流分析实战"></a>音视频高手课07-视频流H264码流分析实战</h4><h4 id="1-1-H-264编码格式"><a href="#1-1-H-264编码格式" class="headerlink" title="1.1 H.264编码格式"></a>1.1 H.264编码格式</h4><p>H.264的功能分为两层：</p>
-<blockquote>
-<ul>
-<li>视频编码层 </li>
-<li>网络提取层 </li>
+          <h2 id="Container-Overview"><a href="#Container-Overview" class="headerlink" title="Container Overview"></a>Container Overview</h2><h3 id><a href="#" class="headerlink" title></a></h3><ul>
+<li><strong>Inversion of Control (IoC)</strong>  控制反转</li>
+<li><strong>dependency injection (DI)</strong>   依赖注入</li>
 </ul>
-</blockquote>
-<blockquote>
-<p>H.264 的编码视频序列包括一系列的NAL 单元，每个NAL 单元包含一个RBSP。一个原始的H.264由<strong>N个NALU单元组成</strong>、 NALU 单元常由 [StartCode] [NALU Header] [NALU Payload] 三部分组成，其中 Start Code 用于标示这是一个NALU 单元的开始，必须是”00 00 00 01” 或”00 00 01”。    </p>
-</blockquote>
-<p><img src="/img/68.png" alt="img"></p>
-<p>​     </p>
-<h4 id="1-2-H-264网络传输"><a href="#1-2-H-264网络传输" class="headerlink" title="1.2 H.264网络传输"></a>1.2 H.264网络传输</h4><p>​        H.264的编码视频序列包括一系列的<strong>NAL单元</strong>，每个NAL单元包含<strong>一个RBSP</strong>，</p>
-<p>见表1。编码片（包括数据分割片IDR片）和序列RBSP结束符被定义为VCL NAL单元，其余为NAL单元。</p>
-<p>​        <strong>典型的RBSP单元序列如图2所示。</strong></p>
-<p>RBSP  顺丰 头   顺丰公司尾部</p>
-<p>每个单元都按独立的NAL单元传送。单元的信息头（一个字节）定义了RBSP单元的类型，NAL单元的其余部分为RBSP数据。</p>
-<p><img src="/img/69.png" alt="img"></p>
-<p><img src="/img/70.png" alt="img"></p>
-<ol>
-<li>2.1 <strong>H.264码流结构图</strong>     </li>
-</ol>
-<p><img src="/img/71.png" alt="img"></p>
-<p>起始码：如果NALU对应的Slice为一帧的开始，则用4字节表示，即0x00000001；否则用3字节表示，0x000001。 NAL Header：forbidden_bit，nal_reference_bit（优先级），nal_unit_type（类型）。 脱壳操作：为了使NALU主体不包括起始码，在编码时每遇到两个字节（连续）的0，就插入一字节0x03，以和起始码相区别。解码时，则将相应的0x03删除掉。</p>
-<p><img src="/img/72.png" alt="img"></p>
-<p> H.264解码 <strong>NAL头信息</strong>的nal_referrence_idc（NRI）用于在重建过程中标记一个NAL单元的重要性，</p>
-<ol>
-<li>值为0表示这个NAL单元没有用预测，因此可以被解码器抛弃而不会有错误扩散；</li>
-<li>值高于0表示NAL单元要用于无漂移重构，且值越高，对此NAL单元丢失的影响越大。</li>
-<li> NAL头信息的隐藏比特位，在H.264编码器中默认为0，当网络识别到单元中存在比特错误时，可将其置为1。隐藏比特位主要用于适应不同种类的网络环境（比如有线无线相结合的环境）。     </li>
-</ol>
-<p><img src="/img/73.png" alt="img"></p>
-<p>NAL单元解码的流程为：首先从NAL单元中提取出RBSP语法结构，然后按照如图4所示的流程处理RBSP语法结构。输入的是NAL单元，输出结果是经过解码的当前图像的样值点。 NAL单元中分别包含了序列参数集和图像参数集。图像参数集和序列参数集在其他NAL单元传输过程中作为参考使用，在这些数据NAL单元的片头中，通过语法元素pic_parameter_set_id设置它们所使用的图像参数集编号；而相应的每个图像参数集中，通过语法元素seq_paramter_set_id设置他们使用的序列参数集编号。</p>
-<p>几个例子：</p>
-<p><img src="http://img.blog.csdn.net/20140720115202062?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvY2hlbmNob25nXzIxOQ==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="img"></p>
-<p>硬解–soc 芯片</p>
-<p>软件   ffmpeg</p>
-<p>3、 ffmpeg解析H264流程分析</p>
-<p>这是一段实际的码流</p>
-<p><img src="http://img.blog.csdn.net/20140720115512525?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvY2hlbmNob25nXzIxOQ==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="img"></p>
-<p>  ffmpeg -i input.mp4 -vcodec h264 -preset fast -b:v 2000k hello.h264 </p>
+<p><img src="https://docs.spring.io/spring/docs/5.2.7.RELEASE/spring-framework-reference/images/container-magic.png" alt="The Spring IoC container"></p>
+<h3 id="Configuration-Metadata"><a href="#Configuration-Metadata" class="headerlink" title="Configuration Metadata"></a>Configuration Metadata</h3><p>The following example shows the basic structure of XML-based configuration metadata:</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="meta">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">beans</span> <span class="attr">xmlns</span>=<span class="string">&quot;http://www.springframework.org/schema/beans&quot;</span></span></span><br><span class="line"><span class="tag">    <span class="attr">xmlns:xsi</span>=<span class="string">&quot;http://www.w3.org/2001/XMLSchema-instance&quot;</span></span></span><br><span class="line"><span class="tag">    <span class="attr">xsi:schemaLocation</span>=<span class="string">&quot;http://www.springframework.org/schema/beans</span></span></span><br><span class="line"><span class="tag"><span class="string">        https://www.springframework.org/schema/beans/spring-beans.xsd&quot;</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">&quot;...&quot;</span> <span class="attr">class</span>=<span class="string">&quot;...&quot;</span>&gt;</span>  </span><br><span class="line">        <span class="comment">&lt;!-- collaborators and configuration for this bean go here --&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">bean</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">&quot;...&quot;</span> <span class="attr">class</span>=<span class="string">&quot;...&quot;</span>&gt;</span></span><br><span class="line">        <span class="comment">&lt;!-- collaborators and configuration for this bean go here --&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">bean</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">&lt;!-- more bean definitions go here --&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;/<span class="name">beans</span>&gt;</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
 
+<h3 id="Instantiating-a-Container"><a href="#Instantiating-a-Container" class="headerlink" title="Instantiating a Container"></a>Instantiating a Container</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">ApplicationContext context = <span class="keyword">new</span> ClassPathXmlApplicationContext(<span class="string">&quot;services.xml&quot;</span>, <span class="string">&quot;daos.xml&quot;</span>);</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+<p>The following example shows the service layer objects (services.xml) configuration file:</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2020/12/31/Spring/%EF%BC%88Container%20Overview%EF%BC%89Spring%E7%AC%94%E8%AE%B0/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
@@ -887,7 +630,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://edward.org.cn/2020/12/31/%E9%9F%B3%E8%A7%86%E9%A2%91/%E6%96%87%E6%A1%A307-H264%E4%B8%8EH265%E7%9A%84%E5%8C%BA%E5%88%AB%E4%BA%8E%E5%B7%AE%E5%BC%82/">
+    <link itemprop="mainEntityOfPage" href="http://edward.org.cn/2020/12/31/Spring/Bean%20Overview%20&&%20Dependencies%20(Spring%20%E7%AC%94%E8%AE%B0)/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/uploads/avatar.gif">
@@ -901,7 +644,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2020/12/31/%E9%9F%B3%E8%A7%86%E9%A2%91/%E6%96%87%E6%A1%A307-H264%E4%B8%8EH265%E7%9A%84%E5%8C%BA%E5%88%AB%E4%BA%8E%E5%B7%AE%E5%BC%82/" class="post-title-link" itemprop="url">07-H264与H265的区别于差异</a>
+            <a href="/2020/12/31/Spring/Bean%20Overview%20&&%20Dependencies%20(Spring%20%E7%AC%94%E8%AE%B0)/" class="post-title-link" itemprop="url">Bean Overview && Dependencies (Spring 笔记)</a>
         </h2>
 
         <div class="post-meta">
@@ -910,12 +653,34 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              
 
-              <time title="创建时间：2020-12-31 10:38:42 / 修改时间：10:46:55" itemprop="dateCreated datePublished" datetime="2020-12-31T10:38:42+08:00">2020-12-31</time>
+              <time title="创建时间：2020-12-31 15:36:42" itemprop="dateCreated datePublished" datetime="2020-12-31T15:36:42+08:00">2020-12-31</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-07-14 12:01:21" itemprop="dateModified" datetime="2020-07-14T12:01:21+08:00">2020-07-14</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Spring/" itemprop="url" rel="index"><span itemprop="name">Spring</span></a>
+                </span>
             </span>
 
           
+            <span id="/2020/12/31/Spring/Bean%20Overview%20&&%20Dependencies%20(Spring%20%E7%AC%94%E8%AE%B0)/" class="post-meta-item leancloud_visitors" data-flag-title="Bean Overview && Dependencies (Spring 笔记)" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
 
         </div>
       </header>
@@ -926,106 +691,20 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h2 id="H-265与H-264的差异详解"><a href="#H-265与H-264的差异详解" class="headerlink" title="H.265与H.264的差异详解"></a>H.265与H.264的差异详解</h2><blockquote>
-<p><strong>码牛只为跟牛逼的你</strong></p>
-</blockquote>
-<p>通过以下几种来对比H264与H265的差异</p>
-<blockquote>
-<p>1.编解码框架差异</p>
-<p>2.压缩性能比较</p>
-<p>3.各模块技术差异汇总</p>
-<p>4.块划分结构</p>
-<p>5.帧内预测</p>
-<p>6.帧间预测</p>
-<p>7.去块滤波</p>
-<p>8.SAO滤波</p>
-<p>9.Tile</p>
-<p>10.WPP</p>
-<p>11.Dependent slice</p>
-<p>12.其他技术</p>
-</blockquote>
-<h4 id="1-1-H-264与H-265的主要差异"><a href="#1-1-H-264与H-265的主要差异" class="headerlink" title="1.1  H.264与H.265的主要差异"></a>1.1  H.264与H.265的主要差异</h4><p>H.265仍然采用混合编解码，编解码结构域H.264基本一致，</p>
-<p>主要的不同在于：</p>
-<p>Ø 编码块划分结构：采用CU (CodingUnit)、PU(PredictionUnit)和TU(TransformUnit)的递归结构。</p>
-<p>Ø 基本细节：各功能块的内部细节有很多差异</p>
-<p>Ø 并行工具：增加了Tile以及WPP等并行工具集以提高编码速度</p>
-<p>Ø 滤波器：在去块滤波之后增加了SAO（sample adaptive offset）滤波模块</p>
-<p><img src="https://img-blog.csdn.net/20170903222110391?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvZmlyZXJvbGw=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt="img"></p>
-<p>Fig.H.265的框架图</p>
-<h4 id="2-压缩性能比较"><a href="#2-压缩性能比较" class="headerlink" title="2.  压缩性能比较"></a>2.  压缩性能比较</h4><p>PSNR计算方式</p>
-<p><img src="https://img-blog.csdn.net/20170903222300500?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvZmlyZXJvbGw=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt="img"></p>
-<p>H.265/HEVC HM-9.0 和H.264 JM-18.4 的BD-rate 比较：</p>
-<p> AllIntra case:           22%</p>
-<p> RandomAccess case:       34%</p>
-<p> LowDelay case:          37%</p>
-<h4 id="3-各模块技术差异汇总"><a href="#3-各模块技术差异汇总" class="headerlink" title="3.  各模块技术差异汇总"></a>3.  各模块技术差异汇总</h4><p><img src="https://img-blog.csdn.net/20170903222335956?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvZmlyZXJvbGw=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt="img"></p>
-<p><img src="https://img-blog.csdn.net/20170903222351940?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvZmlyZXJvbGw=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt="img"></p>
-<h4 id="4-块划分结构"><a href="#4-块划分结构" class="headerlink" title="4.  块划分结构"></a>4.  块划分结构</h4><p>在H.265中，将宏块的大小从H.264的16×16扩展到了64×64，以便于高分辨率视频的压缩。</p>
-<p>同时，采用了更加灵活的编码结构来提高编码效率，</p>
-<p>包括编码单元（CodingUnit）、预测单元（PredictUnit）和变换单元（TransformUnit）。</p>
-<p>如下图所示:</p>
-<p><img src="https://img-blog.csdn.net/20170903222441671?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvZmlyZXJvbGw=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt="img"></p>
-<p>其中:</p>
-<p>编码单元类似于H.264/AVC中的宏块的概念，用于编码的过程。</p>
-<p>预测单元是进行预测的基本单元，</p>
-<p>变换单元是进行变换和量化的基本单元。</p>
-<p>这三个单元的分离，使得变换、预测和编码各个处理环节更加灵活，</p>
-<p>也有利于各环节的划分更加符合视频图像的纹理特征，</p>
-<p>有利于各个单元更优化的完成各自的功能。</p>
-<p> <img src="https://img-blog.csdn.net/20170903222542263?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvZmlyZXJvbGw=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt="img"></p>
-<p>RQT是一种自适应的变换技术，这种思想是对H.264/AVC中ABT（AdaptiveBlock-size Transform）技术的延伸和扩展。</p>
-<p>对于帧间编码来说，它允许变换块的大小根据运动补偿块的大小进行自适应的调整；</p>
-<p>对于帧内编码来说，它允许变换块的大小根据帧内预测残差的特性进行自适应的调整。</p>
-<p>大块的变换相对于小块的变换，一方面能够提供更好的能量集中效果，并能在量化后保存更多的图像细节，但是另一方面在量化后却会带来更多的振铃效应。</p>
-<p>因此，根据当前块信号的特性，自适应的选择变换块大小，如下图所示，可以得到能量集中、细节保留程度以及图像的振铃效应三者最优的折中。</p>
-<p><img src="https://img-blog.csdn.net/20170903222512555?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvZmlyZXJvbGw=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt="img"></p>
-<p>Fig. 灵活的块结构示意图</p>
-<h4 id="5-帧内预测模式"><a href="#5-帧内预测模式" class="headerlink" title="5.  帧内预测模式"></a>5.  帧内预测模式</h4><p>本质上H.265是在H.264的预测方向基础上增加了更多的预测方向</p>
-<p>H.265：所有尺寸的CU块，亮度有35种预测方向，色度有5种预测方向</p>
-<p>H.264：亮度 4x4块9个方向，8x8块9个方向，16x16块4种方向，色度4种方向</p>
-<p> <img src="https://img-blog.csdn.net/20170903222603597?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvZmlyZXJvbGw=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt="img"></p>
-<p>H.264的帧内预测方向:</p>
-<p> <img src="https://img-blog.csdn.net/20170903222635669?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvZmlyZXJvbGw=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt="img"></p>
-<p>H.265的帧内预测方向：</p>
-<h4 id="6-帧间预测"><a href="#6-帧间预测" class="headerlink" title="6.  帧间预测"></a>6.  帧间预测</h4><p>本质上H.265是在H.264基础上增加插值的抽头系数个数，改变抽头系数值以及增加运动矢量预测值的候选个数，以达到减少预测残差的目的。</p>
-<p>H.265与H.264一样插值精度都是亮度到1/4，色度到1/8精度，但插值滤波器抽头长度和系数不同.</p>
-<p>H.265的增加了运动矢量预测值候选的个数，而H.264预测值只有一个</p>
-<p> <img src="https://img-blog.csdn.net/20170903222712796?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvZmlyZXJvbGw=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt="img"></p>
-<p>H.265的空域候选项：</p>
-<p><img src="https://img-blog.csdn.net/20170903222726452?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvZmlyZXJvbGw=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt="img"></p>
-<p>H.265时域共同位置候选项</p>
-<h4 id="7-去块滤波"><a href="#7-去块滤波" class="headerlink" title="7.  去块滤波"></a>7.  去块滤波</h4><p>本质上H.265的去块滤波与H.264的去块滤波及流程是一致的，做了如下最显著的改变：</p>
-<p>Ø 滤波边界： H.264最小到4x4边界滤波；而H.265适应最新的CU、PU和TU划分结构的滤波边缘，最小滤波边界为8x8，</p>
-<p>Ø 滤波顺序：H264先宏块内采用垂直边界，再当前宏块内水平边界；而H.265先整帧的垂直边界，再整帧的水平边界</p>
-<p>ALF在编解码环路内，位于Deblock和SAO之后，</p>
-<p>用于恢复重建图像以达到重建图像与原始图像之间的均方差（MSE）最小。</p>
-<p>ALF的系数是在帧级计算和传输的，可以整帧应用ALF，</p>
-<p>也可以对于基于块或基于量化树（quadtree）的部分区域进行ALF，</p>
-<p>如果是基于部分区域的ALF，还必须传递指示区域信息的附加信息。</p>
-<h4 id="8-采样点自适应偏移（Sample-AdaptiveOffset）滤波"><a href="#8-采样点自适应偏移（Sample-AdaptiveOffset）滤波" class="headerlink" title="8.  采样点自适应偏移（Sample AdaptiveOffset）滤波"></a>8.  采样点自适应偏移（Sample AdaptiveOffset）滤波</h4><p>SAO(sample adaptive offset)滤波其实就是对去块滤波后的重建像素按照不同的模板进行分类，并对每一种分类像素进行补偿, 分类模板分为BO(Band offset)和EO(Edge offset)。</p>
-<p> <img src="https://img-blog.csdn.net/20170903222824890?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvZmlyZXJvbGw=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt="img"></p>
-<p>BO分类：</p>
-<p> <img src="https://img-blog.csdn.net/20170903222838657?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvZmlyZXJvbGw=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt="img"></p>
-<p>EO分类模块：</p>
-<p>SAO在编解码环路内，位于Deblock之后，通过对重建图像的分类，对每一类图像像素值加减一个偏移，达到减少失真的目的，从而提高压缩率，减少码流。</p>
-<p>采用SAO后，平均可以减少2%~6%的码流,而编码器和解码器的性能消耗仅仅增加了约2%。</p>
-<h4 id="9-Tile划分"><a href="#9-Tile划分" class="headerlink" title="9.  Tile划分"></a>9.  Tile划分</h4><p>Tile： 将图像分割为矩形区域。</p>
-<p>其主要目的是增强并行处理性能。</p>
-<p>每个tile区域相当于一幅子图像，可独立的以LCU块为单位进行编解码。</p>
-<p>一个Tile块为基本的并行单元，每个Tile为一个子码流</p>
-<p> <img src="https://img-blog.csdn.net/20170903222909352?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvZmlyZXJvbGw=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt="img"></p>
-<p>\10. WPP</p>
-<p>WPP:  全称为wavefront parallel process，以LCU行为基本的编码单位。</p>
-<p>以一行LCU块为基本的并行单元，每一行LCU为一个子码流</p>
-<p> <img src="https://img-blog.csdn.net/20170903222931315?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvZmlyZXJvbGw=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt="img"></p>
-<p>\11. Dependentslice</p>
-<p>Dependent slice：该技术可以理解为对原先Slice NALU的数据划分，使其可以适合更加灵活的打包方式。</p>
-<p>Slice 和dependent slice 的示意图如下</p>
-<p><img src="https://img-blog.csdn.net/20170903223007796?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvZmlyZXJvbGw=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt="img"></p>
-<p>\12. 其他相关技术</p>
-<p>Ø Transform_skip模式：transform_skip_flag，该模式不进行变换，但是要进行量化，该模式对文本桌面视频有较好效果</p>
-<p>Ø 内部比特深度增加：为了保证中间预测、变换以及量化过程中的内部比特精度，以达到更好的压缩性能</p>
-
+          <h2 id="Bean-Overview"><a href="#Bean-Overview" class="headerlink" title="Bean Overview"></a>Bean Overview</h2><h3 id="Aliasing-a-Bean-outside-the-Bean-Definition"><a href="#Aliasing-a-Bean-outside-the-Bean-Definition" class="headerlink" title="Aliasing a Bean outside the Bean Definition"></a>Aliasing a Bean outside the Bean Definition</h3><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">alias</span> <span class="attr">name</span>=<span class="string">&quot;myApp-dataSource&quot;</span> <span class="attr">alias</span>=<span class="string">&quot;subsystemA-dataSource&quot;</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">alias</span> <span class="attr">name</span>=<span class="string">&quot;myApp-dataSource&quot;</span> <span class="attr">alias</span>=<span class="string">&quot;subsystemB-dataSource&quot;</span>/&gt;</span></span><br></pre></td></tr></table></figure>
+<h3 id="Instantiating-Beans"><a href="#Instantiating-Beans" class="headerlink" title="Instantiating Beans"></a>Instantiating Beans</h3><p>With XML-based configuration metadata you can specify your bean class as follows:</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">&quot;exampleBean&quot;</span> <span class="attr">class</span>=<span class="string">&quot;examples.ExampleBean&quot;</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">name</span>=<span class="string">&quot;anotherExample&quot;</span> <span class="attr">class</span>=<span class="string">&quot;examples.ExampleBeanTwo&quot;</span>/&gt;</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h3 id="Instantiation-with-a-Static-Factory-Method"><a href="#Instantiation-with-a-Static-Factory-Method" class="headerlink" title="Instantiation with a Static Factory Method"></a>Instantiation with a Static Factory Method</h3><p>In this example, the createInstance() method must be a static method. The following example shows how to specify a factory method:</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">&quot;clientService&quot;</span></span></span><br><span class="line"><span class="tag">    <span class="attr">class</span>=<span class="string">&quot;examples.ClientService&quot;</span></span></span><br><span class="line"><span class="tag">    <span class="attr">factory-method</span>=<span class="string">&quot;createInstance&quot;</span>/&gt;</span></span><br><span class="line">    </span><br></pre></td></tr></table></figure>
+<p>The following example shows a class that would work with the preceding bean definition:</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2020/12/31/Spring/Bean%20Overview%20&&%20Dependencies%20(Spring%20%E7%AC%94%E8%AE%B0)/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
@@ -1044,7 +723,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://edward.org.cn/2020/12/31/%E9%9F%B3%E8%A7%86%E9%A2%91/%E6%96%87%E6%A1%A305-%E6%89%8B%E5%86%99H264%E7%BC%96%E7%A0%81%E5%99%A8/">
+    <link itemprop="mainEntityOfPage" href="http://edward.org.cn/2020/12/31/mybatis/Mybatis/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/uploads/avatar.gif">
@@ -1058,7 +737,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2020/12/31/%E9%9F%B3%E8%A7%86%E9%A2%91/%E6%96%87%E6%A1%A305-%E6%89%8B%E5%86%99H264%E7%BC%96%E7%A0%81%E5%99%A8/" class="post-title-link" itemprop="url">05-手写H264编码器</a>
+            <a href="/2020/12/31/mybatis/Mybatis/" class="post-title-link" itemprop="url">Mybatis</a>
         </h2>
 
         <div class="post-meta">
@@ -1067,12 +746,34 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              
 
-              <time title="创建时间：2020-12-31 10:38:42 / 修改时间：10:47:13" itemprop="dateCreated datePublished" datetime="2020-12-31T10:38:42+08:00">2020-12-31</time>
+              <time title="创建时间：2020-12-31 15:36:42" itemprop="dateCreated datePublished" datetime="2020-12-31T15:36:42+08:00">2020-12-31</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-07-16 08:47:16" itemprop="dateModified" datetime="2020-07-16T08:47:16+08:00">2020-07-16</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/mybatis/" itemprop="url" rel="index"><span itemprop="name">mybatis</span></a>
+                </span>
             </span>
 
           
+            <span id="/2020/12/31/mybatis/Mybatis/" class="post-meta-item leancloud_visitors" data-flag-title="Mybatis" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
 
         </div>
       </header>
@@ -1083,168 +784,24 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h5 id=""><a href="#" class="headerlink" title=""></a></h5><h3 id="音视频高手课08-H264-I帧-P帧-B帧及手写H264编码器"><a href="#音视频高手课08-H264-I帧-P帧-B帧及手写H264编码器" class="headerlink" title="音视频高手课08-H264 I帧 P帧 B帧及手写H264编码器"></a>音视频高手课08-H264 I帧 P帧 B帧及手写H264编码器</h3><h5 id="1-三种帧的说明"><a href="#1-三种帧的说明" class="headerlink" title="1  三种帧的说明"></a>1  三种帧的说明</h5><p>1、I 帧：帧内编码帧，帧表示关键帧，你可以理解为这一帧画面的完整保留；解码时只需要本帧数据就可以完成（因为包含完整画面）</p>
-<p><strong>I 帧的特点：</strong></p>
-<ul>
-<li><p>a. 它是一个全帧压缩编码帧，它将全帧图像信息进行JPEG压缩编码及传输</p>
-</li>
-<li><p>b. 解码时仅用I 帧的数据就可重构完整图像</p>
-</li>
-<li><p>c. I 帧描述了图像背景和运动主体的详情</p>
-</li>
-<li><p>d. I 帧不需要参考其他画面而生成</p>
-</li>
-<li><p>e. I 帧是P帧和B帧的参考帧（其质量直接影响到同组中以后各帧的质量）</p>
-</li>
-<li><p>f. I 帧不需要考虑运动矢量</p>
-</li>
-<li><p>g. I 帧所占数据的信息量比较大</p>
-</li>
-</ul>
-<p>  、<strong>P帧</strong>：前向预测编码帧。P帧表示的是这一帧跟之前的一个关键帧（或P帧）的差别，解码时需要之前缓存的画面叠加上本帧定义的差别，生成最终画面。（也就是差别帧，P帧没有完整画面数据，只有与前一帧的画面差别的数据）</p>
-<p>​    <strong>P帧的预测与重构</strong>：P帧是以 I 帧为参考帧，在 I 帧中找出P帧“某点”的预测值和运动矢量，取预测差值和运动矢量一起传送。在接收端根据运行矢量从 I 帧找出P帧“某点”的预测值并与差值相加以得到P帧“某点”样值，从而可得到完整的P帧。</p>
-<p><strong>P帧的特点：</strong></p>
-<ul>
-<li><p>a. P帧是 I 帧后面相隔1~2帧的编码帧</p>
-</li>
-<li><p>b. P帧采用运动补偿的方法传送它与前面的I或P帧的差值及运动矢量（预测误差）</p>
-</li>
-<li><p>c. 解码时必须将帧中的预测值与预测误差求和后才能重构完整的P帧图像</p>
-</li>
-<li><p>d. P帧属于前向预测的帧间编码。它只参考前面最靠近它的 I 帧或P帧</p>
-</li>
-<li><p>e. 由于P帧是参考帧，它可能造成解码错误的扩散</p>
-</li>
-<li><p>f. 由于是差值传送，P帧的压缩比较高</p>
-</li>
-</ul>
-<p>3、<strong>B帧</strong>：双向预测内插编码帧。B帧是双向差别帧，也就是B帧记录的是本帧与前后帧的差别（具体比较复杂，有4种情况，但我这样说简单些），换言之，要解码B帧。不仅要取得之前的缓存画面，还要解码之后的画面，通过前后画面的与本帧数据的叠加取得最终的画面。B帧压缩率高，但是解码时CPU会比较累。</p>
-<p><strong>B帧的预测与重构</strong></p>
-<p>​    B帧以前面的 I 或P帧和后面的P帧为参考帧，“找出”B帧“某点”的预测值和两个运动矢量，并取预测差值和运动矢量传送。接收端根据运动矢量在两个参考帧中“找出（算出）”预测值并与差值求和，得到B帧“某点”样值，从而可得到完整的B帧。</p>
-<p><strong>B帧的特点：</strong></p>
-<ul>
-<li><p>a. B帧是由前面的 I 或P帧和后面的P帧进行预测的</p>
-</li>
-<li><p>b. B帧传送的是它与前面的 I 或P帧和后面的P帧之间的预测误差及运动矢量</p>
-</li>
-<li><p>c. B帧是双向预测编码帧</p>
-</li>
-<li><p>d. B帧压缩比最高，因为它只反映并参考帧间运动主体的变化情况，预测比较准确</p>
-</li>
-<li><p>e. B帧不是参考帧，不会造成解码错误的扩散</p>
-</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">注：I、B、P帧是根据压缩算法的需要，是人为定义的，他们都是实实在在的物理帧。</span><br><span class="line">一般来说，帧的压缩率是7（跟JPG差不多），</span><br><span class="line">P帧是20，B帧可以达到50.可见使用B帧能节省大量空间，</span><br><span class="line">节省出来的空间可以用来保存多一些帧，这样在相同码率下，可以提供更好的画质。</span><br></pre></td></tr></table></figure>
+          <h2 id="Mybatis"><a href="#Mybatis" class="headerlink" title="Mybatis"></a>Mybatis</h2><p>MyBatis 是一款优秀的持久层框架，它支持自定义 SQL、存储过程以及高级映射。</p>
+<p>如果使用 Maven 来构建项目，则需将下面的依赖代码置于 pom.xml 文件中：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.mybatis<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>mybatis<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">version</span>&gt;</span>x.x.x<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h4 id="从-XML-中构建-SqlSessionFactory"><a href="#从-XML-中构建-SqlSessionFactory" class="headerlink" title="从 XML 中构建 SqlSessionFactory"></a>从 XML 中构建 SqlSessionFactory</h4><p>每个基于 MyBatis 的应用都是以一个 SqlSessionFactory 的实例为核心的。SqlSessionFactory 的实例可以通过 SqlSessionFactoryBuilder 获得。而 SqlSessionFactoryBuilder 则可以从 XML 配置文件或一个预先配置的 Configuration 实例来构建出 SqlSessionFactory 实例。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">String resource = <span class="string">&quot;org/mybatis/example/mybatis-config.xml&quot;</span>;</span><br><span class="line">InputStream inputStream = Resources.getResourceAsStream(resource);</span><br><span class="line">SqlSessionFactory sqlSessionFactory = <span class="keyword">new</span> SqlSessionFactoryBuilder().build(inputStream);</span><br></pre></td></tr></table></figure>
 
 
-
-
-<h4 id="1-2-压缩算法的说明"><a href="#1-2-压缩算法的说明" class="headerlink" title="1.2 压缩算法的说明"></a>1.2 压缩算法的说明</h4><p><strong>h264的压缩方法</strong>：</p>
-<ul>
-<li><p>1、分组：把几帧图像分为一组（GOP，也就是一个序列），为防止运动变化，帧数不宜取多</p>
-</li>
-<li><p>2、定义帧：将每组内各帧图像定义为三种类型，即 I 帧、B帧和P帧</p>
-</li>
-<li><p>3、预测帧：以帧作为基础帧，以帧预测P帧，再由 I 帧和P帧预测B帧</p>
-</li>
-<li><p>4、数据传输：最后将 I  帧数据与预测的差值信息进行存储和传输</p>
-</li>
-</ul>
-<p>​    <strong>帧内</strong>（Intraframe）压缩也称为空间压缩（Spatial compression）。当压缩一帧图像时，仅考虑本帧的数据而不考虑相邻帧之间的冗余信息，这实际上与静态图像压缩类似。帧内一般采用有损压缩算法，由于帧内压缩是编码一个完整的图像，因此可以独立的解码、显示。帧内压缩一般达不到很高的压缩，跟编码jpeg差不多。</p>
-<p>​    <strong>帧间</strong>（Interframe）压缩的原理是：相邻几帧的数据有很大的相关性，或者说前后两帧信息变化很小的特点，也即连续的视频及其相邻帧之间具有冗余信息，根据这一特性，压缩相邻帧之间的冗余量就可以进一步提高压缩量，减少压缩比。帧间压缩也称为时间压缩，它通过比较时间轴上不同帧之间的数据进行压缩。帧间压缩一般是无损的。帧差值（Frame differencing）算法是一种典型的时间压缩发，它通过比较本帧与相邻帧之间的差异，仅记录本帧与其相邻帧的差值，这样可以大大减少数据量。</p>
-<p>​    <strong>顺便说下有损</strong>（Lossy）压缩和无损（Lossy less）压缩。无损压缩也即压缩前和解压缩后的数据完全一致。多数的无损压缩都采用RLE行程编码算法。有损压缩意味着解压缩后的数据与压缩前的数据不一致。在压缩的过程中要丢失一些人眼和耳朵所不敏感的图像或音频信息，而且丢失的信息不可恢复。几乎所有高压缩的算法都采用有损压缩，这样才能达到低数据率的目标。丢失的数据率与压缩比有关，压缩比越小，丢失的数据越多，解压缩后的效果一般越差。此外，某些有损压缩算法采用多次重复压缩的方式，这样还会引起额外的数据丢失。</p>
-<hr>
-<h3 id="2-手写H264编码器"><a href="#2-手写H264编码器" class="headerlink" title="2  手写H264编码器"></a>2  手写H264编码器</h3><p>要彻底理解视频编码原理，看书都是虚的，需要实际动手，实现一个简单的视频编码器：</p>
-<p>知识准备：基本图像处理知识，信号的时域和频域问题，熟练掌握傅立叶正反变换，一维、二维傅立叶变换，以及其变种，dct变换，快速dct变换。 </p>
-<p><strong>2.1.1 第一步：实现有损图像压缩和解压</strong><br>        参考 JPEG原理，将RGB-&gt;YUV，然后Y/U/V看成三张不同的图片，将其中一张图片分为 8x8的block进行 dct变换（可以直接进行二维dct变换，或者按一定顺序将8x8的二维数组整理成一个64字节的一维数组），还是得到一个8x8的整数频率数据。于是表示图像大轮廓的低频信号（人眼敏感的信号）集中在 8x8的左上角；表示图像细节的高频信号集中在右下角。</p>
-<p>​         接着将其量化，所谓<strong>量化</strong>，就是信号采样的步长，8x8的整数频率数据块，每个数据都要除以对应位置的步长，左上角相对重要的低频信号步长是1，也就是说0-255，是多少就是多少。而右下角是不太重要的高频信号，比如步长取10，那么这些位置的数据都要/10，实际解码的时候再将他们<em>10恢复出来，这样经过编码的时候/10和解码的时候</em>10，那么步长为10的信号1, 13, 25, 37就会变成规矩的：0, 10, 20, 30, 对小于步长10的部分我们直接丢弃了，因为高频不太重要。 </p>
-<p>​         <strong>经过量化以后</strong>，8x8的数据块左上角的数据由于步长小，都是比较离散的，而靠近右下角的高频数据，都比较统一，或者是一串0，因此图像大量的细节被我们丢弃了，这时候，我们用无损压缩方式，比如lzma2算法（jpeg是rle + huffman）将这64个byte压缩起来，由于后面高频数据步长大，做了除法以后，这些值都比较小，而且比较靠近，甚至右下部分都是一串0，十分便于压缩。</p>
-<p>​        JPEG图像有个问题就是低码率时 block边界比较严重，现代图片压缩技术往往要配合一些de-block算法，比如最简单的就是边界部分几个像素点和周围插值模糊一下。 </p>
-<blockquote>
-<p> 做到这里我们实现了一个同 jpeg类似的静态图片有损压缩算法。在视频里面用来保存I帧数据。 </p>
-</blockquote>
-<p>​     </p>
-<p> <strong>2.1.2 第二步：实现宏块误差计算</strong> </p>
-<p>​        <strong>视频</strong>由连续的若干图像帧组成，分为 I帧，P帧，所谓I帧，就是不依赖就可以独立解码的视频图像帧，而P帧则需要依赖前面已解码的视频帧，配合一定数据才能生成出来。所以视频中I帧往往都比较大，而P帧比较小，如果播放器一开始收到了P帧那么是无法播放的，只有收到下一个I帧才能开始播放。I帧多了视频就变大，I帧少了，数据量是小了，但视频受到丢包或者数据错误的影响却又会更严重。</p>
-<p>​         那么所谓运动预测编码，其实就是P帧的生成过程：继续将图片分成 16x16的block（为了简单只讨论yuv的y分量压缩）。I帧内部单帧图片压缩我们采用了8x8的block，而这里用16x16的block来提高帧间编码压缩率（当然也会有更多细节损失），我们用 x, y表示像素点坐标，而s,t表示block坐标，那么坐标为（x,y）的像素点所属的block坐标为： </p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">s = x / <span class="number">16</span> = x &gt;&gt; <span class="number">4</span></span><br><span class="line">t = y / <span class="number">16</span> = y &gt;&gt; <span class="number">4</span></span><br></pre></td></tr></table></figure>
-
-
-<p>​         接着要计算两个<strong>block的相似度</strong>，即矢量的距离，可以表示为一个256维矢量（16x16）像素点色彩距离的平方，我们先定义两个颜色的误差为： </p>
-<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">PixelDiff(c1, c2) = (c1- c2) ^ 2</span><br></pre></td></tr></table></figure>
-<p>​        <strong>那么256个点的误差</strong>可以表示为所有对应点的像素误差和：</p>
-<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">BlockDiff(b1, b2) = sum( PixelDiff(c1, c2) for c1 in b1 for c2 in b2)</span><br></pre></td></tr></table></figure>
-
-<p>代码化为：</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">block_diff</span><span class="params">(<span class="keyword">const</span> <span class="keyword">unsigned</span> <span class="keyword">char</span> b1[<span class="number">16</span>][<span class="number">16</span>], <span class="keyword">const</span> <span class="keyword">unsigned</span> <span class="keyword">char</span> b2[<span class="number">16</span>][<span class="number">16</span>])</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> sum = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">16</span>; i++) &#123;</span><br><span class="line">         <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; <span class="number">16</span>; j++) &#123;</span><br><span class="line">              <span class="keyword">int</span> c1 = b1[i][j];</span><br><span class="line">              <span class="keyword">int</span> c2 = b2[i][j];</span><br><span class="line">              sum += (c1 - c2) * (c1 - c2);</span><br><span class="line">         &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> sum;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>有了这个block求差的函数，我们就可以针对<strong>特定block</strong>，搜索另外若<strong>干个block</strong>中哪个和它最相似了（误差最小）。</p>
-<h5 id="1-2-3-第三步：实现运动预测编码"><a href="#1-2-3-第三步：实现运动预测编码" class="headerlink" title="1.2.3 第三步：实现运动预测编码"></a>1.2.3 <strong>第三步：实现运动预测编码</strong></h5><p>​        根据上面的宏块比较函数，你已经可以知道两个block到底像不像了，越象的block，block_diff返回值越低。那么我们有两帧相邻的图片，P1，P2，假设 P1已经完成编码了，现在要对 P2进行P帧编码，其实就是轮询 P2里面的每一个 block，为P2中每一个block找出上一帧中相似度最高的block坐标，并记录下来，具体伪代码可以表示为：</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">unsigned</span> <span class="keyword">char</span> block[<span class="number">16</span>][<span class="number">16</span>];</span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">int</span> t = <span class="number">0</span>; t &lt;= maxt; t++) &#123;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> s = <span class="number">0</span>; s &lt;= maxs; s++) &#123;</span><br><span class="line">         picture_get_block(P2, s * <span class="number">16</span>, t * <span class="number">16</span>, block); <span class="comment">// 取得图片 P2 的 block</span></span><br><span class="line">         <span class="keyword">int</span> x, y;</span><br><span class="line">         block_search_nearest(P1, &amp;x, &amp;y, block); <span class="comment">// 在P1中搜索最相似的block</span></span><br><span class="line">         output(x, y);  <span class="comment">// 将P1中最相似的block的左上角像素坐标 (x, y) 输出</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>​        其中在P1中搜索最相似 block的 block_search_nearest 函数原理是比较简单的，我们可以暴力点用两个for循环轮询 P1中每个像素点开始的16x16的block（速度较慢），当然实际中不可能这么暴力搜索，而是围绕P2中该block对应坐标在P1中位置作为中心，慢慢四周扩散，搜索一定步长，并得到一个 ：<strong>按照一定顺序进行搜索，并且在一定范围内最相似的宏块坐标</strong>。 。</p>
-<blockquote>
-<p>于是P2进行运动预测编码的结果就是一大堆(x,y)的坐标，代表P2上每个block在上一帧P1里面最相似的 block的位置。反过来说可能更容易理解，我们可以把第三步整个过程定义为： </p>
-</blockquote>
-<h5 id="怎么用若干-P1里不同起始位置的block拼凑出图片P2来，使得拼凑以后的结果和P2最像。"><a href="#怎么用若干-P1里不同起始位置的block拼凑出图片P2来，使得拼凑以后的结果和P2最像。" class="headerlink" title="怎么用若干 P1里不同起始位置的block拼凑出图片P2来，使得拼凑以后的结果和P2最像。"></a>怎么用若干 P1里不同起始位置的block拼凑出图片P2来，使得拼凑以后的结果和P2最像。</h5><p><strong>1.2.4 第四步：实现P帧编码</strong></p>
-<p>​         拼凑的结果就是一系列(x,y)的坐标数据，我们继续用lzma2将它们先压缩起来，按照 vcd的分辨率</p>
-<p>352 x 240，我们横向需要 352 / 16 = 22个block，纵向需要 240 / 16 = 15 个block，可以用 P1中 22 x 15 = 330 </p>
-<p>个 block的坐标信息生成一张和P2很类似的图片 P2’ ： </p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> (<span class="keyword">int</span> t = <span class="number">0</span>; t &lt; <span class="number">15</span>; t++) &#123;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> s = <span class="number">0</span>; s &lt; <span class="number">22</span>; s++, next++) &#123;</span><br><span class="line">         <span class="keyword">int</span> x = block_positions[next].x;   <span class="comment">// 取得对应 P1上的 block像素位置 x</span></span><br><span class="line">         <span class="keyword">int</span> y = block_positions[next].y;   <span class="comment">// 取得对应 P1上的 block像素位置 y</span></span><br><span class="line">         <span class="comment">// 将 P1位置(x,y)开始的 16 x 16 的图块拷贝到 P2&#x27;的 (s * 16, t * 16)处</span></span><br><span class="line">         CopyRect(P2<span class="number">&#x27;</span>, s * <span class="number">16</span>, t * <span class="number">16</span>, P1, x, y, <span class="number">16</span>, <span class="number">16</span>); </span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<pre><code>     我们把用来生成P2的P1称为 P2的 “参考帧”，再把刚才那一堆P1内用来拼成P2的 block坐标称为 “**运动矢量**”，这是P帧里面最主要的数据内容。但是此时由P1和这些坐标数据拼凑出来的P2，你会发现粗看和P2很象，但细看会发现有些支离破碎，并且边缘比较明显，怎么办呢？我们需要第四步。</code></pre>
-<h5 id="1-2-5第五步：实现P帧编码"><a href="#1-2-5第五步：实现P帧编码" class="headerlink" title="1.2.5第五步：实现P帧编码"></a><strong>1.2.5第五步：实现P帧编码</strong></h5><pre><code>     有了刚才的运动预测矢量（一堆block的坐标），我们先用P1按照这些数据拼凑出一张类似 P2的新图片叫做P2&#39;，然后同P2上每个像素做减法，得到一张保存 differ的图片： </code></pre>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">D2 = (P2 - P2<span class="number">&#x27;</span>) / <span class="number">2</span></span><br></pre></td></tr></table></figure>
-<p>​        误差图片 D2上每一个点等于 P2上对应位置的点的颜色减去 P2’上对应位置的点的颜色再除以2，用8位表示差值，值是循环的，比如-2就是255，这里一般可以在结果上 + 0x80，即 128代表0，129代表2，127代表-2。继续用一个 8位的整数可以表示 [-254, 254] 之间的误差范围，步长精度是2。 </p>
-<p>​        按照第三步实现的逻辑，P2’其实已经很像P2了，只是有些误差，我们将这些误差保存成了图片D2，所以图片D2中，信息量其实已经很小了，都是些细节修善，比起直接保存一张完整图片熵要低很多的。所以我们将 D2用类似第一步提到的有损图片压缩方法进行编码，得到最终的P帧数据：</p>
-<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Encode(P2) = Lzma2(block_positions) + 有损图像编码（D2）</span><br></pre></td></tr></table></figure>
-
-<p>​        具体在操作的时候，D2的图像块可以用16x16进行有损编码，因为前面的运动预测数据是按16x16的宏块搜索的，而不用象I帧那样精确的用8x8表示，同时保存误差图时，量化的精度可以更粗一些用不着象I帧那么精确，可以理解成用质量更低的JPEG编码，按照16x16的块进行编码，加上误差图D2本来信息量就不高，这样的保存方式能够节省不少空间。</p>
-<p>​    </p>
-<p> <strong>1.2.6 第六步：实现GOP生成</strong> </p>
-<p>​        通过前面的代码，我们实现了I帧编码和P帧编码，P帧是参考P1对P2进行编码，而所谓B帧，就是参考 P1和 P3对P2进行编码，当然间隔不一定是1，比如可以是参考P1和P5对P2进行编码，前提条件是P5可以依赖P1及以前的数据进行解码。</p>
-<p>​         不过对于一个完整的简版视频编码器，I帧和P帧编码已经够了，市面上任然有很多面向低延迟的商用编码器是直接干掉B帧的，因为做实时传输时收到B帧没法播放，之后再往后好几帧收到下一个I或者P帧时，先前收到的B帧才能被解码出来，造成不少的延迟。 </p>
-<p>​        而所谓的 GOP (Group of picture) 就是由一系列类似 I, P, B, B, P, B, B, P, B, B P 组成的一个可以完整被解码出来的图像组，而所谓视频文件，就是一个接一个的GOP，每个GOP由一个I帧开头，然后接下来一组连续的P 或者 B构成，播放时只有完整收到下一个GOP的I帧才能开始播放。</p>
-<pre><code>     最后是关于参考帧选择，前面提到的 P2生成过程是参考了 P1，假设一个GOP中十张图片，是 I1, P1, P2, P3, P4, ... P9 保存的，如果P1参考I1，P2参考P1, P3参考P2 .... P9参考P8这样每一个P帧都是参考上一帧进行编码的话，误差容易越来越大，因为P1已经引入一定误差了，P2在P1的基础上误差更大，到了P9的话，图片质量可能已经没法看了。 </code></pre>
-<p>​        因此正确的参考帧选择往往不需要这样死板，比如可以P1-P9全部参考I1来生成，或者，P1-P4参考I1来生成，而P5-P9则参考P5来生成，这样步子小点，误差也不算太离谱。</p>
-<p> <strong>1.2.7 第七步：容器组装</strong> </p>
-<p>​        我们生成了一组组编码过的GOP了，这时候需要一定的文件格式将他们恰当的保存下来，记录视频信息，比如分辨率，帧率，时间索引等，就是一个类似MP4（h.264的容器）文件的东西。至此一个简单的小型编码器我们已经完成了，可以用 SDL / DirectX / OpenGL 配合实现一个播放器，愉快的将自己编码器编码的视频播放出来。</p>
-<p><strong>1.2.8第八步：优化改进</strong> </p>
-<p>​        这时候你已经大概学习并掌握了视频编码的基础原理了，接下来大量的优化改进的坑等着你去填呢。优化有两大方向，编码效率优化和编码性能优化：前者追求同质量（同信噪比）下更低的码率，后者追求同样质量和码率的情况下，更快的编码速度。</p>
-<p>​         有这个基础后接下来可以回过头去看JPEG标准，MPEG1-2标准，并阅读相关实现代码，你会发现简单很多了，接着肯H.264代码，不用全部看可以针对性的了解以下H.264的I帧编码和各种搜索预测方法，有H.264的底子，你了解 HEVC和 vpx就比较容易了。 </p>
-<p>​        参考这些编码器一些有意思的实现来改进自己的编码器，试验性质，可以侧重原理，各种优化技巧了解下即可，本来就是hack性质的。</p>
-<blockquote>
-<pre><code>     有卯用呢？首先肯定很好玩，其次，当你有需要使用并修改这些编码器为他们增加新特性的时候，你会发现前面的知识很管用了。 </code></pre>
-</blockquote>
-<p>——有朋友说光有代码没有图片演示看不大明白，好我们补充一下图片演示：</p>
-<h4 id="1-3-画面演示"><a href="#1-3-画面演示" class="headerlink" title="1.3 画面演示"></a>1.3 画面演示</h4><ol>
-<li><h5 id="3-1-这是第一帧画面：P1（我们的参考帧）"><a href="#3-1-这是第一帧画面：P1（我们的参考帧）" class="headerlink" title="3.1 这是第一帧画面：P1（我们的参考帧）"></a>3.1 这是第一帧画面：P1（我们的参考帧）</h5></li>
-</ol>
-<p><img src="/img/71.jpg"></p>
-<p> <strong>这是第二帧画面：P2（需要编码的帧）</strong> </p>
-<p><img src="/img/72.jpg"></p>
-<blockquote>
-<p>从视频中截取的两张间隔1-2秒的画面，和实际情况类似，下面我们进行几次运动搜索：</p>
-</blockquote>
-<h5 id="1-3-2-搜索演示1：搜索P2中车辆的车牌在P1中最接近的位置（上图P1，下图P2）"><a href="#1-3-2-搜索演示1：搜索P2中车辆的车牌在P1中最接近的位置（上图P1，下图P2）" class="headerlink" title="1.3.2 搜索演示1：搜索P2中车辆的车牌在P1中最接近的位置（上图P1，下图P2）"></a>1.3.2 搜索演示1：搜索P2中车辆的车牌在P1中最接近的位置（上图P1，下图P2）</h5><p><img src="/img/73.jpg"></p>
-<p>这是一个<strong>演示程序</strong>，鼠标选中P2上任意16x16的Block，即可搜索出P1上的 BestMatch 宏块。虽然车辆在运动，从远到近，但是依然找到了最接近的<strong>宏块坐标</strong>。</p>
-<h5 id="1-3-3-搜索演示2：空中电线交叉位置（上图P1，下图P2）"><a href="#1-3-3-搜索演示2：空中电线交叉位置（上图P1，下图P2）" class="headerlink" title="1.3.3 搜索演示2：空中电线交叉位置（上图P1，下图P2）"></a>1.3.3 搜索演示2：空中电线交叉位置（上图P1，下图P2）</h5><p><img src="/img/74.jpg"></p>
-<h5 id="1-3-3-搜索演示3：报刊停的广告海报"><a href="#1-3-3-搜索演示3：报刊停的广告海报" class="headerlink" title="1.3.3  搜索演示3：报刊停的广告海报"></a>1.3.3  搜索演示3：报刊停的广告海报</h5><p><img src="/img/75.jpg" alt="75.jpg"></p>
-<blockquote>
-<p>同样顺利在P1中找到最接近P2里海报的宏块位置。</p>
-</blockquote>
-<p> 图片全搜索：根据P1和运动矢量数据（在P2中搜索到每一个宏块在P1中最相似的位置集合）还原出来的P2’，即完全用P1各个位置的宏块拼凑出来最像P2的图片P2’，效果如下： </p>
-<p><img src="/img/76.jpg"></p>
-<p>仔细观察，有些支离破碎对吧？肯定啊，拼凑出来的东西就是这样，现在我们用P2`和P2像素相减，得到差分图 D2 = (P2’ - P2) / 2 + 0x80：</p>
-<p><img src="https://pic4.zhimg.com/50/9a08b5dae6c53d11076027c5f3e47391_hd.jpg" alt="img"> </p>
-<p>嗯，这就是P2`和P2两幅图片的不同处，看到没？基本只有低频了！高频数据少到我们可以忽略，这时用有损压缩方式比较差的效果来保存误差图D2，只要5KB的大小。<br>接着我们根据运动矢量还原的 P2’及差分图D2来还原新的 P2，NewP2 = P2’ + (D2 - 0x80) * 2：</p>
-<p><img src="https://pic3.zhimg.com/50/2d2f1026f8fe2f6242c7a952d1ac1ec8_hd.jpg" alt="img"> </p>
-<blockquote>
-<p>​        这就是之前支离破碎的 P2` 加上误差 D2之后变成了清晰可见的样子，基本还原了原图P2。<br>​    由于D2仅仅占5KB，加上压缩过后的运动矢量不过7KB，</p>
-</blockquote>
-<p>​        <strong>所以参考P1我们只需要额外 7KB的数据量就可以完整表示P2了，而如果独立将P2用质量尚可的有损压缩方式独立压缩，则至少要去到50-60KB，这一下节省了差不多8倍的空间，正就是所谓运动编码的基本原理。</strong></p>
-<p>再者误差我们保存的是（P2-P2’）/2 + 0x80，实际使用时我们会用更有效率的方式，比如让[-64,64]之间的色差精度为1，[-255,-64], [64, 255] 之间的色差精度为2-3，这样会更加真实一些。</p>
-<p>​        现代视频编码中，除了帧间预测，I帧还使用了大量帧内预测，而不是完全dct量化后编码，前面帧间预测我们使用了参考帧的宏块移动拼凑新帧的方式进行，而所谓帧内预测就是同一幅画面中，未编码部分使用已编码部分拼凑而成。。。。。。。</p>
-<h5 id="H264是新一代的编码标准，以高压缩高质量和支持多种网络的流媒体传输著称在编码方面，"><a href="#H264是新一代的编码标准，以高压缩高质量和支持多种网络的流媒体传输著称在编码方面，" class="headerlink" title="H264是新一代的编码标准，以高压缩高质量和支持多种网络的流媒体传输著称在编码方面，"></a>H264是新一代的编码标准，以高压缩高质量和支持多种网络的流媒体传输著称在编码方面，</h5>
+<p>XML 配置文件中包含了对 MyBatis 系统的核心设置，包括获取数据库连接实例的数据源（DataSource）以及决定事务作用域和控制方式的事务管理器（TransactionManager）.</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; ?&gt;</span></span><br><span class="line"><span class="meta">&lt;!DOCTYPE <span class="meta-keyword">configuration</span></span></span><br><span class="line"><span class="meta">  <span class="meta-keyword">PUBLIC</span> <span class="meta-string">&quot;-//mybatis.org//DTD Config 3.0//EN&quot;</span></span></span><br><span class="line"><span class="meta">  <span class="meta-string">&quot;http://mybatis.org/dtd/mybatis-3-config.dtd&quot;</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">configuration</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">environments</span> <span class="attr">default</span>=<span class="string">&quot;development&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">environment</span> <span class="attr">id</span>=<span class="string">&quot;development&quot;</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">transactionManager</span> <span class="attr">type</span>=<span class="string">&quot;JDBC&quot;</span>/&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">dataSource</span> <span class="attr">type</span>=<span class="string">&quot;POOLED&quot;</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">&quot;driver&quot;</span> <span class="attr">value</span>=<span class="string">&quot;$&#123;driver&#125;&quot;</span>/&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">&quot;url&quot;</span> <span class="attr">value</span>=<span class="string">&quot;$&#123;url&#125;&quot;</span>/&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">&quot;username&quot;</span> <span class="attr">value</span>=<span class="string">&quot;$&#123;username&#125;&quot;</span>/&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">&quot;password&quot;</span> <span class="attr">value</span>=<span class="string">&quot;$&#123;password&#125;&quot;</span>/&gt;</span></span><br><span class="line">      <span class="tag">&lt;/<span class="name">dataSource</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">environment</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">environments</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">mappers</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">mapper</span> <span class="attr">resource</span>=<span class="string">&quot;org/mybatis/example/BlogMapper.xml&quot;</span>/&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">mappers</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">configuration</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>当然，还有很多可以在 XML 文件中配置的选项，上面的示例仅罗列了最关键的部分。 注意 XML 头部的声明，它用来验证 XML 文档的正确性。environment 元素体中包含了事务管理和连接池的配置。mappers 元素则包含了一组映射器（mapper），这些映射器的 XML 映射文件包含了 SQL 代码和映射定义信息。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2020/12/31/mybatis/Mybatis/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
@@ -1263,7 +820,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://edward.org.cn/2020/12/31/%E9%9F%B3%E8%A7%86%E9%A2%91/%E6%96%87%E6%A1%A306-H264%E8%A7%A3%E7%A0%81%E6%B5%81%E7%A8%8B/">
+    <link itemprop="mainEntityOfPage" href="http://edward.org.cn/2020/12/31/Android/APN%20%E8%AE%BE%E7%BD%AE%E5%8F%8A%E6%9F%A5%E8%AF%A2/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/uploads/avatar.gif">
@@ -1277,7 +834,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2020/12/31/%E9%9F%B3%E8%A7%86%E9%A2%91/%E6%96%87%E6%A1%A306-H264%E8%A7%A3%E7%A0%81%E6%B5%81%E7%A8%8B/" class="post-title-link" itemprop="url">06-H264解码流程</a>
+            <a href="/2020/12/31/Android/APN%20%E8%AE%BE%E7%BD%AE%E5%8F%8A%E6%9F%A5%E8%AF%A2/" class="post-title-link" itemprop="url">APN 设置及查询</a>
         </h2>
 
         <div class="post-meta">
@@ -1286,12 +843,34 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              
 
-              <time title="创建时间：2020-12-31 10:38:42 / 修改时间：10:47:04" itemprop="dateCreated datePublished" datetime="2020-12-31T10:38:42+08:00">2020-12-31</time>
+              <time title="创建时间：2020-12-31 15:36:42" itemprop="dateCreated datePublished" datetime="2020-12-31T15:36:42+08:00">2020-12-31</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-09-03 16:04:07" itemprop="dateModified" datetime="2020-09-03T16:04:07+08:00">2020-09-03</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Android/" itemprop="url" rel="index"><span itemprop="name">Android</span></a>
+                </span>
             </span>
 
           
+            <span id="/2020/12/31/Android/APN%20%E8%AE%BE%E7%BD%AE%E5%8F%8A%E6%9F%A5%E8%AF%A2/" class="post-meta-item leancloud_visitors" data-flag-title="APN 设置及查询" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
 
         </div>
       </header>
@@ -1302,418 +881,168 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h4 id="H264解码详解"><a href="#H264解码详解" class="headerlink" title="H264解码详解"></a>H264解码详解</h4><p>​        H264是新一代的编码标准，以高压缩高质量和支持多种网络的流媒体传输著称，在编码方面，我理解的他的理论依据是：参照一段时间内图像的统计结果表明，在相邻几幅图像画面中，一般有差别的像素只有10%以内的点,亮度差值变化不超过2%，而色度差值的变化只有1%以内。所以对于一段变化不大图像画面，我们可以先编码出一个完整的图像帧A，随后的B帧就不编码全部图像，只写入与A帧的差别，这样B帧的大小就只有完整帧的1/10或更小！B帧之后的C帧如果变化不大，我们可以继续以参考B的方式编码C帧，这样循环下去。这段图像我们称为一个序列（序列就是有相同特点的一段数据），当某个图像与之前的图像变化很大，无法参考前面的帧来生成，那我们就结束上一个序列，开始下一段序列，也就是对这个图像生成一个完整帧A1，随后的图像就参考A1生成，只写入与A1的差别内容。</p>
-<p>​    在H264协议里定义了三种帧，完整编码的帧叫I帧，参考之前的I帧生成的只包含差异部分编码的帧叫P帧，还有一种参考前后的帧编码的帧叫B帧。</p>
-<p>​    H264采用的核心算法是帧内压缩和帧间压缩，帧内压缩是生成I帧的算法，帧间压缩是生成B帧和P帧的算法。</p>
-<p>-———————</p>
-<p>序列的说明</p>
-<p>-———————</p>
-<p>​    在H264中图像以序列为单位进行组织，一个序列是一段图像编码后的数据流，以I帧开始，到下一个I帧结束。</p>
-<p>​    <strong><em>\</em>一个序列的第一个图像叫做 IDR图像（立即刷新图像），IDR 图像都是 I 帧图像。\</strong>*<em>H.264引入 IDR 图像是为了解码的重同步，当解码器解码到 IDR图像时，立即将参考帧队列清空，将已解码的数据全部输出或抛弃，重新查找参数集，开始一个新的序列。****</em>这样，如果前一个序列出现重大错误，在这里可以获得重新同步的机会。IDR图像之后的图像永远不会使用IDR之前的图像的数据来解码。*</p>
-<p>​    一个序列就是一段内容差异不太大的图像编码后生成的一串数据流。当运动变化比较少时，一个序列可以很长，因为运动变化少就代表图像画面的内容变动很小，所以就可以编一个I帧，然后一直P帧、B帧了。当运动变化多时，可能一个序列就比较短了，比如就包含一个I帧和3、4个P帧。</p>
-<p>-———————-</p>
-<p>三种帧的说明</p>
-<p>-———————-</p>
-<p>I帧:帧内编码帧，I帧表示关键帧，你可以理解为这一帧画面的完整保留；解码时只需要本帧数据就可以完成（因为包含完整画面）</p>
-<p>I帧特点:<br>1.它是一个全帧压缩编码帧。它将全帧图像信息进行JPEG压缩编码及传输;<br>2.解码时仅用I帧的数据就可重构完整图像;<br>3.I帧描述了图像背景和运动主体的详情;<br>4.I帧不需要参考其他画面而生成;<br>5.I帧是P帧和B帧的参考帧(其质量直接影响到同组中以后各帧的质量);<br>6.I帧是帧组GOP的基础帧(第一帧),在一组中只有一个I帧;<br>7.I帧不需要考虑运动矢量;<br>8.I帧所占数据的信息量比较大。</p>
-<p>P帧:前向预测编码帧。P帧表示的是这一帧跟之前的一个关键帧（或P帧）的差别，解码时需要用之前缓存的画面叠加上本帧定义的差别，生成最终画面。（也就是差别帧，P帧没有完整画面数据，只有与前一帧的画面差别的数据）</p>
-<p>P帧的预测与重构:P帧是以I帧为参考帧,在I帧中找出P帧“某点”的预测值和运动矢量,取预测差值和运动矢量一起传送。在接收端根据运动矢量从I帧中找出P帧“某点”的预测值并与差值相加以得到P帧“某点”样值,从而可得到完整的P帧。<br>P帧特点:<br>1.P帧是I帧后面相隔1~2帧的编码帧;<br>2.P帧采用运动补偿的方法传送它与前面的I或P帧的差值及运动矢量(预测误差);<br>3.解码时必须将I帧中的预测值与预测误差求和后才能重构完整的P帧图像;<br>4.P帧属于前向预测的帧间编码。它只参考前面最靠近它的I帧或P帧;<br>5.P帧可以是其后面P帧的参考帧,也可以是其前后的B帧的参考帧;<br>6.由于P帧是参考帧,它可能造成解码错误的扩散;<br>7.由于是差值传送,P帧的压缩比较高。</p>
-<p>B帧:双向预测内插编码帧。B帧是双向差别帧，也就是B帧记录的是本帧与前后帧的差别（具体比较复杂，有4种情况，但我这样说简单些），换言之，要解码B帧，不仅要取得之前的缓存画面，还要解码之后的画面，通过前后画面的与本帧数据的叠加取得最终的画面。B帧压缩率高，但是解码时CPU会比较累。</p>
-<p>B帧的预测与重构<br>B帧以前面的I或P帧和后面的P帧为参考帧,“找出”B帧“某点”的预测值和两个运动矢量,并取预测差值和运动矢量传送。接收端根据运动矢量在两个参考帧中“找出(算出)”预测值并与差值求和,得到B帧“某点”样值,从而可得到完整的B帧。<br>B帧特点<br>1.B帧是由前面的I或P帧和后面的P帧来进行预测的;<br>2.B帧传送的是它与前面的I或P帧和后面的P帧之间的预测误差及运动矢量;<br>3.B帧是双向预测编码帧;<br>4.B帧压缩比最高,因为它只反映丙参考帧间运动主体的变化情况,预测比较准确;<br>5.B帧不是参考帧,不会造成解码错误的扩散。</p>
-<p>注:I、B、P各帧是根据压缩算法的需要，是人为定义的,它们都是实实在在的物理帧。一般来说，I帧的压缩率是7（跟JPG差不多），P帧是20，B帧可以达到50。可见使用B帧能节省大量空间，节省出来的空间可以用来保存多一些I帧，这样在相同码率下，可以提供更好的画质。</p>
-<p>-——————————-</p>
-<p>压缩算法的说明</p>
-<p>-——————————-</p>
-<p>h264的压缩方法:</p>
-<p>1.分组:把几帧图像分为一组(GOP，也就是一个序列),为防止运动变化,帧数不宜取多。<br>2.定义帧:将每组内各帧图像定义为三种类型,即I帧、B帧和P帧;<br>3.预测帧:以I帧做为基础帧,以I帧预测P帧,再由I帧和P帧预测B帧;<br>4.数据传输:最后将I帧数据与预测的差值信息进行存储和传输。</p>
-<p>​    帧内（Intraframe）压缩也称为空间压缩（Spatialcompression）。当压缩一帧图像时，仅考虑本帧的数据而不考虑相邻帧之间的冗余信息，这实际上与静态图像压缩类似。帧内一般采用有损压缩算法，由于帧内压缩是编码一个完整的图像，所以可以独立的解码、显示。帧内压缩一般达不到很高的压缩，跟编码jpeg差不多。
-　　</p>
-<p>​    帧间（Interframe）压缩的原理是：相邻几帧的数据有很大的相关性，或者说前后两帧信息变化很小的特点。也即连续的视频其相邻帧之间具有冗余信息,根据这一特性，压缩相邻帧之间的冗余量就可以进一步提高压缩量，减小压缩比。帧间压缩也称为时间压缩（Temporalcompression），它通过比较时间轴上不同帧之间的数据进行压缩。帧间压缩一般是无损的。帧差值（Framedifferencing）算法是一种典型的时间压缩法，它通过比较本帧与相邻帧之间的差异，仅记录本帧与其相邻帧的差值，这样可以大大减少数据量。</p>
-<p>   顺便说下有损（Lossy ）压缩和无损（Lossyless）压缩。无损压缩也即压缩前和解压缩后的数据完全一致。多数的无损压缩都采用RLE行程编码算法。有损压缩意味着解压缩后的数据与压缩前的数据不一致。在压缩的过程中要丢失一些人眼和人耳所不敏感的图像或音频信息,而且丢失的信息不可恢复。几乎所有高压缩的算法都采用有损压缩,这样才能达到低数据率的目标。丢失的数据率与压缩比有关,压缩比越小，丢失的数据越多,解压缩后的效果一般越差。此外,某些有损压缩算法采用多次重复压缩的方式,这样还会引起额外的数据丢失。</p>
-<p><strong>H264层次构成</strong></p>
-<p>H264标准是由JVT（Joint Video Team，视频联合工作组）组织提出的新一代数字视频编码标准。JVT于2001年12月在泰国Pattaya成立。它由ITU-T的VCEG（视频编码专家组）和ISO/IEC的MPEG（活动图像编码专家组）两个国际标准化组织的专家联合组成。JVT的工作目标是制定一个新的视频编码标准，以实现视频的高压缩比、高图像质量、良好的网络适应性等目标H264标准。H264标准将作为MPEG-4标准的一个新的部分（MPEG-4 part.10）而获得批准，是一个面向未来IP和无线环境下的新数字视频压缩编码标准。</p>
-<p>H264标准的主要特点如下：</p>
-<p>1．更高的编码效率：同H.263等标准的特率效率相比，能够平均节省大于50％的码率。</p>
-<p>2．高质量的视频画面：H.264能够在低码率情况下提供高质量的视频图像，在较低带宽上提供高质量的图像传输是H.264的应用亮点。</p>
-<p>3．提高网络适应能力：H.264可以工作在实时通信应用（如视频会议）低延时模式下，也可以工作在没有延时的视频存储或视频流服务器中。</p>
-<p>4．采用混合编码结构：同H.263相同，H.264也使用采用DCT变换编码加DPCM的差分编码的混合编码结构，还增加了如多模式运动估计、帧内预测、多帧预测、基于内容的变长编码、4x4二维整数变换等新的编码方式，提高了编码效率。</p>
-<p>5．H.264的编码选项较少：在H.263中编码时往往需要设置相当多选项，增加了编码的难度，而H.264做到了力求简洁的“回归基本”，降低了编码时复杂度。</p>
-<p>6．H.264可以应用在不同场合：H.264可以根据不同的环境使用不同的传输和播放速率，并且提供了丰富的错误处理工具，可以很好的控制或消除丢包和误码。</p>
-<p>7．错误恢复功能：H.264提供了解决网络传输包丢失的问题的工具，适用于在高误码率传输的无线网络中传输视频数据。</p>
-<p>8．较高的复杂度：264性能的改进是以增加复杂性为代价而获得的。据估计，H.264编码的计算复杂度大约相当于H.263的3倍，解码复杂度大约相当于H.263的2倍。</p>
-<p>H264标准各主要部分有Access Unit delimiter（访问单元分割符），SEI（附加增强信息），primary coded picture（基本图像编码），Redundant Coded Picture（冗余图像编码）。还有Instantaneous Decoding Refresh（IDR，即时解码刷新）、Hypothetical Reference Decoder（HRD，假想码流调度器）、Hypothetical Stream Scheduler（HSS，假想参考解码）。</p>
-<p>主要部分结构如图3.18所示：</p>
-<p><a target="_blank" rel="noopener" href="http://book.51cto.com/files/upload/img/20080418/1651580.png"><img src="http://book.51cto.com/files/upload/img/20080418/1651580.png" alt="img"></a></p>
-<p>H.264的目标应用涵盖了目前大部分的视频服务，如有线电视远程监控、交互媒体、数字电视、视频会议、视频点播、流媒体服务等。H.264为解决不同应用中的网络传输的差异。定义了两层：视频编码层（VCL：Video Coding Layer）负责高效的视频内容表示，网络提取层（NAL：Network Abstraction Layer）负责以网络所要求的恰当的方式对数据进行打包和传送。如图3.19所示。</p>
-<table>
-<thead>
-<tr>
-<th><a target="_blank" rel="noopener" href="http://new.51cto.com/files/upload/img/20080418/165517727.png"><img src="http://new.51cto.com/files/upload/img/20080418/165517727.png" alt="img"></a></th>
-</tr>
-</thead>
-<tbody><tr>
-<td>图3.19 标准的整体框架</td>
-</tr>
-</tbody></table>
-<p>基本层次（Baseline Profile）：该层次使用了H.264的除了B-Slices，CABAC以及交织编码模式外所有的特性。该层次主要使用于低时延的实时应用场合。</p>
-<p>主要层次（Main Profile）：包含Baseline profile的所有特性，并包括了B-slices，CABAC以及交织编码模式。它主要针对对时延要求不高，当压缩率和质量要求较高的场合。</p>
-<p>扩展层次(Profile X)：支持所有Baseline profile的特性，但不支持CABAC以及基于宏块的自适应帧场编码。该层次主要针对的时各种网络视频流传输方面的应用。</p>
-<p>CABAC</p>
-<p>CABAC是基于内容的自适应二进制算术编码，当参数entropy_coding_mode设置为1时，一个算术系统被用来编码和解码H.264的语法元素。</p>
-<p>H.264采用两种方法进行熵编码：CAVLC编码和CABAC编码算法。采用基于上下文的自适应二进制算术编码算法（CABAC），能够充分利用上下文信息和算术编码的优点，使得编码后的平均码长更逼近图像的信息熵，达到最佳的编码效率。采用CABAC算法进行编码，可以提高大约10％的编码率</p>
-<p>具体编码步骤：</p>
-<p>1二值化：CABAC使用二进制算术编码，所以要将数据先转换为二进制数据，这些原始数据包括变换系数和运动矢量等。转换后二进制数据为可变长编码的数据，并且还要将这些数据进行算术编码。</p>
-<p>2内容模式选择：内容模式是针对二进制数据进行统计的概率模型，这个模式根据之前编码的一些数据符号的统计特性从一些可选模式中选出。内容模式存储了每一位“1”或“0”的概率。</p>
-<p>3算术编码：算术编码器根据选择的内容模式对每一位进行编码。</p>
-<p>4概率校正：被选择的内容模式根据实际被编码的值进行校正，例如，如果数据比特流中有数值“1”，就将“1”的概率统计值加1。</p>
-<p>DCT变换</p>
-<p>H.264仍然采用对残差信号进行变换在量化后进行熵编码的模式来压缩空间冗余信息。使用了类似于4x4离散余弦变换DCT的整数变换而不是象MPEG4那样采用8x8DCT的浮点数变换。最终使用那种变换方式还用根据残余数据类型的不同来选择，帧内编码宏块的亮度DC系数（仅对16x16预测模式有效）采用4x4的矩阵，色度DC系数采用2x2的矩阵，对于其他的都采用4X4的块来变换。</p>
-<p>使用以整数为基础的空间变换可以提高计算速度（只使用加法和位移运算），但是使用整数变换要以不矢精确度为前提；整数变换的反变换过程中不会出现较大的误差，并且缩放矩阵的乘法集成到了量化中，降低了乘法的总次数。</p>
-<p>（1）4×4亮度分量的直流系数变换</p>
-<p>如果宏块被编码为16×16帧内模式，则每个4×4残差块首先用前面叙述的变换进行变换，然后对于每个4×4的变换后的直流（DC）系数进行4×4的二次变换，采用Hadamard变换。<br>正变换为：</p>
-<p><a target="_blank" rel="noopener" href="http://new.51cto.com/files/upload/img/20080418/165717576.gif"><img src="http://new.51cto.com/files/upload/img/20080418/165717576.gif" alt="img"></a> </p>
-<p><a target="_blank" rel="noopener" href="http://new.51cto.com/files/upload/img/20080418/165740418.gif"><img src="http://new.51cto.com/files/upload/img/20080418/165740418.gif" alt="img"></a> </p>
-<p>其中A是变换核矩阵<br>a=1/2</p>
-<p><a target="_blank" rel="noopener" href="http://new.51cto.com/files/upload/img/20080418/165826593.gif"><img src="http://new.51cto.com/files/upload/img/20080418/165826593.gif" alt="img"></a> </p>
-<p><a target="_blank" rel="noopener" href="http://new.51cto.com/files/upload/img/20080418/165844395.gif"><img src="http://new.51cto.com/files/upload/img/20080418/165844395.gif" alt="img"></a> </p>
-<p><a target="_blank" rel="noopener" href="http://new.51cto.com/files/upload/img/20080418/165936434.gif"><img src="http://new.51cto.com/files/upload/img/20080418/165936434.gif" alt="img"></a> </p>
-<p><a target="_blank" rel="noopener" href="http://new.51cto.com/files/upload/img/20080418/165954381.gif"><img src="http://new.51cto.com/files/upload/img/20080418/165954381.gif" alt="img"></a> </p>
-<p><a target="_blank" rel="noopener" href="http://new.51cto.com/files/upload/img/20080418/170014959.gif"><img src="http://new.51cto.com/files/upload/img/20080418/170014959.gif" alt="img"></a> </p>
-<p>（2）2×2色度块的DC系数变换</p>
-<p>每个宏块内的4个4×4色度块经过变换后，每个块的DC系数构成了一个2×2的块WD，对其进行2×2的Hadamard变换。</p>
-<p>正变换的公式为：</p>
-<p><a target="_blank" rel="noopener" href="http://new.51cto.com/files/upload/img/20080418/170126791.gif"><img src="http://new.51cto.com/files/upload/img/20080418/170126791.gif" alt="img"></a> </p>
-<p>反变换公式为：</p>
-<p><a target="_blank" rel="noopener" href="http://new.51cto.com/files/upload/img/20080418/170138864.gif"><img src="http://new.51cto.com/files/upload/img/20080418/170138864.gif" alt="img"></a> </p>
-<p>（3）如图3.18所示，展示了宏块中的变换块及其传送顺序。编号为-1的块在采用Intra16x16模式编码时0-15号4x4子块经整数DCT变换后的DC系数在经4x4的哈达变换的结果。块16、17是色度块的DC系数进行2x2哈达码变换的结果。其余的24块则进行4x4整数变换。</p>
-<table>
-<thead>
-<tr>
-<th><a target="_blank" rel="noopener" href="http://new.51cto.com/files/upload/img/20080418/170243187.png"><img src="http://new.51cto.com/files/upload/img/20080418/170243187.png" alt="img"></a></th>
-</tr>
-</thead>
-<tbody><tr>
-<td>图3.20 宏块中的变换及其传送顺序</td>
-</tr>
-</tbody></table>
-<p>多种运动补偿块</p>
-<p>有7种形状的运动补偿可供选用，这7种块是：INTER16x16，INTER16x8，INTER8x16，INTER8x8，INTER8x4，INTER4x8，INTER4x4。根据运动补偿采用的块尺寸的不同，宏块的编码模式分为四种，前三种模式分别按照一个16x16块、两个16x8块和两个8x16块来进行运动补偿；最后一种模式记作P8x8，在P8x8模式下，一个宏块被分为4个8x8的子块，而每一个子块又有4种可能的子模式，分别按照一个8x8块、两个8x4块、两个4x8块及四个4x4块进行运动补偿，如图3.19所示，第一行是宏块四种模式，第二行是子块四种模式。</p>
-<p><a target="_blank" rel="noopener" href="http://new.51cto.com/files/upload/img/20080418/170410300.png"><img src="http://new.51cto.com/files/upload/img/20080418/170410300.png" alt="img"></a> </p>
-<table>
-<thead>
-<tr>
-<th><a target="_blank" rel="noopener" href="http://new.51cto.com/files/upload/img/20080418/170437720.png"><img src="http://new.51cto.com/files/upload/img/20080418/170437720.png" alt="img"></a></th>
-</tr>
-</thead>
-<tbody><tr>
-<td>图3.21 宏块划分方式</td>
-</tr>
-</tbody></table>
-<p>块大小的选择是否合理对于压缩效果的好坏有很大的影响，通常来说，对于变化缓慢的部分采用较大分块效果比较好，对于包含较多细节的部分则应该采用较小的分块方式。</p>
-<p>1/4像素精度运动估计</p>
-<p>帧内编码宏块的每一分块都是由参考帧中相同大小的区域预测得到。这两个区域之间的偏移量即运动矢量。由于图像的运动不可能总是整像素的。因此引入了亚像素运动矢量。对亮度分量，运动矢量的分辨率为1/4像素。由于参考帧中本身不可能存在亚像素采样点，因此需要利用其临近像素内插产生亚像素采样点。亚像素采样点的内插产生过程，如图3.20所示</p>
-<table>
-<thead>
-<tr>
-<th><a target="_blank" rel="noopener" href="http://new.51cto.com/files/upload/img/20080418/170531554.png"><img src="http://new.51cto.com/files/upload/img/20080418/170531554.png" alt="img"></a></th>
-</tr>
-</thead>
-<tbody><tr>
-<td>图3.22 亚像素采样点</td>
-</tr>
-</tbody></table>
-<p>半像素内插值分别由运动于水平和垂直方向的一维6阶滤波器产生。1/4像素值由整数像素和半像素点求均值取得。<br>例如：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">b&#x3D;round（（E-5F+20G+20H-5I+J）&#x2F;32） a&#x3D;round（（G+b）&#x2F;2） e&#x3D;round（（b+h）&#x2F;2）</span><br></pre></td></tr></table></figure>
-<p>由于亮度分量中的1/4像素精度运动矢量将在色度分量中产生1/8像素精度。因此，采用线性内插法产生1/8像素采样点。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">a&#x3D;round（（[（8-dx）.（8-dy）A+dx.（8-dy）B+（8-dx）.dyC+dx.dyD]&#x2F;64）</span><br></pre></td></tr></table></figure>
-<p>图片分割</p>
-<p>H.264支持slice结构的图片分割。一个slice有一帧图片内的若干宏块组成。编码器端对slice种包含的宏块数目没有限制。一个slice可以仅包含一个宏块也可以包含该帧中的所有宏块。然而，任何一个宏块都只能包含在某一个slice中，不允许重复出现（在冗余slice方法中例外）。<br>采用slice结构的主要动机是使编码的slice大小能适应不同的MTU大小。当它同时能应用于交叉打包等方法的实现方案中。</p>
-<p>多参考帧选择</p>
-<p>多参考帧选择在之前的一些视频编码标准中也可以得到应用。该方法尤其使用于具有反馈机制的系统中。但在时延要求较高的应用中意义不大。<br>与以往标准的P帧、B帧不同，H.264采用了前向与后向多个参考帧的预测</p>
-<p>数据分快</p>
-<p>通常，宏块中素有的码元都是被编码在单一的比特串中的。数据分块则为每一个slice创建多个比特串。<br>在H.264中，使用了三种不同类型的数据分块。</p>
-<p>头信息块，包括宏块类型，量化参数，运动矢量。这些信息是最重要的，因为离开他们，被的数据块种的码元都无法使用。该数据分块称为A类数据分块。</p>
-<p>帧内编码信息数据块，称为B类数据分块。它包含帧内编码宏块类型，帧内编码系数。对应的slice来说，B类数据分块的可用性依赖于A类数据分块。和帧间编码信息数据块不通的是，帧内编码信息能防止进一步的偏差，因此比帧间编码信息更重要。</p>
-<p>帧间编码信息数据块，称为C类数据分块。它包含帧间编码宏块类型，帧间编码系数。它通常是slice种最大的一部分。帧间编码信息数据块是不重要的一部分。它所包含的信息并不提供编解码器之间的同步。C类数据分块的可用性也依赖于A类数据分块，但于B类数据分块无关。</p>
-<p>当采用数据分块方式的时候，源编码器将不通类型的码元放到三个不同的比特缓冲器种此外，slice大小也需要调整，以使最大数据分块不会大于最大的MTU尺寸。以此，对数据分块进行操作的是源编码器而不是NAL。<br>在解码器端，在开始正确解码之前必须获得所有数据分块信息。然而，如果帧间或帧内编码数据块信息丢失了，头信息仍然能够有效地应用于提高差错恢复效率。头信息种包含宏块类型，用动矢量等信息，因此能够据此较高质量地复制信息。而仅仅丢失了一些图像纹理信息。</p>
-<p>参数集</p>
-<p>序列参数集包括与一图片序列相关地所有信息。图像参数集包含与图像中所有slice相关地信息。在解码器端可以存储多个不同地序列和图片参数集。编码器可以选择适当地图片参数集，图片参数集本身又包含所引用地序列参数集信息。</p>
-<p>参数集的创造性应用极大地提高了错误恢复性能。在容错环境中使用参数集地关键是确保参数集能可靠并及时地到达接受端解码器。一次可以用频带外可靠通讯控制协议传送参数集，并确保在解码器从实时通讯信道接收到第一个需要参考该参数集地slice数据之前送达。或者也可以在频带内传输，但必须采用一些应用层保护措施（例如传送一参数集地多个复制，以提高至少一个复制到底目的地地概率）。第三中方案是在编码器和解码器端预先放置一些参数集，编解码器都必须在其中选择参数集。</p>
-<p>可变宏块排序</p>
-<p>可变宏块排序（FMO，Flexible Macroblock Ordering）可以在Baseline和Ext4ended模式中使用，但不允许在Main模式重使用。可变宏块排序允许将宏块不按照扫描顺序分配给slice。具体地分配策略由一宏块分配映射图（MBAmap）规定。在slice内，宏块仍然按照正常地扫描顺序编码。</p>
-<p>该特性提供了一种将一帧图像中的宏块分配到多个slice中的模式，每个slice都是一个独立的编码单位，无论是帧间还是帧内编码都不能越界，如果在传输过程中出现数据丢失的情况，可以利用已接收到的宏块数据来对丢失的宏块数据进行恢复。</p>
-<table>
-<thead>
-<tr>
-<th><a target="_blank" rel="noopener" href="http://new.51cto.com/files/upload/img/20080418/170821603.png"><img src="http://new.51cto.com/files/upload/img/20080418/170821603.png" alt="img"></a></th>
-</tr>
-</thead>
-<tbody><tr>
-<td>图3.23 可变宏块编码顺序</td>
-</tr>
-</tbody></table>
-<p>slice</p>
-<p>slice是一个类似于H.263中图像组（GOP）的概念，一个slice是由一系列按光栅扫描顺序排列的宏块组成。一般情况下每个宏块均包含一个16×16 的亮度阵列，当视频格式不是单色时，还包含和两个相应的色度阵列。如果没有使用宏块自适应帧/场解码，每个宏块代表图像中的一个空间矩形区域。例如，如图3.22所示，一幅图像被分为两个条带。</p>
-<table>
-<thead>
-<tr>
-<th><a target="_blank" rel="noopener" href="http://new.51cto.com/files/upload/img/20080418/170851210.png"><img src="http://new.51cto.com/files/upload/img/20080418/170851210.png" alt="img"></a></th>
-</tr>
-</thead>
-<tbody><tr>
-<td>图3.24 slice对象</td>
-</tr>
-</tbody></table>
-<p>每个slice都是一个独立的编码单位，无论是帧间还是帧内编码都不能越界。冗余slice允许编码器在同一数据流中嵌入同一slice中宏块地一个或多个冗余表示。这种做法和传输层冗余技术，例如包复制等，关键区别是在冗余slice中宏块地冗余表示可以使用不同地编码参数编码。例如，首先要表示可以使用相对较低的量化系数以获得较低的图像质量，而在冗余表示中可以用相对较高的量化系数以减少比特数。当解码器正确接受到首要表示时，将冗余表示丢弃。而如果首要表示由于包丢失等原因无法正确获得，能够用冗余表示中地信息将相应slice数据恢复。冗余slice 最初是为支持高差错无线通信环境而引入的，但在基于IP的环境中同样有效。</p>
-<p>通过块匹配估计运动的方法</p>
-<p>完全抵消所有运动的运动补偿器将产生非常好的预测帧，以至于实际上在差别图片中不会存在任何功率。我们需要相对较多的数据以详细描述运动，但是只需要相对教少的数据，以描述差别帧。无可否认，甚至使用艺术技术也不可能从一般的帧源中识别和测量任何对象的运动。我们不得不满足于简化图片模型，例如经常使用的块匹配技术。除了次优的运动补偿之外，差别图片所需的数据速率比没有运动补偿所需的速率要小很多。进一步而言，我们的优势是特别简单，因而节省描述运动所需的位数。这在部分程度哂纳感弥补了差别图片的信号功率的不足，这种信号没有完全最小化。</p>
-<p>使用块匹配技术的运动估计器</p>
-<p>在数据压缩中，块匹配运动估计器可以任意处理每个新帧，使其用大小相同的直接相邻的对象进行传送。另外，对象仅仅能在2维平面上在一个方向上统一地移动。因而，被传输的帧被分割为一系列矩形图案块，它们是连续产生的。运动预测器假设图案块仅仅能在x和y方向上移动一个最大值。对于每个图案块，存在一个搜索区域，根据基本模型，在先前帧的这个区域内可以找到那个图案块。在使用等长步长的情况下，图案块逐渐移动通过搜索区域内的连续位置，并且每个位置都和旧图片进行比较。<br>位置变换也称为位移，如果某个位移达到了最佳的相似性或匹配结果，则它称为搜索后运动。然后，运动补偿帧的块将填充属于先前帧的块的内容，这将和前面搜索的图案块产生最佳的匹配。通过这种方式，运动补偿帧可以和瞬态帧尽可能地接近。</p>
-<p>位移中的x和y成分通过侧向通道而传送到接受器，目的是可以从旧帧中构造运动补偿帧。对先前帧的内容执行这个操作，从而对已知图片进行这个操作，这就是这种编码技术的本质优点。</p>
-<p>向量的数据速率取决于查找区域的带，从而取决于最大的位移，以及期望的向量的精确程度。对象的轮廓没有必要传送，原因是所有的对象具有相同的矩形。</p>
-<p>P图像的VLC编码</p>
-<p>VLC是可变长编码，VLC是统计编码技术，它的基本思想是：对出现频率较高的数值分配比特数较少的码字，而对出现频率较低的数值分配比特数较多的码字，因此从总的效果看，数据量比用均匀分配比特数的数据量要少。可变长编码是对Huffman编码的改进</p>
-<p>P图像是参考过去的帧内图像或者过去预测得到得图像用运动补偿预测技术进行编码，P图像得编码也是以图像宏块为基本编码单元。预测编码得 基础是运动估值，它将直接影响到整个系统得编码效率和压缩性能，因此希望找到一种预测精度高同时计算量又小得运动估值算法。</p>
-<p>正如I画面一样，每一幅P画面被分为一片或多片，每一片又被划分为若干宏块。对P画面的编码要比I画面复杂的多，因为要构造运动补偿宏块。运动补偿宏块与当前宏块的差值被一个二维的DCT变换为8x8的变换系数矩阵，这些系数在被量化成一组量化系数，最后，对量化后的系数采用行程长度技术编码。表3.11和3.12分别给出了P画面和B画面中所支持的宏块类型及VLC编码。</p>
-<p>表3.11 P画面中的宏块类型及VLC编码</p>
-<table>
-<thead>
-<tr>
-<th>宏块类型</th>
-<th>VLC码</th>
-<th>INTRA</th>
-<th>MOTION FORWARD</th>
-<th>CODED PATTERN</th>
-<th>QUANT</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>pred_mc</td>
-<td>1</td>
-<td>0</td>
-<td>1</td>
-<td>1</td>
-<td>0</td>
-</tr>
-<tr>
-<td>pred_c</td>
-<td>01</td>
-<td>0</td>
-<td>0</td>
-<td>1</td>
-<td>0</td>
-</tr>
-<tr>
-<td>pred_m</td>
-<td>001</td>
-<td>0</td>
-<td>1</td>
-<td>0</td>
-<td>0</td>
-</tr>
-<tr>
-<td>intra_d</td>
-<td>0001 1</td>
-<td>1</td>
-<td>0</td>
-<td>0</td>
-<td>0</td>
-</tr>
-<tr>
-<td>pred_mcq</td>
-<td>0001 0</td>
-<td>0</td>
-<td>1</td>
-<td>1</td>
-<td>1</td>
-</tr>
-<tr>
-<td>pred_cq</td>
-<td>0000 1</td>
-<td>0</td>
-<td>0</td>
-<td>1</td>
-<td>1</td>
-</tr>
-<tr>
-<td>intra_q</td>
-<td>0000 01</td>
-<td>1</td>
-<td>0</td>
-<td>0</td>
-<td>1</td>
-</tr>
-<tr>
-<td>skipped</td>
-<td>无</td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-</tbody></table>
-<p>表3.12 B画面中的宏块类型及VLC编码</p>
-<table>
-<thead>
-<tr>
-<th>宏块类型</th>
-<th>VLC码</th>
-<th>INTRA</th>
-<th>MOTION FORWARD</th>
-<th>MOTION BACKWARD</th>
-<th>CODED PATTERN</th>
-<th>QUANT</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>pred_I</td>
-<td>10</td>
-<td>0</td>
-<td>1</td>
-<td>1</td>
-<td>0</td>
-<td>0</td>
-</tr>
-<tr>
-<td>pred_ic</td>
-<td>11</td>
-<td>0</td>
-<td>1</td>
-<td>1</td>
-<td>1</td>
-<td>0</td>
-</tr>
-<tr>
-<td>pred_b</td>
-<td>010</td>
-<td>0</td>
-<td>0</td>
-<td>1</td>
-<td>0</td>
-<td>0</td>
-</tr>
-<tr>
-<td>pred_bc</td>
-<td>011</td>
-<td>0</td>
-<td>0</td>
-<td>1</td>
-<td>1</td>
-<td>0</td>
-</tr>
-<tr>
-<td>pred_f</td>
-<td>0010</td>
-<td>0</td>
-<td>1</td>
-<td>0</td>
-<td>0</td>
-<td>0</td>
-</tr>
-<tr>
-<td>pred_fc</td>
-<td>0011</td>
-<td>0</td>
-<td>1</td>
-<td>0</td>
-<td>1</td>
-<td>0</td>
-</tr>
-<tr>
-<td>intra_d</td>
-<td>0001 1</td>
-<td>1</td>
-<td>0</td>
-<td>0</td>
-<td>0</td>
-<td>0</td>
-</tr>
-<tr>
-<td>pred_icq</td>
-<td>0001 0</td>
-<td>0</td>
-<td>1</td>
-<td>1</td>
-<td>0</td>
-<td>1</td>
-</tr>
-<tr>
-<td>pred_fcq</td>
-<td>0000 11</td>
-<td>0</td>
-<td>1</td>
-<td>0</td>
-<td>0</td>
-<td>1</td>
-</tr>
-<tr>
-<td>pred_bcq</td>
-<td>0000 10</td>
-<td>1</td>
-<td>0</td>
-<td>1</td>
-<td>1</td>
-<td>1</td>
-</tr>
-<tr>
-<td>intra_q</td>
-<td>0000 01</td>
-<td>1</td>
-<td>0</td>
-<td>0</td>
-<td>0</td>
-<td>1</td>
-</tr>
-<tr>
-<td>skippde</td>
-<td>无</td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-</tbody></table>
-<p>每一帧B画面被划分成一片或多片，每一片又被划分为若干宏块。由于要构造几种类型的运动补偿宏块：前向、后向、插播，所以对B画面的编码要比对P画面复杂的多。首先用一个二维DCT将运动补偿宏块与当前块之间的差值变换为8x8的变换系数矩阵，然后对着些系数进行量化，产生一组量化的系数，最后对这些量化后的系数用行程长度技术进行编码。</p>
-<p>编码器不需要存储解码的B画面，因为B画面不用于运动补偿。</p>
-<p>B画面宏块比P画面多了 几种类型，如果仅有前向运动矢量，则像P画面那样，从前面的一帧画面种构造运动补偿宏块。如果仅有后向运动矢量，则从后面的一帧画面种构造运动补偿宏块。如果既有前向也有后向运动矢量，则从前面以及后面的画面种构造运动补偿宏块，对结果求平均，用以形成插补宏块。</p>
-<p>如同需要存储I画面一样，编码器也需要存储解了码的P画面，一位该P画面很可能会作为运动补偿的开始点。因此，编码器将要从量化系数种重构该画面的图像。<br>H.264所支持的帧编码模式如表3.13所示。</p>
-<p>表3.13 帧编码模式</p>
-<table>
-<thead>
-<tr>
-<th>帧类型</th>
-<th>描述</th>
-<th>支持的框架</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>I(Intra)</td>
-<td>只包含帧内预测的宏块(I)</td>
-<td>全部</td>
-</tr>
-<tr>
-<td>P(Predicted)</td>
-<td>包含帧间预测宏块(P)和I型宏块</td>
-<td>全部</td>
-</tr>
-<tr>
-<td>B(Bi-Predictive)</td>
-<td>包含帧间双向预测宏块(B)和I型宏块</td>
-<td>扩展和主</td>
-</tr>
-<tr>
-<td>SP(Switching P)</td>
-<td>利于在编码的比特流中切换,包括I和P宏块</td>
-<td>扩展</td>
-</tr>
-<tr>
-<td>SI(Switching I)</td>
-<td>利于在编码的比特流中切换,包含SI宏块(一种特殊的帧内编码宏块)</td>
-<td>扩展</td>
-</tr>
-</tbody></table>
+          <p><strong><em>APN 设置及查询</em></strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">getDefaultAPN</span><span class="params">(Context context)</span></span>&#123;</span><br><span class="line">       Cursor mCursor = context.getContentResolver().query(Uri.parse(<span class="string">&quot;content://telephony/carriers/preferapn&quot;</span>),</span><br><span class="line">               <span class="keyword">null</span>, <span class="keyword">null</span>, <span class="keyword">null</span>, <span class="keyword">null</span>);</span><br><span class="line">       <span class="keyword">while</span> (mCursor != <span class="keyword">null</span> &amp;&amp; mCursor.moveToNext()) &#123;</span><br><span class="line">           String id = mCursor.getString(mCursor.getColumnIndex(<span class="string">&quot;_id&quot;</span>));</span><br><span class="line">           String name = mCursor.getString(mCursor.getColumnIndex(<span class="string">&quot;name&quot;</span>));</span><br><span class="line">           String apn = mCursor.getString(mCursor.getColumnIndex(<span class="string">&quot;apn&quot;</span>));</span><br><span class="line">           String type = mCursor.getString(mCursor.getColumnIndex(<span class="string">&quot;type&quot;</span>));</span><br><span class="line">           Log.d(TAG,<span class="string">&quot;DefaultAPN:&quot;</span>+id+<span class="string">&quot; &quot;</span>+name+<span class="string">&quot; &quot;</span>+apn+<span class="string">&quot; &quot;</span>+type);</span><br><span class="line">       &#125;</span><br><span class="line">       <span class="keyword">if</span>(mCursor != <span class="keyword">null</span>)</span><br><span class="line">           mCursor.close();</span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line">   <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">checkAPN</span><span class="params">(Context context,String apn)</span></span>&#123;</span><br><span class="line">      <span class="keyword">int</span> apnId = -<span class="number">1</span>;</span><br><span class="line">       ContentResolver resolver = context.getContentResolver();</span><br><span class="line">       Cursor c = resolver.query(Uri.parse(<span class="string">&quot;content://telephony/carriers&quot;</span>), <span class="keyword">new</span> String[] &#123; <span class="string">&quot;_id&quot;</span>, <span class="string">&quot;name&quot;</span>, <span class="string">&quot;apn&quot;</span> &#125;,</span><br><span class="line">               <span class="string">&quot;apn like &#x27;%&quot;</span>+apn+<span class="string">&quot;%&#x27;&quot;</span>, <span class="keyword">null</span>, <span class="keyword">null</span>);</span><br><span class="line">       <span class="keyword">if</span> (c != <span class="keyword">null</span> &amp;&amp; c.moveToNext()) &#123;</span><br><span class="line">           apnId = c.getShort(c.getColumnIndex(<span class="string">&quot;_id&quot;</span>));</span><br><span class="line">       &#125;</span><br><span class="line">       <span class="keyword">if</span>(c != <span class="keyword">null</span>)</span><br><span class="line">           c.close();</span><br><span class="line">       <span class="keyword">return</span> apnId;</span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line">   <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">AddApn</span><span class="params">(Context context,String name,String apn)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">       <span class="keyword">int</span> apnId = -<span class="number">1</span>;</span><br><span class="line">       TelephonyManager iPhoneManager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);</span><br><span class="line">       String NUMERIC = iPhoneManager.getSimOperator();</span><br><span class="line">       <span class="keyword">if</span> (NUMERIC == <span class="keyword">null</span>) &#123;</span><br><span class="line">           <span class="keyword">return</span> -<span class="number">1</span>;</span><br><span class="line">       &#125;</span><br><span class="line">       ContentResolver resolver = context.getContentResolver();</span><br><span class="line">       ContentValues values = <span class="keyword">new</span> ContentValues();</span><br><span class="line"></span><br><span class="line">       values.put(<span class="string">&quot;name&quot;</span>,name);</span><br><span class="line">       values.put(<span class="string">&quot;apn&quot;</span>,apn);</span><br><span class="line">       values.put(<span class="string">&quot;type&quot;</span>, <span class="string">&quot;default,xcap,supl&quot;</span>);</span><br><span class="line">       values.put(<span class="string">&quot;numeric&quot;</span>, NUMERIC);</span><br><span class="line">       values.put(<span class="string">&quot;mcc&quot;</span>, NUMERIC.substring(<span class="number">0</span>, <span class="number">3</span>));</span><br><span class="line">       values.put(<span class="string">&quot;mnc&quot;</span>, NUMERIC.substring(<span class="number">3</span>));</span><br><span class="line">       values.put(<span class="string">&quot;proxy&quot;</span>, <span class="string">&quot;&quot;</span>);</span><br><span class="line">       values.put(<span class="string">&quot;port&quot;</span>, <span class="string">&quot;&quot;</span>);</span><br><span class="line">       values.put(<span class="string">&quot;mmsproxy&quot;</span>, <span class="string">&quot;&quot;</span>);</span><br><span class="line">       values.put(<span class="string">&quot;mmsport&quot;</span>, <span class="string">&quot;&quot;</span>);</span><br><span class="line">       values.put(<span class="string">&quot;user&quot;</span>, <span class="string">&quot;&quot;</span>);</span><br><span class="line">       values.put(<span class="string">&quot;server&quot;</span>, <span class="string">&quot;&quot;</span>);</span><br><span class="line">       values.put(<span class="string">&quot;password&quot;</span>, <span class="string">&quot;&quot;</span>);</span><br><span class="line">       values.put(<span class="string">&quot;mmsc&quot;</span>, <span class="string">&quot;&quot;</span>);</span><br><span class="line">       Cursor c = <span class="keyword">null</span>;</span><br><span class="line">       <span class="keyword">try</span> &#123;</span><br><span class="line">           Uri newRow = resolver.insert(Uri.parse(<span class="string">&quot;content://telephony/carriers&quot;</span>), values);</span><br><span class="line">           <span class="keyword">if</span> (newRow != <span class="keyword">null</span>) &#123;</span><br><span class="line">               c = resolver.query(newRow, <span class="keyword">null</span>, <span class="keyword">null</span>, <span class="keyword">null</span>, <span class="keyword">null</span>);</span><br><span class="line">               <span class="keyword">if</span>(c != <span class="keyword">null</span>)&#123;</span><br><span class="line">                   apnId = c.getShort(c.getColumnIndex(<span class="string">&quot;_id&quot;</span>));</span><br><span class="line">                   c.moveToFirst();</span><br><span class="line">               &#125;</span><br><span class="line">           &#125;</span><br><span class="line">       &#125; <span class="keyword">catch</span> (SQLException e) &#123;</span><br><span class="line">           e.printStackTrace();</span><br><span class="line">       &#125;</span><br><span class="line">       <span class="keyword">if</span> (c != <span class="keyword">null</span>)</span><br><span class="line">           c.close();</span><br><span class="line"></span><br><span class="line">       <span class="keyword">return</span> apnId;</span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line">   <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">boolean</span> <span class="title">setDefaultApn</span><span class="params">(Context context,<span class="keyword">int</span> apnId)</span> </span>&#123;</span><br><span class="line">       <span class="keyword">boolean</span> ret = <span class="keyword">false</span>;</span><br><span class="line">       ContentResolver resolver = context.getContentResolver();</span><br><span class="line">       ContentValues values = <span class="keyword">new</span> ContentValues();</span><br><span class="line">       values.put(<span class="string">&quot;apn_id&quot;</span>, apnId);</span><br><span class="line">       <span class="keyword">try</span> &#123;</span><br><span class="line">           Uri uri = Uri.parse(<span class="string">&quot;content://telephony/carriers/preferapn&quot;</span>);</span><br><span class="line">           resolver.update(uri, values, <span class="keyword">null</span>, <span class="keyword">null</span>);</span><br><span class="line">           Cursor c = resolver.query(uri, <span class="keyword">new</span> String[] &#123; <span class="string">&quot;name&quot;</span>, <span class="string">&quot;apn&quot;</span> &#125;, <span class="string">&quot;_id=&quot;</span> + apnId, <span class="keyword">null</span>, <span class="keyword">null</span>);</span><br><span class="line">           <span class="keyword">if</span> (c != <span class="keyword">null</span>) &#123;</span><br><span class="line">               c.close();</span><br><span class="line">               ret = <span class="keyword">true</span>;</span><br><span class="line">           &#125;</span><br><span class="line">       &#125; <span class="keyword">catch</span> (SQLException e) &#123;</span><br><span class="line">           e.printStackTrace();</span><br><span class="line">       &#125;</span><br><span class="line">       <span class="keyword">return</span> ret;</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
+      
+    </div>
 
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://edward.org.cn/2020/12/31/Android/cpu_info.sh/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/avatar.gif">
+      <meta itemprop="name" content="Edward">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="点点滴滴">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/12/31/Android/cpu_info.sh/" class="post-title-link" itemprop="url">cpu_info</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-12-31 15:36:42" itemprop="dateCreated datePublished" datetime="2020-12-31T15:36:42+08:00">2020-12-31</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-09-29 16:10:06" itemprop="dateModified" datetime="2020-09-29T16:10:06+08:00">2020-09-29</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Android/" itemprop="url" rel="index"><span itemprop="name">Android</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2020/12/31/Android/cpu_info.sh/" class="post-meta-item leancloud_visitors" data-flag-title="cpu_info" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="meta">#!/busybox/sh</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#print top info if you need</span></span><br><span class="line"><span class="comment">#top -t -m 9 &amp;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">while</span> [ 1 ]; <span class="keyword">do</span> </span><br><span class="line">zone_type=<span class="string">&quot;zone?&quot;</span> </span><br><span class="line">maxTemp=0</span><br><span class="line">Cur_zone=9</span><br><span class="line"><span class="keyword">while</span> [ <span class="variable">$Cur_zone</span> -ge 0 ]; <span class="keyword">do</span></span><br><span class="line">    Cur_temp=`cat /sys/class/thermal/thermal_zone<span class="variable">$Cur_zone</span>/temp`</span><br><span class="line">    <span class="keyword">if</span> [ <span class="variable">$Cur_temp</span> -gt <span class="variable">$maxTemp</span> ]; <span class="keyword">then</span></span><br><span class="line">        maxTemp=<span class="variable">$Cur_temp</span></span><br><span class="line">        zone_type=`cat /sys/class/thermal/thermal_zone<span class="variable">$Cur_zone</span>/<span class="built_in">type</span>`</span><br><span class="line">        zone_type=<span class="string">&quot;<span class="variable">$zone_type</span>-<span class="variable">$Cur_zone</span>&quot;</span></span><br><span class="line">    <span class="keyword">fi</span></span><br><span class="line">    <span class="built_in">let</span> <span class="string">&quot;Cur_zone=<span class="variable">$Cur_zone</span> - 1&quot;</span></span><br><span class="line"><span class="keyword">done</span></span><br><span class="line">cpu_Temp=`cat /sys/class/thermal/thermal_zone7/temp`</span><br><span class="line">freq=`cat /sys/devices/system/cpu/cpu0/cpufreq/cpuinfo_cur_freq`</span><br><span class="line">core=`cat /proc/cpuinfo | grep <span class="string">&quot;processor&quot;</span> | busybox wc -l`</span><br><span class="line">tm=`date +%H:%M:%S`</span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;<span class="variable">$tm</span> maxTemp(<span class="variable">$zone_type</span>)=<span class="variable">$maxTemp</span> cpu_Temp=<span class="variable">$cpu_Temp</span> core=<span class="variable">$core</span> freq=<span class="variable">$freq</span>&quot;</span></span><br><span class="line">sleep 2</span><br><span class="line"><span class="keyword">done</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://edward.org.cn/2020/12/31/Android/hook.sh/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/avatar.gif">
+      <meta itemprop="name" content="Edward">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="点点滴滴">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/12/31/Android/hook.sh/" class="post-title-link" itemprop="url">hook</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-12-31 15:36:42" itemprop="dateCreated datePublished" datetime="2020-12-31T15:36:42+08:00">2020-12-31</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-09-29 16:12:23" itemprop="dateModified" datetime="2020-09-29T16:12:23+08:00">2020-09-29</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Android/" itemprop="url" rel="index"><span itemprop="name">Android</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2020/12/31/Android/hook.sh/" class="post-meta-item leancloud_visitors" data-flag-title="hook" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="meta">#!/busybox/sh</span></span><br><span class="line"></span><br><span class="line">PATH=/system/bin:/busybox:<span class="variable">$PATH</span></span><br><span class="line"></span><br><span class="line">LOG ()</span><br><span class="line">&#123;</span><br><span class="line">    <span class="built_in">local</span> log_file=/dev/console</span><br><span class="line">    <span class="built_in">local</span> tag=<span class="string">&quot;CM_hook&quot;</span></span><br><span class="line"></span><br><span class="line">    <span class="built_in">local</span> sDate=`date <span class="string">&quot;+%Y-%m-%d %H:%M:%S&quot;</span>`</span><br><span class="line">    <span class="built_in">echo</span> <span class="string">&quot;[<span class="variable">$tag</span>] <span class="variable">$&#123;sDate&#125;</span> <span class="variable">$@</span>&quot;</span> &gt; <span class="variable">$log_file</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">LOG <span class="string">&quot;Start <span class="variable">$0</span>&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#turn off radar power</span></span><br><span class="line">ln -s /dev/ttyMT1  /dev/ttyS1</span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;0&quot;</span>&gt;/sys/devices/virtual/misc/radar/ctl</span><br><span class="line"></span><br><span class="line">ln -s /dev/ttyMT2  /dev/ttyS2</span><br><span class="line">ln -s /dev/ttyMT3  /dev/ttyS3</span><br><span class="line"></span><br><span class="line"><span class="built_in">echo</span> 0 &gt; /proc/hps/enabled</span><br><span class="line"><span class="built_in">echo</span> performance &gt; /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor</span><br><span class="line"><span class="built_in">echo</span> 4 &gt;proc/cpufreq/cpufreq_oppidx </span><br><span class="line"><span class="built_in">echo</span> 0 &gt;sys/devices/system/cpu/cpu3/online </span><br><span class="line"><span class="built_in">echo</span> 0 &gt;sys/devices/system/cpu/cpu2/online </span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">#set wifi bt mac addr</span></span><br><span class="line">/system/bin/wifibt_mac random&amp;</span><br><span class="line"></span><br><span class="line">gsensor_bmi=`cat /proc/cmdline | grep gs=bmi160`</span><br><span class="line"><span class="keyword">if</span> [ -n <span class="string">&quot;<span class="variable">$gsensor_bmi</span>&quot;</span> ]; <span class="keyword">then</span></span><br><span class="line">    LOG <span class="string">&quot;trigger bmibmmd for gsensor of bmi160&quot;</span></span><br><span class="line">    setprop sys.hw_gsensor.bmi 1</span><br><span class="line"><span class="keyword">fi</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">local</span> t=300</span><br><span class="line"><span class="built_in">local</span> tm_boot=0</span><br><span class="line"><span class="built_in">local</span> boot_ok=</span><br><span class="line"><span class="keyword">while</span> [ <span class="variable">$t</span> -gt 0 ]; <span class="keyword">do</span></span><br><span class="line">    boot_ok=`getprop sys.boot_completed`</span><br><span class="line">    <span class="keyword">if</span> [ <span class="string">&quot;<span class="variable">$boot_ok</span>&quot;</span> == <span class="string">&quot;1&quot;</span> ]; <span class="keyword">then</span></span><br><span class="line">        LOG <span class="string">&quot;<span class="variable">$0</span>: Boot finished(<span class="variable">$tm_boot</span>), then trigger xlog&quot;</span></span><br><span class="line">        <span class="comment">#/system/bin/xlog filter-set on</span></span><br><span class="line">        /system/bin/xlog filter-reset</span><br><span class="line">        <span class="comment">#am start -n com.mediatek.engineermode/.EngineerMode</span></span><br><span class="line">        <span class="comment">#am start -n com.mediatek.mtklogger/.MainActivity</span></span><br><span class="line">        <span class="built_in">break</span></span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">        sleep 2</span><br><span class="line">        <span class="built_in">let</span> <span class="string">&quot;t = t - 1&quot;</span></span><br><span class="line">        <span class="built_in">let</span> <span class="string">&quot;tm_boot = tm_boot + 2&quot;</span></span><br><span class="line">    <span class="keyword">fi</span></span><br><span class="line"><span class="keyword">done</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">local</span> cta=`getprop ro.cta`</span><br><span class="line"><span class="keyword">if</span> [ <span class="string">&quot;<span class="variable">$cta</span>&quot;</span> == <span class="string">&quot;1&quot;</span> ]; <span class="keyword">then</span></span><br><span class="line">    iptables -I INPUT -s 10.0.0.172 -j DROP</span><br><span class="line">    iptables -I INPUT -s mmsc.monternet.com -j DROP</span><br><span class="line"><span class="keyword">fi</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#remove it to init.project.rc</span></span><br><span class="line"><span class="comment">#default param tempCtrl/less/full Trig: 100 85 75</span></span><br><span class="line"><span class="comment">#/system/backup/bin/loop.sh 100 85 75 &amp;</span></span><br><span class="line"></span><br><span class="line">memTotal=`cat /proc/meminfo | grep MemTotal | sed <span class="string">&#x27;s/[ ]\+/ /g&#x27;</span> | cut -d<span class="string">&#x27; &#x27;</span> -f2`</span><br><span class="line">memTotal=`expr <span class="variable">$memTotal</span> \/ 1024`</span><br><span class="line"></span><br><span class="line"><span class="built_in">local</span> min_free_kbytes=`cat /proc/sys/vm/min_free_kbytes`</span><br><span class="line"></span><br><span class="line">chmod 660 /sys/module/lowmemorykiller/parameters/minfree</span><br><span class="line">lowmemkiller=`cat /sys/module/lowmemorykiller/parameters/minfree`</span><br><span class="line">LOG <span class="string">&quot;memTotal=<span class="variable">$memTotal</span> MB, org min_free_kbytes=<span class="variable">$min_free_kbytes</span> lowmemkiller=<span class="variable">$lowmemkiller</span>&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> [ <span class="variable">$memTotal</span> -gt 768 ]; <span class="keyword">then</span></span><br><span class="line">    <span class="comment">#1G DDR</span></span><br><span class="line">    min_free_kbytes=28672</span><br><span class="line">    lowmemkiller=<span class="string">&quot;6144,8192,16384,20480,22528,24576&quot;</span></span><br><span class="line"><span class="keyword">elif</span> [ <span class="variable">$memTotal</span> -gt 660 ]; <span class="keyword">then</span></span><br><span class="line">    <span class="comment">#768M DDR</span></span><br><span class="line">    min_free_kbytes=15360</span><br><span class="line">    lowmemkiller=<span class="string">&quot;2304,3072,6144,7680,8448,9216&quot;</span></span><br><span class="line"><span class="keyword">else</span></span><br><span class="line">    <span class="comment">#512M DDR</span></span><br><span class="line">    min_free_kbytes=10240</span><br><span class="line">    lowmemkiller=<span class="string">&quot;1536,2048,4096,5120,5632,6144&quot;</span></span><br><span class="line"><span class="keyword">fi</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">echo</span> <span class="variable">$min_free_kbytes</span> &gt; /proc/sys/vm/min_free_kbytes</span><br><span class="line"><span class="built_in">echo</span> <span class="variable">$lowmemkiller</span> &gt; /sys/module/lowmemorykiller/parameters/minfree</span><br><span class="line">min_free_kbytes=`cat /proc/sys/vm/min_free_kbytes`</span><br><span class="line">lowmemkiller=`cat /sys/module/lowmemorykiller/parameters/minfree`</span><br><span class="line">LOG <span class="string">&quot;new min_free_kbytes=<span class="variable">$min_free_kbytes</span> lowmemkiller=<span class="variable">$lowmemkiller</span>&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#isHeadless=`getprop ro.product.class`</span></span><br><span class="line"><span class="comment">#if [ &quot;$isHeadless&quot; == &quot;headless&quot; ]; then</span></span><br><span class="line"><span class="comment">#    curTimeoff=`sqlite3 /data/data/com.android.providers.settings/databases/settings.db \</span></span><br><span class="line"><span class="comment">#               &quot;select value from system where name=&#x27;screen_off_timeout&#x27;&quot;`</span></span><br><span class="line"><span class="comment">#    STANGE： sqlite will fail when system boot, but OK by cmd line!!!</span></span><br><span class="line"><span class="comment">#    if [ $curTimeoff -eq 30 ]; then</span></span><br><span class="line"><span class="comment">#        LOG &quot;screen off timeout is already $curTimeoff&quot;</span></span><br><span class="line"><span class="comment">#    else</span></span><br><span class="line"><span class="comment">#        LOG &quot;set screen off timeout to 30s&quot;</span></span><br><span class="line"><span class="comment">#        sqlite3 /data/data/com.android.providers.settings/databases/settings.db \</span></span><br><span class="line"><span class="comment">#        &quot;insert into system (name, value) values (&#x27;screen_off_timeout&#x27;, 30)&quot;</span></span><br><span class="line"><span class="comment">#    fi</span></span><br><span class="line"><span class="comment">#fi</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">local</span> cntFail=`getprop persist.bootup.fail`</span><br><span class="line"><span class="keyword">if</span> [ <span class="string">&quot;<span class="variable">$boot_ok</span>&quot;</span> == <span class="string">&quot;1&quot;</span> ]; <span class="keyword">then</span></span><br><span class="line">    filter_size_org=`<span class="built_in">stat</span> -c <span class="string">&quot;%s&quot;</span> /system/etc/xlog-filter-default`</span><br><span class="line">    filter_size_running=`<span class="built_in">stat</span> -c <span class="string">&quot;%s&quot;</span> /data/misc/xlog-filter`</span><br><span class="line">    size=`expr <span class="variable">$filter_size_org</span> - <span class="variable">$filter_size_running</span>`</span><br><span class="line">    abs_size=`<span class="built_in">echo</span> <span class="variable">$size</span> | tr -d -`</span><br><span class="line">    <span class="comment">#if [ $abs_size -gt 1000 ]; then</span></span><br><span class="line">    <span class="keyword">if</span> [ <span class="variable">$filter_size_running</span> -lt 1000 ]; <span class="keyword">then</span></span><br><span class="line">        LOG <span class="string">&quot;ERROR: xlog-filter size abnormal, try to filter-reset...&quot;</span></span><br><span class="line">        LOG <span class="string">&quot;org=<span class="variable">$filter_size_org</span> running=<span class="variable">$filter_size_running</span> abs=<span class="variable">$abs_size</span>&quot;</span></span><br><span class="line">        rm /data/misc/xlog-filter</span><br><span class="line">        /system/bin/xlog filter-reset</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">        LOG <span class="string">&quot;checking xlog-filter OK&quot;</span></span><br><span class="line">    <span class="keyword">fi</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> [ -n <span class="string">&quot;<span class="variable">$cntFail</span>&quot;</span> ]; <span class="keyword">then</span></span><br><span class="line">        LOG <span class="string">&quot;Bootup OK, reset cntFail(<span class="variable">$cntFail</span>)&quot;</span></span><br><span class="line">        setprop persist.bootup.fail 0</span><br><span class="line">    <span class="keyword">fi</span></span><br><span class="line"><span class="keyword">else</span></span><br><span class="line">    <span class="keyword">if</span> [ <span class="string">&quot;<span class="variable">$cntFail</span>&quot;</span> == <span class="string">&quot;&quot;</span> ]; <span class="keyword">then</span></span><br><span class="line">        cntFail=1</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">        <span class="built_in">let</span> <span class="string">&quot;cntFail = cntFail + 1&quot;</span></span><br><span class="line">    <span class="keyword">fi</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> [ <span class="variable">$cntFail</span> -gt 2 ]; <span class="keyword">then</span></span><br><span class="line">        LOG <span class="string">&quot;Bootup failed(<span class="variable">$cntFail</span>), remove all in /data/ and reboot system...&quot;</span></span><br><span class="line">        stop</span><br><span class="line">        rm -rf /data/*</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">        setprop persist.bootup.fail <span class="variable">$cntFail</span></span><br><span class="line">        LOG <span class="string">&quot;Bootup failed(<span class="variable">$cntFail</span>), reboot system...&quot;</span></span><br><span class="line">    <span class="keyword">fi</span></span><br><span class="line"></span><br><span class="line">    reboot -p</span><br><span class="line">    <span class="built_in">exit</span></span><br><span class="line"><span class="keyword">fi</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#PowerOn UsbCamara, need do it here?</span></span><br><span class="line"><span class="comment">#echo 1 &gt; /sys/devices/virtual/misc/gpio_ctl/usbcam</span></span><br><span class="line"></span><br><span class="line">LOG <span class="string">&quot;Sleeping a while to wait for T card being mounted&quot;</span></span><br><span class="line"><span class="built_in">local</span> delayT=15</span><br><span class="line"><span class="keyword">while</span> [ <span class="variable">$delayT</span> -gt 0 ]; <span class="keyword">do</span></span><br><span class="line">    <span class="built_in">local</span> T_ok=`df | grep sdcard | wc -l`</span><br><span class="line">    <span class="keyword">if</span> [ <span class="variable">$T_ok</span> -gt 0 ]; <span class="keyword">then</span></span><br><span class="line">        LOG <span class="string">&quot;T card is mounted(remain <span class="variable">$delayT</span> second)&quot;</span></span><br><span class="line">        <span class="built_in">break</span></span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">        sleep 1</span><br><span class="line">        <span class="built_in">let</span> <span class="string">&quot;delayT = delayT - 1&quot;</span></span><br><span class="line">    <span class="keyword">fi</span></span><br><span class="line"><span class="keyword">done</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
       
     </div>
 
@@ -1730,6 +1059,9 @@
 
 
   
+  <nav class="pagination">
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/page/57/">57</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
+  </nav>
 
 
 
@@ -1796,9 +1128,15 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">8</span>
+          <span class="site-state-item-count">570</span>
           <span class="site-state-item-name">日志</span>
         </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">分类</span></a>
       </div>
   </nav>
 </div>
@@ -1838,6 +1176,97 @@
 
 
 
+<script>
+  (function() {
+    function leancloudSelector(url) {
+      url = encodeURI(url);
+      return document.getElementById(url).querySelector('.leancloud-visitors-count');
+    }
+
+    function addCount(Counter) {
+      var visitors = document.querySelector('.leancloud_visitors');
+      var url = decodeURI(visitors.id);
+      var title = visitors.dataset.flagTitle;
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          if (results.length > 0) {
+            var counter = results[0];
+            leancloudSelector(url).innerText = counter.time + 1;
+            Counter('put', '/classes/Counter/' + counter.objectId, { time: { '__op': 'Increment', 'amount': 1 } })
+              .catch(error => {
+                console.error('Failed to save visitor count', error);
+              });
+          } else {
+              Counter('post', '/classes/Counter', { title, url, time: 1 })
+                .then(response => response.json())
+                .then(() => {
+                  leancloudSelector(url).innerText = 1;
+                })
+                .catch(error => {
+                  console.error('Failed to create', error);
+                });
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    function showTime(Counter) {
+      var visitors = document.querySelectorAll('.leancloud_visitors');
+      var entries = [...visitors].map(element => {
+        return decodeURI(element.id);
+      });
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url: { '$in': entries } })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          for (let url of entries) {
+            let target = results.find(item => item.url === url);
+            leancloudSelector(url).innerText = target ? target.time : 0;
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    let { app_id, app_key, server_url } = {"enable":true,"app_id":"wxYx0BX9gaKA3XC4LuO2of0v-gzGzoHsz","app_key":"LQMcs6IDIE4YAm10vMsn9IYq","server_url":"https://wxyx0bx9.lc-cn-n1-shared.com","security":false};
+    function fetchData(api_server) {
+      var Counter = (method, url, data) => {
+        return fetch(`${api_server}/1.1${url}`, {
+          method,
+          headers: {
+            'X-LC-Id'     : app_id,
+            'X-LC-Key'    : app_key,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data)
+        });
+      };
+      if (CONFIG.page.isPost) {
+        if (CONFIG.hostname !== location.hostname) return;
+        addCount(Counter);
+      } else if (document.querySelectorAll('.post-title-link').length >= 1) {
+        showTime(Counter);
+      }
+    }
+
+    let api_server = app_id.slice(-9) !== '-MdYXbMMI' ? server_url : `https://${app_id.slice(0, 8).toLowerCase()}.api.lncldglobal.com`;
+
+    if (api_server) {
+      fetchData(api_server);
+    } else {
+      fetch('https://app-router.leancloud.cn/2/route?appId=' + app_id)
+        .then(response => response.json())
+        .then(({ api_server }) => {
+          fetchData('https://' + api_server);
+        });
+    }
+  })();
+</script>
 
 
       </div>

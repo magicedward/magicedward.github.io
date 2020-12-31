@@ -1,0 +1,1118 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"edward.org.cn","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="Android之framework修改底部导航栏NavigationBar动态显示和隐藏 大家都知道，Android从3.0版本开始就加入了NavigationBar，主要是为那些没有实体按键的设备提供虚拟按键，但是，它始终固定在底部，占用48dp的像素高度，尽管从android 4.4开始可以全透明，使用这一部分像素，但三个按钮始终悬浮在屏幕上，这对于有强迫症的朋友来说是无法忍受的。因此，本文的">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android之framework修改底部导航栏NavigationBar动态显示和隐藏">
+<meta property="og:url" content="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/Android%E4%B9%8Bframework%E4%BF%AE%E6%94%B9%E5%BA%95%E9%83%A8%E5%AF%BC%E8%88%AA%E6%A0%8FNavigationBar%E5%8A%A8%E6%80%81%E6%98%BE%E7%A4%BA%E5%92%8C%E9%9A%90%E8%97%8F/index.html">
+<meta property="og:site_name" content="点点滴滴">
+<meta property="og:description" content="Android之framework修改底部导航栏NavigationBar动态显示和隐藏 大家都知道，Android从3.0版本开始就加入了NavigationBar，主要是为那些没有实体按键的设备提供虚拟按键，但是，它始终固定在底部，占用48dp的像素高度，尽管从android 4.4开始可以全透明，使用这一部分像素，但三个按钮始终悬浮在屏幕上，这对于有强迫症的朋友来说是无法忍受的。因此，本文的">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-12-31T06:48:00.982Z">
+<meta property="article:modified_time" content="2020-01-16T04:37:33.248Z">
+<meta property="article:author" content="Edward">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/Android%E4%B9%8Bframework%E4%BF%AE%E6%94%B9%E5%BA%95%E9%83%A8%E5%AF%BC%E8%88%AA%E6%A0%8FNavigationBar%E5%8A%A8%E6%80%81%E6%98%BE%E7%A4%BA%E5%92%8C%E9%9A%90%E8%97%8F/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>Android之framework修改底部导航栏NavigationBar动态显示和隐藏 | 点点滴滴</title>
+  
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?a92ed22eafce466e7a7b17546bb0dc6f";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">点点滴滴</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/Android%E4%B9%8Bframework%E4%BF%AE%E6%94%B9%E5%BA%95%E9%83%A8%E5%AF%BC%E8%88%AA%E6%A0%8FNavigationBar%E5%8A%A8%E6%80%81%E6%98%BE%E7%A4%BA%E5%92%8C%E9%9A%90%E8%97%8F/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/avatar.gif">
+      <meta itemprop="name" content="Edward">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="点点滴滴">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Android之framework修改底部导航栏NavigationBar动态显示和隐藏
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-12-31 14:48:00" itemprop="dateCreated datePublished" datetime="2020-12-31T14:48:00+08:00">2020-12-31</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-01-16 12:37:33" itemprop="dateModified" datetime="2020-01-16T12:37:33+08:00">2020-01-16</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%83%82%E7%AC%94%E5%A4%B4/" itemprop="url" rel="index"><span itemprop="name">烂笔头</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/Android%E4%B9%8Bframework%E4%BF%AE%E6%94%B9%E5%BA%95%E9%83%A8%E5%AF%BC%E8%88%AA%E6%A0%8FNavigationBar%E5%8A%A8%E6%80%81%E6%98%BE%E7%A4%BA%E5%92%8C%E9%9A%90%E8%97%8F/" class="post-meta-item leancloud_visitors" data-flag-title="Android之framework修改底部导航栏NavigationBar动态显示和隐藏" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>Android之framework修改底部导航栏NavigationBar动态显示和隐藏</p>
+<p>大家都知道，Android从3.0版本开始就加入了NavigationBar，主要是为那些没有实体按键的设备提供虚拟按键，但是，它始终固定在底部，占用48dp的像素高度，尽管从android 4.4开始可以全透明，使用这一部分像素，但三个按钮始终悬浮在屏幕上，这对于有强迫症的朋友来说是无法忍受的。因此，本文的目的就是修改framework部分代码，可以动态隐藏和显示NavigationBar，同时又尽量不影响系统的正常。</p>
+<p>主要思路：</p>
+<p>在NavigationBar的布局左部加入一个Button(在SystemUI模块实现)，点击隐藏NavigationBar，即将NavigationBar从WindowManager中移除掉。需要的时候，通过一个从屏幕底部向上的滑动手势(在policy模块实现)调出NavigationBar。如下两图对比所示：一张为移除前，另一张为移除后。</p>
+<p>具体实现：</p>
+<p>①.增加按钮实现动态隐藏，主要修改在frameworks/base/packages/SystemUI模块，首先我们增加一个按钮，主要修改</p>
+<p>frameworks/base/packages/SystemUI/res/layout/navigation_bar.xml文件，图片资源和字符串我就不提了，具体如下：</p>
+<p>?</p>
+<p>1</p>
+<p>2</p>
+<p>3</p>
+<p>4</p>
+<p>5</p>
+<p>6</p>
+<p>7</p>
+<p>8</p>
+<p>9</p>
+<p>10</p>
+<p>11</p>
+<p>12</p>
+<p>13</p>
+<p>14</p>
+<p>15</p>
+<p>16</p>
+<p>17</p>
+<p>18</p>
+<p>19</p>
+<p>20</p>
+<p>21</p>
+<p>22</p>
+<p>23</p>
+<p>24</p>
+<p>25</p>
+<p>26</p>
+<p>27</p>
+<p>28</p>
+<p>29</p>
+<p>30</p>
+<p>31</p>
+<p>32</p>
+<p>33</p>
+<p>34</p>
+<p>35</p>
+<p>36</p>
+<p>37</p>
+<p>38</p>
+<p>diff –git a/frameworks/base/packages/SystemUI/res/layout/navigation_bar.xml b/frameworks/base/packages/SystemUI/res/layout/navigation_bar.xml</p>
+<p>index 16027d9..326aafc 100644</p>
+<p>— a/frameworks/base/packages/SystemUI/res/layout/navigation_bar.xml</p>
+<p>+++ b/frameworks/base/packages/SystemUI/res/layout/navigation_bar.xml</p>
+<p>@@ -42,12 +42,28 @@</p>
+<p>&gt;</p>
+<p>&lt;!– navigation controls –&gt;</p>
+<p>+           &lt;!–BEGIN liweiping</p>
+<p>&lt;View</p>
+<p>android:layout_width=40dp</p>
+<p>android:layout_height=match_parent</p>
+<p>android:layout_weight=0</p>
+<p>android:visibility=invisible</p>
+<p>/&gt;</p>
+<p>+           –&gt;</p>
+<p>+            &lt;framelayout android:layout_height=&quot;match_parent&quot; android:layout_weight=&quot;0&quot; android:layout_width=&quot;@dimen/navigation_extra_key_width&quot;&gt;</p>
+<p>+                &lt;imagebutton android:id=&quot;@+id/hide_bar_btn&quot; android:src=&quot;@drawable/ic_sysbar_hide&quot; android:layout_width=&quot;@dimen/navigation_extra_key_width&quot; android:layout_height=&quot;match_parent&quot; android:contentdescription=&quot;@string/accessibility_hide&quot;&gt;</p>
+<p>+</p>
+<p>+            &lt;/imagebutton&gt;&lt;/framelayout&gt;</p>
+<p>+           &lt;!–END liweiping –&gt;</p>
+<p>&lt;com.android.systemui.statusbar.policy.keybuttonview android:id=&quot;@+id/back&quot; android:layout_width=&quot;@dimen/navigation_key_width&quot; android:layout_height=&quot;match_parent&quot; android:contentdescription=&quot;@string/accessibility_back&quot; android:layout_weight=&quot;0&quot; 28=&quot;&quot; 12=&quot;&quot;&gt;</p>
+<p>+           &lt;!–BEGIN liweiping</p>
+<p>&lt;View</p>
+<p>android:layout_height=40dp</p>
+<p>android:layout_width=match_parent</p>
+<p>android:layout_weight=0</p>
+<p>android:visibility=invisible</p>
+<p>/&gt;</p>
+<p>+           –&gt;</p>
+<p>+            &lt;framelayout android:layout_height=&quot;40dp&quot; android:layout_weight=&quot;0&quot; android:layout_width=&quot;match_parent&quot;&gt;</p>
+<p>+</p>
+<p>+                &lt;imagebutton android:id=&quot;@+id/hide_bar_btn&quot; android:src=&quot;@drawable/ic_sysbar_hide_land&quot; android:layout_width=&quot;match_parent&quot; android:layout_height=&quot;40dp&quot; android:contentdescription=&quot;@string/accessibility_hide&quot;&gt;</p>
+<p>+            &lt;/imagebutton&gt;&lt;/framelayout&gt;</p>
+<p>+           &lt;!–END liweiping –&gt;</p>
+<p>&lt;!– lights out layout to match exactly –&gt;&lt;/com.android.systemui.statusbar.policy.keybuttonview&gt;</p>
+<p>接下来修改frameworks/base/packages/SystemUI/src/com/android/systemui/statusbar/phone/NavigationBarView.java，为按钮提供一个接口，具体如下：</p>
+<p>?</p>
+<p>1</p>
+<p>2</p>
+<p>3</p>
+<p>4</p>
+<p>5</p>
+<p>6</p>
+<p>7</p>
+<p>8</p>
+<p>9</p>
+<p>10</p>
+<p>11</p>
+<p>12</p>
+<p>13</p>
+<p>14</p>
+<p>15</p>
+<p>16</p>
+<p>17</p>
+<p>18</p>
+<p>19</p>
+<p>20</p>
+<p>21</p>
+<p>22</p>
+<p>23</p>
+<p>24</p>
+<p>25</p>
+<p>26</p>
+<p>27</p>
+<p>28</p>
+<p>29</p>
+<p>30</p>
+<p>31</p>
+<p>32</p>
+<p>33</p>
+<p>diff –git a/frameworks/base/packages/SystemUI/src/com/android/systemui/statusbar/phone/NavigationBarView.java b/frameworks/base/packages/SystemUI/src/com/android/systemui/statusbar/phone/NavigationBarView.java</p>
+<p>index 88e71e2..7545984 100644</p>
+<p>— a/frameworks/base/packages/SystemUI/src/com/android/systemui/statusbar/phone/NavigationBarView.java</p>
+<p>+++ b/frameworks/base/packages/SystemUI/src/com/android/systemui/statusbar/phone/NavigationBarView.java</p>
+<p>@@ -45,6 +45,7 @@ import com.android.systemui.R;</p>
+<p>import com.android.systemui.statusbar.BaseStatusBar;</p>
+<p>import com.android.systemui.statusbar.DelegateViewHelper;</p>
+<p>import com.android.systemui.statusbar.policy.DeadZone;</p>
+<p>+import com.android.systemui.statusbar.policy.KeyButtonRipple;</p>
+<p>import com.android.systemui.statusbar.policy.KeyButtonView;</p>
+<p>import java.io.FileDescriptor;</p>
+<p>@@ -265,6 +266,13 @@ public class NavigationBarView extends LinearLayout {</p>
+<p>public View getImeSwitchButton() {</p>
+<p>return mCurrentView.findViewById(R.id.ime_switcher);</p>
+<p>}</p>
+<p>+    //BEGIN liweiping</p>
+<p>+    public View getHideBarButton() {</p>
+<p>+       View view = mCurrentView.findViewById(R.id.hide_bar_btn);</p>
+<p>+       view.setBackground(new KeyButtonRipple(getContext(), view));</p>
+<p>+        return view;</p>
+<p>+    }</p>
+<p>+    //END liweiping</p>
+<p>private void getIcons(Resources res) {</p>
+<p>mBackIcon = res.getDrawable(R.drawable.ic_sysbar_back);</p>
+<p>@@ -412,7 +420,6 @@ public class NavigationBarView extends LinearLayout {</p>
+<p>mCurrentView = mRotatedViews[Surface.ROTATION_0];</p>
+<p>getImeSwitchButton().setOnClickListener(mImeSwitcherClickListener);</p>
+<p>-</p>
+<p>updateRTLOrder();</p>
+<p>}</p>
+<p>最后便是在frameworks/base/packages/SystemUI/src/com/android/systemui/statusbar/phone/PhoneStatusBar.java实现点击事件了：</p>
+<p>?</p>
+<p>1</p>
+<p>2</p>
+<p>3</p>
+<p>4</p>
+<p>5</p>
+<p>6</p>
+<p>7</p>
+<p>8</p>
+<p>9</p>
+<p>10</p>
+<p>11</p>
+<p>12</p>
+<p>13</p>
+<p>14</p>
+<p>15</p>
+<p>+    private final OnClickListener mHideBarClickListener = new OnClickListener() {</p>
+<p>+        @Override</p>
+<p>+        public void onClick(View view) {</p>
+<p>+           Log.i(way, mHideBarClickListener  onClick…);</p>
+<p>+           removeNavigationBar();</p>
+<p>+        }</p>
+<p>+    };</p>
+<p>+    private void removeNavigationBar() {</p>
+<p>+        if (DEBUG) Log.d(TAG, removeNavigationBar: about to remove  + mNavigationBarView);</p>
+<p>+        if (mNavigationBarView == null) return;</p>
+<p>+</p>
+<p>+        mWindowManager.removeView(mNavigationBarView);</p>
+<p>+        mNavigationBarView = null;</p>
+<p>+    }</p>
+<p>到此，隐藏NavigationBar告一段落了。</p>
+<p>②.接下来便是显示NavigationBar，这个修改相对复杂一点。因为此时NavigationBar处于不可见状态，我们无法通过增加按钮的方式让其显示，但是我们知道，状态栏下拉通过手势向下滑动即可。因此很容易便想到通过手势从屏幕底部向上滑动来显示NavigationBar。我的想法是在policy模块中增加一个接口，通过frameworks/base/services/core/java/com/android/server/statusbar/StatusBarManagerService.java服务传递到状态栏中，从而触发显示NavigationBar事件。</p>
+<p>也许大家会有疑问，为什么是在policy模块修改？其实我这只是一种解决方案，因为我知道</p>
+<p>frameworks/base/policy/src/com/android/internal/policy/impl/PhoneWindowManager.java 有现成的手势滑动接口。其实你也可以SystemUI中增加一个这样的事件，我们需要的就是这么一个触发事件。</p>
+<p>PhoneWindowManager.java的修改主要是实现onSwipeFromBottom(竖屏时)和onSwipeFromRight(横屏时)两个接口，然后调用showNavigationBar，在showNavigationBar函数中，我们调用StatusBarManagerService服务中的showNavigationBar函数，具体如下：</p>
+<p>?</p>
+<p>1</p>
+<p>2</p>
+<p>3</p>
+<p>4</p>
+<p>5</p>
+<p>6</p>
+<p>7</p>
+<p>8</p>
+<p>9</p>
+<p>10</p>
+<p>11</p>
+<p>12</p>
+<p>13</p>
+<p>14</p>
+<p>15</p>
+<p>16</p>
+<p>17</p>
+<p>18</p>
+<p>19</p>
+<p>20</p>
+<p>21</p>
+<p>22</p>
+<p>23</p>
+<p>24</p>
+<p>25</p>
+<p>26</p>
+<p>27</p>
+<p>28</p>
+<p>29</p>
+<p>30</p>
+<p>31</p>
+<p>32</p>
+<p>33</p>
+<p>34</p>
+<p>35</p>
+<p>36</p>
+<p>37</p>
+<p>38</p>
+<p>39</p>
+<p>40</p>
+<p>41</p>
+<p>42</p>
+<p>43</p>
+<p>44</p>
+<p>45</p>
+<p>46</p>
+<p>47</p>
+<p>48</p>
+<p>49</p>
+<p>50</p>
+<p>51</p>
+<p>52</p>
+<p>53</p>
+<p>54</p>
+<p>55</p>
+<p>56</p>
+<p>57</p>
+<p>58</p>
+<p>diff –git a/frameworks/base/policy/src/com/android/internal/policy/impl/PhoneWindowManager.java b/frameworks/base/policy/src/com/android/internal/policy/impl/PhoneWindowManager.java</p>
+<p>index bb53e12..907202d 100644</p>
+<p>— a/frameworks/base/policy/src/com/android/internal/policy/impl/PhoneWindowManager.java</p>
+<p>+++ b/frameworks/base/policy/src/com/android/internal/policy/impl/PhoneWindowManager.java</p>
+<p>@@ -1241,13 +1241,27 @@ public class PhoneWindowManager implements WindowManagerPolicy {</p>
+<p>public void onSwipeFromBottom() {</p>
+<p>if (mNavigationBar != null &amp;&amp; mNavigationBarOnBottom) {</p>
+<p>requestTransientBars(mNavigationBar);</p>
+<p>+                            Log.i(way, onSwipeFromBottom… mNavigationBar != null &amp;&amp; mNavigationBarOnBottom);</p>
+<p>}</p>
+<p>+                        //BEGIN liweiping</p>
+<p>+                        else{</p>
+<p>+                           Log.i(way, onSwipeFromBottom…);</p>
+<p>+                           showNavigationBar();</p>
+<p>+                        }</p>
+<p>+                        //END liweiping</p>
+<p>}</p>
+<p>@Override</p>
+<p>public void onSwipeFromRight() {</p>
+<p>if (mNavigationBar != null &amp;&amp; !mNavigationBarOnBottom) {</p>
+<p>requestTransientBars(mNavigationBar);</p>
+<p>+                            Log.i(way, onSwipeFromRight… mNavigationBar != null &amp;&amp; !mNavigationBarOnBottom);</p>
+<p>+                        }</p>
+<p>+                        //BEGIN liweiping</p>
+<p>+                        else{</p>
+<p>+                           Log.i(way, onSwipeFromRight…);</p>
+<p>+                           showNavigationBar();</p>
+<p>}</p>
+<p>+                        //END liweiping</p>
+<p>}</p>
+<p>@Override</p>
+<p>public void onDebug() {</p>
+<p>@@ -1293,7 +1307,24 @@ public class PhoneWindowManager implements WindowManagerPolicy {</p>
+<p>goingToSleep(WindowManagerPolicy.OFF_BECAUSE_OF_USER);</p>
+<p>}</p>
+<p>}</p>
+<p>-</p>
+<p>+    //BEGIN liweiping</p>
+<p>+    private void showNavigationBar(){</p>
+<p>+        mHandler.post(new Runnable() {</p>
+<p>+            @Override</p>
+<p>+            public void run() {</p>
+<p>+                try {</p>
+<p>+                    IStatusBarService statusbar = getStatusBarService();</p>
+<p>+                    if (statusbar != null) {</p>
+<p>+                        statusbar.showNavigationBar();</p>
+<p>+                    }</p>
+<p>+                } catch (RemoteException e) {</p>
+<p>+                    // re-acquire status bar service next time it is needed.</p>
+<p>+                    mStatusBarService = null;</p>
+<p>+                }</p>
+<p>+            }</p>
+<p>+        });</p>
+<p>+    }</p>
+<p>+    //END liweiping</p>
+<p>private void updateKeyAssignments() {</p>
+<p>final boolean hasMenu = (mDeviceHardwareKeys &amp; KEY_MASK_MENU) != 0;</p>
+<p>final boolean hasHome = (mDeviceHardwareKeys &amp; KEY_MASK_HOME) != 0;</p>
+<p>这时事件传递到了StatusBarManagerService中，我们来看看StatusBarManagerService.java如何实现showNavigationBar：</p>
+<p>?</p>
+<p>1</p>
+<p>2</p>
+<p>3</p>
+<p>4</p>
+<p>5</p>
+<p>6</p>
+<p>7</p>
+<p>8</p>
+<p>9</p>
+<p>10</p>
+<p>11</p>
+<p>12</p>
+<p>13</p>
+<p>14</p>
+<p>15</p>
+<p>16</p>
+<p>17</p>
+<p>18</p>
+<p>19</p>
+<p>20</p>
+<p>21</p>
+<p>22</p>
+<p>23</p>
+<p>24</p>
+<p>25</p>
+<p>26</p>
+<p>27</p>
+<p>28</p>
+<p>29</p>
+<p>30</p>
+<p>31</p>
+<p>32</p>
+<p>diff –git a/frameworks/base/services/core/java/com/android/server/statusbar/StatusBarManagerService.java b/frameworks/base/services/core/java/com/android/server/statusbar/StatusBarManagerService.java</p>
+<p>index f85e2d9..3f75840 100644</p>
+<p>— a/frameworks/base/services/core/java/com/android/server/statusbar/StatusBarManagerService.java</p>
+<p>+++ b/frameworks/base/services/core/java/com/android/server/statusbar/StatusBarManagerService.java</p>
+<p>@@ -366,6 +366,27 @@ public class StatusBarManagerService extends IStatusBarService.Stub {</p>
+<p>WindowManager.LayoutParams);</p>
+<p>}</p>
+<p>}</p>
+<p>+    //BEGIN liweiping</p>
+<p>+    @Override</p>
+<p>+    public void showNavigationBar() {</p>
+<p>+        enforceStatusBar();</p>
+<p>+</p>
+<p>+        android.util.Log.d(way, TAG +  showNavigationBar…);</p>
+<p>+</p>
+<p>+        synchronized(mLock) {</p>
+<p>+            mHandler.post(new Runnable() {</p>
+<p>+                    public void run() {</p>
+<p>+                        if (mBar != null) {</p>
+<p>+                            try {</p>
+<p>+                                mBar.showNavigationBar();</p>
+<p>+                            } catch (RemoteException ex) {</p>
+<p>+                            }</p>
+<p>+                        }</p>
+<p>+                    }</p>
+<p>+                });</p>
+<p>+        }</p>
+<p>+    }</p>
+<p>+    //END liweiping</p>
+<p>private void updateUiVisibilityLocked(final int vis, final int mask) {</p>
+<p>if (mSystemUiVisibility != vis) {</p>
+<p>从上述代码可以看出，StatusBarManagerService只是起到一个传递作用，将消息传递到StatusBar中，最终的实现是在SystemUI模块的frameworks/base/packages/SystemUI/src/com/android/systemui/statusbar/CommandQueue.java，如下所示：</p>
+<p>?</p>
+<p>1</p>
+<p>2</p>
+<p>3</p>
+<p>4</p>
+<p>5</p>
+<p>6</p>
+<p>7</p>
+<p>8</p>
+<p>9</p>
+<p>10</p>
+<p>11</p>
+<p>12</p>
+<p>13</p>
+<p>14</p>
+<p>15</p>
+<p>16</p>
+<p>17</p>
+<p>18</p>
+<p>19</p>
+<p>20</p>
+<p>21</p>
+<p>22</p>
+<p>23</p>
+<p>24</p>
+<p>25</p>
+<p>26</p>
+<p>27</p>
+<p>28</p>
+<p>29</p>
+<p>30</p>
+<p>31</p>
+<p>32</p>
+<p>33</p>
+<p>34</p>
+<p>35</p>
+<p>36</p>
+<p>37</p>
+<p>38</p>
+<p>39</p>
+<p>40</p>
+<p>41</p>
+<p>42</p>
+<p>43</p>
+<p>44</p>
+<p>45</p>
+<p>46</p>
+<p>47</p>
+<p>diff –git a/frameworks/base/packages/SystemUI/src/com/android/systemui/statusbar/CommandQueue.java b/frameworks/base/packages/SystemUI/src/com/android/systemui/statusbar/CommandQueue.java</p>
+<p>index 9db875f..4f24b6e 100644</p>
+<p>— a/frameworks/base/packages/SystemUI/src/com/android/systemui/statusbar/CommandQueue.java</p>
+<p>+++ b/frameworks/base/packages/SystemUI/src/com/android/systemui/statusbar/CommandQueue.java</p>
+<p>@@ -56,6 +56,7 @@ public class CommandQueue extends IStatusBar.Stub {</p>
+<p>private static final int MSG_BUZZ_BEEP_BLINKED          = 15 &lt;&lt; MSG_SHIFT;</p>
+<p>private static final int MSG_NOTIFICATION_LIGHT_OFF     = 16 &lt;&lt; MSG_SHIFT;</p>
+<p>private static final int MSG_NOTIFICATION_LIGHT_PULSE   = 17 &lt;&lt; MSG_SHIFT;</p>
+<p>+    private static final int MSG_SHOW_NAVIGATIONBAR   = 18 &lt;&lt; MSG_SHIFT;//ADD liweiping</p>
+<p>public static final int FLAG_EXCLUDE_NONE = 0;</p>
+<p>public static final int FLAG_EXCLUDE_SEARCH_PANEL = 1 &lt;&lt; 0;</p>
+<p>@@ -83,6 +84,7 @@ public class CommandQueue extends IStatusBar.Stub {</p>
+<p>public void animateCollapsePanels(int flags);</p>
+<p>public void animateExpandSettingsPanel();</p>
+<p>public void setSystemUiVisibility(int vis, int mask);</p>
+<p>+        public void showNavigationBar();//ADD liweiping</p>
+<p>public void topAppWindowChanged(boolean visible);</p>
+<p>public void setImeWindowStatus(IBinder token, int vis, int backDisposition,</p>
+<p>boolean showImeSwitcher);</p>
+<p>@@ -154,6 +156,14 @@ public class CommandQueue extends IStatusBar.Stub {</p>
+<p>mHandler.obtainMessage(MSG_SET_SYSTEMUI_VISIBILITY, vis, mask, null).sendToTarget();</p>
+<p>}</p>
+<p>}</p>
+<p>+    //BEGIN liweiping</p>
+<p>+    public void showNavigationBar() {</p>
+<p>+        synchronized (mList) {</p>
+<p>+            mHandler.removeMessages(MSG_SHOW_NAVIGATIONBAR);</p>
+<p>+            mHandler.sendEmptyMessage(MSG_SHOW_NAVIGATIONBAR);</p>
+<p>+        }</p>
+<p>+    }</p>
+<p>+    //END liweiping</p>
+<p>public void topAppWindowChanged(boolean menuVisible) {</p>
+<p>synchronized (mList) {</p>
+<p>@@ -283,6 +293,11 @@ public class CommandQueue extends IStatusBar.Stub {</p>
+<p>case MSG_SET_SYSTEMUI_VISIBILITY:</p>
+<p>mCallbacks.setSystemUiVisibility(msg.arg1, msg.arg2);</p>
+<p>break;</p>
+<p>+                //BEGIN liweiping</p>
+<p>+                case MSG_SHOW_NAVIGATIONBAR:</p>
+<p>+                   mCallbacks.showNavigationBar();</p>
+<p>+                   break;</p>
+<p>+                //END liweiping</p>
+<p>case MSG_TOP_APP_WINDOW_CHANGED:</p>
+<p>mCallbacks.topAppWindowChanged(msg.arg1 != 0);</p>
+<p>break;</p>
+<p>CommandQueue.java收到了这个消息之后，又回调给了base/packages/SystemUI/src/com/android/systemui/statusbar/phone/PhoneStatusBar.java，绕了大半天，消息终于回来了，我们就是需要在PhoneStatusBar.java实现显示NavigationBar的函数了：</p>
+<p>?</p>
+<p>1</p>
+<p>2</p>
+<p>3</p>
+<p>4</p>
+<p>5</p>
+<p>6</p>
+<p>7</p>
+<p>8</p>
+<p>9</p>
+<p>10</p>
+<p>11</p>
+<p>12</p>
+<p>13</p>
+<p>14</p>
+<p>15</p>
+<p>16</p>
+<p>17</p>
+<p>18</p>
+<p>19</p>
+<p>20</p>
+<p>21</p>
+<p>22</p>
+<p>23</p>
+<p>24</p>
+<p>25</p>
+<p>26</p>
+<p>27</p>
+<p>28</p>
+<p>29</p>
+<p>30</p>
+<p>31</p>
+<p>32</p>
+<p>33</p>
+<p>34</p>
+<p>35</p>
+<p>36</p>
+<p>37</p>
+<p>38</p>
+<p>39</p>
+<p>40</p>
+<p>41</p>
+<p>42</p>
+<p>43</p>
+<p>44</p>
+<p>45</p>
+<p>46</p>
+<p>47</p>
+<p>48</p>
+<p>49</p>
+<p>50</p>
+<p>51</p>
+<p>52</p>
+<p>53</p>
+<p>54</p>
+<p>55</p>
+<p>56</p>
+<p>57</p>
+<p>58</p>
+<p>59</p>
+<p>+    @Override // CommandQueue</p>
+<p>+    public void showNavigationBar() {</p>
+<p>+       Log.i(way, TAG +  showNavigationBar…);</p>
+<p>+       forceAddNavigationBar();</p>
+<p>+    }</p>
+<p>+    private void forceAddNavigationBar() {</p>
+<p>+        // If we have no Navbar view and we should have one, create it</p>
+<p>+        if (mNavigationBarView != null) {</p>
+<p>+            return;</p>
+<p>+        }</p>
+<p>+</p>
+<p>+        mNavigationBarView =</p>
+<p>+                (NavigationBarView) View.inflate(mContext, R.layout.navigation_bar, null);</p>
+<p>+        mNavigationBarView.setDisabledFlags(mDisabled);</p>
+<p>+        mNavigationBarView.setBar(this);</p>
+<p>+        addNavigationBar(true); // dynamically adding nav bar, reset System UI visibility!</p>
+<p>+    }</p>
+<p>+    private void prepareNavigationBarView(boolean forceReset) {</p>
+<p>+        mNavigationBarView.reorient();</p>
+<p>+        mNavigationBarView.getRecentsButton().setOnClickListener(mRecentsClickListener);</p>
+<p>+        mNavigationBarView.getRecentsButton().setOnTouchListener(mRecentsPreloadOnTouchListener);</p>
+<p>+        mNavigationBarView.getRecentsButton().setLongClickable(true);</p>
+<p>+        mNavigationBarView.getRecentsButton().setOnLongClickListener(mLongPressBackRecentsListener);</p>
+<p>+        mNavigationBarView.getBackButton().setLongClickable(true);</p>
+<p>+        mNavigationBarView.getBackButton().setOnLongClickListener(mLongPressBackRecentsListener);</p>
+<p>+        mNavigationBarView.getHomeButton().setOnTouchListener(mHomeActionListener);</p>
+<p>+        mNavigationBarView.getHideBarButton().setOnClickListener(mHideBarClickListener);//ADD liweiping</p>
+<p>+</p>
+<p>+        if (forceReset) {</p>
+<p>+            // Nav Bar was added dynamically - we need to reset the mSystemUiVisibility and call</p>
+<p>+            // setSystemUiVisibility so that mNavigationBarMode is set to the correct value</p>
+<p>+           Log.i(way, prepareNavigationBarView mNavigationBarMode = + mNavigationBarMode +  mSystemUiVisibility =  + mSystemUiVisibility +  mNavigationIconHints =  + mNavigationIconHints);</p>
+<p>+           mNavigationBarMode = 0;</p>
+<p>+          </p>
+<p>+            int newVal = mSystemUiVisibility;</p>
+<p>+            mSystemUiVisibility = View.SYSTEM_UI_FLAG_VISIBLE;</p>
+<p>+            setSystemUiVisibility(newVal, /<em>SYSTEM_UI_VISIBILITY_MASK</em>/0xffffffff);</p>
+<p>+            int hints = mNavigationIconHints;</p>
+<p>+            mNavigationIconHints = 0;</p>
+<p>+            setNavigationIconHints(hints);</p>
+<p>+            topAppWindowChanged(mShowMenu);</p>
+<p>+        }</p>
+<p>+</p>
+<p>+        updateSearchPanel();</p>
+<p>+    }</p>
+<p>+</p>
+<p>+    // For small-screen devices (read: phones) that lack hardware navigation buttons</p>
+<p>+    private void addNavigationBar(boolean forceReset) {</p>
+<p>+        if (DEBUG) Log.v(TAG, addNavigationBar: about to add  + mNavigationBarView);</p>
+<p>+        if (mNavigationBarView == null) return;</p>
+<p>+</p>
+<p>+        prepareNavigationBarView(forceReset);</p>
+<p>+</p>
+<p>+        mWindowManager.addView(mNavigationBarView, getNavigationBarLayoutParams());</p>
+<p>+    }</p>
+<p>+    //END liweiping</p>
+<p>需要注意的是： </p>
+<p>①显示NavigationBar时，需要重新实例化一次NavigationBarView，我之前有试过移除NavigationBarView后未置空，下次添加时直接使用，会出现状态栏重启的情况，具体原因未知，log显示动画播放错误之类。</p>
+<p>②重新添加NavigationBarView时需要恢复NavigationBarView之前的状态，比如说隐藏前时是透明的、显示输入法按钮、菜单键等等。</p>
+<p>③本文是在Android5.0的代码上修改的，其他版本未验证。</p>
+<p>④本文仅是提供一种思路，并非最优方案。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/Android%E7%B3%BB%E7%BB%9F%E5%90%AF%E5%8A%A8%E8%BF%87%E7%A8%8B/" rel="prev" title="Android系统启动过程">
+      <i class="fa fa-chevron-left"></i> Android系统启动过程
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/apk%20%E5%8F%8D%E7%BC%96%E8%AF%91%E5%B7%A5%E5%85%B7/" rel="next" title="apk 反编译工具">
+      apk 反编译工具 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Edward"
+      src="/uploads/avatar.gif">
+  <p class="site-author-name" itemprop="name">Edward</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">570</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Edward</span>
+</div>
+
+        
+
+
+
+
+
+
+<script>
+  (function() {
+    function leancloudSelector(url) {
+      url = encodeURI(url);
+      return document.getElementById(url).querySelector('.leancloud-visitors-count');
+    }
+
+    function addCount(Counter) {
+      var visitors = document.querySelector('.leancloud_visitors');
+      var url = decodeURI(visitors.id);
+      var title = visitors.dataset.flagTitle;
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          if (results.length > 0) {
+            var counter = results[0];
+            leancloudSelector(url).innerText = counter.time + 1;
+            Counter('put', '/classes/Counter/' + counter.objectId, { time: { '__op': 'Increment', 'amount': 1 } })
+              .catch(error => {
+                console.error('Failed to save visitor count', error);
+              });
+          } else {
+              Counter('post', '/classes/Counter', { title, url, time: 1 })
+                .then(response => response.json())
+                .then(() => {
+                  leancloudSelector(url).innerText = 1;
+                })
+                .catch(error => {
+                  console.error('Failed to create', error);
+                });
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    function showTime(Counter) {
+      var visitors = document.querySelectorAll('.leancloud_visitors');
+      var entries = [...visitors].map(element => {
+        return decodeURI(element.id);
+      });
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url: { '$in': entries } })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          for (let url of entries) {
+            let target = results.find(item => item.url === url);
+            leancloudSelector(url).innerText = target ? target.time : 0;
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    let { app_id, app_key, server_url } = {"enable":true,"app_id":"wxYx0BX9gaKA3XC4LuO2of0v-gzGzoHsz","app_key":"LQMcs6IDIE4YAm10vMsn9IYq","server_url":"https://wxyx0bx9.lc-cn-n1-shared.com","security":false};
+    function fetchData(api_server) {
+      var Counter = (method, url, data) => {
+        return fetch(`${api_server}/1.1${url}`, {
+          method,
+          headers: {
+            'X-LC-Id'     : app_id,
+            'X-LC-Key'    : app_key,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data)
+        });
+      };
+      if (CONFIG.page.isPost) {
+        if (CONFIG.hostname !== location.hostname) return;
+        addCount(Counter);
+      } else if (document.querySelectorAll('.post-title-link').length >= 1) {
+        showTime(Counter);
+      }
+    }
+
+    let api_server = app_id.slice(-9) !== '-MdYXbMMI' ? server_url : `https://${app_id.slice(0, 8).toLowerCase()}.api.lncldglobal.com`;
+
+    if (api_server) {
+      fetchData(api_server);
+    } else {
+      fetch('https://app-router.leancloud.cn/2/route?appId=' + app_id)
+        .then(response => response.json())
+        .then(({ api_server }) => {
+          fetchData('https://' + api_server);
+        });
+    }
+  })();
+</script>
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

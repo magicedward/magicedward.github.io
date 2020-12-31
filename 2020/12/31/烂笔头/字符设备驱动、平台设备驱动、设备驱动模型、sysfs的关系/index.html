@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"edward.org.cn","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="学习Linux设备驱动开发的过程中自然会遇到字符设备驱动、平台设备驱动、设备驱动模型和sysfs等相关概念和技术。对于初学者来说会非常困惑，甚至对Linux有一定基础的工程师而言，能够较好理解这些相关技术也相对不错了。要深刻理解其中的原理需要非常熟悉设备驱动相关的框架和模型代码。网络上有关这些技术的文章不少，但多是对其中的某一点进行阐述，很难找到对这些技术进行比较和关联的分析。对于开发者而言，能够">
+<meta property="og:type" content="article">
+<meta property="og:title" content="字符设备驱动、平台设备驱动、设备驱动模型、sysfs的关系">
+<meta property="og:url" content="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/%E5%AD%97%E7%AC%A6%E8%AE%BE%E5%A4%87%E9%A9%B1%E5%8A%A8%E3%80%81%E5%B9%B3%E5%8F%B0%E8%AE%BE%E5%A4%87%E9%A9%B1%E5%8A%A8%E3%80%81%E8%AE%BE%E5%A4%87%E9%A9%B1%E5%8A%A8%E6%A8%A1%E5%9E%8B%E3%80%81sysfs%E7%9A%84%E5%85%B3%E7%B3%BB/index.html">
+<meta property="og:site_name" content="点点滴滴">
+<meta property="og:description" content="学习Linux设备驱动开发的过程中自然会遇到字符设备驱动、平台设备驱动、设备驱动模型和sysfs等相关概念和技术。对于初学者来说会非常困惑，甚至对Linux有一定基础的工程师而言，能够较好理解这些相关技术也相对不错了。要深刻理解其中的原理需要非常熟悉设备驱动相关的框架和模型代码。网络上有关这些技术的文章不少，但多是对其中的某一点进行阐述，很难找到对这些技术进行比较和关联的分析。对于开发者而言，能够">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-12-31T06:48:02.298Z">
+<meta property="article:modified_time" content="2020-01-16T04:37:32.342Z">
+<meta property="article:author" content="Edward">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/%E5%AD%97%E7%AC%A6%E8%AE%BE%E5%A4%87%E9%A9%B1%E5%8A%A8%E3%80%81%E5%B9%B3%E5%8F%B0%E8%AE%BE%E5%A4%87%E9%A9%B1%E5%8A%A8%E3%80%81%E8%AE%BE%E5%A4%87%E9%A9%B1%E5%8A%A8%E6%A8%A1%E5%9E%8B%E3%80%81sysfs%E7%9A%84%E5%85%B3%E7%B3%BB/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>字符设备驱动、平台设备驱动、设备驱动模型、sysfs的关系 | 点点滴滴</title>
+  
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?a92ed22eafce466e7a7b17546bb0dc6f";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">点点滴滴</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/%E5%AD%97%E7%AC%A6%E8%AE%BE%E5%A4%87%E9%A9%B1%E5%8A%A8%E3%80%81%E5%B9%B3%E5%8F%B0%E8%AE%BE%E5%A4%87%E9%A9%B1%E5%8A%A8%E3%80%81%E8%AE%BE%E5%A4%87%E9%A9%B1%E5%8A%A8%E6%A8%A1%E5%9E%8B%E3%80%81sysfs%E7%9A%84%E5%85%B3%E7%B3%BB/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/avatar.gif">
+      <meta itemprop="name" content="Edward">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="点点滴滴">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          字符设备驱动、平台设备驱动、设备驱动模型、sysfs的关系
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-12-31 14:48:02" itemprop="dateCreated datePublished" datetime="2020-12-31T14:48:02+08:00">2020-12-31</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-01-16 12:37:32" itemprop="dateModified" datetime="2020-01-16T12:37:32+08:00">2020-01-16</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%83%82%E7%AC%94%E5%A4%B4/" itemprop="url" rel="index"><span itemprop="name">烂笔头</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/%E5%AD%97%E7%AC%A6%E8%AE%BE%E5%A4%87%E9%A9%B1%E5%8A%A8%E3%80%81%E5%B9%B3%E5%8F%B0%E8%AE%BE%E5%A4%87%E9%A9%B1%E5%8A%A8%E3%80%81%E8%AE%BE%E5%A4%87%E9%A9%B1%E5%8A%A8%E6%A8%A1%E5%9E%8B%E3%80%81sysfs%E7%9A%84%E5%85%B3%E7%B3%BB/" class="post-meta-item leancloud_visitors" data-flag-title="字符设备驱动、平台设备驱动、设备驱动模型、sysfs的关系" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>学习Linux设备驱动开发的过程中自然会遇到字符设备驱动、平台设备驱动、设备驱动模型和sysfs等相关概念和技术。对于初学者来说会非常困惑，甚至对Linux有一定基础的工程师而言，能够较好理解这些相关技术也相对不错了。要深刻理解其中的原理需要非常熟悉设备驱动相关的框架和模型代码。网络上有关这些技术的文章不少，但多是对其中的某一点进行阐述，很难找到对这些技术进行比较和关联的分析。对于开发者而言，能够熟悉某一点并分享出来已很难得，但对于专注传授技术和经验给学习者而言，横向比较关联各个驱动相关的知识点和纵向剖析Linux整个驱动软件层次是非常有必要的，也非常有意义。</p>
+<p>本文依然是从需求的角度去理解以上知识点，存在即是合理，以上技术知识能够存在，即代表其有一定的作用。我们着重去理解每一个技术点的作用，并明确其在驱动开发中的角色。</p>
+<p>一、设备驱动</p>
+<p>Linux设备驱动分三种，包括字符设备驱动、块设备驱动和网络设备驱动。字符设备只能按字节流先后顺序访问设备内存，不能随机访问。鼠标、触摸屏、LCD等是字符设备的代表。块设备可以随机访问设备内存的任意地址，硬盘、SD卡、NAND FLASH是块设备的代表。网络设备指的是网卡一类使用socket套接字进行通信的设备。本文以字符设备为例讲述相关知识。</p>
+<p>二、字符设备驱动</p>
+<p>字符设备驱动框架请参考嵌入式企鹅圈的两篇文章：</p>
+<p> Linux字符设备驱动剖析</p>
+<p>Linux 设备文件的创建和mdev</p>
+<p>1.    字符设备驱动纵向关系</p>
+<p>从&lt; Linux字符设备驱动剖析&gt;可以看出，应用层访问设备驱动非常简单，即是通过open接口来最终获得设备驱动的操作接口集struct file_opertions.而open接口传入的参数是/dev目录下的设备名。而从&lt;Linux 设备文件的创建和mdev&gt;可以知道，设备名对应的设备文件节点inode会存储设备号，而驱动框架中的全局数组cdev_map则维护设备号和file_opertions的关系。即应用层到底层的关系主要是（忽略VFS这一层）：</p>
+<p>设备名–&gt;设备号–&gt;file_opertions</p>
+<p>Open函数返回的局部fd和file_opertions的关系(忽略进程数据结构)如下：</p>
+<p>fd–&gt;file(当前进程数据结构成员)-&gt; file_opertions</p>
+<p>这样，通过fd即可以获得file_opertions，即可以通过read、write等接口来调用驱动的读操作函数和写操作函数、ioctl函数等。</p>
+<p>2.    字符设备驱动的任务</p>
+<p>1）字符设备驱动最本质的任务应该是提供file_opertions的各个open、read、write、ioctl等接口的实现。</p>
+<p>另外从以上的描述中，为了让应用层能够调用到底层的file_opertions还涉及到以下任务：</p>
+<p>2）申请设备号，并将设备号和file_opertions注册（cdev_add接口）到驱动框架中的cdev_map数组。这点应该在字符设备驱动中负责，涉及到其主动向系统报备自己的存在。</p>
+<p>3）在/dev目录中创建设备文件，内容包括设备号。这一点是否由字符设备驱动来负责商榷。字符设备驱动位于内核层，如果由其负责这个任务，那么驱动就得知道它要创建的设备名。简单的字符驱动还好，如果是USB等可插拔的设备，驱动怎么知道自己要创建什么设备名呢？有人说可以写明一套规则。确实如此，但如果把这套规则放到应用层，由应用程序开发人员去明确这个规则（mdev正是这样做的），会不会更好？因为是应用程序直接编程访问这个设备名对应的设备驱动的。所以字符设备驱动不应该直接负责设备文件的创建。</p>
+<ol start="3">
+<li>谁来创建设备文件</li>
+</ol>
+<p>       总得有人出来做吧，否则应用层怎么访问啊？</p>
+<p>       一种方法就是用户在shell中使用mknod命令创建设备文件，同时传入设备名和设备号。这是人工的做法，很不科学。但它是一种演示的方法。</p>
+<p>       另外一种方法就是依赖设备模型来辅助创建设备文件。这也是设备模型的作用之一。</p>
+<ol start="4">
+<li>字符设备驱动编程流程</li>
+</ol>
+<p>       1）定义struct file_opertions my_fops并实现其中的各个接口，如open、read、write、ioctl等接口。</p>
+<p>       2）实现驱动的入口函数，如chardev_init</p>
+<p>              static int __init chardev_init(void){</p>
+<p>                     alloc_chrdev_region(&amp;devno,…);//申请设备号</p>
+<p>                     my_cdev=cdev_alloc();</p>
+<p>                     cdev_init(my_cdev,&amp;my_fops);</p>
+<p>                     cdev_add(my_fops,devno, 1);//注册设备号和file_opertions</p>
+<p>              }</p>
+<p>       3）module_init(chardev_init);//宏定义该初始化入口函数。卸载流程不做解释。</p>
+<p>       4）insmod加载这个module后，可以人工在shell命令行利用mknod创建设备文件。</p>
+<p>       5）应用层即可以用open来打开设备文件来进行访问了。</p>
+<p>5.    总结</p>
+<p>可以看出，字符设备驱动的核心框架跟设备模型、平台设备驱动没有直接关系，不用他们也一样能够正常工作。</p>
+<p>三、设备驱动模型</p>
+<p>我们主要谈及设备驱动模型在linux驱动中的作用和角色，有关设备模型的原理和实现我们另文再述。</p>
+<ol>
+<li>设备驱动模型的作用</li>
+</ol>
+<p>1）设备驱动模型实现uevent机制，调用应用层的medv来自动创建设备文件。这在上面已经论述过。</p>
+<p>2）设备驱动模型通过sysfs文件系统向用户层提供设备驱动视图，如下。</p>
+<p>上图只是可视化的一种表达，有助于大家去理解设备模型，类似于windows的设备管理程序，在嵌入式linux里面并没有相关应用通过图形的方式来展现这种关系。但是用户可以通过命令窗口利用ls命名逐级访问/sys文件夹来获得各种总线、设备、驱动的信息和关系。可以看出，在/sys顶级目录，有三个关键的子目录，就是设备类、设备和总线。</p>
+<p>设备是具体的一个个设备，在/sys/devices/是创建了实际的文件节点。而其他目录，如设备类和总线以下的子目录中出现的设备都是用符号链接指向/sys/devices/目录下的文件。</p>
+<p>设备类是对/sys/devices/下的各种设备进行归类，以体现一类设备的公共属性，如鼠标和触摸屏都是属于input设备类。</p>
+<p>总线目录是总线、设备、驱动模型的核心目录。因为设备和驱动都是依附在某种总线上的，如USB、PCI和平台总线等。设备和驱动正是依靠总线的管理功能才能找到对方，如设备注册到总线时去寻找驱动，而驱动注册的时候去寻找其能够支持的设备。</p>
+<p>最重要的是，如果没有设备模型，那应用层很难知晓驱动和设备的关系，因为字符设备驱动并没有提供这些信息，那对于设备驱动的管理者而言会非常麻烦。</p>
+<p>事实上，内核中的总线class、设备device和驱动device_driver都不会将所有的信息暴露给用户层，例如这三个数据结构都有对应的private数据结构，它用于内核对上下级总线设备驱动的链表关系维护。如果暴露给用户层，那容易被用户层修改而使系统混乱。实际上，用户层只关心三者的视图关联，至于他们的关联在底层怎么实现则不需要关心。</p>
+<p>3）设备驱动模型提供统一的电源管理机制。很明显，我们在字符设备驱动的file_operations接口中并没有看到电源管理方面的接口。而对于操作系统来说，电源功耗管理必不可少。电源管理其实不应该由应用开发人员来负责，而是应该由系统来负责，例如手机很久没有触摸了，那会进入休眠状态。这种状态的改变应该由系统来完成，而各种设备进入睡眠模式也应该由系统来完成。因此file_operations不提供电源管理的接口给应用程序是合理的。而设备模型作为系统管理的一种机制，由它来提供电源管理是非常合理的。</p>
+<p>       如设备device数据结构有struct dev_pm_info    power功耗属性参数，驱动device_driver数据结构有struct dev_pm_ops *pm功耗操作接口。</p>
+<p>       4）设备驱动模型提供各种对象实例的引用计数，防止对象被应用层误删。设备模型的所有数据结构均是继承kobject而来，而kobject就提供基础的计数功能。</p>
+<p>       5）设备驱动模型提供多一种方式给应用层，用户和内核可以通过sysfs进行交互，如通过修改/sys目录下设备的文件内容，即可以直接修改设备对应的参数。</p>
+<p>       总结，设备驱动模型侧重于内核对总线、设备和驱动的管理，并向应用层暴露这些管理的信息，而字符设备驱动则侧重于设备驱动的功能实现。</p>
+<ol start="2">
+<li>设备驱动模型的核心接口</li>
+</ol>
+<p>       bus_register(struct bus_type *bus) 注册总线</p>
+<p>device_add(struct device *dev) 注册设备</p>
+<p>       driver_register(struct device_driver*drv) 注册驱动</p>
+<p>       class_create(owner, name) 创建设备类</p>
+<p>       等等</p>
+<p>3.    设备驱动模型和字符设备驱动区别</p>
+<p>设备驱动模型侧重于内核对总线、设备和驱动的管理，并向应用层暴露这些管理的信息，而字符设备驱动则侧重于设备驱动的功能实现。</p>
+<p>四、sysfs文件系统</p>
+<p>1.sysfs文件系统和设备驱动模型的关系</p>
+<p>Sysfs文件系统是设备驱动模型得以向用户暴露其管理信息的载体。它们之间的关系如下：</p>
+<p>1）设备驱动模型的上下级关系（如子设备和所属父设备）通过sysfs文件系统的父目录和子目录来体现。</p>
+<p>2）设备驱动模型的平级关系（如设备类管理的设备和具体的设备的关系）则通过sysfs文件系统的目录符号链接来实现。</p>
+<p>3）设备驱动模型的属性（如设备的参数和设备名，设备号等）则通过sysfs文件系统的文件内容来记录实现。</p>
+<p>       4）设备驱动模型数据结构中的kobject对应于sysfs文件系统中的目录，而数据结构中的struct attribute成员则对应于sysfs文件系统中的文件。对应的意思是指继续与kobject的device、device_driver和bus等在向系统注册的过程中会调用sysfs的create_dir接口来创建对应的目录，而含有struct attribute成员属性的device、device_driver和bus等在向系统注册的过程中则会调用sysfs的sysfs_create_file接口来创建文件。</p>
+<p>2.sysfs核心接口</p>
+<p>       sysfs_create_file(struct kobject * kobj,const struct attribute * attr)创建属性文件</p>
+<p>       sysfs_create_dir(struct kobject * kobj)创建目录</p>
+<p>       int sysfs_open_file(struct inode *inode,struct file *file)打开sysfs文件系统格式的文件</p>
+<p>       sysfs_read_file(struct file *file, char__user *buf, size_t count, loff_t *ppos) 读操作</p>
+<p>       sysfs_write_file(struct file *file, constchar __user *buf, size_t count, loff_t *ppos) 写操作</p>
+<ol start="3">
+<li>sysfs文件系统与属性文件读写</li>
+</ol>
+<p>       sysfs_read_file是sysfs文件系统的读写入口，但是驱动需要向系统提供真正的读写操作，也即是struct sysfs_ops数据结构中的show和store接口。</p>
+<p>       Sysfs是基于内存的文件系统，掉电即消失，sysfs所有的操作接口均是对内存中的内核数据结构进行访问操作。假如用户用cat命令去读取一个属性文件(如dev)的内容，那么会产生以下流程：</p>
+<p>       1）fd=open(“dev”)-&gt;vfs_open(“dev”)-&gt;sysfs_open(“dev”)获取该文件的句柄</p>
+<p>       2）read()-&gt;vfs_read()-&gt;sysfs_read_file()-&gt;sysfs_ops-&gt;show()该show接口即是设备在注册时产生属性文件，并向系统提供该文件的读接口。而读接口的实现中自然是对该属性参数的读访问。</p>
+<p>       /sys挂载了sysfs文件系统，因此所有对/sys目录下的文件或者目录的操作都会通过sysfs文件的接口进行访问。</p>
+<p>五、平台设备驱动</p>
+<p>平台设备驱动中的“平台”指的是平台总线，即platform_bus_type，是linux众多总线中的一种，如USB总线、PCI总线、I2C总线等等。只不过平台总线是一种虚拟的总线，专门用来管理SOC上的控制器（如看门狗、LCD、RTC等等），它们都是CPU的总线上直接取址访问设备的。而USB、PCI等设备都有通过特定的时序来访问SOC芯片以外的设备。平台设备驱动体现的关系是设备驱动模型上的一个子集，将平台视为一种总线的概念，那两者的关系就会容易理解。</p>
+<p>1.    平台设备驱动和设备驱动模型的关系</p>
+<p>1）平台设备驱动接口在设备驱动模型视图上创建了相关的平台设备类(/sys/class/platform_bus)、平台总线(/sys/bus/platform)、平台设备(/sys/devices/).</p>
+<p>2）平台设备(platform_device)和平台设备驱动(platform_driver)均注册到平台总线上，即在/sys/bus/platform/目录下创建相应的设备和驱动目录。</p>
+<p>3）平台总线负责匹配注册到其上面的设备和驱动，匹配成功后回调用驱动的probe接口。</p>
+<p>4）平台设备驱动利用设备驱动模型接口来辅助创建对应的设备文件（位于/dev/目录下）。</p>
+<p>相关的接口包括：</p>
+<p>platform_device_register(structplatform_device *pdev) 注册平台设备</p>
+<p>platform_driver_register(structplatform_driver *drv) 注册平台设备驱动</p>
+<p>两个接口的实现里面都会对平台驱动和设备进行匹配，匹配成功会调用驱动的probe接口。</p>
+<ol start="2">
+<li>平台设备驱动和字符设备驱动的关系</li>
+</ol>
+<p>       我们假设这个平台设备是字符设备。</p>
+<p>平台设备驱动和字符设备驱动的关系始于驱动的probe接口，即在probe接口中实现字符设备驱动所要完成的任务，即通过alloc_chrdev_region申请设备号和通过cdev_add注册驱动的struct file_opertions.另外为了自动创建应用层访问的设备文件，还要调用class_create和device_create接口在平台设备类下创建对应的设备类和设备，并发出uevent事件，调用mdev来创建设备文件。</p>
+<ol start="3">
+<li>平台设备驱动的开发流程</li>
+</ol>
+<p>       1）将字符设备驱动的char_init函数的实现搬到platform_driver的probe接口中。</p>
+<p>       2）在char_init中调用platform_device_register和platform_driver_register分别注册设备和驱动。其实，对于移植好的系统，platform_device_register是在linux启动的过程中完成的。因此char_init一般只有platform_driver_register注册驱动。</p>
+<p>       详细的平台设备驱动的实现原理和开发流程另文再述。本次的重点是为了阐述字符设备驱动、设备驱动模型、sysfs和平台设备驱动之间的关系。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%8B%B7%E8%B4%9D%E9%97%AE%E9%A2%98/" rel="prev" title="字符串拷贝问题">
+      <i class="fa fa-chevron-left"></i> 字符串拷贝问题
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/%E2%80%9C+%E2%80%9D%E5%8F%B7%E7%9A%84%E4%BC%98%E5%85%88%E7%BA%A7%20%20%E7%A7%BB%E4%BD%8D/" rel="next" title="“+”号的优先级  移位">
+      “+”号的优先级  移位 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Edward"
+      src="/uploads/avatar.gif">
+  <p class="site-author-name" itemprop="name">Edward</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">570</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Edward</span>
+</div>
+
+        
+
+
+
+
+
+
+<script>
+  (function() {
+    function leancloudSelector(url) {
+      url = encodeURI(url);
+      return document.getElementById(url).querySelector('.leancloud-visitors-count');
+    }
+
+    function addCount(Counter) {
+      var visitors = document.querySelector('.leancloud_visitors');
+      var url = decodeURI(visitors.id);
+      var title = visitors.dataset.flagTitle;
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          if (results.length > 0) {
+            var counter = results[0];
+            leancloudSelector(url).innerText = counter.time + 1;
+            Counter('put', '/classes/Counter/' + counter.objectId, { time: { '__op': 'Increment', 'amount': 1 } })
+              .catch(error => {
+                console.error('Failed to save visitor count', error);
+              });
+          } else {
+              Counter('post', '/classes/Counter', { title, url, time: 1 })
+                .then(response => response.json())
+                .then(() => {
+                  leancloudSelector(url).innerText = 1;
+                })
+                .catch(error => {
+                  console.error('Failed to create', error);
+                });
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    function showTime(Counter) {
+      var visitors = document.querySelectorAll('.leancloud_visitors');
+      var entries = [...visitors].map(element => {
+        return decodeURI(element.id);
+      });
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url: { '$in': entries } })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          for (let url of entries) {
+            let target = results.find(item => item.url === url);
+            leancloudSelector(url).innerText = target ? target.time : 0;
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    let { app_id, app_key, server_url } = {"enable":true,"app_id":"wxYx0BX9gaKA3XC4LuO2of0v-gzGzoHsz","app_key":"LQMcs6IDIE4YAm10vMsn9IYq","server_url":"https://wxyx0bx9.lc-cn-n1-shared.com","security":false};
+    function fetchData(api_server) {
+      var Counter = (method, url, data) => {
+        return fetch(`${api_server}/1.1${url}`, {
+          method,
+          headers: {
+            'X-LC-Id'     : app_id,
+            'X-LC-Key'    : app_key,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data)
+        });
+      };
+      if (CONFIG.page.isPost) {
+        if (CONFIG.hostname !== location.hostname) return;
+        addCount(Counter);
+      } else if (document.querySelectorAll('.post-title-link').length >= 1) {
+        showTime(Counter);
+      }
+    }
+
+    let api_server = app_id.slice(-9) !== '-MdYXbMMI' ? server_url : `https://${app_id.slice(0, 8).toLowerCase()}.api.lncldglobal.com`;
+
+    if (api_server) {
+      fetchData(api_server);
+    } else {
+      fetch('https://app-router.leancloud.cn/2/route?appId=' + app_id)
+        .then(response => response.json())
+        .then(({ api_server }) => {
+          fetchData('https://' + api_server);
+        });
+    }
+  })();
+</script>
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

@@ -1,0 +1,3591 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"edward.org.cn","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="&#x2F;*  * Driver for MT9M001 CMOS Image Sensor from Micron  *  * Copyright (C) 2008, Guennadi Liakhovetski &lt;&amp;#107;&amp;#x65;&amp;#x72;&amp;#110;&amp;#x65;&amp;#x6c;&amp;#64;&amp;#112;&amp;#x65;&amp;#x6e;&amp;#103;&amp;#117;&amp;#116;&amp;#114;&amp;#x6f;&amp;#x6">
+<meta property="og:type" content="article">
+<meta property="og:title" content="gc2035">
+<meta property="og:url" content="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/gc2035.c/index.html">
+<meta property="og:site_name" content="点点滴滴">
+<meta property="og:description" content="&#x2F;*  * Driver for MT9M001 CMOS Image Sensor from Micron  *  * Copyright (C) 2008, Guennadi Liakhovetski &lt;&amp;#107;&amp;#x65;&amp;#x72;&amp;#110;&amp;#x65;&amp;#x6c;&amp;#64;&amp;#112;&amp;#x65;&amp;#x6e;&amp;#103;&amp;#117;&amp;#116;&amp;#114;&amp;#x6f;&amp;#x6">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-12-31T06:48:01.143Z">
+<meta property="article:modified_time" content="2020-01-16T04:37:32.138Z">
+<meta property="article:author" content="Edward">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/gc2035.c/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>gc2035 | 点点滴滴</title>
+  
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?a92ed22eafce466e7a7b17546bb0dc6f";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">点点滴滴</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/gc2035.c/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/avatar.gif">
+      <meta itemprop="name" content="Edward">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="点点滴滴">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          gc2035
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-12-31 14:48:01" itemprop="dateCreated datePublished" datetime="2020-12-31T14:48:01+08:00">2020-12-31</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-01-16 12:37:32" itemprop="dateModified" datetime="2020-01-16T12:37:32+08:00">2020-01-16</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%83%82%E7%AC%94%E5%A4%B4/" itemprop="url" rel="index"><span itemprop="name">烂笔头</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/gc2035.c/" class="post-meta-item leancloud_visitors" data-flag-title="gc2035" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>/*</p>
+<p> * Driver for MT9M001 CMOS Image Sensor from Micron</p>
+<p> *</p>
+<p> * Copyright (C) 2008, Guennadi Liakhovetski &lt;<a href="mailto:&#107;&#x65;&#x72;&#110;&#x65;&#x6c;&#64;&#112;&#x65;&#x6e;&#103;&#117;&#116;&#114;&#x6f;&#x6e;&#105;&#x78;&#46;&#x64;&#101;">&#107;&#x65;&#x72;&#110;&#x65;&#x6c;&#64;&#112;&#x65;&#x6e;&#103;&#117;&#116;&#114;&#x6f;&#x6e;&#105;&#x78;&#46;&#x64;&#101;</a>&gt;</p>
+<p> *</p>
+<p> * This program is free software; you can redistribute it and/or modify</p>
+<p> * it under the terms of the GNU General Public License version 2 as</p>
+<p> * published by the Free Software Foundation.</p>
+<p> */</p>
+<p>#define lily_debug 0</p>
+<p>#include &lt;linux/videodev2.h&gt;</p>
+<p>#include &lt;linux/slab.h&gt;</p>
+<p>#include &lt;linux/i2c.h&gt;</p>
+<p>#include &lt;linux/log2.h&gt;</p>
+<p>#include &lt;linux/platform_device.h&gt;</p>
+<p>#include &lt;linux/delay.h&gt;</p>
+<p>#include &lt;linux/circ_buf.h&gt;</p>
+<p>#include &lt;linux/miscdevice.h&gt;</p>
+<p>#include &lt;media/v4l2-common.h&gt;</p>
+<p>#include &lt;media/v4l2-chip-ident.h&gt;</p>
+<p>#include &lt;media/soc_camera.h&gt;</p>
+<p>#include &lt;plat/rk_camera.h&gt;</p>
+<p>#if lily_debug</p>
+<p>#include &lt;linux/proc_fs.h&gt;</p>
+<p>struct i2c_client * g_client;</p>
+<p>#endif</p>
+<p>static int debug;</p>
+<p>module_param(debug, int, S_IRUGO|S_IWUSR);</p>
+<p>#define dprintk(level, fmt, arg…) do { \</p>
+<p>if (debug &gt;= level) \</p>
+<p>printk(KERN_WARNING fmt , ## arg); } while (0)</p>
+<p>#define SENSOR_TR(format, …) printk(KERN_ERR format, ## __VA_ARGS__)</p>
+<p>#define SENSOR_DG(format, …) dprintk(1, format, ## __VA_ARGS__)</p>
+<p>#define _CONS(a,b) a##b</p>
+<p>#define CONS(a,b) _CONS(a,b)</p>
+<p>#define __STR(x) #x</p>
+<p>#define _STR(x) __STR(x)</p>
+<p>#define STR(x) _STR(x)</p>
+<p>#define MIN(x,y)   ((x&lt;y) ? x: y)</p>
+<p>#define MAX(x,y)    ((x&gt;y) ? x: y)</p>
+<p>/* Sensor Driver Configuration */</p>
+<p>#define SENSOR_NAME RK29_CAM_SENSOR_GC2035</p>
+<p>#define SENSOR_V4L2_IDENT  V4L2_IDENT_GC2035</p>
+<p>#define SENSOR_ID 0x2035</p>
+<p>#define SENSOR_MIN_WIDTH    800</p>
+<p>#define SENSOR_MIN_HEIGHT   600</p>
+<p>#define SENSOR_MAX_WIDTH    1600</p>
+<p>#define SENSOR_MAX_HEIGHT   1200</p>
+<p>#define SENSOR_INIT_WIDTH 800 /* Sensor pixel size for sensor_init_data array */</p>
+<p>#define SENSOR_INIT_HEIGHT  600</p>
+<p>#define SENSOR_INIT_WINSEQADR sensor_svga</p>
+<p>#define SENSOR_INIT_PIXFMT V4L2_MBUS_FMT_YUYV8_2X8</p>
+<p>#define CONFIG_SENSOR_WhiteBalance 1</p>
+<p>#define CONFIG_SENSOR_Brightness 0</p>
+<p>#define CONFIG_SENSOR_Contrast      0</p>
+<p>#define CONFIG_SENSOR_Saturation    0</p>
+<p>#define CONFIG_SENSOR_Effect        1</p>
+<p>#define CONFIG_SENSOR_Scene         1</p>
+<p>#define CONFIG_SENSOR_DigitalZoom   0</p>
+<p>#define CONFIG_SENSOR_Focus         0</p>
+<p>#define CONFIG_SENSOR_Exposure      1</p>
+<p>#define CONFIG_SENSOR_Flash         1</p>
+<p>#define CONFIG_SENSOR_Mirror        0</p>
+<p>#define CONFIG_SENSOR_Flip          0</p>
+<p>#define CONFIG_SENSOR_I2C_SPEED     250000       /* Hz */</p>
+<p>/* Sensor write register continues by preempt_disable/preempt_enable for current process not be scheduled */</p>
+<p>#define CONFIG_SENSOR_I2C_NOSCHED   0</p>
+<p>#define CONFIG_SENSOR_I2C_RDWRCHK   0</p>
+<p>#define SENSOR_BUS_PARAM  (SOCAM_MASTER | SOCAM_PCLK_SAMPLE_RISING |\</p>
+<p>                          SOCAM_HSYNC_ACTIVE_HIGH | SOCAM_VSYNC_ACTIVE_HIGH |\</p>
+<p>                          SOCAM_DATA_ACTIVE_HIGH | SOCAM_DATAWIDTH_8  |SOCAM_MCLK_24MHZ)</p>
+<p>#define COLOR_TEMPERATURE_CLOUDY_DN  6500</p>
+<p>#define COLOR_TEMPERATURE_CLOUDY_UP    8000</p>
+<p>#define COLOR_TEMPERATURE_CLEARDAY_DN  5000</p>
+<p>#define COLOR_TEMPERATURE_CLEARDAY_UP    6500</p>
+<p>#define COLOR_TEMPERATURE_OFFICE_DN     3500</p>
+<p>#define COLOR_TEMPERATURE_OFFICE_UP     5000</p>
+<p>#define COLOR_TEMPERATURE_HOME_DN       2500</p>
+<p>#define COLOR_TEMPERATURE_HOME_UP       3500</p>
+<p>#define SENSOR_NAME_STRING(a) STR(CONS(SENSOR_NAME, a))</p>
+<p>#define SENSOR_NAME_VARFUN(a) CONS(SENSOR_NAME, a)</p>
+<p>#define SENSOR_AF_IS_ERR    (0x00&lt;&lt;0)</p>
+<p>#define SENSOR_AF_IS_OK (0x01&lt;&lt;0)</p>
+<p>#define SENSOR_INIT_IS_ERR   (0x00&lt;&lt;28)</p>
+<p>#define SENSOR_INIT_IS_OK    (0x01&lt;&lt;28)</p>
+<p>struct reginfo</p>
+<p>{</p>
+<p>    u8 reg;</p>
+<p>    u8 val;</p>
+<p>};</p>
+<p>//flash off in fixed time to prevent from too hot , zyc</p>
+<p>struct  flash_timer{</p>
+<p>    struct soc_camera_device *icd;</p>
+<p>struct hrtimer timer;</p>
+<p>};</p>
+<p>static enum hrtimer_restart flash_off_func(struct hrtimer *timer);</p>
+<p>static struct  flash_timer flash_off_timer;</p>
+<p>//for user defined if user want to customize the series , zyc</p>
+<p>#ifdef CONFIG_GC2035_USER_DEFINED_SERIES</p>
+<p>#include &quot;gc2035_user_series.c&quot;</p>
+<p>#else</p>
+<p>/* init 352X288 SVGA */</p>
+<p>static struct reginfo sensor_init_data[] ={</p>
+<p>{0xfe,0x80},</p>
+<p>{0xfe,0x80},</p>
+<p>{0xfe,0x80},</p>
+<p>{0xfc,0x06},</p>
+<p>{0xf2,0x00},</p>
+<p>{0xf3,0x00},</p>
+<p>{0xf4,0x00},</p>
+<p>{0xf5,0x00},</p>
+<p>{0xf9,0xfe}, //[0] pll enable</p>
+<p>{0xfa,0x00},</p>
+<p>{0xf6,0x00},</p>
+<p>{0xf7,0x15}, //pll enable</p>
+<p>{0xf8,0x85},</p>
+<p>{0xfe,0x00},</p>
+<p>{0x82,0x00},</p>
+<p>{0xb3,0x60},</p>
+<p>{0xb4,0x40},</p>
+<p>{0xb5,0x60},</p>
+<p>{0x03,0x02},</p>
+<p>{0x04,0x80},</p>
+<p>//========================measure window,0x</p>
+<p>{0xfe,0x00},</p>
+<p>{0xec,0x06},//04 2012.10.26</p>
+<p>{0xed,0x06},//04 2012.10.26</p>
+<p>{0xee,0x62},//60 2012.10.26</p>
+<p>{0xef,0x92},//90 2012.10.26</p>
+<p>////=============================analog</p>
+<p>{0x0a,0x00}, //row start</p>
+<p>{0x0c,0x02}, //col start</p>
+<p>{0x0d,0x04},</p>
+<p>{0x0e,0xc0},</p>
+<p>{0x0f,0x06}, //Window setting</p>
+<p>{0x10,0x58}, </p>
+<p>{0x17,0x17}, //[0]mirror [1]flip</p>
+<p>{0x18,0x0a}, //0a 2012.10.26</p>
+<p>{0x19,0x0a}, //AD pipe number</p>
+<p>{0x1a,0x01}, //CISCTL mode4</p>
+<p>{0x1b,0x8b},</p>
+<p>{0x1e,0x88}, //analog mode1 [7] tx-high en [5:3]COL_bias</p>
+<p>{0x1f,0x08}, //[3] tx-low en//</p>
+<p>{0x20,0x05}, //[0]adclk mode,0x[1]rowclk_MODE [2]rsthigh_en</p>
+<p>{0x21,0x0f}, //[6:4]rsg</p>
+<p>{0x22,0xf0}, //[3:0]vref</p>
+<p>{0x23,0xc3}, //f3//ADC_r</p>
+<p>{0x24,0x1a}, //16//pad drive</p>
+<p>//==============================aec</p>
+<p>//AEC</p>
+<p>{0xfe,0x01},</p>
+<p>{0x11,0x20},//AEC_out_slope,0x</p>
+<p>{0x1f,0x80},//max_post_gain</p>
+<p>{0x20,0x40},//max_pre_gain</p>
+<p>{0x47,0x30},//AEC_outdoor_th</p>
+<p>{0x0b,0x10},//</p>
+<p>{0x13,0x90},//63//y_target</p>
+<p>{0xfe,0x00},</p>
+<p>{0xfe,0x00}, </p>
+<p>{0xb6,0x03}, //AEC enable</p>
+<p>{0xfe,0x00},</p>
+<p>////======================BLK</p>
+<p>{0x3f,0x00}, //prc close</p>
+<p>{0x40,0x77},//</p>
+<p>{0x42,0x7f},</p>
+<p>{0x43,0x30},</p>
+<p>{0x5c,0x08},</p>
+<p>{0x5e,0x20},</p>
+<p>{0x5f,0x20},</p>
+<p>{0x60,0x20},</p>
+<p>{0x61,0x20},</p>
+<p>{0x62,0x20},</p>
+<p>{0x63,0x20},</p>
+<p>{0x64,0x20},</p>
+<p>{0x65,0x20},</p>
+<p>///=================block</p>
+<p>{0x80,0xff},//</p>
+<p>{0x81,0x26},//38},skin_Y 8c_debug</p>
+<p>{0x87,0xb0}, //[7]middle gamma </p>
+<p>{0x03,0x05},</p>
+<p>{0x04,0x2e}, </p>
+<p>{0x84,0x00}, //output put foramat</p>
+<p>{0x86,0x03}, //sync plority</p>
+<p>{0x8b,0xbc},</p>
+<p>{0xb0,0x80}, //globle gain</p>
+<p>{0xc0,0x40},//Yuv bypass</p>
+<p>//===============================lsc</p>
+<p>{0xfe,0x01},</p>
+<p>{0xc2,0x14},</p>
+<p>{0xc3,0x0b},</p>
+<p>{0xc4,0x06},</p>
+<p>{0xc8,0x1b},</p>
+<p>{0xc9,0x0c},</p>
+<p>{0xca,0x00},</p>
+<p>{0xbc,0x19},</p>
+<p>{0xbd,0x0c},</p>
+<p>{0xbe,0x0b},</p>
+<p>{0xb6,0x28},</p>
+<p>{0xb7,0x18},</p>
+<p>{0xb8,0x00},</p>
+<p>{0xc5,0x00},</p>
+<p>{0xc6,0x00},</p>
+<p>{0xc7,0x00},</p>
+<p>{0xcb,0x22},</p>
+<p>{0xcc,0x0f},</p>
+<p>{0xcd,0x07},</p>
+<p>{0xbf,0x10},</p>
+<p>{0xc0,0x0c},</p>
+<p>{0xc1,0x0b},</p>
+<p>{0xb9,0x10},</p>
+<p>{0xba,0x0f},</p>
+<p>{0xbb,0x0c},</p>
+<p>{0xaa,0x1a},</p>
+<p>{0xab,0x15},</p>
+<p>{0xac,0x1c},</p>
+<p>{0xad,0x23},</p>
+<p>{0xae,0x1e},</p>
+<p>{0xaf,0x26},</p>
+<p>{0xb0,0x12},</p>
+<p>{0xb1,0x0f},</p>
+<p>{0xb2,0x14},</p>
+<p>{0xb3,0x13},</p>
+<p>{0xb4,0x12},</p>
+<p>{0xb5,0x1c},</p>
+<p>{0xd0,0x2f},</p>
+<p>{0xd2,0x39},</p>
+<p>{0xd3,0x40},</p>
+<p>{0xd8,0x0f},</p>
+<p>{0xda,0x24},</p>
+<p>{0xdb,0x19},</p>
+<p>{0xdc,0x00},</p>
+<p>{0xde,0x0a},</p>
+<p>{0xdf,0x0b},</p>
+<p>{0xd4,0x00},</p>
+<p>{0xd6,0x0d},</p>
+<p>{0xd7,0x04},</p>
+<p>{0xa4,0x00},</p>
+<p>{0xa5,0x00},</p>
+<p>{0xa6,0x60},</p>
+<p>{0xa7,0x06},</p>
+<p>{0xa8,0x00},</p>
+<p>{0xa9,0x00},</p>
+<p>{0xa1,0x80},</p>
+<p>{0xa2,0x80},</p>
+<p>//=================================cc</p>
+<p>{0xfe,0x02},</p>
+<p>{0xc0,0x01},</p>
+<p>{0xc1,0x40}, //Green_cc for d</p>
+<p>{0xc2,0xfc},</p>
+<p>{0xc3,0x05},</p>
+<p>{0xc4,0xec},</p>
+<p>{0xc5,0x42},</p>
+<p>{0xc6,0xf8},</p>
+<p>{0xc7,0x40},//for cwf </p>
+<p>{0xc8,0xf8},</p>
+<p>{0xc9,0x06},</p>
+<p>{0xca,0xfd},</p>
+<p>{0xcb,0x3e},</p>
+<p>{0xcc,0xf3},</p>
+<p>{0xcd,0x36},//for A</p>
+<p>{0xce,0xf6},</p>
+<p>{0xcf,0x04},</p>
+<p>{0xe3,0x0c},</p>
+<p>{0xe4,0x44},</p>
+<p>{0xe5,0xe5},</p>
+<p>{0xfe,0x00},</p>
+<p>//==============================awb</p>
+<p>//AWB clear</p>
+<p>{0xfe,0x01},</p>
+<p>{0x4f,0x00},</p>
+<p>{0x4d,0x00},</p>
+<p>{0x4e,0x00},</p>
+<p>{0x4e,0x00},</p>
+<p>{0x4e,0x00},</p>
+<p>{0x4e,0x00},</p>
+<p>{0x4e,0x00},</p>
+<p>{0x4e,0x00},</p>
+<p>{0x4e,0x00},</p>
+<p>{0x4e,0x00},</p>
+<p>{0x4e,0x00},</p>
+<p>{0x4e,0x00},</p>
+<p>{0x4e,0x00},</p>
+<p>{0x4e,0x00},</p>
+<p>{0x4e,0x00},</p>
+<p>{0x4e,0x00},</p>
+<p>{0x4e,0x00},</p>
+<p>{0x4e,0x00},</p>
+<p>{0x4d,0x10}, // 10</p>
+<p>{0x4e,0x00},</p>
+<p>{0x4e,0x00},</p>
+<p>{0x4e,0x00},</p>
+<p>{0x4e,0x00},</p>
+<p>{0x4e,0x00},</p>
+<p>{0x4e,0x00},</p>
+<p>{0x4e,0x00},</p>
+<p>{0x4e,0x00},</p>
+<p>{0x4e,0x00},</p>
+<p>{0x4e,0x00},</p>
+<p>{0x4e,0x00},</p>
+<p>{0x4e,0x00},</p>
+<p>{0x4e,0x00},</p>
+<p>{0x4e,0x00},</p>
+<p>{0x4e,0x00},</p>
+<p>{0x4e,0x00},</p>
+<p>{0x4d,0x20}, // 20</p>
+<p>{0x4e,0x00},</p>
+<p>{0x4e,0x00},</p>
+<p>{0x4e,0x00},</p>
+<p>{0x4e,0x00},</p>
+<p>{0x4e,0x00},</p>
+<p>{0x4e,0x00},</p>
+<p>{0x4e,0x00},</p>
+<p>{0x4e,0x00},</p>
+<p>{0x4e,0x00},</p>
+<p>{0x4e,0x00},</p>
+<p>{0x4e,0x00},</p>
+<p>{0x4e,0x00},</p>
+<p>{0x4e,0x00},</p>
+<p>{0x4e,0x00},</p>
+<p>{0x4e,0x00},</p>
+<p>{0x4e,0x00},</p>
+<p>{0x4d,0x30},</p>
+<p>{0x4e,0x00},</p>
+<p>{0x4e,0x00},</p>
+<p>{0x4e,0x00},</p>
+<p>{0x4e,0x00}, // 30</p>
+<p>{0x4e,0x00},</p>
+<p>{0x4e,0x00},</p>
+<p>{0x4e,0x00},</p>
+<p>{0x4e,0x00},</p>
+<p>{0x4e,0x00},</p>
+<p>{0x4e,0x00},</p>
+<p>{0x4e,0x00},</p>
+<p>{0x4e,0x00},</p>
+<p>{0x4e,0x00},</p>
+<p>{0x4e,0x00},</p>
+<p>{0x4e,0x00},</p>
+<p>{0x4e,0x00},</p>
+<p>{0x4d,0x40}, // 40</p>
+<p>{0x4e,0x00},</p>
+<p>{0x4e,0x00},</p>
+<p>{0x4e,0x00},</p>
+<p>{0x4e,0x00},</p>
+<p>{0x4e,0x00},</p>
+<p>{0x4e,0x00},</p>
+<p>{0x4e,0x00},</p>
+<p>{0x4e,0x00},</p>
+<p>{0x4e,0x00},</p>
+<p>{0x4e,0x00},</p>
+<p>{0x4e,0x00},</p>
+<p>{0x4e,0x00},</p>
+<p>{0x4e,0x00},</p>
+<p>{0x4e,0x00},</p>
+<p>{0x4e,0x00},</p>
+<p>{0x4e,0x00},</p>
+<p>{0x4d,0x50}, // 50</p>
+<p>{0x4e,0x00},</p>
+<p>{0x4e,0x00},</p>
+<p>{0x4e,0x00},</p>
+<p>{0x4e,0x00},</p>
+<p>{0x4e,0x00},</p>
+<p>{0x4e,0x00},</p>
+<p>{0x4e,0x00},</p>
+<p>{0x4e,0x00},</p>
+<p>{0x4e,0x00},</p>
+<p>{0x4e,0x00},</p>
+<p>{0x4e,0x00},</p>
+<p>{0x4e,0x00},</p>
+<p>{0x4e,0x00},</p>
+<p>{0x4e,0x00},</p>
+<p>{0x4e,0x00},</p>
+<p>{0x4e,0x00},</p>
+<p>{0x4d,0x60}, // 60</p>
+<p>{0x4e,0x00},</p>
+<p>{0x4e,0x00},</p>
+<p>{0x4e,0x00},</p>
+<p>{0x4e,0x00},</p>
+<p>{0x4e,0x00},</p>
+<p>{0x4e,0x00},</p>
+<p>{0x4e,0x00},</p>
+<p>{0x4e,0x00},</p>
+<p>{0x4e,0x00},</p>
+<p>{0x4e,0x00},</p>
+<p>{0x4e,0x00},</p>
+<p>{0x4e,0x00},</p>
+<p>{0x4e,0x00},</p>
+<p>{0x4e,0x00},</p>
+<p>{0x4e,0x00},</p>
+<p>{0x4e,0x00},</p>
+<p>{0x4d,0x70}, // 70</p>
+<p>{0x4e,0x00},</p>
+<p>{0x4e,0x00},</p>
+<p>{0x4e,0x00},</p>
+<p>{0x4e,0x00},</p>
+<p>{0x4e,0x00},</p>
+<p>{0x4e,0x00},</p>
+<p>{0x4e,0x00},</p>
+<p>{0x4e,0x00},</p>
+<p>{0x4e,0x00},</p>
+<p>{0x4e,0x00},</p>
+<p>{0x4e,0x00},</p>
+<p>{0x4e,0x00},</p>
+<p>{0x4e,0x00},</p>
+<p>{0x4e,0x00},</p>
+<p>{0x4e,0x00},</p>
+<p>{0x4e,0x00},</p>
+<p>{0x4d,0x80}, // 80</p>
+<p>{0x4e,0x00},</p>
+<p>{0x4e,0x00},</p>
+<p>{0x4e,0x00},</p>
+<p>{0x4e,0x00},</p>
+<p>{0x4e,0x00},</p>
+<p>{0x4e,0x00},</p>
+<p>{0x4e,0x00},</p>
+<p>{0x4e,0x00},</p>
+<p>{0x4e,0x00},</p>
+<p>{0x4e,0x00},</p>
+<p>{0x4e,0x00},</p>
+<p>{0x4e,0x00},</p>
+<p>{0x4e,0x00},</p>
+<p>{0x4e,0x00},</p>
+<p>{0x4e,0x00},</p>
+<p>{0x4e,0x00},</p>
+<p>{0x4d,0x90}, // 90</p>
+<p>{0x4e,0x00},</p>
+<p>{0x4e,0x00},</p>
+<p>{0x4e,0x00},</p>
+<p>{0x4e,0x00},</p>
+<p>{0x4e,0x00},</p>
+<p>{0x4e,0x00},</p>
+<p>{0x4e,0x00},</p>
+<p>{0x4e,0x00},</p>
+<p>{0x4e,0x00},</p>
+<p>{0x4e,0x00},</p>
+<p>{0x4e,0x00},</p>
+<p>{0x4e,0x00},</p>
+<p>{0x4e,0x00},</p>
+<p>{0x4e,0x00},</p>
+<p>{0x4e,0x00},</p>
+<p>{0x4e,0x00},</p>
+<p>{0x4d,0xa0}, // a0</p>
+<p>{0x4e,0x00},</p>
+<p>{0x4e,0x00},</p>
+<p>{0x4e,0x00},</p>
+<p>{0x4e,0x00},</p>
+<p>{0x4e,0x00},</p>
+<p>{0x4e,0x00},</p>
+<p>{0x4e,0x00},</p>
+<p>{0x4e,0x00},</p>
+<p>{0x4e,0x00},</p>
+<p>{0x4e,0x00},</p>
+<p>{0x4e,0x00},</p>
+<p>{0x4e,0x00},</p>
+<p>{0x4e,0x00},</p>
+<p>{0x4e,0x00},</p>
+<p>{0x4e,0x00},</p>
+<p>{0x4e,0x00},</p>
+<p>{0x4d,0xb0}, // b0</p>
+<p>{0x4e,0x00},</p>
+<p>{0x4e,0x00},</p>
+<p>{0x4e,0x00},</p>
+<p>{0x4e,0x00},</p>
+<p>{0x4e,0x00},</p>
+<p>{0x4e,0x00},</p>
+<p>{0x4e,0x00},</p>
+<p>{0x4e,0x00},</p>
+<p>{0x4e,0x00},</p>
+<p>{0x4e,0x00},</p>
+<p>{0x4e,0x00},</p>
+<p>{0x4e,0x00},</p>
+<p>{0x4e,0x00},</p>
+<p>{0x4e,0x00},</p>
+<p>{0x4e,0x00},</p>
+<p>{0x4e,0x00},</p>
+<p>{0x4d,0xc0}, // c0</p>
+<p>{0x4e,0x00},</p>
+<p>{0x4e,0x00},</p>
+<p>{0x4e,0x00},</p>
+<p>{0x4e,0x00},</p>
+<p>{0x4e,0x00},</p>
+<p>{0x4e,0x00},</p>
+<p>{0x4e,0x00},</p>
+<p>{0x4e,0x00},</p>
+<p>{0x4e,0x00},</p>
+<p>{0x4e,0x00},</p>
+<p>{0x4e,0x00},</p>
+<p>{0x4e,0x00},</p>
+<p>{0x4e,0x00},</p>
+<p>{0x4e,0x00},</p>
+<p>{0x4e,0x00},</p>
+<p>{0x4e,0x00},</p>
+<p>{0x4d,0xd0}, // d0</p>
+<p>{0x4e,0x00},</p>
+<p>{0x4e,0x00},</p>
+<p>{0x4e,0x00},</p>
+<p>{0x4e,0x00},</p>
+<p>{0x4e,0x00},</p>
+<p>{0x4e,0x00},</p>
+<p>{0x4e,0x00},</p>
+<p>{0x4e,0x00},</p>
+<p>{0x4e,0x00},</p>
+<p>{0x4e,0x00},</p>
+<p>{0x4e,0x00},</p>
+<p>{0x4e,0x00},</p>
+<p>{0x4e,0x00},</p>
+<p>{0x4e,0x00},</p>
+<p>{0x4e,0x00},</p>
+<p>{0x4e,0x00},</p>
+<p>{0x4f,0x01},</p>
+<p>/////// awb value////////</p>
+<p>{0xfe,0x01},</p>
+<p>{0x4f,0x00},</p>
+<p>{0x4d,0x30},</p>
+<p>{0x4e,0x00},</p>
+<p>{0x4e,0x80},</p>
+<p>{0x4e,0x80},</p>
+<p>{0x4e,0x02},</p>
+<p>{0x4e,0x02},</p>
+<p>{0x4d,0x40},</p>
+<p>{0x4e,0x00},</p>
+<p>{0x4e,0x80},</p>
+<p>{0x4e,0x80},</p>
+<p>{0x4e,0x02},</p>
+<p>{0x4e,0x02},</p>
+<p>{0x4e,0x02},</p>
+<p>{0x4d,0x53},</p>
+<p>{0x4e,0x08},</p>
+<p>{0x4e,0x04},</p>
+<p>{0x4d,0x62},</p>
+<p>{0x4e,0x10},</p>
+<p>{0x4d,0x72},</p>
+<p>{0x4e,0x20},</p>
+<p>{0x4f,0x01},</p>
+<p>/////awb////</p>
+<p>{0xfe,0x01},</p>
+<p>{0x50,0x88},//c0//[6]green mode</p>
+<p>{0x52,0x40},</p>
+<p>{0x54,0x60},</p>
+<p>{0x56,0x06},</p>
+<p>{0x57,0x20}, //pre adjust</p>
+<p>{0x58,0x01}, </p>
+<p>{0x5b,0x02}, //AWB_gain_delta</p>
+<p>{0x61,0xaa},//R/G stand</p>
+<p>{0x62,0xaa},//R/G stand</p>
+<p>{0x71,0x00},</p>
+<p>{0x74,0x10},//AWB_C_max</p>
+<p>{0x77,0x08}, // 0x//AWB_p2_x</p>
+<p>{0x78,0xfd}, //AWB_p2_y</p>
+<p>{0x86,0x30},</p>
+<p>{0x87,0x00},</p>
+<p>{0x88,0x04},//06},[1]dark mode</p>
+<p>{0x8a,0xc0},//awb move mode</p>
+<p>{0x89,0x75},</p>
+<p>{0x84,0x08},//auto_window</p>
+<p>{0x8b,0x00}, // 0x//awb compare luma</p>
+<p>{0x8d,0x70}, //awb gain limit R </p>
+<p>{0x8e,0x70},//G</p>
+<p>{0x8f,0xf4},//B</p>
+<p>{0xfe,0x00},</p>
+<p>{0x82,0x02},//awb_en</p>
+<p>///==========================asde</p>
+<p>{0xfe,0x01},</p>
+<p>{0x21,0xbf},</p>
+<p>{0xfe,0x02},</p>
+<p>{0xa4,0x00},//asde_offset_slope ?§?????￡¤</p>
+<p>{0xa5,0x40}, //lsc_th</p>
+<p>{0xa2,0xa0}, //lsc_dec_slope</p>
+<p>{0xa6,0x80}, //dd_th</p>
+<p>{0xa7,0x80}, //ot_th</p>
+<p>{0xab,0x31}, //[0]b_dn_effect_dark_inc_or_dec</p>
+<p>{0xa9,0x6f}, //[7:4] ASDE_DN_b_slope_high</p>
+<p>//[3:0] ASDE_DN_b_slope_low</p>
+<p>{0xb0,0x99}, //0x//edge effect slope low</p>
+<p>{0xb1,0x34},//edge effect slope low</p>
+<p>{0xb3,0x70}, //saturation dec slope  80</p>
+<p>{0xb4,0x41}, //ASDE_auto_saturation   anstor add  </p>
+<p>{0xde,0xb6},</p>
+<p>{0x38,0x0f }, // auto_gray_dec_slope  0f</p>
+<p>{0x39,0x40}, //</p>
+<p>{0xfe,0x00},</p>
+<p>{0x81,0x26},</p>
+<p>{0xfe,0x02},</p>
+<p>{0x83,0x00},//[6]green_bks_auto [5]gobal_green_bks</p>
+<p>{0x84,0x45},//RB offset</p>
+<p>///=================YCP</p>
+<p>{0xd1,0x40},//saturation_cb</p>
+<p>{0xd2,0x40},//saturation_Cr</p>
+<p>{0xd3,0x40},//contrast 2012.10.26????§?</p>
+<p>{0xd4,0x80},//contrast center 2012.10.26????§?</p>
+<p>{0xd5,0xfc},//luma_offset 2012.10.26????§?</p>
+<p>{0xdc,0x30},</p>
+<p>{0xdd,0xb8},//edge_sa_g,b</p>
+<p>{0xfe,0x00},</p>
+<p>////=================dndd</p>
+<p>{0xfe,0x02},</p>
+<p>{0x88,0x15},//dn_b_base</p>
+<p>{0x8c,0xf6}, //[2]b_in_dark_inc</p>
+<p>{0x89,0x03}, //dn_c_weight</p>
+<p>////==================EE 2012.10.26</p>
+<p>{0xfe,0x02},</p>
+<p>{0x90,0x6c},// EEINTP mode1</p>
+<p>{0x97,0x48},// edge effect</p>
+<p>////==============RGB Gamma ???§?gamma 2012.10.26</p>
+<p>{0xfe,0x02},</p>
+<p>{0x15,0x05},</p>
+<p>{0x16,0x0b},</p>
+<p>{0x17,0x10},</p>
+<p>{0x18,0x16},</p>
+<p>{0x19,0x24},</p>
+<p>{0x1a,0x32},</p>
+<p>{0x1b,0x42},</p>
+<p>{0x1c,0x4e},</p>
+<p>{0x1d,0x64},</p>
+<p>{0x1e,0x76},</p>
+<p>{0x1f,0x86},</p>
+<p>{0x20,0x94},</p>
+<p>{0x21,0x9f},</p>
+<p>{0x22,0xb4},</p>
+<p>{0x23,0xc3},</p>
+<p>{0x24,0xce},</p>
+<p>{0x25,0xd7},</p>
+<p>{0x26,0xe3},</p>
+<p>{0x27,0xec},</p>
+<p>{0x28,0xf0},   //  0xf7</p>
+<p>{0x29,0xf6},   //  0xff </p>
+<p>///=================y gamma</p>
+<p>//y-gamma</p>
+<p>{0x2b,0x00},</p>
+<p>{0x2c,0x04},</p>
+<p>{0x2d,0x09},</p>
+<p>{0x2e,0x18},</p>
+<p>{0x2f,0x27},</p>
+<p>{0x30,0x37},</p>
+<p>{0x31,0x49},</p>
+<p>{0x32,0x5c},</p>
+<p>{0x33,0x7e},</p>
+<p>{0x34,0xa0},</p>
+<p>{0x35,0xc0},</p>
+<p>{0x36,0xe0},</p>
+<p>{0x37,0xf0},   // 0xff</p>
+<p>/////1600x1200size// </p>
+<p>{0xfe,0x00},//</p>
+<p>{0x90,0x01}, //0x//crop enable</p>
+<p>{0x95,0x04},//1600x1200</p>
+<p>{0x96,0xb0},</p>
+<p>{0x97,0x06},</p>
+<p>{0x98,0x40},</p>
+<p>{0xfe,0x03},</p>
+<p>{0x42,0x40}, </p>
+<p>{0x43,0x06}, //output buf width 800x2</p>
+<p>{0x41,0x02}, // Pclk_polarity</p>
+<p>{0x40,0x40},</p>
+<p>{0x17,0x00}, //widv </p>
+<p>{0xfe,0x00},</p>
+<p>////output DVP/////</p>
+<p>//Sleep(100},</p>
+<p>{0xfe,0x00},</p>
+<p>{0x82,0xfe},</p>
+<p>{0xf2,0x70}, </p>
+<p>{0xf3,0xff},</p>
+<p>{0xf4,0x00},</p>
+<p>{0xf5,0x30},</p>
+<p>{0xfe , 0x00},</p>
+<p>{0x0a , 0x00}, //row start</p>
+<p>{0x0c , 0x00}, //col start</p>
+<p>{0x0d , 0x04},</p>
+<p>{0x0e , 0xc0},</p>
+<p>{0x0f , 0x06}, //Window setting</p>
+<p>{0x10 , 0x58},// </p>
+<p>{0xfe,0x00},</p>
+<p>{0xec,0x04},</p>
+<p>{0xed,0x04},</p>
+<p>{0xee,0x60},</p>
+<p>{0xef,0x90},</p>
+<p>{0x05,0x01},//hb</p>
+<p>{0x06,0x11},</p>
+<p>{0x07,0x00},//vb</p>
+<p>{0x08,0x50},</p>
+<p>{0xfe,0x01},</p>
+<p>{0x27,0x00},//step</p>
+<p>{0x28,0xa0},</p>
+<p>{0x29,0x05},//level1</p>
+<p>{0x2a,0x00},</p>
+<p>{0x2b,0x05},//level2</p>
+<p>{0x2c,0x00},</p>
+<p>{0x2d,0x05},//6e8//level3</p>
+<p>{0x2e,0x00},</p>
+<p>{0x2f,0x0f},//level4</p>
+<p>{0x30,0x00},</p>
+<p>{0xfe,0x00},</p>
+<p>{0xb6,0x03},//aec on</p>
+<p>/*<strong><strong><strong><strong>****</strong></strong></strong></strong>/</p>
+<p>{0xfe,0x00},  </p>
+<p>//subsample for svga</p>
+<p>{0x0c,0x04}, //col  start</p>
+<p>{0x0d,0x04},</p>
+<p>{0x0e,0xc0},</p>
+<p>{0x0f,0x06},</p>
+<p>{0x10,0x56},  //50</p>
+<p>{0x99,0x22},</p>
+<p>{0x9b,0x00},</p>
+<p>{0x9f,0x00},</p>
+<p>{0x90,0x01},</p>
+<p>{0x95,0x02},</p>
+<p>{0x96,0x58},//600</p>
+<p>{0x97,0x03},</p>
+<p>{0x98,0x20},//800</p>
+<p>{0xfe,0x03},</p>
+<p>{0x42,0x80}, </p>
+<p>{0x43,0x06}, //output buf width</p>
+<p>{0x41,0x00}, // delay</p>
+<p>{0x40,0x00}, //fifo half full trig</p>
+<p>{0x17,0x01}, //widv </p>
+<p>{0xfe,0x00},</p>
+<p>{0xc8,0x00}, </p>
+<p>{0xfa,0x00}, </p>
+<p>{0x00,0x00}, </p>
+<p>};</p>
+<p>static struct reginfo sensor_720p[] =</p>
+<p>{</p>
+<p>{0xfe ,0x00},</p>
+<p>{0x0a ,0xf0}, //row start</p>
+<p>{0x0c ,0xa0}, //col start </p>
+<p>{0x0d ,0x02},</p>
+<p>{0x0e ,0xd8},</p>
+<p>{0x0f ,0x05}, //Window setting</p>
+<p>{0x10 ,0x18},   </p>
+<p>{0xfe,0x00},</p>
+<p>{0xec,0x04},</p>
+<p>{0xed,0x04},</p>
+<p>{0xee,0x50},</p>
+<p>{0xef,0x58},</p>
+<p>{0x05 , 0x01},//hb</p>
+<p>{0x06 , 0xaa},</p>
+<p>{0x07 , 0x00},//b</p>
+<p>{0x08 , 0xf6},</p>
+<p>{0xfe , 0x01},</p>
+<p>{0x27 , 0x00},//step</p>
+<p>{0x28 , 0xa1},</p>
+<p>{0x29 , 0x03},//level1  16 fps</p>
+<p>{0x2a , 0xc6},</p>
+<p>{0x2b , 0x04},//level2  14</p>
+<p>{0x2c , 0x67},</p>
+<p>{0x2d , 0x06},//level3   10</p>
+<p>{0x2e , 0x4a},</p>
+<p>{0x2f , 0x07},//level4  8</p>
+<p>{0x30 , 0x8c},</p>
+<p>{0x3e,0x40},//0x40 0x00</p>
+<p>//measure window</p>
+<p>{0xfe,0x00},</p>
+<p>{0xb6,0x03},//aec on</p>
+<p>{0xec,0x04},</p>
+<p>{0xed,0x04},</p>
+<p>{0xee,0x50},</p>
+<p>{0xef,0x58},</p>
+<p>{0x99,0x11},</p>
+<p>{0x90 ,0x01},  //crop enable</p>
+<p>{0x95 ,0x02},</p>
+<p>{0x96 ,0xd0},</p>
+<p>{0x97 ,0x05},</p>
+<p>{0x98 ,0x00},   </p>
+<p>{0xfe ,0x03},</p>
+<p>{0x42 ,0x80}, </p>
+<p>{0x43 ,0x06}, //output buf width</p>
+<p>{0x41 ,0x00}, // delay</p>
+<p>{0x40 ,0x00}, //fifo half full trig</p>
+<p>{0x17 ,0x01}, //widv </p>
+<p>{0xfe ,0x00},</p>
+<p>{0xc8,0x00},</p>
+<p>{0xfa,0x11},</p>
+<p>{0x00 , 0x00},</p>
+<p>};</p>
+<p>/* 1600X1200 UXGA */</p>
+<p>static struct reginfo sensor_uxga[] = </p>
+<p>{</p>
+<p>{0xfe , 0x00},</p>
+<p>{0x0a , 0x00}, //row start</p>
+<p>{0x0c , 0x00}, //col start</p>
+<p>{0x0d , 0x04},</p>
+<p>{0x0e , 0xc0},</p>
+<p>{0x0f , 0x06}, //Window setting</p>
+<p>{0x10 , 0x58},// </p>
+<p>{0x90 , 0x01},  //crop enable</p>
+<p>{0x94 , 0x04},// x_start</p>
+<p>{0x95 , 0x04},</p>
+<p>{0x96 , 0xb0},</p>
+<p>{0x97 , 0x06},</p>
+<p>{0x98 , 0x40},</p>
+<p>{0x99 , 0x11},</p>
+<p>{0xc8 , 0x00},</p>
+<p>//{0xfa , 0x11},</p>
+<p>{0xfe , 0x03},</p>
+<p>{0x42 , 0x80}, </p>
+<p>{0x43 , 0x06}, //output buf width</p>
+<p>{0x41 , 0x00}, // delay</p>
+<p>{0x40 , 0x00}, //fifo half full trig</p>
+<p>{0x17 , 0x01}, //widv </p>
+<p>{0xfe , 0x00},</p>
+<p>{0xc8 , 0x00},</p>
+<p>{0x00 , 0x00}, </p>
+<p>};</p>
+<p>/* 1280X1024 SXGA */</p>
+<p>static struct reginfo sensor_sxga[] =</p>
+<p>{</p>
+<p>{0x0, 0x0},</p>
+<p>};</p>
+<p>/* 800X600 SVGA*/</p>
+<p>static struct reginfo sensor_svga[] =</p>
+<p>{</p>
+<p>{0xfe,0x00},</p>
+<p>{0x0a,0x00}, //row start</p>
+<p>{0x0c,0x00}, //col start</p>
+<p>{0x0d,0x04},</p>
+<p>{0x0e,0xc0},</p>
+<p>{0x0f,0x06}, //Window setting</p>
+<p>{0x10,0x58},// </p>
+<p>{0xfe,0x00},</p>
+<p>{0xec,0x04},</p>
+<p>{0xed,0x04},</p>
+<p>{0xee,0x60},</p>
+<p>{0xef,0x90},</p>
+<p>{0x05,0x01},//hb</p>
+<p>{0x06,0x11},</p>
+<p>{0x07,0x00},//vb</p>
+<p>{0x08,0x50},</p>
+<p>{0xfe,0x01},</p>
+<p>{0x27,0x00},//step</p>
+<p>{0x28,0xa0},</p>
+<p>{0x29,0x05},//level1</p>
+<p>{0x2a,0x00},</p>
+<p>{0x2b,0x06},//level2</p>
+<p>{0x2c,0x40},</p>
+<p>{0x2d,0x07},//6e8//level3</p>
+<p>{0x2e,0x80},</p>
+<p>{0x2f,0x0f},//level4</p>
+<p>{0x30,0x00},</p>
+<p>{0xfe,0x00},</p>
+<p>{0xb6,0x03},//aec on</p>
+<p>/*<strong><strong><strong><strong>****</strong></strong></strong></strong>/</p>
+<p>{0xfe,0x00},  </p>
+<p>//subsample for svga</p>
+<p>{0x0c,0x04}, //col  start</p>
+<p>{0x0d,0x04},</p>
+<p>{0x0e,0xc0},</p>
+<p>{0x0f,0x06},</p>
+<p>{0x10,0x56},  //50</p>
+<p>{0x99,0x22},</p>
+<p>{0x9b,0x00},</p>
+<p>{0x9f,0x00},</p>
+<p>{0x90,0x01},</p>
+<p>{0x95,0x02},</p>
+<p>{0x96,0x58},//600</p>
+<p>{0x97,0x03},</p>
+<p>{0x98,0x20},//800</p>
+<p>{0xfe,0x03},</p>
+<p>{0x42,0x80}, </p>
+<p>{0x43,0x06}, //output buf width</p>
+<p>{0x41,0x00}, // delay</p>
+<p>{0x40,0x00}, //fifo half full trig</p>
+<p>{0x17,0x01}, //widv </p>
+<p>{0xfe,0x00},</p>
+<p>{0xc8,0x00}, </p>
+<p>{0xfa,0x00}, </p>
+<p>{0x00 , 0x00},</p>
+<p>/*<strong><strong><strong><strong><strong>****</strong></strong></strong></strong></strong>/</p>
+<p>};</p>
+<p>/* 640X480 VGA */</p>
+<p>static struct reginfo sensor_vga[] =</p>
+<p>{</p>
+<p>{0x00 , 0x00},</p>
+<p>};</p>
+<p>/* 352X288 CIF */</p>
+<p>static struct reginfo sensor_cif[] =</p>
+<p>{</p>
+<p>    {0x0, 0x0},</p>
+<p>};</p>
+<p>/* 320*240 QVGA */</p>
+<p>static  struct reginfo sensor_qvga[] =</p>
+<p>{</p>
+<p>    {0x0, 0x0},</p>
+<p>};</p>
+<p>/* 176X144 QCIF*/</p>
+<p>static struct reginfo sensor_qcif[] =</p>
+<p>{</p>
+<p>    {0x0, 0x0},</p>
+<p>};</p>
+<p>#endif</p>
+<p>static  struct reginfo sensor_ClrFmt_YUYV[]=</p>
+<p>{</p>
+<p>         {0x0, 0x0},</p>
+<p>};</p>
+<p>static  struct reginfo sensor_ClrFmt_UYVY[]=</p>
+<p>{</p>
+<p>           {0x0, 0x0},</p>
+<p>};</p>
+<p>#if CONFIG_SENSOR_WhiteBalance</p>
+<p>static  struct reginfo sensor_WhiteB_Auto[]=</p>
+<p>{</p>
+<p>                     {0xfe, 0x00},</p>
+<p>{0xb3, 0x61},</p>
+<p>{0xb4, 0x40},</p>
+<p>{0xb5, 0x61},</p>
+<p>{0x82, 0xfe},</p>
+<p>             {0x0, 0x0},</p>
+<p>};</p>
+<p>/* Cloudy Colour Temperature : 6500K - 8000K  */</p>
+<p>static  struct reginfo sensor_WhiteB_Cloudy[]=</p>
+<p>{</p>
+<p>                     {0xfe, 0x00},</p>
+<p>{0x82, 0xfc},</p>
+<p>{0xb3, 0x58},</p>
+<p>{0xb4, 0x40},</p>
+<p>{0xb5, 0x50},</p>
+<p>             {0x0, 0x0},</p>
+<p>};</p>
+<p>/* ClearDay Colour Temperature : 5000K - 6500K  */</p>
+<p>static  struct reginfo sensor_WhiteB_ClearDay[]=</p>
+<p>{</p>
+<p>    //Sunny</p>
+<p>                     {0xfe, 0x00},</p>
+<p>{0x82, 0xfc},</p>
+<p>{0xb3, 0x58},</p>
+<p>{0xb4, 0x40},</p>
+<p>{0xb5, 0x50},</p>
+<p>             {0x0, 0x0},</p>
+<p>};</p>
+<p>/* Office Colour Temperature : 3500K - 5000K  */</p>
+<p>static  struct reginfo sensor_WhiteB_TungstenLamp1[]=</p>
+<p>{</p>
+<p>    //Office</p>
+<p>                     {0xfe, 0x00},</p>
+<p>{0x82, 0xfc},</p>
+<p>{0xb3, 0x50},</p>
+<p>{0xb4, 0x40},</p>
+<p>{0xb5, 0xa8},</p>
+<p>{0x0, 0x0},</p>
+<p>};</p>
+<p>/* Home Colour Temperature : 2500K - 3500K  */</p>
+<p>static  struct reginfo sensor_WhiteB_TungstenLamp2[]=</p>
+<p>{</p>
+<p>    //Home</p>
+<p>                     {0xfe, 0x00},</p>
+<p>{0x82, 0xfc},</p>
+<p>{0xb3, 0xa0},</p>
+<p>{0xb4, 0x45},</p>
+<p>{0xb5, 0x40},</p>
+<p>      {0x0, 0x0},</p>
+<p>};</p>
+<p>static struct reginfo *sensor_WhiteBalanceSeqe[] = {sensor_WhiteB_Auto, sensor_WhiteB_TungstenLamp1,sensor_WhiteB_TungstenLamp2,</p>
+<p>    sensor_WhiteB_ClearDay, sensor_WhiteB_Cloudy,NULL,</p>
+<p>};</p>
+<p>#endif</p>
+<p>#if CONFIG_SENSOR_Brightness</p>
+<p>static  struct reginfo sensor_Brightness0[]=</p>
+<p>{</p>
+<p>    // Brightness -2</p>
+<p>       {0x00, 0x00},</p>
+<p>};</p>
+<p>static  struct reginfo sensor_Brightness1[]=</p>
+<p>{</p>
+<p>    // Brightness -1</p>
+<p>       {0x00, 0x00}</p>
+<p>};</p>
+<p>static  struct reginfo sensor_Brightness2[]=</p>
+<p>{</p>
+<p>    //  Brightness 0</p>
+<p>       {0x00, 0x00}</p>
+<p>};</p>
+<p>static  struct reginfo sensor_Brightness3[]=</p>
+<p>{</p>
+<p>    // Brightness +1</p>
+<p>       {0x00, 0x00}</p>
+<p>};</p>
+<p>static  struct reginfo sensor_Brightness4[]=</p>
+<p>{</p>
+<p>    //  Brightness +2</p>
+<p>       {0x00, 0x00}</p>
+<p>};</p>
+<p>static  struct reginfo sensor_Brightness5[]=</p>
+<p>{</p>
+<p>    //  Brightness +3</p>
+<p>{0x00, 0x00}</p>
+<p>};</p>
+<p>static struct reginfo *sensor_BrightnessSeqe[] = {sensor_Brightness0, sensor_Brightness1, sensor_Brightness2, sensor_Brightness3,</p>
+<p>    sensor_Brightness4, sensor_Brightness5,NULL,</p>
+<p>};</p>
+<p>#endif</p>
+<p>#if CONFIG_SENSOR_Effect</p>
+<p>static  struct reginfo sensor_Effect_Normal[] =</p>
+<p>{</p>
+<p>{0xfe, 0x00},</p>
+<p>{0x83, 0xe0},</p>
+<p>{0x00, 0x00}</p>
+<p>};</p>
+<p>static  struct reginfo sensor_Effect_WandB[] =</p>
+<p>{</p>
+<p>{0xfe, 0x00},</p>
+<p>{0x83, 0x12},</p>
+<p>{0x00, 0x00}</p>
+<p>};</p>
+<p>static  struct reginfo sensor_Effect_Sepia[] =</p>
+<p>{</p>
+<p>{0xfe, 0x00},</p>
+<p>{0x83, 0x82},</p>
+<p>{0x00, 0x00}</p>
+<p>};</p>
+<p>static  struct reginfo sensor_Effect_Negative[] =</p>
+<p>{</p>
+<p>    //Negative</p>
+<p>{0xfe, 0x00},</p>
+<p>{0x83, 0x01},</p>
+<p>{0x00, 0x00}</p>
+<p>};</p>
+<p>static  struct reginfo sensor_Effect_Bluish[] =</p>
+<p>{</p>
+<p>    // Bluish</p>
+<p>{0xfe, 0x00},</p>
+<p>{0x83, 0x62},</p>
+<p>{0x00, 0x00}</p>
+<p>};</p>
+<p>static  struct reginfo sensor_Effect_Green[] =</p>
+<p>{</p>
+<p>    //  Greenish</p>
+<p>{0xfe, 0x00},</p>
+<p>{0x83, 0x52},</p>
+<p>{0x00, 0x00}</p>
+<p>};</p>
+<p>static struct reginfo *sensor_EffectSeqe[] = {sensor_Effect_Normal, sensor_Effect_WandB, sensor_Effect_Negative,sensor_Effect_Sepia,</p>
+<p>    sensor_Effect_Bluish, sensor_Effect_Green,NULL,</p>
+<p>};</p>
+<p>#endif</p>
+<p>#if CONFIG_SENSOR_Exposure</p>
+<p>static  struct reginfo sensor_Exposure0[]=</p>
+<p>{</p>
+<p>    //-3</p>
+<p>    {0xfe,0x01},</p>
+<p>    {0x13,0x40},</p>
+<p>    {0xfe,0x00},</p>
+<p>       {0x00,0x00}</p>
+<p>};</p>
+<p>static  struct reginfo sensor_Exposure1[]=</p>
+<p>{</p>
+<p>    //-2</p>
+<p>{0xfe,0x01},</p>
+<p>    {0x13,0x50},</p>
+<p>    {0xfe,0x00},</p>
+<p>       {0x00,0x00}</p>
+<p>};</p>
+<p>static  struct reginfo sensor_Exposure2[]=</p>
+<p>{</p>
+<p>    //-0.3EV</p>
+<p>{0xfe,0x01},</p>
+<p>    {0x13,0x60},</p>
+<p>    {0xfe,0x00},</p>
+<p>       {0x00,0x00}</p>
+<p>};</p>
+<p>static  struct reginfo sensor_Exposure3[]=</p>
+<p>{</p>
+<p>    //default</p>
+<p>  {0xfe,0x01},</p>
+<p>    {0x13,0x90},</p>
+<p>    {0xfe,0x00},</p>
+<p>       {0x00,0x00}</p>
+<p>};</p>
+<p>static  struct reginfo sensor_Exposure4[]=</p>
+<p>{</p>
+<p>    // 1</p>
+<p>{0xfe,0x01},</p>
+<p>    {0x13,0x98},</p>
+<p>    {0xfe,0x00},</p>
+<p>       {0x00,0x00}};</p>
+<p>static  struct reginfo sensor_Exposure5[]=</p>
+<p>{</p>
+<p>    // 2</p>
+<p>  {0xfe,0x01},</p>
+<p>    {0x13,0xa8},</p>
+<p>    {0xfe,0x00},</p>
+<p>       {0x00,0x00}</p>
+<p>};</p>
+<p>static  struct reginfo sensor_Exposure6[]=</p>
+<p>{</p>
+<p>    // 3</p>
+<p>  {0xfe,0x01},</p>
+<p>    {0x13,0x98},</p>
+<p>    {0xfe,0x00},</p>
+<p>       {0x00,0x00}</p>
+<p>};</p>
+<p>static struct reginfo *sensor_ExposureSeqe[] = {sensor_Exposure0, sensor_Exposure1, sensor_Exposure2, sensor_Exposure3,</p>
+<p>    sensor_Exposure4, sensor_Exposure5,sensor_Exposure6,NULL,</p>
+<p>};</p>
+<p>#endif</p>
+<p>#if CONFIG_SENSOR_Saturation</p>
+<p>static  struct reginfo sensor_Saturation0[]=</p>
+<p>{</p>
+<p>    {0x00, 0x00}</p>
+<p>};</p>
+<p>static  struct reginfo sensor_Saturation1[]=</p>
+<p>{</p>
+<p>    {0x00, 0x00}</p>
+<p>};</p>
+<p>static  struct reginfo sensor_Saturation2[]=</p>
+<p>{</p>
+<p>    {0x00, 0x00}</p>
+<p>};</p>
+<p>static struct reginfo *sensor_SaturationSeqe[] = {sensor_Saturation0, sensor_Saturation1, sensor_Saturation2, NULL,};</p>
+<p>#endif</p>
+<p>#if CONFIG_SENSOR_Contrast</p>
+<p>static  struct reginfo sensor_Contrast0[]=</p>
+<p>{</p>
+<p>    //Contrast -3</p>
+<p>    {0x00, 0x00}</p>
+<p>};</p>
+<p>static  struct reginfo sensor_Contrast1[]=</p>
+<p>{</p>
+<p>    //Contrast -2</p>
+<p>    {0x00, 0x00}</p>
+<p>};</p>
+<p>static  struct reginfo sensor_Contrast2[]=</p>
+<p>{</p>
+<p>    // Contrast -1</p>
+<p>    {0x00, 0x00}</p>
+<p>};</p>
+<p>static  struct reginfo sensor_Contrast3[]=</p>
+<p>{</p>
+<p>    //Contrast 0</p>
+<p>    {0x00, 0x00}</p>
+<p>};</p>
+<p>static  struct reginfo sensor_Contrast4[]=</p>
+<p>{</p>
+<p>    //Contrast +1</p>
+<p>    {0x00, 0x00}</p>
+<p>};</p>
+<p>static  struct reginfo sensor_Contrast5[]=</p>
+<p>{</p>
+<p>    //Contrast +2</p>
+<p>    {0x00, 0x00}</p>
+<p>};</p>
+<p>static  struct reginfo sensor_Contrast6[]=</p>
+<p>{</p>
+<p>    //Contrast +3</p>
+<p>    {0x00, 0x00}</p>
+<p>};</p>
+<p>static struct reginfo *sensor_ContrastSeqe[] = {sensor_Contrast0, sensor_Contrast1, sensor_Contrast2, sensor_Contrast3,</p>
+<p>    sensor_Contrast4, sensor_Contrast5, sensor_Contrast6, NULL,</p>
+<p>};</p>
+<p>#endif</p>
+<p>#if CONFIG_SENSOR_Mirror</p>
+<p>static  struct reginfo sensor_MirrorOn[]=</p>
+<p>{</p>
+<p>    {0x17 , 0x14},</p>
+<p>    {0x00 , 0x00}</p>
+<p>};</p>
+<p>static  struct reginfo sensor_MirrorOff[]=</p>
+<p>{</p>
+<p>    {0x17 , 0x15},</p>
+<p>    {0x00 , 0x00}</p>
+<p>};</p>
+<p>static struct reginfo *sensor_MirrorSeqe[] = {sensor_MirrorOff, sensor_MirrorOn,NULL,};</p>
+<p>#endif</p>
+<p>#if CONFIG_SENSOR_Flip</p>
+<p>static  struct reginfo sensor_FlipOn[]=</p>
+<p>{</p>
+<p>    {0x17 , 0x16},</p>
+<p>    {0x00 , 0x00}</p>
+<p>};</p>
+<p>static  struct reginfo sensor_FlipOff[]=</p>
+<p>{</p>
+<p>    {0x17 , 0x17},</p>
+<p>    {0x00 , 0x00}</p>
+<p>};</p>
+<p>static struct reginfo *sensor_FlipSeqe[] = {sensor_FlipOff, sensor_FlipOn,NULL,};</p>
+<p>#endif</p>
+<p>#if CONFIG_SENSOR_Scene</p>
+<p>static  struct reginfo sensor_SceneAuto[] =</p>
+<p>{</p>
+<p>{0xfe,0x01},</p>
+<p>{0x3e,0x40},  </p>
+<p>{0xfe,0x00},</p>
+<p>{0x00, 0x00}</p>
+<p>};</p>
+<p>static  struct reginfo sensor_SceneNight[] =</p>
+<p>{</p>
+<p>{0xfe,0x01},</p>
+<p>{0x3e,0x60},  </p>
+<p>{0xfe,0x00},</p>
+<p>{0x00, 0x00}</p>
+<p>};</p>
+<p>static struct reginfo *sensor_SceneSeqe[] = {sensor_SceneAuto, sensor_SceneNight,NULL,};</p>
+<p>#endif</p>
+<p>#if CONFIG_SENSOR_DigitalZoom</p>
+<p>static struct reginfo sensor_Zoom0[] =</p>
+<p>{</p>
+<p>    {0x0, 0x0},</p>
+<p>};</p>
+<p>static struct reginfo sensor_Zoom1[] =</p>
+<p>{</p>
+<p>     {0x0, 0x0},</p>
+<p>};</p>
+<p>static struct reginfo sensor_Zoom2[] =</p>
+<p>{</p>
+<p>    {0x0, 0x0},</p>
+<p>};</p>
+<p>static struct reginfo sensor_Zoom3[] =</p>
+<p>{</p>
+<p>    {0x0, 0x0},</p>
+<p>};</p>
+<p>static struct reginfo *sensor_ZoomSeqe[] = {sensor_Zoom0, sensor_Zoom1, sensor_Zoom2, sensor_Zoom3, NULL,};</p>
+<p>#endif</p>
+<p>static const struct v4l2_querymenu sensor_menus[] =</p>
+<p>{</p>
+<p>#if CONFIG_SENSOR_WhiteBalance</p>
+<p>    { .id = V4L2_CID_DO_WHITE_BALANCE,  .index = 0,  .name = &quot;auto&quot;,  .reserved = 0, }, {  .id = V4L2_CID_DO_WHITE_BALANCE,  .index = 1, .name = &quot;incandescent&quot;,  .reserved = 0,},</p>
+<p>    { .id = V4L2_CID_DO_WHITE_BALANCE,  .index = 2,  .name = &quot;fluorescent&quot;, .reserved = 0,}, {  .id = V4L2_CID_DO_WHITE_BALANCE, .index = 3,  .name = &quot;daylight&quot;, .reserved = 0,},</p>
+<p>    { .id = V4L2_CID_DO_WHITE_BALANCE,  .index = 4,  .name = &quot;cloudy-daylight&quot;, .reserved = 0,},</p>
+<p>    #endif</p>
+<p>#if CONFIG_SENSOR_Effect</p>
+<p>    { .id = V4L2_CID_EFFECT,  .index = 0,  .name = &quot;none&quot;,  .reserved = 0, }, {  .id = V4L2_CID_EFFECT,  .index = 1, .name = &quot;mono&quot;,  .reserved = 0,},</p>
+<p>    { .id = V4L2_CID_EFFECT,  .index = 2,  .name = &quot;negative&quot;, .reserved = 0,}, {  .id = V4L2_CID_EFFECT, .index = 3,  .name = &quot;sepia&quot;, .reserved = 0,},</p>
+<p>    { .id = V4L2_CID_EFFECT,  .index = 4, .name = &quot;posterize&quot;, .reserved = 0,} ,{ .id = V4L2_CID_EFFECT,  .index = 5,  .name = &quot;aqua&quot;, .reserved = 0,},</p>
+<p>    #endif</p>
+<p>#if CONFIG_SENSOR_Scene</p>
+<p>    { .id = V4L2_CID_SCENE,  .index = 0, .name = &quot;auto&quot;, .reserved = 0,} ,{ .id = V4L2_CID_SCENE,  .index = 1,  .name = &quot;night&quot;, .reserved = 0,},</p>
+<p>    #endif</p>
+<p>#if CONFIG_SENSOR_Flash</p>
+<p>    { .id = V4L2_CID_FLASH,  .index = 0,  .name = &quot;off&quot;,  .reserved = 0, }, {  .id = V4L2_CID_FLASH,  .index = 1, .name = &quot;auto&quot;,  .reserved = 0,},</p>
+<p>    { .id = V4L2_CID_FLASH,  .index = 2,  .name = &quot;on&quot;, .reserved = 0,}, {  .id = V4L2_CID_FLASH, .index = 3,  .name = &quot;torch&quot;, .reserved = 0,},</p>
+<p>    #endif</p>
+<p>};</p>
+<p>static  struct v4l2_queryctrl sensor_controls[] =</p>
+<p>{</p>
+<p>#if CONFIG_SENSOR_WhiteBalance</p>
+<p>    {</p>
+<p>        .id = V4L2_CID_DO_WHITE_BALANCE,</p>
+<p>        .type = V4L2_CTRL_TYPE_MENU,</p>
+<p>        .name = &quot;White Balance Control&quot;,</p>
+<p>        .minimum = 0,</p>
+<p>        .maximum = 4,</p>
+<p>        .step = 1,</p>
+<p>        .default_value = 0,</p>
+<p>    },</p>
+<p>    #endif</p>
+<p>#if CONFIG_SENSOR_Brightness</p>
+<p>{</p>
+<p>        .id = V4L2_CID_BRIGHTNESS,</p>
+<p>        .type = V4L2_CTRL_TYPE_INTEGER,</p>
+<p>        .name = &quot;Brightness Control&quot;,</p>
+<p>        .minimum = -3,</p>
+<p>        .maximum = 2,</p>
+<p>        .step = 1,</p>
+<p>        .default_value = 0,</p>
+<p>    },</p>
+<p>    #endif</p>
+<p>#if CONFIG_SENSOR_Effect</p>
+<p>{</p>
+<p>        .id = V4L2_CID_EFFECT,</p>
+<p>        .type = V4L2_CTRL_TYPE_MENU,</p>
+<p>        .name = &quot;Effect Control&quot;,</p>
+<p>        .minimum = 0,</p>
+<p>        .maximum = 5,</p>
+<p>        .step = 1,</p>
+<p>        .default_value = 0,</p>
+<p>    },</p>
+<p>#endif</p>
+<p>#if CONFIG_SENSOR_Exposure</p>
+<p>{</p>
+<p>        .id = V4L2_CID_EXPOSURE,</p>
+<p>        .type = V4L2_CTRL_TYPE_INTEGER,</p>
+<p>        .name = &quot;Exposure Control&quot;,</p>
+<p>        .minimum = 0,</p>
+<p>        .maximum = 6,</p>
+<p>        .step = 1,</p>
+<p>        .default_value = 0,</p>
+<p>    },</p>
+<p>#endif</p>
+<p>#if CONFIG_SENSOR_Saturation</p>
+<p>{</p>
+<p>        .id = V4L2_CID_SATURATION,</p>
+<p>        .type = V4L2_CTRL_TYPE_INTEGER,</p>
+<p>        .name = &quot;Saturation Control&quot;,</p>
+<p>        .minimum = 0,</p>
+<p>        .maximum = 2,</p>
+<p>        .step = 1,</p>
+<p>        .default_value = 0,</p>
+<p>    },</p>
+<p>    #endif</p>
+<p>#if CONFIG_SENSOR_Contrast</p>
+<p>{</p>
+<p>        .id = V4L2_CID_CONTRAST,</p>
+<p>        .type = V4L2_CTRL_TYPE_INTEGER,</p>
+<p>        .name = &quot;Contrast Control&quot;,</p>
+<p>        .minimum = -3,</p>
+<p>        .maximum = 3,</p>
+<p>        .step = 1,</p>
+<p>        .default_value = 0,</p>
+<p>    },</p>
+<p>#endif</p>
+<p>#if CONFIG_SENSOR_Mirror</p>
+<p>{</p>
+<p>        .id = V4L2_CID_HFLIP,</p>
+<p>        .type = V4L2_CTRL_TYPE_BOOLEAN,</p>
+<p>        .name = &quot;Mirror Control&quot;,</p>
+<p>        .minimum = 0,</p>
+<p>        .maximum = 1,</p>
+<p>        .step = 1,</p>
+<p>        .default_value = 1,</p>
+<p>    },</p>
+<p>    #endif</p>
+<p>#if CONFIG_SENSOR_Flip</p>
+<p>{</p>
+<p>        .id = V4L2_CID_VFLIP,</p>
+<p>        .type = V4L2_CTRL_TYPE_BOOLEAN,</p>
+<p>        .name = &quot;Flip Control&quot;,</p>
+<p>        .minimum = 0,</p>
+<p>        .maximum = 1,</p>
+<p>        .step = 1,</p>
+<p>        .default_value = 1,</p>
+<p>    },</p>
+<p>    #endif</p>
+<p>#if CONFIG_SENSOR_Scene</p>
+<p>    {</p>
+<p>        .id = V4L2_CID_SCENE,</p>
+<p>        .type = V4L2_CTRL_TYPE_MENU,</p>
+<p>        .name = &quot;Scene Control&quot;,</p>
+<p>        .minimum = 0,</p>
+<p>        .maximum = 1,</p>
+<p>        .step = 1,</p>
+<p>        .default_value = 0,</p>
+<p>    },</p>
+<p>    #endif</p>
+<p>#if CONFIG_SENSOR_DigitalZoom</p>
+<p>    {</p>
+<p>        .id = V4L2_CID_ZOOM_RELATIVE,</p>
+<p>        .type = V4L2_CTRL_TYPE_INTEGER,</p>
+<p>        .name = &quot;DigitalZoom Control&quot;,</p>
+<p>        .minimum = -1,</p>
+<p>        .maximum = 1,</p>
+<p>        .step = 1,</p>
+<p>        .default_value = 0,</p>
+<p>    }, {</p>
+<p>        .id = V4L2_CID_ZOOM_ABSOLUTE,</p>
+<p>        .type = V4L2_CTRL_TYPE_INTEGER,</p>
+<p>        .name = &quot;DigitalZoom Control&quot;,</p>
+<p>        .minimum = 0,</p>
+<p>        .maximum = 3,</p>
+<p>        .step = 1,</p>
+<p>        .default_value = 0,</p>
+<p>    },</p>
+<p>    #endif</p>
+<p>#if CONFIG_SENSOR_Focus</p>
+<p>{</p>
+<p>        .id = V4L2_CID_FOCUS_RELATIVE,</p>
+<p>        .type = V4L2_CTRL_TYPE_INTEGER,</p>
+<p>        .name = &quot;Focus Control&quot;,</p>
+<p>        .minimum = -1,</p>
+<p>        .maximum = 1,</p>
+<p>        .step = 1,</p>
+<p>        .default_value = 0,</p>
+<p>    }, {</p>
+<p>        .id = V4L2_CID_FOCUS_ABSOLUTE,</p>
+<p>        .type = V4L2_CTRL_TYPE_INTEGER,</p>
+<p>        .name = &quot;Focus Control&quot;,</p>
+<p>        .minimum = 0,</p>
+<p>        .maximum = 255,</p>
+<p>        .step = 1,</p>
+<p>        .default_value = 125,</p>
+<p>    },</p>
+<p>    #endif</p>
+<p>#if CONFIG_SENSOR_Flash</p>
+<p>{</p>
+<p>        .id = V4L2_CID_FLASH,</p>
+<p>        .type = V4L2_CTRL_TYPE_MENU,</p>
+<p>        .name = &quot;Flash Control&quot;,</p>
+<p>        .minimum = 0,</p>
+<p>        .maximum = 3,</p>
+<p>        .step = 1,</p>
+<p>        .default_value = 0,</p>
+<p>    },</p>
+<p>#endif</p>
+<p>};</p>
+<p>static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *did);</p>
+<p>static int sensor_video_probe(struct soc_camera_device *icd, struct i2c_client *client);</p>
+<p>static int sensor_g_control(struct v4l2_subdev *sd, struct v4l2_control *ctrl);</p>
+<p>static int sensor_s_control(struct v4l2_subdev *sd, struct v4l2_control *ctrl);</p>
+<p>static int sensor_g_ext_controls(struct v4l2_subdev *sd,  struct v4l2_ext_controls *ext_ctrl);</p>
+<p>static int sensor_s_ext_controls(struct v4l2_subdev *sd,  struct v4l2_ext_controls *ext_ctrl);</p>
+<p>static int sensor_suspend(struct soc_camera_device *icd, pm_message_t pm_msg);</p>
+<p>static int sensor_resume(struct soc_camera_device *icd);</p>
+<p>static int sensor_set_bus_param(struct soc_camera_device *icd,unsigned long flags);</p>
+<p>static unsigned long sensor_query_bus_param(struct soc_camera_device *icd);</p>
+<p>static int sensor_set_effect(struct soc_camera_device *icd, const struct v4l2_queryctrl *qctrl, int value);</p>
+<p>static int sensor_set_whiteBalance(struct soc_camera_device *icd, const struct v4l2_queryctrl *qctrl, int value);</p>
+<p>static int sensor_deactivate(struct i2c_client *client);</p>
+<p>static struct soc_camera_ops sensor_ops =</p>
+<p>{</p>
+<p>    .suspend                     = sensor_suspend,</p>
+<p>    .resume                       = sensor_resume,</p>
+<p>    .set_bus_param = sensor_set_bus_param,</p>
+<p>    .query_bus_param = sensor_query_bus_param,</p>
+<p>    .controls = sensor_controls,</p>
+<p>    .menus                         = sensor_menus,</p>
+<p>    .num_controls = ARRAY_SIZE(sensor_controls),</p>
+<p>    .num_menus = ARRAY_SIZE(sensor_menus),</p>
+<p>};</p>
+<p>/* only one fixed colorspace per pixelcode */</p>
+<p>struct sensor_datafmt {</p>
+<p>enum v4l2_mbus_pixelcode code;</p>
+<p>enum v4l2_colorspace colorspace;</p>
+<p>};</p>
+<p>/* Find a data format by a pixel code in an array */</p>
+<p>static const struct sensor_datafmt *sensor_find_datafmt(</p>
+<p>enum v4l2_mbus_pixelcode code, const struct sensor_datafmt *fmt,</p>
+<p>int n)</p>
+<p>{</p>
+<p>int i;</p>
+<p>for (i = 0; i &lt; n; i++)</p>
+<p>if (fmt[i].code == code)</p>
+<p>return fmt + i;</p>
+<p>return NULL;</p>
+<p>}</p>
+<p>static const struct sensor_datafmt sensor_colour_fmts[] = {</p>
+<p>{V4L2_MBUS_FMT_UYVY8_2X8, V4L2_COLORSPACE_JPEG},</p>
+<p>    {V4L2_MBUS_FMT_YUYV8_2X8, V4L2_COLORSPACE_JPEG},</p>
+<p>};</p>
+<p>typedef struct sensor_info_priv_s</p>
+<p>{</p>
+<p>    int whiteBalance;</p>
+<p>    int brightness;</p>
+<p>    int contrast;</p>
+<p>    int saturation;</p>
+<p>    int effect;</p>
+<p>    int scene;</p>
+<p>    int digitalzoom;</p>
+<p>    int focus;</p>
+<p>    int flash;</p>
+<p>    int exposure;</p>
+<p>bool snap2preview;</p>
+<p>bool video2preview;</p>
+<p>    unsigned char mirror;                                        /* HFLIP */</p>
+<p>    unsigned char flip;                                          /* VFLIP */</p>
+<p>    unsigned int winseqe_cur_addr;</p>
+<p>    struct sensor_datafmt fmt;</p>
+<p>    unsigned int funmodule_state;</p>
+<p>} sensor_info_priv_t;</p>
+<p>struct sensor</p>
+<p>{</p>
+<p>    struct v4l2_subdev subdev;</p>
+<p>    struct i2c_client *client;</p>
+<p>    sensor_info_priv_t info_priv;</p>
+<p>    int model; /* V4L2_IDENT_OV* codes from v4l2-chip-ident.h */</p>
+<p>#if CONFIG_SENSOR_I2C_NOSCHED</p>
+<p>atomic_t tasklock_cnt;</p>
+<p>#endif</p>
+<p>struct rk29camera_platform_data *sensor_io_request;</p>
+<p>    struct rk29camera_gpio_res *sensor_gpio_res;</p>
+<p>};</p>
+<p>static struct sensor* to_sensor(const struct i2c_client *client)</p>
+<p>{</p>
+<p>    return container_of(i2c_get_clientdata(client), struct sensor, subdev);</p>
+<p>}</p>
+<p>static int sensor_task_lock(struct i2c_client *client, int lock)</p>
+<p>{</p>
+<p>#if CONFIG_SENSOR_I2C_NOSCHED</p>
+<p>int cnt = 3;</p>
+<p>    struct sensor *sensor = to_sensor(client);</p>
+<p>if (lock) {</p>
+<p>if (atomic_read(&amp;sensor-&gt;tasklock_cnt) == 0) {</p>
+<p>while ((atomic_read(&amp;client-&gt;adapter-&gt;bus_lock.count) &lt; 1) &amp;&amp; (cnt&gt;0)) {</p>
+<p>SENSOR_TR(&quot;\n %s will obtain i2c in atomic, but i2c bus is locked! Wait…\n&quot;,SENSOR_NAME_STRING());</p>
+<p>msleep(35);</p>
+<p>cnt–;</p>
+<p>}</p>
+<p>if ((atomic_read(&amp;client-&gt;adapter-&gt;bus_lock.count) &lt; 1) &amp;&amp; (cnt&lt;=0)) {</p>
+<p>SENSOR_TR(&quot;\n %s obtain i2c fail in atomic!!\n&quot;,SENSOR_NAME_STRING());</p>
+<p>goto sensor_task_lock_err;</p>
+<p>}</p>
+<p>preempt_disable();</p>
+<p>}</p>
+<p>atomic_add(1, &amp;sensor-&gt;tasklock_cnt);</p>
+<p>} else {</p>
+<p>if (atomic_read(&amp;sensor-&gt;tasklock_cnt) &gt; 0) {</p>
+<p>atomic_sub(1, &amp;sensor-&gt;tasklock_cnt);</p>
+<p>if (atomic_read(&amp;sensor-&gt;tasklock_cnt) == 0)</p>
+<p>preempt_enable();</p>
+<p>}</p>
+<p>}</p>
+<p>return 0;</p>
+<p>sensor_task_lock_err:</p>
+<p>return -1; </p>
+<p>#else</p>
+<p>    return 0;</p>
+<p>#endif</p>
+<p>}</p>
+<p>/* sensor register write */</p>
+<p>static int sensor_write(struct i2c_client *client, u8 reg, u8 val)</p>
+<p>{</p>
+<p>    int err,cnt;</p>
+<p>    u8 buf[2];</p>
+<p>    struct i2c_msg msg[1];</p>
+<p>    buf[0] = reg;</p>
+<p>    buf[1] = val;</p>
+<p>    msg-&gt;addr = client-&gt;addr;</p>
+<p>    msg-&gt;flags = client-&gt;flags;</p>
+<p>    msg-&gt;buf = buf;</p>
+<p>    msg-&gt;len = sizeof(buf);</p>
+<p>    msg-&gt;scl_rate = CONFIG_SENSOR_I2C_SPEED;         /* <a href="mailto:&#100;&#100;&#x6c;&#x40;&#114;&#x6f;&#99;&#x6b;&#45;&#99;&#x68;&#105;&#112;&#115;&#46;&#x63;&#x6f;&#x6d;">&#100;&#100;&#x6c;&#x40;&#114;&#x6f;&#99;&#x6b;&#45;&#99;&#x68;&#105;&#112;&#115;&#46;&#x63;&#x6f;&#x6d;</a> : 100kHz */</p>
+<p>    msg-&gt;read_type = 0;               /* fpga i2c:0==I2C_NORMAL : direct use number not enum for don’t want include spi_fpga.h */</p>
+<p>    cnt = 3;</p>
+<p>    err = -EAGAIN;</p>
+<p>    while ((cnt– &gt; 0) &amp;&amp; (err &lt; 0)) {                       /* <a href="mailto:&#100;&#100;&#x6c;&#64;&#x72;&#x6f;&#x63;&#107;&#x2d;&#99;&#x68;&#105;&#112;&#x73;&#x2e;&#x63;&#111;&#109;">&#100;&#100;&#x6c;&#64;&#x72;&#x6f;&#x63;&#107;&#x2d;&#99;&#x68;&#105;&#112;&#x73;&#x2e;&#x63;&#111;&#109;</a> :  Transfer again if transent is failed   */</p>
+<p>        err = i2c_transfer(client-&gt;adapter, msg, 1);</p>
+<p>        if (err &gt;= 0) {</p>
+<p>            return 0;</p>
+<p>        } else {</p>
+<p>        SENSOR_TR(&quot;\n %s write reg(0x%x, val:0x%x) failed, try to write again!\n&quot;,SENSOR_NAME_STRING(),reg, val);</p>
+<p>            udelay(10);</p>
+<p>        }</p>
+<p>    }</p>
+<p>    return err;</p>
+<p>}</p>
+<p>/* sensor register read */</p>
+<p>static int sensor_read(struct i2c_client *client, u8 reg, u8 *val)</p>
+<p>{</p>
+<p>    int err,cnt;</p>
+<p>    u8 buf[1];</p>
+<p>    struct i2c_msg msg[2];</p>
+<p>    buf[0] = reg ;</p>
+<p>    msg[0].addr = client-&gt;addr;</p>
+<p>    msg[0].flags = client-&gt;flags;</p>
+<p>    msg[0].buf = buf;</p>
+<p>    msg[0].len = sizeof(buf);</p>
+<p>    msg[0].scl_rate = CONFIG_SENSOR_I2C_SPEED;       /* <a href="mailto:&#100;&#100;&#x6c;&#64;&#114;&#111;&#99;&#x6b;&#x2d;&#99;&#104;&#105;&#x70;&#x73;&#x2e;&#99;&#x6f;&#x6d;">&#100;&#100;&#x6c;&#64;&#114;&#111;&#99;&#x6b;&#x2d;&#99;&#104;&#105;&#x70;&#x73;&#x2e;&#99;&#x6f;&#x6d;</a> : 100kHz */</p>
+<p>    msg[0].read_type = 2;   /* fpga i2c:0==I2C_NO_STOP : direct use number not enum for don’t want include spi_fpga.h */</p>
+<p>    msg[1].addr = client-&gt;addr;</p>
+<p>    msg[1].flags = client-&gt;flags|I2C_M_RD;</p>
+<p>    msg[1].buf = buf;</p>
+<p>    msg[1].len = 1;</p>
+<p>    msg[1].scl_rate = CONFIG_SENSOR_I2C_SPEED;                       /* <a href="mailto:&#100;&#100;&#108;&#64;&#x72;&#x6f;&#x63;&#x6b;&#x2d;&#99;&#104;&#105;&#112;&#115;&#x2e;&#99;&#111;&#109;">&#100;&#100;&#108;&#64;&#x72;&#x6f;&#x63;&#x6b;&#x2d;&#99;&#104;&#105;&#112;&#115;&#x2e;&#99;&#111;&#109;</a> : 100kHz */</p>
+<p>    msg[1].read_type = 2;                             /* fpga i2c:0==I2C_NO_STOP : direct use number not enum for don’t want include spi_fpga.h */</p>
+<p>    cnt = 3;</p>
+<p>    err = -EAGAIN;</p>
+<p>    while ((cnt– &gt; 0) &amp;&amp; (err &lt; 0)) {                       /* <a href="mailto:&#x64;&#x64;&#108;&#x40;&#114;&#x6f;&#99;&#x6b;&#45;&#99;&#104;&#x69;&#112;&#115;&#x2e;&#x63;&#111;&#x6d;">&#x64;&#x64;&#108;&#x40;&#114;&#x6f;&#99;&#x6b;&#45;&#99;&#104;&#x69;&#112;&#115;&#x2e;&#x63;&#111;&#x6d;</a> :  Transfer again if transent is failed   */</p>
+<p>        err = i2c_transfer(client-&gt;adapter, msg, 2);</p>
+<p>        if (err &gt;= 0) {</p>
+<p>            *val = buf[0];</p>
+<p>            return 0;</p>
+<p>        } else {</p>
+<p>        SENSOR_TR(&quot;\n %s read reg(0x%x val:0x%x) failed, try to read again! \n&quot;,SENSOR_NAME_STRING(),reg, *val);</p>
+<p>            udelay(10);</p>
+<p>        }</p>
+<p>    }</p>
+<p>    return err;</p>
+<p>}</p>
+<p>/* write a array of registers  */</p>
+<p>static int sensor_write_array(struct i2c_client *client, struct reginfo *regarray)</p>
+<p>{</p>
+<p>    int err = 0, cnt;</p>
+<p>    int i = 0;</p>
+<p>#if CONFIG_SENSOR_I2C_RDWRCHK    </p>
+<p>char valchk;</p>
+<p>#endif</p>
+<p>cnt = 0;</p>
+<p>if (sensor_task_lock(client, 1) &lt; 0)</p>
+<p>goto sensor_write_array_end;</p>
+<p>    while (regarray[i].reg != 0)</p>
+<p>    {</p>
+<p>        err = sensor_write(client, regarray[i].reg, regarray[i].val);</p>
+<p>        if (err &lt; 0)</p>
+<p>        {</p>
+<p>            if (cnt– &gt; 0) {</p>
+<p>   SENSOR_TR(&quot;%s..write failed current reg:0x%x, Write array again !\n&quot;, SENSOR_NAME_STRING(),regarray[i].reg);</p>
+<p>i = 0;</p>
+<p>continue;</p>
+<p>            } else {</p>
+<p>                SENSOR_TR(&quot;%s..write array failed!!!\n&quot;, SENSOR_NAME_STRING());</p>
+<p>                err = -EPERM;</p>
+<p>goto sensor_write_array_end;</p>
+<p>            }</p>
+<p>        } else {</p>
+<p>        #if CONFIG_SENSOR_I2C_RDWRCHK</p>
+<p>sensor_read(client, regarray[i].reg, &amp;valchk);</p>
+<p>if (valchk != regarray[i].val)</p>
+<p>SENSOR_TR(&quot;%s Reg:0x%x write(0x%x, 0x%x) fail\n&quot;,SENSOR_NAME_STRING(), regarray[i].reg, regarray[i].val, valchk);</p>
+<p>#endif</p>
+<p>        }</p>
+<p>        i++;</p>
+<p>    }</p>
+<p>sensor_write_array_end:</p>
+<p>sensor_task_lock(client,0);</p>
+<p>return err;</p>
+<p>}</p>
+<p>#if CONFIG_SENSOR_I2C_RDWRCHK</p>
+<p>static int sensor_check_array(struct i2c_client *client, struct reginfo *regarray)</p>
+<p>{</p>
+<p>    int cnt;</p>
+<p>    int i = 0;</p>
+<p>char valchk;</p>
+<p>cnt = 0;</p>
+<p>valchk = 0;</p>
+<p>    while (regarray[i].reg != 0)</p>
+<p>    {</p>
+<p>sensor_read(client, regarray[i].reg, &amp;valchk);</p>
+<p>if (valchk != regarray[i].val)</p>
+<p>SENSOR_TR(&quot;%s Reg:0x%x read(0x%x, 0x%x) error\n&quot;,SENSOR_NAME_STRING(), regarray[i].reg, regarray[i].val, valchk);</p>
+<p>        i++;</p>
+<p>    }</p>
+<p>    return 0;</p>
+<p>}</p>
+<p>#endif</p>
+<p>static int sensor_ioctrl(struct soc_camera_device *icd,enum rk29sensor_power_cmd cmd, int on)</p>
+<p>{</p>
+<p>struct soc_camera_link *icl = to_soc_camera_link(icd);</p>
+<p>int ret = 0;</p>
+<p>    SENSOR_DG(&quot;%s %s  cmd(%d) on(%d)\n&quot;,SENSOR_NAME_STRING(),<strong>FUNCTION</strong>,cmd,on);</p>
+<p>switch (cmd)</p>
+<p>{</p>
+<p>case Sensor_PowerDown:</p>
+<p>{</p>
+<p>    // honghaishen_test</p>
+<p>if (icl-&gt;powerdown) {</p>
+<p>ret = icl-&gt;powerdown(icd-&gt;pdev, on);</p>
+<p>if (ret == RK29_CAM_IO_SUCCESS) {</p>
+<p>if (on == 0) {</p>
+<p>mdelay(2);</p>
+<p>if (icl-&gt;reset)</p>
+<p>icl-&gt;reset(icd-&gt;pdev);</p>
+<p>}</p>
+<p>} else if (ret == RK29_CAM_EIO_REQUESTFAIL) {</p>
+<p>ret = -ENODEV;</p>
+<p>goto sensor_power_end;</p>
+<p>}</p>
+<p>}</p>
+<p>break;</p>
+<p>}</p>
+<p>case Sensor_Flash:</p>
+<p>{</p>
+<p>struct i2c_client *client = to_i2c_client(to_soc_camera_control(icd));</p>
+<p>    struct sensor *sensor = to_sensor(client);</p>
+<p>if (sensor-&gt;sensor_io_request &amp;&amp; sensor-&gt;sensor_io_request-&gt;sensor_ioctrl) {</p>
+<p>sensor-&gt;sensor_io_request-&gt;sensor_ioctrl(icd-&gt;pdev,Cam_Flash, on);</p>
+<p>                if(on){</p>
+<p>                    //flash off after 2 secs</p>
+<p>            hrtimer_cancel(&amp;(flash_off_timer.timer));</p>
+<p>            hrtimer_start(&amp;(flash_off_timer.timer),ktime_set(0, 800<em>1000</em>1000),HRTIMER_MODE_REL);</p>
+<p>                    }</p>
+<p>}</p>
+<p>            break;</p>
+<p>}</p>
+<p>default:</p>
+<p>{</p>
+<p>SENSOR_TR(&quot;%s %s cmd(0x%x) is unknown!&quot;,SENSOR_NAME_STRING(),<strong>FUNCTION</strong>,cmd);</p>
+<p>break;</p>
+<p>}</p>
+<p>}</p>
+<p>sensor_power_end:</p>
+<p>return ret;</p>
+<p>}</p>
+<p>static enum hrtimer_restart flash_off_func(struct hrtimer *timer){</p>
+<p>struct flash_timer *fps_timer = container_of(timer, struct flash_timer, timer);</p>
+<p>    sensor_ioctrl(fps_timer-&gt;icd,Sensor_Flash,0);</p>
+<p>SENSOR_DG(&quot;%s %s !!!!!!&quot;,SENSOR_NAME_STRING(),<strong>FUNCTION</strong>);</p>
+<p>    return 0;</p>
+<p>}</p>
+<p>static int sensor_init(struct v4l2_subdev *sd, u32 val)</p>
+<p>{</p>
+<p>    struct i2c_client *client = v4l2_get_subdevdata(sd);</p>
+<p>    struct soc_camera_device *icd = client-&gt;dev.platform_data;</p>
+<p>    struct sensor *sensor = to_sensor(client);</p>
+<p>const struct v4l2_queryctrl *qctrl;</p>
+<p>    const struct sensor_datafmt *fmt;</p>
+<p>    char value;</p>
+<p>    int ret,pid = 0;</p>
+<p>    SENSOR_DG(&quot;\n%s..%s.. \n&quot;,SENSOR_NAME_STRING(),<strong>FUNCTION</strong>);</p>
+<p>if (sensor_ioctrl(icd, Sensor_PowerDown, 0) &lt; 0) {</p>
+<p>ret = -ENODEV;</p>
+<p>goto sensor_INIT_ERR;</p>
+<p>}</p>
+<p>    /* soft reset */</p>
+<p>if (sensor_task_lock(client,1)&lt;0)</p>
+<p>goto sensor_INIT_ERR;</p>
+<p>/* check if it is an sensor sensor */</p>
+<p>    ret = sensor_read(client, 0xf0, &amp;value);</p>
+<p>    if (ret != 0) {</p>
+<p>        SENSOR_TR(&quot;read chip id high byte failed\n&quot;);</p>
+<p>        ret = -ENODEV;</p>
+<p>        goto sensor_INIT_ERR;</p>
+<p>    }</p>
+<p>    pid |= (value &lt;&lt; 8);</p>
+<p>    ret = sensor_read(client, 0xf1, &amp;value);</p>
+<p>    if (ret != 0) {</p>
+<p>        SENSOR_TR(&quot;read chip id low byte failed\n&quot;);</p>
+<p>        ret = -ENODEV;</p>
+<p>        goto sensor_INIT_ERR;</p>
+<p>    }</p>
+<p>    pid |= (value &amp; 0xff);</p>
+<p>    SENSOR_DG(&quot;\n %s  pid = 0x%x\n&quot;, SENSOR_NAME_STRING(), pid);</p>
+<p>    if (pid == SENSOR_ID) {</p>
+<p>        sensor-&gt;model = SENSOR_V4L2_IDENT;</p>
+<p>    } else {</p>
+<p>        SENSOR_TR(&quot;error: %s mismatched   pid = 0x%x\n&quot;, SENSOR_NAME_STRING(), pid);</p>
+<p>        ret = -ENODEV;</p>
+<p>        goto sensor_INIT_ERR;</p>
+<p>    }</p>
+<p>    ret = sensor_write_array(client, sensor_init_data);</p>
+<p>    mdelay(300);</p>
+<p>    if (ret != 0)</p>
+<p>    {</p>
+<p>        SENSOR_TR(&quot;error: %s initial failed\n&quot;,SENSOR_NAME_STRING());</p>
+<p>        goto sensor_INIT_ERR;</p>
+<p>    }</p>
+<p>sensor_task_lock(client,0);</p>
+<p>    sensor-&gt;info_priv.winseqe_cur_addr  = (int)SENSOR_INIT_WINSEQADR;</p>
+<p>    fmt = sensor_find_datafmt(SENSOR_INIT_PIXFMT,sensor_colour_fmts, ARRAY_SIZE(sensor_colour_fmts));</p>
+<p>    if (!fmt) {</p>
+<p>        SENSOR_TR(&quot;error: %s initial array colour fmts is not support!!&quot;,SENSOR_NAME_STRING());</p>
+<p>        ret = -EINVAL;</p>
+<p>        goto sensor_INIT_ERR;</p>
+<p>    }</p>
+<p>sensor-&gt;info_priv.fmt = *fmt;</p>
+<p>    /* sensor sensor information for initialization  */</p>
+<p>qctrl = soc_camera_find_qctrl(&amp;sensor_ops, V4L2_CID_DO_WHITE_BALANCE);</p>
+<p>if (qctrl)</p>
+<p>    sensor-&gt;info_priv.whiteBalance = qctrl-&gt;default_value;</p>
+<p>qctrl = soc_camera_find_qctrl(&amp;sensor_ops, V4L2_CID_BRIGHTNESS);</p>
+<p>if (qctrl)</p>
+<p>    sensor-&gt;info_priv.brightness = qctrl-&gt;default_value;</p>
+<p>qctrl = soc_camera_find_qctrl(&amp;sensor_ops, V4L2_CID_EFFECT);</p>
+<p>if (qctrl)</p>
+<p>    sensor-&gt;info_priv.effect = qctrl-&gt;default_value;</p>
+<p>qctrl = soc_camera_find_qctrl(&amp;sensor_ops, V4L2_CID_EXPOSURE);</p>
+<p>if (qctrl)</p>
+<p>        sensor-&gt;info_priv.exposure = qctrl-&gt;default_value;</p>
+<p>qctrl = soc_camera_find_qctrl(&amp;sensor_ops, V4L2_CID_SATURATION);</p>
+<p>if (qctrl)</p>
+<p>        sensor-&gt;info_priv.saturation = qctrl-&gt;default_value;</p>
+<p>qctrl = soc_camera_find_qctrl(&amp;sensor_ops, V4L2_CID_CONTRAST);</p>
+<p>if (qctrl)</p>
+<p>        sensor-&gt;info_priv.contrast = qctrl-&gt;default_value;</p>
+<p>qctrl = soc_camera_find_qctrl(&amp;sensor_ops, V4L2_CID_HFLIP);</p>
+<p>if (qctrl)</p>
+<p>        sensor-&gt;info_priv.mirror = qctrl-&gt;default_value;</p>
+<p>qctrl = soc_camera_find_qctrl(&amp;sensor_ops, V4L2_CID_VFLIP);</p>
+<p>if (qctrl)</p>
+<p>        sensor-&gt;info_priv.flip = qctrl-&gt;default_value;</p>
+<p>qctrl = soc_camera_find_qctrl(&amp;sensor_ops, V4L2_CID_SCENE);</p>
+<p>if (qctrl)</p>
+<p>        sensor-&gt;info_priv.scene = qctrl-&gt;default_value;</p>
+<p>qctrl = soc_camera_find_qctrl(&amp;sensor_ops, V4L2_CID_ZOOM_ABSOLUTE);</p>
+<p>if (qctrl)</p>
+<p>        sensor-&gt;info_priv.digitalzoom = qctrl-&gt;default_value;</p>
+<p>    /* <a href="mailto:&#x64;&#100;&#108;&#64;&#x72;&#x6f;&#x63;&#x6b;&#45;&#99;&#104;&#x69;&#x70;&#x73;&#46;&#99;&#111;&#109;">&#x64;&#100;&#108;&#64;&#x72;&#x6f;&#x63;&#x6b;&#45;&#99;&#104;&#x69;&#x70;&#x73;&#46;&#99;&#111;&#109;</a> : if sensor support auto focus and flash, programer must run focus and flash code  */</p>
+<p>#if CONFIG_SENSOR_Focus</p>
+<p>    sensor_set_focus();</p>
+<p>    qctrl = soc_camera_find_qctrl(&amp;sensor_ops, V4L2_CID_FOCUS_ABSOLUTE);</p>
+<p>if (qctrl)</p>
+<p>        sensor-&gt;info_priv.focus = qctrl-&gt;default_value;</p>
+<p>#endif</p>
+<p>#if CONFIG_SENSOR_Flash</p>
+<p>qctrl = soc_camera_find_qctrl(&amp;sensor_ops, V4L2_CID_FLASH);</p>
+<p>if (qctrl)</p>
+<p>        sensor-&gt;info_priv.flash = qctrl-&gt;default_value;</p>
+<p>    flash_off_timer.icd = icd;</p>
+<p>flash_off_timer.timer.function = flash_off_func;</p>
+<p>    #endif</p>
+<p>    SENSOR_DG(&quot;\n%s..%s.. icd-&gt;width = %d.. icd-&gt;height %d\n&quot;,SENSOR_NAME_STRING(),((val == 0)?<strong>FUNCTION</strong>:&quot;sensor_reinit&quot;),icd-&gt;user_width,icd-&gt;user_height);</p>
+<p>    sensor-&gt;info_priv.funmodule_state |= SENSOR_INIT_IS_OK;</p>
+<p>    return 0;</p>
+<p>sensor_INIT_ERR:</p>
+<p>    sensor-&gt;info_priv.funmodule_state &amp;= ~SENSOR_INIT_IS_OK;</p>
+<p>sensor_task_lock(client,0);</p>
+<p>sensor_deactivate(client);</p>
+<p>    return ret;</p>
+<p>}</p>
+<p>static int sensor_deactivate(struct i2c_client *client)</p>
+<p>{</p>
+<p>struct soc_camera_device *icd = client-&gt;dev.platform_data;</p>
+<p>    struct sensor *sensor = to_sensor(client);</p>
+<p>SENSOR_DG(&quot;\n%s..%s.. Enter\n&quot;,SENSOR_NAME_STRING(),<strong>FUNCTION</strong>);</p>
+<p>/* <a href="mailto:&#100;&#x64;&#x6c;&#x40;&#x72;&#x6f;&#x63;&#107;&#x2d;&#99;&#104;&#105;&#112;&#x73;&#46;&#99;&#x6f;&#x6d;">&#100;&#x64;&#x6c;&#x40;&#x72;&#x6f;&#x63;&#107;&#x2d;&#99;&#104;&#105;&#112;&#x73;&#46;&#99;&#x6f;&#x6d;</a> : all sensor output pin must change to input for other sensor */</p>
+<p>    if (sensor-&gt;info_priv.funmodule_state &amp; SENSOR_INIT_IS_OK) {</p>
+<p>    }</p>
+<p>sensor_ioctrl(icd, Sensor_PowerDown, 1);</p>
+<p>    msleep(100); </p>
+<p>/* <a href="mailto:&#100;&#100;&#108;&#64;&#x72;&#111;&#x63;&#x6b;&#x2d;&#99;&#104;&#105;&#x70;&#115;&#x2e;&#x63;&#111;&#109;">&#100;&#100;&#108;&#64;&#x72;&#111;&#x63;&#x6b;&#x2d;&#99;&#104;&#105;&#x70;&#115;&#x2e;&#x63;&#111;&#109;</a> : sensor config init width , because next open sensor quickly(soc_camera_open -&gt; Try to configure with default parameters) */</p>
+<p>icd-&gt;user_width = SENSOR_INIT_WIDTH;</p>
+<p>    icd-&gt;user_height = SENSOR_INIT_HEIGHT;</p>
+<p>    sensor-&gt;info_priv.funmodule_state &amp;= ~SENSOR_INIT_IS_OK;</p>
+<p>return 0;</p>
+<p>}</p>
+<p>static  struct reginfo sensor_power_down_sequence[]=</p>
+<p>{</p>
+<p>    {0x00,0x00}</p>
+<p>};</p>
+<p>static int sensor_suspend(struct soc_camera_device *icd, pm_message_t pm_msg)</p>
+<p>{</p>
+<p>    int ret;</p>
+<p>    struct i2c_client *client = to_i2c_client(to_soc_camera_control(icd));</p>
+<p>    if (pm_msg.event == PM_EVENT_SUSPEND) {</p>
+<p>        SENSOR_DG(&quot;\n %s Enter Suspend.. \n&quot;, SENSOR_NAME_STRING());</p>
+<p>        ret = sensor_write_array(client, sensor_power_down_sequence) ;</p>
+<p>        if (ret != 0) {</p>
+<p>            SENSOR_TR(&quot;\n %s..%s WriteReg Fail.. \n&quot;, SENSOR_NAME_STRING(),<strong>FUNCTION</strong>);</p>
+<p>            return ret;</p>
+<p>        } else {</p>
+<p>            ret = sensor_ioctrl(icd, Sensor_PowerDown, 1);</p>
+<p>            if (ret &lt; 0) {</p>
+<p>   SENSOR_TR(&quot;\n %s suspend fail for turn on power!\n&quot;, SENSOR_NAME_STRING());</p>
+<p>                return -EINVAL;</p>
+<p>            }</p>
+<p>        }</p>
+<p>    } else {</p>
+<p>        SENSOR_TR(&quot;\n %s cann’t suppout Suspend..\n&quot;,SENSOR_NAME_STRING());</p>
+<p>        return -EINVAL;</p>
+<p>    }</p>
+<p>    return 0;</p>
+<p>}</p>
+<p>static int sensor_resume(struct soc_camera_device *icd)</p>
+<p>{</p>
+<p>int ret;</p>
+<p>    ret = sensor_ioctrl(icd, Sensor_PowerDown, 0);</p>
+<p>    if (ret &lt; 0) {</p>
+<p>SENSOR_TR(&quot;\n %s resume fail for turn on power!\n&quot;, SENSOR_NAME_STRING());</p>
+<p>        return -EINVAL;</p>
+<p>    }</p>
+<p>SENSOR_DG(&quot;\n %s Enter Resume.. \n&quot;, SENSOR_NAME_STRING());</p>
+<p>    return 0;</p>
+<p>}</p>
+<p>static int sensor_set_bus_param(struct soc_camera_device *icd,</p>
+<p>                                unsigned long flags)</p>
+<p>{</p>
+<p>    return 0;</p>
+<p>}</p>
+<p>static unsigned long sensor_query_bus_param(struct soc_camera_device *icd)</p>
+<p>{</p>
+<p>    struct soc_camera_link *icl = to_soc_camera_link(icd);</p>
+<p>    unsigned long flags = SENSOR_BUS_PARAM;</p>
+<p>    return soc_camera_apply_sensor_flags(icl, flags);</p>
+<p>}</p>
+<p>static int sensor_g_fmt(struct v4l2_subdev *sd, struct v4l2_mbus_framefmt *mf)</p>
+<p>{</p>
+<p>    struct i2c_client *client = v4l2_get_subdevdata(sd);</p>
+<p>    struct soc_camera_device *icd = client-&gt;dev.platform_data;</p>
+<p>    struct sensor *sensor = to_sensor(client);</p>
+<p>    mf-&gt;width = icd-&gt;user_width;</p>
+<p>mf-&gt;height = icd-&gt;user_height;</p>
+<p>mf-&gt;code = sensor-&gt;info_priv.fmt.code;</p>
+<p>mf-&gt;colorspace = sensor-&gt;info_priv.fmt.colorspace;</p>
+<p>mf-&gt;field = V4L2_FIELD_NONE;</p>
+<p>    return 0;</p>
+<p>}</p>
+<p>static bool sensor_fmt_capturechk(struct v4l2_subdev *sd, struct v4l2_mbus_framefmt *mf)</p>
+<p>{</p>
+<p>    bool ret = false;</p>
+<p>if ((mf-&gt;width == 1024) &amp;&amp; (mf-&gt;height == 768)) {</p>
+<p>ret = true;</p>
+<p>} else if ((mf-&gt;width == 1280) &amp;&amp; (mf-&gt;height == 1024)) {</p>
+<p>ret = true;</p>
+<p>} else if ((mf-&gt;width == 1600) &amp;&amp; (mf-&gt;height == 1200)) {</p>
+<p>ret = true;</p>
+<p>} else if ((mf-&gt;width == 2048) &amp;&amp; (mf-&gt;height == 1536)) {</p>
+<p>ret = true;</p>
+<p>} else if ((mf-&gt;width == 2592) &amp;&amp; (mf-&gt;height == 1944)) {</p>
+<p>ret = true;</p>
+<p>}</p>
+<p>if (ret == true)</p>
+<p>SENSOR_DG(&quot;%s %dx%d is capture format\n&quot;, <strong>FUNCTION</strong>, mf-&gt;width, mf-&gt;height);</p>
+<p>return ret;</p>
+<p>}</p>
+<p>static bool sensor_fmt_videochk(struct v4l2_subdev *sd, struct v4l2_mbus_framefmt *mf)</p>
+<p>{</p>
+<p>    bool ret = false;</p>
+<p>if ((mf-&gt;width == 1280) &amp;&amp; (mf-&gt;height == 720)) {</p>
+<p>ret = true;</p>
+<p>} else if ((mf-&gt;width == 1920) &amp;&amp; (mf-&gt;height == 1080)) {</p>
+<p>ret = true;</p>
+<p>}</p>
+<p>if (ret == true)</p>
+<p>SENSOR_DG(&quot;%s %dx%d is video format\n&quot;, <strong>FUNCTION</strong>, mf-&gt;width, mf-&gt;height);</p>
+<p>return ret;</p>
+<p>}</p>
+<p>static  unsigned   int shutter_h,shutter_l;</p>
+<p>static int sensor_s_fmt(struct v4l2_subdev *sd, struct v4l2_mbus_framefmt *mf)</p>
+<p>{</p>
+<p>    int ret1;</p>
+<p>    struct i2c_client *client = v4l2_get_subdevdata(sd);</p>
+<p>    const struct sensor_datafmt *fmt;</p>
+<p>    struct sensor *sensor = to_sensor(client);</p>
+<p>const struct v4l2_queryctrl *qctrl;</p>
+<p>struct soc_camera_device *icd = client-&gt;dev.platform_data;</p>
+<p>    struct reginfo *winseqe_set_addr=NULL;</p>
+<p>    int ret=0, set_w,set_h;</p>
+<p>#if  1</p>
+<p>char value;</p>
+<p>unsigned   int pid=0,shutter,temp_reg;</p>
+<p>#endif</p>
+<p>fmt = sensor_find_datafmt(mf-&gt;code, sensor_colour_fmts,</p>
+<p>  ARRAY_SIZE(sensor_colour_fmts));</p>
+<p>if (!fmt) {</p>
+<p>        ret = -EINVAL;</p>
+<p>        goto sensor_s_fmt_end;</p>
+<p>    }</p>
+<p>if (sensor-&gt;info_priv.fmt.code != mf-&gt;code) {</p>
+<p>switch (mf-&gt;code)</p>
+<p>{</p>
+<p>case V4L2_MBUS_FMT_YUYV8_2X8:</p>
+<p>{</p>
+<p>winseqe_set_addr = sensor_ClrFmt_YUYV;</p>
+<p>break;</p>
+<p>}</p>
+<p>case V4L2_MBUS_FMT_UYVY8_2X8:</p>
+<p>{</p>
+<p>winseqe_set_addr = sensor_ClrFmt_UYVY;</p>
+<p>break;</p>
+<p>}</p>
+<p>default:</p>
+<p>break;</p>
+<p>}</p>
+<p>if (winseqe_set_addr != NULL) {</p>
+<p>            sensor_write_array(client, winseqe_set_addr);</p>
+<p>sensor-&gt;info_priv.fmt.code = mf-&gt;code;</p>
+<p>            sensor-&gt;info_priv.fmt.colorspace= mf-&gt;colorspace;            </p>
+<p>SENSOR_DG(&quot;%s v4l2_mbus_code:%d set success!\n&quot;, SENSOR_NAME_STRING(),mf-&gt;code);</p>
+<p>} else {</p>
+<p>SENSOR_TR(&quot;%s v4l2_mbus_code:%d is invalidate!\n&quot;, SENSOR_NAME_STRING(),mf-&gt;code);</p>
+<p>}</p>
+<p>}</p>
+<p>    set_w = mf-&gt;width;</p>
+<p>    set_h = mf-&gt;height;</p>
+<p>if (((set_w &lt;= 176) &amp;&amp; (set_h &lt;= 144)) &amp;&amp; sensor_qcif[0].reg)</p>
+<p>{</p>
+<p>winseqe_set_addr = sensor_qcif;</p>
+<p>        set_w = 176;</p>
+<p>        set_h = 144;</p>
+<p>}</p>
+<p>else if (((set_w &lt;= 320) &amp;&amp; (set_h &lt;= 240)) &amp;&amp; sensor_qvga[0].reg)</p>
+<p>    {</p>
+<p>        winseqe_set_addr = sensor_qvga;</p>
+<p>        set_w = 320;</p>
+<p>        set_h = 240;</p>
+<p>    }</p>
+<p>    else if (((set_w &lt;= 352) &amp;&amp; (set_h&lt;= 288)) &amp;&amp; sensor_cif[0].reg)</p>
+<p>    {</p>
+<p>        winseqe_set_addr = sensor_cif;</p>
+<p>        set_w = 352;</p>
+<p>        set_h = 288;</p>
+<p>    }</p>
+<p>    else if (((set_w &lt;= 640) &amp;&amp; (set_h &lt;= 480)) &amp;&amp; sensor_vga[0].reg)</p>
+<p>    {</p>
+<p>        winseqe_set_addr = sensor_vga;</p>
+<p>        set_w = 640;</p>
+<p>        set_h = 480;</p>
+<p>    }</p>
+<p>    else if (((set_w &lt;= 800) &amp;&amp; (set_h &lt;= 600)) &amp;&amp; sensor_svga[0].reg)</p>
+<p>    {</p>
+<p>        winseqe_set_addr = sensor_svga;</p>
+<p>        set_w = 800;</p>
+<p>        set_h = 600;</p>
+<p>    }</p>
+<p>else if (((set_w &lt;= 1280) &amp;&amp; (set_h &lt;= 720)) &amp;&amp; sensor_720p[0].reg)</p>
+<p>    {</p>
+<p>        winseqe_set_addr = sensor_720p;</p>
+<p>        set_w = 1280;</p>
+<p>        set_h = 720;</p>
+<p>    }</p>
+<p>    else if (((set_w &lt;= 1280) &amp;&amp; (set_h &lt;= 1024)) &amp;&amp; sensor_sxga[0].reg)</p>
+<p>    {</p>
+<p>        winseqe_set_addr = sensor_sxga;</p>
+<p>        set_w = 1280;</p>
+<p>        set_h = 1024;</p>
+<p>    }</p>
+<p>    else if (((set_w &lt;= 1600) &amp;&amp; (set_h &lt;= 1200)) &amp;&amp; sensor_uxga[0].reg)</p>
+<p>    {</p>
+<p>        winseqe_set_addr = sensor_uxga;</p>
+<p>        set_w = 1600;</p>
+<p>        set_h = 1200;</p>
+<p>    }</p>
+<p>    else</p>
+<p>    {</p>
+<p>        winseqe_set_addr = SENSOR_INIT_WINSEQADR;               /* <a href="mailto:&#x64;&#100;&#x6c;&#64;&#x72;&#111;&#x63;&#x6b;&#x2d;&#x63;&#x68;&#105;&#112;&#x73;&#x2e;&#x63;&#111;&#109;">&#x64;&#100;&#x6c;&#64;&#x72;&#111;&#x63;&#x6b;&#x2d;&#x63;&#x68;&#105;&#112;&#x73;&#x2e;&#x63;&#111;&#109;</a> : Sensor output smallest size if  isn’t support app  */</p>
+<p>        set_w = SENSOR_INIT_WIDTH;</p>
+<p>        set_h = SENSOR_INIT_HEIGHT;</p>
+<p>SENSOR_TR(&quot;\n %s..%s Format is Invalidate. pix-&gt;width = %d.. pix-&gt;height = %d\n&quot;,SENSOR_NAME_STRING(),<strong>FUNCTION</strong>,mf-&gt;width,mf-&gt;height);</p>
+<p>    }</p>
+<p>    if ((int)winseqe_set_addr  != sensor-&gt;info_priv.winseqe_cur_addr) {</p>
+<p>        #if CONFIG_SENSOR_Flash</p>
+<p>        if (sensor_fmt_capturechk(sd,mf) == true) {      /* <a href="mailto:&#100;&#100;&#x6c;&#x40;&#x72;&#x6f;&#99;&#x6b;&#x2d;&#99;&#104;&#x69;&#x70;&#x73;&#x2e;&#99;&#x6f;&#x6d;">&#100;&#100;&#x6c;&#x40;&#x72;&#x6f;&#99;&#x6b;&#x2d;&#99;&#104;&#x69;&#x70;&#x73;&#x2e;&#99;&#x6f;&#x6d;</a> : Capture */</p>
+<p>            if ((sensor-&gt;info_priv.flash == 1) || (sensor-&gt;info_priv.flash == 2)) {</p>
+<p>                sensor_ioctrl(icd, Sensor_Flash, Flash_On);</p>
+<p>                SENSOR_DG(&quot;%s flash on in capture!\n&quot;, SENSOR_NAME_STRING());</p>
+<p>            }           </p>
+<p>        } else {                                        /* <a href="mailto:&#100;&#100;&#x6c;&#64;&#114;&#111;&#99;&#107;&#x2d;&#x63;&#104;&#105;&#x70;&#115;&#x2e;&#x63;&#x6f;&#109;">&#100;&#100;&#x6c;&#64;&#114;&#111;&#99;&#107;&#x2d;&#x63;&#104;&#105;&#x70;&#115;&#x2e;&#x63;&#x6f;&#109;</a> : Video */</p>
+<p>            if ((sensor-&gt;info_priv.flash == 1) || (sensor-&gt;info_priv.flash == 2)) {</p>
+<p>                sensor_ioctrl(icd, Sensor_Flash, Flash_Off);</p>
+<p>                SENSOR_DG(&quot;%s flash off in preivew!\n&quot;, SENSOR_NAME_STRING());</p>
+<p>            }</p>
+<p>        }</p>
+<p>        #endif</p>
+<p>if ((winseqe_set_addr == sensor_svga)||(winseqe_set_addr == sensor_vga) )</p>
+<p>{</p>
+<p>sensor_write(client, 0xb6, 0x00);  // AEC ON</p>
+<p>sensor_write(client, 0x03, shutter_h);</p>
+<p>sensor_write(client, 0x04, shutter_l);</p>
+<p>       msleep(50);</p>
+<p>printk(&quot;set preview for rewrite 0x03&quot;);</p>
+<p>} </p>
+<p>        ret |= sensor_write_array(client, winseqe_set_addr);</p>
+<p>#if 1</p>
+<p>if (winseqe_set_addr == sensor_uxga) { </p>
+<p>        sensor_write(client, 0xfe, 0x00);</p>
+<p>sensor_write(client, 0xb6, 0x02);  // AEC OFF</p>
+<p>sensor_read(client, 0x03, &amp;value);</p>
+<p>shutter_h=value;</p>
+<p>pid |= (value &lt;&lt; 8);</p>
+<p>      sensor_read(client, 0x04, &amp;value);</p>
+<p>shutter_l=value;</p>
+<p>pid |= (value &amp; 0xff);</p>
+<p>shutter=pid;</p>
+<p>temp_reg= shutter ; // 2</p>
+<p>if(temp_reg &lt; 1) temp_reg = 1;</p>
+<p>sensor_write(client, 0x03, ((temp_reg&gt;&gt;8)&amp;0xff));</p>
+<p>      sensor_write(client, 0x04, (temp_reg&amp;0xff));</p>
+<p>        }</p>
+<p>#endif   </p>
+<p>        if (ret != 0) {</p>
+<p>            SENSOR_TR(&quot;%s set format capability failed\n&quot;, SENSOR_NAME_STRING());</p>
+<p>            #if CONFIG_SENSOR_Flash</p>
+<p>            if (sensor_fmt_capturechk(sd,mf) == true) {</p>
+<p>                if ((sensor-&gt;info_priv.flash == 1) || (sensor-&gt;info_priv.flash == 2)) {</p>
+<p>                    sensor_ioctrl(icd, Sensor_Flash, Flash_Off);</p>
+<p>                    SENSOR_TR(&quot;%s Capture format set fail, flash off !\n&quot;, SENSOR_NAME_STRING());</p>
+<p>                }</p>
+<p>            }</p>
+<p>            #endif</p>
+<p>            goto sensor_s_fmt_end;</p>
+<p>        }</p>
+<p>        sensor-&gt;info_priv.winseqe_cur_addr  = (int)winseqe_set_addr;</p>
+<p>if (sensor_fmt_capturechk(sd,mf) == true) {    /* <a href="mailto:&#x64;&#x64;&#x6c;&#x40;&#x72;&#x6f;&#x63;&#107;&#x2d;&#99;&#104;&#105;&#112;&#x73;&#x2e;&#x63;&#111;&#109;">&#x64;&#x64;&#x6c;&#x40;&#x72;&#x6f;&#x63;&#107;&#x2d;&#99;&#104;&#105;&#112;&#x73;&#x2e;&#x63;&#111;&#109;</a> : Capture */</p>
+<p>qctrl = soc_camera_find_qctrl(&amp;sensor_ops, V4L2_CID_EFFECT);</p>
+<p>sensor_set_effect(icd, qctrl,sensor-&gt;info_priv.effect);</p>
+<p>if (sensor-&gt;info_priv.whiteBalance != 0) {</p>
+<p>qctrl = soc_camera_find_qctrl(&amp;sensor_ops, V4L2_CID_DO_WHITE_BALANCE);</p>
+<p>sensor_set_whiteBalance(icd, qctrl,sensor-&gt;info_priv.whiteBalance);</p>
+<p>}</p>
+<p>sensor-&gt;info_priv.snap2preview = true;</p>
+<p>} else if (sensor_fmt_videochk(sd,mf) == true) { /* <a href="mailto:&#100;&#x64;&#x6c;&#64;&#x72;&#x6f;&#99;&#107;&#x2d;&#99;&#104;&#105;&#x70;&#115;&#46;&#99;&#111;&#x6d;">&#100;&#x64;&#x6c;&#64;&#x72;&#x6f;&#99;&#107;&#x2d;&#99;&#104;&#105;&#x70;&#115;&#46;&#99;&#111;&#x6d;</a> : Video */</p>
+<p>qctrl = soc_camera_find_qctrl(&amp;sensor_ops, V4L2_CID_EFFECT);</p>
+<p>sensor_set_effect(icd, qctrl,sensor-&gt;info_priv.effect);</p>
+<p>qctrl = soc_camera_find_qctrl(&amp;sensor_ops, V4L2_CID_DO_WHITE_BALANCE);</p>
+<p>sensor_set_whiteBalance(icd, qctrl,sensor-&gt;info_priv.whiteBalance);</p>
+<p>sensor-&gt;info_priv.video2preview = true;</p>
+<p>} else if ((sensor-&gt;info_priv.snap2preview == true) || (sensor-&gt;info_priv.video2preview == true)) {</p>
+<p>qctrl = soc_camera_find_qctrl(&amp;sensor_ops, V4L2_CID_EFFECT);</p>
+<p>sensor_set_effect(icd, qctrl,sensor-&gt;info_priv.effect);</p>
+<p>qctrl = soc_camera_find_qctrl(&amp;sensor_ops, V4L2_CID_DO_WHITE_BALANCE);</p>
+<p>sensor_set_whiteBalance(icd, qctrl,sensor-&gt;info_priv.whiteBalance);</p>
+<p>            msleep(600);</p>
+<p>sensor-&gt;info_priv.video2preview = false;</p>
+<p>sensor-&gt;info_priv.snap2preview = false;</p>
+<p>}</p>
+<p>        SENSOR_DG(&quot;\n%s..%s.. icd-&gt;width = %d.. icd-&gt;height %d\n&quot;,SENSOR_NAME_STRING(),<strong>FUNCTION</strong>,set_w,set_h);</p>
+<p>    }</p>
+<p>    else</p>
+<p>    {</p>
+<p>        SENSOR_DG(&quot;\n %s .. Current Format is validate. icd-&gt;width = %d.. icd-&gt;height %d\n&quot;,SENSOR_NAME_STRING(),set_w,set_h);</p>
+<p>    }</p>
+<p>mf-&gt;width = set_w;</p>
+<p>    mf-&gt;height = set_h;</p>
+<p>msleep(100);</p>
+<p>sensor_s_fmt_end:</p>
+<p>    return ret;</p>
+<p>}</p>
+<p>static int sensor_try_fmt(struct v4l2_subdev *sd, struct v4l2_mbus_framefmt *mf)</p>
+<p>{</p>
+<p>    struct i2c_client *client = v4l2_get_subdevdata(sd);</p>
+<p>    struct sensor *sensor = to_sensor(client);</p>
+<p>    const struct sensor_datafmt *fmt;</p>
+<p>    int ret = 0,set_w,set_h;</p>
+<p>fmt = sensor_find_datafmt(mf-&gt;code, sensor_colour_fmts,</p>
+<p>  ARRAY_SIZE(sensor_colour_fmts));</p>
+<p>if (fmt == NULL) {</p>
+<p>fmt = &amp;sensor-&gt;info_priv.fmt;</p>
+<p>        mf-&gt;code = fmt-&gt;code;</p>
+<p>} </p>
+<p>    if (mf-&gt;height &gt; SENSOR_MAX_HEIGHT)</p>
+<p>        mf-&gt;height = SENSOR_MAX_HEIGHT;</p>
+<p>    else if (mf-&gt;height &lt; SENSOR_MIN_HEIGHT)</p>
+<p>        mf-&gt;height = SENSOR_MIN_HEIGHT;</p>
+<p>    if (mf-&gt;width &gt; SENSOR_MAX_WIDTH)</p>
+<p>        mf-&gt;width = SENSOR_MAX_WIDTH;</p>
+<p>    else if (mf-&gt;width &lt; SENSOR_MIN_WIDTH)</p>
+<p>        mf-&gt;width = SENSOR_MIN_WIDTH;</p>
+<p>    set_w = mf-&gt;width;</p>
+<p>    set_h = mf-&gt;height;</p>
+<p>if (((set_w &lt;= 176) &amp;&amp; (set_h &lt;= 144)) &amp;&amp; sensor_qcif[0].reg)</p>
+<p>{</p>
+<p>        set_w = 176;</p>
+<p>        set_h = 144;</p>
+<p>}</p>
+<p>else if (((set_w &lt;= 320) &amp;&amp; (set_h &lt;= 240)) &amp;&amp; sensor_qvga[0].reg)</p>
+<p>    {</p>
+<p>        set_w = 320;</p>
+<p>        set_h = 240;</p>
+<p>    }</p>
+<p>    else if (((set_w &lt;= 352) &amp;&amp; (set_h&lt;= 288)) &amp;&amp; sensor_cif[0].reg)</p>
+<p>    {</p>
+<p>        set_w = 352;</p>
+<p>        set_h = 288;</p>
+<p>    }</p>
+<p>    else if (((set_w &lt;= 640) &amp;&amp; (set_h &lt;= 480)) &amp;&amp; sensor_vga[0].reg)</p>
+<p>    {</p>
+<p>        set_w = 640;</p>
+<p>        set_h = 480;</p>
+<p>    }</p>
+<p>    else if (((set_w &lt;= 800) &amp;&amp; (set_h &lt;= 600)) &amp;&amp; sensor_svga[0].reg)</p>
+<p>    {</p>
+<p>        set_w = 800;</p>
+<p>        set_h = 600;</p>
+<p>    }</p>
+<p>else if (((set_w &lt;= 1280) &amp;&amp; (set_h &lt;= 720)) &amp;&amp; sensor_720p[0].reg)</p>
+<p>    {</p>
+<p>        set_w = 1280;</p>
+<p>        set_h = 720;</p>
+<p>    }</p>
+<p>    else if (((set_w &lt;= 1280) &amp;&amp; (set_h &lt;= 1024)) &amp;&amp; sensor_sxga[0].reg)</p>
+<p>    {</p>
+<p>        set_w = 1280;</p>
+<p>        set_h = 1024;</p>
+<p>    }</p>
+<p>    else if (((set_w &lt;= 1600) &amp;&amp; (set_h &lt;= 1200)) &amp;&amp; sensor_uxga[0].reg)</p>
+<p>    {</p>
+<p>        set_w = 1600;</p>
+<p>        set_h = 1200;</p>
+<p>    }</p>
+<p>    else</p>
+<p>    {</p>
+<p>        set_w = SENSOR_INIT_WIDTH;</p>
+<p>        set_h = SENSOR_INIT_HEIGHT;</p>
+<p>    }</p>
+<p>mf-&gt;width = set_w;</p>
+<p>    mf-&gt;height = set_h;</p>
+<p>    mf-&gt;colorspace = fmt-&gt;colorspace;</p>
+<p>    return ret;</p>
+<p>}</p>
+<p> static int sensor_g_chip_ident(struct v4l2_subdev *sd, struct v4l2_dbg_chip_ident *id)</p>
+<p>{</p>
+<p>    struct i2c_client *client = v4l2_get_subdevdata(sd);</p>
+<p>    if (id-&gt;match.type != V4L2_CHIP_MATCH_I2C_ADDR)</p>
+<p>        return -EINVAL;</p>
+<p>    if (id-&gt;match.addr != client-&gt;addr)</p>
+<p>        return -ENODEV;</p>
+<p>    id-&gt;ident = SENSOR_V4L2_IDENT;      /* <a href="mailto:&#x64;&#100;&#x6c;&#64;&#x72;&#111;&#x63;&#107;&#x2d;&#x63;&#x68;&#105;&#112;&#x73;&#x2e;&#x63;&#x6f;&#x6d;">&#x64;&#100;&#x6c;&#64;&#x72;&#111;&#x63;&#107;&#x2d;&#x63;&#x68;&#105;&#112;&#x73;&#x2e;&#x63;&#x6f;&#x6d;</a> :  Return gc2035  identifier */</p>
+<p>    id-&gt;revision = 0;</p>
+<p>    return 0;</p>
+<p>}</p>
+<p>#if CONFIG_SENSOR_Brightness</p>
+<p>static int sensor_set_brightness(struct soc_camera_device *icd, const struct v4l2_queryctrl *qctrl, int value)</p>
+<p>{</p>
+<p>    struct i2c_client *client = to_i2c_client(to_soc_camera_control(icd));</p>
+<p>    if ((value &gt;= qctrl-&gt;minimum) &amp;&amp; (value &lt;= qctrl-&gt;maximum))</p>
+<p>    {</p>
+<p>        if (sensor_BrightnessSeqe[value - qctrl-&gt;minimum] != NULL)</p>
+<p>        {</p>
+<p>            if (sensor_write_array(client, sensor_BrightnessSeqe[value - qctrl-&gt;minimum]) != 0)</p>
+<p>            {</p>
+<p>                SENSOR_TR(&quot;%s..%s WriteReg Fail.. \n&quot;,SENSOR_NAME_STRING(), <strong>FUNCTION</strong>);</p>
+<p>                return -EINVAL;</p>
+<p>            }</p>
+<p>            SENSOR_DG(&quot;%s..%s : %x\n&quot;,SENSOR_NAME_STRING(),<strong>FUNCTION</strong>, value);</p>
+<p>            return 0;</p>
+<p>        }</p>
+<p>    }</p>
+<p>SENSOR_TR(&quot;\n %s..%s valure = %d is invalidate..    \n&quot;,SENSOR_NAME_STRING(),<strong>FUNCTION</strong>,value);</p>
+<p>    return -EINVAL;</p>
+<p>}</p>
+<p>#endif</p>
+<p>#if CONFIG_SENSOR_Effect</p>
+<p>static int sensor_set_effect(struct soc_camera_device *icd, const struct v4l2_queryctrl *qctrl, int value)</p>
+<p>{</p>
+<p>    struct i2c_client *client = to_i2c_client(to_soc_camera_control(icd));</p>
+<p>    if ((value &gt;= qctrl-&gt;minimum) &amp;&amp; (value &lt;= qctrl-&gt;maximum))</p>
+<p>    {</p>
+<p>        if (sensor_EffectSeqe[value - qctrl-&gt;minimum] != NULL)</p>
+<p>        {</p>
+<p>            if (sensor_write_array(client, sensor_EffectSeqe[value - qctrl-&gt;minimum]) != 0)</p>
+<p>            {</p>
+<p>                SENSOR_TR(&quot;%s..%s WriteReg Fail.. \n&quot;,SENSOR_NAME_STRING(), <strong>FUNCTION</strong>);</p>
+<p>                return -EINVAL;</p>
+<p>            }</p>
+<p>            SENSOR_DG(&quot;%s..%s : %x\n&quot;,SENSOR_NAME_STRING(),<strong>FUNCTION</strong>, value);</p>
+<p>            return 0;</p>
+<p>        }</p>
+<p>    }</p>
+<p>SENSOR_TR(&quot;\n %s..%s valure = %d is invalidate..    \n&quot;,SENSOR_NAME_STRING(),<strong>FUNCTION</strong>,value);</p>
+<p>    return -EINVAL;</p>
+<p>}</p>
+<p>#endif</p>
+<p>#if CONFIG_SENSOR_Exposure</p>
+<p>static int sensor_set_exposure(struct soc_camera_device *icd, const struct v4l2_queryctrl *qctrl, int value)</p>
+<p>{</p>
+<p>    struct i2c_client *client = to_i2c_client(to_soc_camera_control(icd));</p>
+<p>    if ((value &gt;= qctrl-&gt;minimum) &amp;&amp; (value &lt;= qctrl-&gt;maximum))</p>
+<p>    {</p>
+<p>        if (sensor_ExposureSeqe[value - qctrl-&gt;minimum] != NULL)</p>
+<p>        {</p>
+<p>            if (sensor_write_array(client, sensor_ExposureSeqe[value - qctrl-&gt;minimum]) != 0)</p>
+<p>            {</p>
+<p>                SENSOR_TR(&quot;%s..%s WriteReg Fail.. \n&quot;,SENSOR_NAME_STRING(), <strong>FUNCTION</strong>);</p>
+<p>                return -EINVAL;</p>
+<p>            }</p>
+<p>            SENSOR_DG(&quot;%s..%s : %x\n&quot;,SENSOR_NAME_STRING(),<strong>FUNCTION</strong>, value);</p>
+<p>            return 0;</p>
+<p>        }</p>
+<p>    }</p>
+<p>SENSOR_TR(&quot;\n %s..%s valure = %d is invalidate..    \n&quot;,SENSOR_NAME_STRING(),<strong>FUNCTION</strong>,value);</p>
+<p>    return -EINVAL;</p>
+<p>}</p>
+<p>#endif</p>
+<p>#if CONFIG_SENSOR_Saturation</p>
+<p>static int sensor_set_saturation(struct soc_camera_device *icd, const struct v4l2_queryctrl *qctrl, int value)</p>
+<p>{</p>
+<p>    struct i2c_client *client = to_i2c_client(to_soc_camera_control(icd));</p>
+<p>    if ((value &gt;= qctrl-&gt;minimum) &amp;&amp; (value &lt;= qctrl-&gt;maximum))</p>
+<p>    {</p>
+<p>        if (sensor_SaturationSeqe[value - qctrl-&gt;minimum] != NULL)</p>
+<p>        {</p>
+<p>            if (sensor_write_array(client, sensor_SaturationSeqe[value - qctrl-&gt;minimum]) != 0)</p>
+<p>            {</p>
+<p>                SENSOR_TR(&quot;%s..%s WriteReg Fail.. \n&quot;,SENSOR_NAME_STRING(), <strong>FUNCTION</strong>);</p>
+<p>                return -EINVAL;</p>
+<p>            }</p>
+<p>            SENSOR_DG(&quot;%s..%s : %x\n&quot;,SENSOR_NAME_STRING(),<strong>FUNCTION</strong>, value);</p>
+<p>            return 0;</p>
+<p>        }</p>
+<p>    }</p>
+<p>    SENSOR_TR(&quot;\n %s..%s valure = %d is invalidate..    \n&quot;,SENSOR_NAME_STRING(),<strong>FUNCTION</strong>,value);</p>
+<p>    return -EINVAL;</p>
+<p>}</p>
+<p>#endif</p>
+<p>#if CONFIG_SENSOR_Contrast</p>
+<p>static int sensor_set_contrast(struct soc_camera_device *icd, const struct v4l2_queryctrl *qctrl, int value)</p>
+<p>{</p>
+<p>    struct i2c_client *client = to_i2c_client(to_soc_camera_control(icd));</p>
+<p>    if ((value &gt;= qctrl-&gt;minimum) &amp;&amp; (value &lt;= qctrl-&gt;maximum))</p>
+<p>    {</p>
+<p>        if (sensor_ContrastSeqe[value - qctrl-&gt;minimum] != NULL)</p>
+<p>        {</p>
+<p>            if (sensor_write_array(client, sensor_ContrastSeqe[value - qctrl-&gt;minimum]) != 0)</p>
+<p>            {</p>
+<p>                SENSOR_TR(&quot;%s..%s WriteReg Fail.. \n&quot;,SENSOR_NAME_STRING(), <strong>FUNCTION</strong>);</p>
+<p>                return -EINVAL;</p>
+<p>            }</p>
+<p>            SENSOR_DG(&quot;%s..%s : %x\n&quot;,SENSOR_NAME_STRING(),<strong>FUNCTION</strong>, value);</p>
+<p>            return 0;</p>
+<p>        }</p>
+<p>    }</p>
+<p>    SENSOR_TR(&quot;\n %s..%s valure = %d is invalidate..    \n&quot;,SENSOR_NAME_STRING(),<strong>FUNCTION</strong>,value);</p>
+<p>    return -EINVAL;</p>
+<p>}</p>
+<p>#endif</p>
+<p>#if CONFIG_SENSOR_Mirror</p>
+<p>static int sensor_set_mirror(struct soc_camera_device *icd, const struct v4l2_queryctrl *qctrl, int value)</p>
+<p>{</p>
+<p>    struct i2c_client *client = to_i2c_client(to_soc_camera_control(icd));</p>
+<p>    if ((value &gt;= qctrl-&gt;minimum) &amp;&amp; (value &lt;= qctrl-&gt;maximum))</p>
+<p>    {</p>
+<p>        if (sensor_MirrorSeqe[value - qctrl-&gt;minimum] != NULL)</p>
+<p>        {</p>
+<p>            if (sensor_write_array(client, sensor_MirrorSeqe[value - qctrl-&gt;minimum]) != 0)</p>
+<p>            {</p>
+<p>                SENSOR_TR(&quot;%s..%s WriteReg Fail.. \n&quot;,SENSOR_NAME_STRING(), <strong>FUNCTION</strong>);</p>
+<p>                return -EINVAL;</p>
+<p>            }</p>
+<p>            SENSOR_DG(&quot;%s..%s : %x\n&quot;,SENSOR_NAME_STRING(),<strong>FUNCTION</strong>, value);</p>
+<p>            return 0;</p>
+<p>        }</p>
+<p>    }</p>
+<p>    SENSOR_TR(&quot;\n %s..%s valure = %d is invalidate..    \n&quot;,SENSOR_NAME_STRING(),<strong>FUNCTION</strong>,value);</p>
+<p>    return -EINVAL;</p>
+<p>}</p>
+<p>#endif</p>
+<p>#if CONFIG_SENSOR_Flip</p>
+<p>static int sensor_set_flip(struct soc_camera_device *icd, const struct v4l2_queryctrl *qctrl, int value)</p>
+<p>{</p>
+<p>    struct i2c_client *client = to_i2c_client(to_soc_camera_control(icd));</p>
+<p>    if ((value &gt;= qctrl-&gt;minimum) &amp;&amp; (value &lt;= qctrl-&gt;maximum))</p>
+<p>    {</p>
+<p>        if (sensor_FlipSeqe[value - qctrl-&gt;minimum] != NULL)</p>
+<p>        {</p>
+<p>            if (sensor_write_array(client, sensor_FlipSeqe[value - qctrl-&gt;minimum]) != 0)</p>
+<p>            {</p>
+<p>                SENSOR_TR(&quot;%s..%s WriteReg Fail.. \n&quot;,SENSOR_NAME_STRING(), <strong>FUNCTION</strong>);</p>
+<p>                return -EINVAL;</p>
+<p>            }</p>
+<p>            SENSOR_DG(&quot;%s..%s : %x\n&quot;,SENSOR_NAME_STRING(),<strong>FUNCTION</strong>, value);</p>
+<p>            return 0;</p>
+<p>        }</p>
+<p>    }</p>
+<p>    SENSOR_TR(&quot;\n %s..%s valure = %d is invalidate..    \n&quot;,SENSOR_NAME_STRING(),<strong>FUNCTION</strong>,value);</p>
+<p>    return -EINVAL;</p>
+<p>}</p>
+<p>#endif</p>
+<p>#if CONFIG_SENSOR_Scene</p>
+<p>static int sensor_set_scene(struct soc_camera_device *icd, const struct v4l2_queryctrl *qctrl, int value)</p>
+<p>{</p>
+<p>    struct i2c_client *client = to_i2c_client(to_soc_camera_control(icd));</p>
+<p>    if ((value &gt;= qctrl-&gt;minimum) &amp;&amp; (value &lt;= qctrl-&gt;maximum))</p>
+<p>    {</p>
+<p>        if (sensor_SceneSeqe[value - qctrl-&gt;minimum] != NULL)</p>
+<p>        {</p>
+<p>            if (sensor_write_array(client, sensor_SceneSeqe[value - qctrl-&gt;minimum]) != 0)</p>
+<p>            {</p>
+<p>                SENSOR_TR(&quot;%s..%s WriteReg Fail.. \n&quot;,SENSOR_NAME_STRING(), <strong>FUNCTION</strong>);</p>
+<p>                return -EINVAL;</p>
+<p>            }</p>
+<p>            SENSOR_DG(&quot;%s..%s : %x\n&quot;,SENSOR_NAME_STRING(),<strong>FUNCTION</strong>, value);</p>
+<p>            return 0;</p>
+<p>        }</p>
+<p>    }</p>
+<p>    SENSOR_TR(&quot;\n %s..%s valure = %d is invalidate..    \n&quot;,SENSOR_NAME_STRING(),<strong>FUNCTION</strong>,value);</p>
+<p>    return -EINVAL;</p>
+<p>}</p>
+<p>#endif</p>
+<p>#if CONFIG_SENSOR_WhiteBalance</p>
+<p>static int sensor_set_whiteBalance(struct soc_camera_device *icd, const struct v4l2_queryctrl *qctrl, int value)</p>
+<p>{</p>
+<p>    struct i2c_client *client = to_i2c_client(to_soc_camera_control(icd));</p>
+<p>    if ((value &gt;= qctrl-&gt;minimum) &amp;&amp; (value &lt;= qctrl-&gt;maximum))</p>
+<p>    {</p>
+<p>        if (sensor_WhiteBalanceSeqe[value - qctrl-&gt;minimum] != NULL)</p>
+<p>        {</p>
+<p>            if (sensor_write_array(client, sensor_WhiteBalanceSeqe[value - qctrl-&gt;minimum]) != 0)</p>
+<p>            {</p>
+<p>                SENSOR_TR(&quot;%s..%s WriteReg Fail.. \n&quot;,SENSOR_NAME_STRING(), <strong>FUNCTION</strong>);</p>
+<p>                return -EINVAL;</p>
+<p>            }</p>
+<p>            SENSOR_DG(&quot;%s..%s : %x\n&quot;,SENSOR_NAME_STRING(),<strong>FUNCTION</strong>, value);</p>
+<p>            return 0;</p>
+<p>        }</p>
+<p>    }</p>
+<p>SENSOR_TR(&quot;\n %s..%s valure = %d is invalidate..    \n&quot;,SENSOR_NAME_STRING(),<strong>FUNCTION</strong>,value);</p>
+<p>    return -EINVAL;</p>
+<p>}</p>
+<p>#endif</p>
+<p>#if CONFIG_SENSOR_DigitalZoom</p>
+<p>static int sensor_set_digitalzoom(struct soc_camera_device *icd, const struct v4l2_queryctrl *qctrl, int *value)</p>
+<p>{</p>
+<p>    struct i2c_client *client = to_i2c_client(to_soc_camera_control(icd));</p>
+<p>    struct sensor *sensor = to_sensor(client);</p>
+<p>const struct v4l2_queryctrl *qctrl_info;</p>
+<p>    int digitalzoom_cur, digitalzoom_total;</p>
+<p>qctrl_info = soc_camera_find_qctrl(&amp;sensor_ops, V4L2_CID_ZOOM_ABSOLUTE);</p>
+<p>if (qctrl_info)</p>
+<p>return -EINVAL;</p>
+<p>    digitalzoom_cur = sensor-&gt;info_priv.digitalzoom;</p>
+<p>    digitalzoom_total = qctrl_info-&gt;maximum;</p>
+<p>    if ((value &gt; 0) &amp;&amp; (digitalzoom_cur &gt;= digitalzoom_total))</p>
+<p>    {</p>
+<p>        SENSOR_TR(&quot;%s digitalzoom is maximum - %x\n&quot;, SENSOR_NAME_STRING(), digitalzoom_cur);</p>
+<p>        return -EINVAL;</p>
+<p>    }</p>
+<p>    if  ((value &lt; 0) &amp;&amp; (digitalzoom_cur &lt;= qctrl_info-&gt;minimum))</p>
+<p>    {</p>
+<p>        SENSOR_TR(&quot;%s digitalzoom is minimum - %x\n&quot;, SENSOR_NAME_STRING(), digitalzoom_cur);</p>
+<p>        return -EINVAL;</p>
+<p>    }</p>
+<p>    if ((value &gt; 0) &amp;&amp; ((digitalzoom_cur + value) &gt; digitalzoom_total))</p>
+<p>    {</p>
+<p>        value = digitalzoom_total - digitalzoom_cur;</p>
+<p>    }</p>
+<p>    if ((value &lt; 0) &amp;&amp; ((digitalzoom_cur + value) &lt; 0))</p>
+<p>    {</p>
+<p>        value = 0 - digitalzoom_cur;</p>
+<p>    }</p>
+<p>    digitalzoom_cur += value;</p>
+<p>    if (sensor_ZoomSeqe[digitalzoom_cur] != NULL)</p>
+<p>    {</p>
+<p>        if (sensor_write_array(client, sensor_ZoomSeqe[digitalzoom_cur]) != 0)</p>
+<p>        {</p>
+<p>            SENSOR_TR(&quot;%s..%s WriteReg Fail.. \n&quot;,SENSOR_NAME_STRING(), <strong>FUNCTION</strong>);</p>
+<p>            return -EINVAL;</p>
+<p>        }</p>
+<p>        SENSOR_DG(&quot;%s..%s : %x\n&quot;,SENSOR_NAME_STRING(),<strong>FUNCTION</strong>, value);</p>
+<p>        return 0;</p>
+<p>    }</p>
+<p>    return -EINVAL;</p>
+<p>}</p>
+<p>#endif</p>
+<p>#if CONFIG_SENSOR_Flash</p>
+<p>static int sensor_set_flash(struct soc_camera_device *icd, const struct v4l2_queryctrl *qctrl, int value)</p>
+<p>{    </p>
+<p>    if ((value &gt;= qctrl-&gt;minimum) &amp;&amp; (value &lt;= qctrl-&gt;maximum)) {</p>
+<p>        if (value == 3) {       /* <a href="mailto:&#100;&#x64;&#108;&#x40;&#x72;&#111;&#99;&#x6b;&#45;&#x63;&#104;&#105;&#x70;&#x73;&#x2e;&#x63;&#111;&#109;">&#100;&#x64;&#108;&#x40;&#x72;&#111;&#99;&#x6b;&#45;&#x63;&#104;&#105;&#x70;&#x73;&#x2e;&#x63;&#111;&#109;</a>: torch */</p>
+<p>            sensor_ioctrl(icd, Sensor_Flash, Flash_Torch);   /* Flash On */</p>
+<p>        } else {</p>
+<p>            sensor_ioctrl(icd, Sensor_Flash, Flash_Off);</p>
+<p>        }</p>
+<p>        SENSOR_DG(&quot;%s..%s : %x\n&quot;,SENSOR_NAME_STRING(),<strong>FUNCTION</strong>, value);</p>
+<p>        return 0;</p>
+<p>    }</p>
+<p>SENSOR_TR(&quot;\n %s..%s valure = %d is invalidate..    \n&quot;,SENSOR_NAME_STRING(),<strong>FUNCTION</strong>,value);</p>
+<p>    return -EINVAL;</p>
+<p>}</p>
+<p>#endif</p>
+<p>static int sensor_g_control(struct v4l2_subdev *sd, struct v4l2_control *ctrl)</p>
+<p>{</p>
+<p>    struct i2c_client *client = v4l2_get_subdevdata(sd);</p>
+<p>    struct sensor *sensor = to_sensor(client);</p>
+<p>    const struct v4l2_queryctrl *qctrl;</p>
+<p>    qctrl = soc_camera_find_qctrl(&amp;sensor_ops, ctrl-&gt;id);</p>
+<p>    if (!qctrl)</p>
+<p>    {</p>
+<p>        SENSOR_TR(&quot;\n %s ioctrl id = %d  is invalidate \n&quot;, SENSOR_NAME_STRING(), ctrl-&gt;id);</p>
+<p>        return -EINVAL;</p>
+<p>    }</p>
+<p>    switch (ctrl-&gt;id)</p>
+<p>    {</p>
+<p>        case V4L2_CID_BRIGHTNESS:</p>
+<p>            {</p>
+<p>                ctrl-&gt;value = sensor-&gt;info_priv.brightness;</p>
+<p>                break;</p>
+<p>            }</p>
+<p>        case V4L2_CID_SATURATION:</p>
+<p>            {</p>
+<p>                ctrl-&gt;value = sensor-&gt;info_priv.saturation;</p>
+<p>                break;</p>
+<p>            }</p>
+<p>        case V4L2_CID_CONTRAST:</p>
+<p>            {</p>
+<p>                ctrl-&gt;value = sensor-&gt;info_priv.contrast;</p>
+<p>                break;</p>
+<p>            }</p>
+<p>        case V4L2_CID_DO_WHITE_BALANCE:</p>
+<p>            {</p>
+<p>                ctrl-&gt;value = sensor-&gt;info_priv.whiteBalance;</p>
+<p>                break;</p>
+<p>            }</p>
+<p>        case V4L2_CID_EXPOSURE:</p>
+<p>            {</p>
+<p>                ctrl-&gt;value = sensor-&gt;info_priv.exposure;</p>
+<p>                break;</p>
+<p>            }</p>
+<p>        case V4L2_CID_HFLIP:</p>
+<p>            {</p>
+<p>                ctrl-&gt;value = sensor-&gt;info_priv.mirror;</p>
+<p>                break;</p>
+<p>            }</p>
+<p>        case V4L2_CID_VFLIP:</p>
+<p>            {</p>
+<p>                ctrl-&gt;value = sensor-&gt;info_priv.flip;</p>
+<p>                break;</p>
+<p>            }</p>
+<p>        default :</p>
+<p>                break;</p>
+<p>    }</p>
+<p>    return 0;</p>
+<p>}</p>
+<p>static int sensor_s_control(struct v4l2_subdev *sd, struct v4l2_control *ctrl)</p>
+<p>{</p>
+<p>    struct i2c_client *client = v4l2_get_subdevdata(sd);</p>
+<p>    struct sensor *sensor = to_sensor(client);</p>
+<p>    struct soc_camera_device *icd = client-&gt;dev.platform_data;</p>
+<p>    const struct v4l2_queryctrl *qctrl;</p>
+<p>    qctrl = soc_camera_find_qctrl(&amp;sensor_ops, ctrl-&gt;id);</p>
+<p>    if (!qctrl)</p>
+<p>    {</p>
+<p>        SENSOR_TR(&quot;\n %s ioctrl id = %d  is invalidate \n&quot;, SENSOR_NAME_STRING(), ctrl-&gt;id);</p>
+<p>        return -EINVAL;</p>
+<p>    }</p>
+<p>    switch (ctrl-&gt;id)</p>
+<p>    {</p>
+<p>#if CONFIG_SENSOR_Brightness</p>
+<p>        case V4L2_CID_BRIGHTNESS:</p>
+<p>            {</p>
+<p>                if (ctrl-&gt;value != sensor-&gt;info_priv.brightness)</p>
+<p>                {</p>
+<p>                    if (sensor_set_brightness(icd, qctrl,ctrl-&gt;value) != 0)</p>
+<p>                    {</p>
+<p>                        return -EINVAL;</p>
+<p>                    }</p>
+<p>                    sensor-&gt;info_priv.brightness = ctrl-&gt;value;</p>
+<p>                }</p>
+<p>                break;</p>
+<p>            }</p>
+<p>#endif</p>
+<p>#if CONFIG_SENSOR_Exposure</p>
+<p>        case V4L2_CID_EXPOSURE:</p>
+<p>            {</p>
+<p>                if (ctrl-&gt;value != sensor-&gt;info_priv.exposure)</p>
+<p>                {</p>
+<p>                    if (sensor_set_exposure(icd, qctrl,ctrl-&gt;value) != 0)</p>
+<p>                    {</p>
+<p>                        return -EINVAL;</p>
+<p>                    }</p>
+<p>                    sensor-&gt;info_priv.exposure = ctrl-&gt;value;</p>
+<p>                }</p>
+<p>                break;</p>
+<p>            }</p>
+<p>#endif</p>
+<p>#if CONFIG_SENSOR_Saturation</p>
+<p>        case V4L2_CID_SATURATION:</p>
+<p>            {</p>
+<p>                if (ctrl-&gt;value != sensor-&gt;info_priv.saturation)</p>
+<p>                {</p>
+<p>                    if (sensor_set_saturation(icd, qctrl,ctrl-&gt;value) != 0)</p>
+<p>                    {</p>
+<p>                        return -EINVAL;</p>
+<p>                    }</p>
+<p>                    sensor-&gt;info_priv.saturation = ctrl-&gt;value;</p>
+<p>                }</p>
+<p>                break;</p>
+<p>            }</p>
+<p>#endif</p>
+<p>#if CONFIG_SENSOR_Contrast</p>
+<p>        case V4L2_CID_CONTRAST:</p>
+<p>            {</p>
+<p>                if (ctrl-&gt;value != sensor-&gt;info_priv.contrast)</p>
+<p>                {</p>
+<p>                    if (sensor_set_contrast(icd, qctrl,ctrl-&gt;value) != 0)</p>
+<p>                    {</p>
+<p>                        return -EINVAL;</p>
+<p>                    }</p>
+<p>                    sensor-&gt;info_priv.contrast = ctrl-&gt;value;</p>
+<p>                }</p>
+<p>                break;</p>
+<p>            }</p>
+<p>#endif</p>
+<p>#if CONFIG_SENSOR_WhiteBalance</p>
+<p>        case V4L2_CID_DO_WHITE_BALANCE:</p>
+<p>            {</p>
+<p>                if (ctrl-&gt;value != sensor-&gt;info_priv.whiteBalance)</p>
+<p>                {</p>
+<p>                    if (sensor_set_whiteBalance(icd, qctrl,ctrl-&gt;value) != 0)</p>
+<p>                    {</p>
+<p>                        return -EINVAL;</p>
+<p>                    }</p>
+<p>                    sensor-&gt;info_priv.whiteBalance = ctrl-&gt;value;</p>
+<p>                }</p>
+<p>                break;</p>
+<p>            }</p>
+<p>#endif</p>
+<p>#if CONFIG_SENSOR_Mirror</p>
+<p>        case V4L2_CID_HFLIP:</p>
+<p>            {</p>
+<p>                if (ctrl-&gt;value != sensor-&gt;info_priv.mirror)</p>
+<p>                {</p>
+<p>                    if (sensor_set_mirror(icd, qctrl,ctrl-&gt;value) != 0)</p>
+<p>                        return -EINVAL;</p>
+<p>                    sensor-&gt;info_priv.mirror = ctrl-&gt;value;</p>
+<p>                }</p>
+<p>                break;</p>
+<p>            }</p>
+<p>#endif</p>
+<p>#if CONFIG_SENSOR_Flip</p>
+<p>        case V4L2_CID_VFLIP:</p>
+<p>            {</p>
+<p>                if (ctrl-&gt;value != sensor-&gt;info_priv.flip)</p>
+<p>                {</p>
+<p>                    if (sensor_set_flip(icd, qctrl,ctrl-&gt;value) != 0)</p>
+<p>                        return -EINVAL;</p>
+<p>                    sensor-&gt;info_priv.flip = ctrl-&gt;value;</p>
+<p>                }</p>
+<p>                break;</p>
+<p>            }</p>
+<p>#endif</p>
+<p>        default:</p>
+<p>            break;</p>
+<p>    }</p>
+<p>    return 0;</p>
+<p>}</p>
+<p>static int sensor_g_ext_control(struct soc_camera_device *icd , struct v4l2_ext_control *ext_ctrl)</p>
+<p>{</p>
+<p>    const struct v4l2_queryctrl *qctrl;</p>
+<p>    struct i2c_client *client = to_i2c_client(to_soc_camera_control(icd));</p>
+<p>    struct sensor *sensor = to_sensor(client);</p>
+<p>    qctrl = soc_camera_find_qctrl(&amp;sensor_ops, ext_ctrl-&gt;id);</p>
+<p>    if (!qctrl)</p>
+<p>    {</p>
+<p>        SENSOR_TR(&quot;\n %s ioctrl id = %d  is invalidate \n&quot;, SENSOR_NAME_STRING(), ext_ctrl-&gt;id);</p>
+<p>        return -EINVAL;</p>
+<p>    }</p>
+<p>    switch (ext_ctrl-&gt;id)</p>
+<p>    {</p>
+<p>        case V4L2_CID_SCENE:</p>
+<p>            {</p>
+<p>                ext_ctrl-&gt;value = sensor-&gt;info_priv.scene;</p>
+<p>                break;</p>
+<p>            }</p>
+<p>        case V4L2_CID_EFFECT:</p>
+<p>            {</p>
+<p>                ext_ctrl-&gt;value = sensor-&gt;info_priv.effect;</p>
+<p>                break;</p>
+<p>            }</p>
+<p>        case V4L2_CID_ZOOM_ABSOLUTE:</p>
+<p>            {</p>
+<p>                ext_ctrl-&gt;value = sensor-&gt;info_priv.digitalzoom;</p>
+<p>                break;</p>
+<p>            }</p>
+<p>        case V4L2_CID_ZOOM_RELATIVE:</p>
+<p>            {</p>
+<p>                return -EINVAL;</p>
+<p>            }</p>
+<p>        case V4L2_CID_FOCUS_ABSOLUTE:</p>
+<p>            {</p>
+<p>                ext_ctrl-&gt;value = sensor-&gt;info_priv.focus;</p>
+<p>                break;</p>
+<p>            }</p>
+<p>        case V4L2_CID_FOCUS_RELATIVE:</p>
+<p>            {</p>
+<p>                return -EINVAL;</p>
+<p>            }</p>
+<p>        case V4L2_CID_FLASH:</p>
+<p>            {</p>
+<p>                ext_ctrl-&gt;value = sensor-&gt;info_priv.flash;</p>
+<p>                break;</p>
+<p>            }</p>
+<p>        default :</p>
+<p>            break;</p>
+<p>    }</p>
+<p>    return 0;</p>
+<p>}</p>
+<p>static int sensor_s_ext_control(struct soc_camera_device *icd, struct v4l2_ext_control *ext_ctrl)</p>
+<p>{</p>
+<p>    const struct v4l2_queryctrl *qctrl;</p>
+<p>    struct i2c_client *client = to_i2c_client(to_soc_camera_control(icd));</p>
+<p>    struct sensor *sensor = to_sensor(client);</p>
+<p>    int val_offset;</p>
+<p>    qctrl = soc_camera_find_qctrl(&amp;sensor_ops, ext_ctrl-&gt;id);</p>
+<p>    if (!qctrl)</p>
+<p>    {</p>
+<p>        SENSOR_TR(&quot;\n %s ioctrl id = %d  is invalidate \n&quot;, SENSOR_NAME_STRING(), ext_ctrl-&gt;id);</p>
+<p>        return -EINVAL;</p>
+<p>    }</p>
+<p>val_offset = 0;</p>
+<p>    switch (ext_ctrl-&gt;id)</p>
+<p>    {</p>
+<p>#if CONFIG_SENSOR_Scene</p>
+<p>        case V4L2_CID_SCENE:</p>
+<p>            {</p>
+<p>                if (ext_ctrl-&gt;value != sensor-&gt;info_priv.scene)</p>
+<p>                {</p>
+<p>                    if (sensor_set_scene(icd, qctrl,ext_ctrl-&gt;value) != 0)</p>
+<p>                        return -EINVAL;</p>
+<p>                    sensor-&gt;info_priv.scene = ext_ctrl-&gt;value;</p>
+<p>                }</p>
+<p>                break;</p>
+<p>            }</p>
+<p>#endif</p>
+<p>#if CONFIG_SENSOR_Effect</p>
+<p>        case V4L2_CID_EFFECT:</p>
+<p>            {</p>
+<p>                if (ext_ctrl-&gt;value != sensor-&gt;info_priv.effect)</p>
+<p>                {</p>
+<p>                    if (sensor_set_effect(icd, qctrl,ext_ctrl-&gt;value) != 0)</p>
+<p>                        return -EINVAL;</p>
+<p>                    sensor-&gt;info_priv.effect= ext_ctrl-&gt;value;</p>
+<p>                }</p>
+<p>                break;</p>
+<p>            }</p>
+<p>#endif</p>
+<p>#if CONFIG_SENSOR_DigitalZoom</p>
+<p>        case V4L2_CID_ZOOM_ABSOLUTE:</p>
+<p>            {</p>
+<p>                if ((ext_ctrl-&gt;value &lt; qctrl-&gt;minimum) || (ext_ctrl-&gt;value &gt; qctrl-&gt;maximum))</p>
+<p>                    return -EINVAL;</p>
+<p>                if (ext_ctrl-&gt;value != sensor-&gt;info_priv.digitalzoom)</p>
+<p>                {</p>
+<p>                    val_offset = ext_ctrl-&gt;value -sensor-&gt;info_priv.digitalzoom;</p>
+<p>                    if (sensor_set_digitalzoom(icd, qctrl,&amp;val_offset) != 0)</p>
+<p>                        return -EINVAL;</p>
+<p>                    sensor-&gt;info_priv.digitalzoom += val_offset;</p>
+<p>                    SENSOR_DG(&quot;%s digitalzoom is %x\n&quot;,SENSOR_NAME_STRING(),  sensor-&gt;info_priv.digitalzoom);</p>
+<p>                }</p>
+<p>                break;</p>
+<p>            }</p>
+<p>        case V4L2_CID_ZOOM_RELATIVE:</p>
+<p>            {</p>
+<p>                if (ext_ctrl-&gt;value)</p>
+<p>                {</p>
+<p>                    if (sensor_set_digitalzoom(icd, qctrl,&amp;ext_ctrl-&gt;value) != 0)</p>
+<p>                        return -EINVAL;</p>
+<p>                    sensor-&gt;info_priv.digitalzoom += ext_ctrl-&gt;value;</p>
+<p>                    SENSOR_DG(&quot;%s digitalzoom is %x\n&quot;, SENSOR_NAME_STRING(), sensor-&gt;info_priv.digitalzoom);</p>
+<p>                }</p>
+<p>                break;</p>
+<p>            }</p>
+<p>#endif</p>
+<p>#if CONFIG_SENSOR_Focus</p>
+<p>        case V4L2_CID_FOCUS_ABSOLUTE:</p>
+<p>            {</p>
+<p>                if ((ext_ctrl-&gt;value &lt; qctrl-&gt;minimum) || (ext_ctrl-&gt;value &gt; qctrl-&gt;maximum))</p>
+<p>                    return -EINVAL;</p>
+<p>                if (ext_ctrl-&gt;value != sensor-&gt;info_priv.focus)</p>
+<p>                {</p>
+<p>                    val_offset = ext_ctrl-&gt;value -sensor-&gt;info_priv.focus;</p>
+<p>                    sensor-&gt;info_priv.focus += val_offset;</p>
+<p>                }</p>
+<p>                break;</p>
+<p>            }</p>
+<p>        case V4L2_CID_FOCUS_RELATIVE:</p>
+<p>            {</p>
+<p>                if (ext_ctrl-&gt;value)</p>
+<p>                {</p>
+<p>                    sensor-&gt;info_priv.focus += ext_ctrl-&gt;value;</p>
+<p>                    SENSOR_DG(&quot;%s focus is %x\n&quot;, SENSOR_NAME_STRING(), sensor-&gt;info_priv.focus);</p>
+<p>                }</p>
+<p>                break;</p>
+<p>            }</p>
+<p>#endif</p>
+<p>#if CONFIG_SENSOR_Flash</p>
+<p>        case V4L2_CID_FLASH:</p>
+<p>            {</p>
+<p>                if (sensor_set_flash(icd, qctrl,ext_ctrl-&gt;value) != 0)</p>
+<p>                    return -EINVAL;</p>
+<p>                sensor-&gt;info_priv.flash = ext_ctrl-&gt;value;</p>
+<p>                SENSOR_DG(&quot;%s flash is %x\n&quot;,SENSOR_NAME_STRING(), sensor-&gt;info_priv.flash);</p>
+<p>                break;</p>
+<p>            }</p>
+<p>#endif</p>
+<p>        default:</p>
+<p>            break;</p>
+<p>    }</p>
+<p>    return 0;</p>
+<p>}</p>
+<p>static int sensor_g_ext_controls(struct v4l2_subdev *sd, struct v4l2_ext_controls *ext_ctrl)</p>
+<p>{</p>
+<p>    struct i2c_client *client = v4l2_get_subdevdata(sd);</p>
+<p>    struct soc_camera_device *icd = client-&gt;dev.platform_data;</p>
+<p>    int i, error_cnt=0, error_idx=-1;</p>
+<p>    for (i=0; i&lt;ext_ctrl-&gt;count; i++) {</p>
+<p>        if (sensor_g_ext_control(icd, &amp;ext_ctrl-&gt;controls[i]) != 0) {</p>
+<p>            error_cnt++;</p>
+<p>            error_idx = i;</p>
+<p>        }</p>
+<p>    }</p>
+<p>    if (error_cnt &gt; 1)</p>
+<p>        error_idx = ext_ctrl-&gt;count;</p>
+<p>    if (error_idx != -1) {</p>
+<p>        ext_ctrl-&gt;error_idx = error_idx;</p>
+<p>        return -EINVAL;</p>
+<p>    } else {</p>
+<p>        return 0;</p>
+<p>    }</p>
+<p>}</p>
+<p>static int sensor_s_ext_controls(struct v4l2_subdev *sd, struct v4l2_ext_controls *ext_ctrl)</p>
+<p>{</p>
+<p>    struct i2c_client *client = v4l2_get_subdevdata(sd);</p>
+<p>    struct soc_camera_device *icd = client-&gt;dev.platform_data;</p>
+<p>    int i, error_cnt=0, error_idx=-1;</p>
+<p>    for (i=0; i&lt;ext_ctrl-&gt;count; i++) {</p>
+<p>        if (sensor_s_ext_control(icd, &amp;ext_ctrl-&gt;controls[i]) != 0) {</p>
+<p>            error_cnt++;</p>
+<p>            error_idx = i;</p>
+<p>        }</p>
+<p>    }</p>
+<p>    if (error_cnt &gt; 1)</p>
+<p>        error_idx = ext_ctrl-&gt;count;</p>
+<p>    if (error_idx != -1) {</p>
+<p>        ext_ctrl-&gt;error_idx = error_idx;</p>
+<p>        return -EINVAL;</p>
+<p>    } else {</p>
+<p>        return 0;</p>
+<p>    }</p>
+<p>}</p>
+<p>/* Interface active, can use i2c. If it fails, it can indeed mean, that</p>
+<p> * this wasn’t our capture interface, so, we wait for the right one */</p>
+<p>static int sensor_video_probe(struct soc_camera_device *icd,</p>
+<p>      struct i2c_client *client)</p>
+<p>{</p>
+<p>    char value;</p>
+<p>    int ret,pid = 0;</p>
+<p>    struct sensor *sensor = to_sensor(client);</p>
+<p>    /* We must have a parent by now. And it cannot be a wrong one.</p>
+<p>     * So this entire test is completely redundant. */</p>
+<p>    if (!icd-&gt;dev.parent ||</p>
+<p>   to_soc_camera_host(icd-&gt;dev.parent)-&gt;nr != icd-&gt;iface)</p>
+<p>return -ENODEV;</p>
+<p>if (sensor_ioctrl(icd, Sensor_PowerDown, 0) &lt; 0) {</p>
+<p>ret = -ENODEV;</p>
+<p>goto sensor_video_probe_err;</p>
+<p>}</p>
+<p>    /* soft reset */</p>
+<p>    /* check if it is an sensor sensor */</p>
+<p>   // honghaishen_test</p>
+<p>    ret = sensor_read(client, 0xf0, &amp;value);</p>
+<p>    if (ret != 0) {</p>
+<p>        SENSOR_TR(&quot;read chip id high byte failed\n&quot;);</p>
+<p>        ret = -ENODEV;</p>
+<p>        goto sensor_video_probe_err;</p>
+<p>    }</p>
+<p>    pid |= (value &lt;&lt; 8);</p>
+<p>    ret = sensor_read(client, 0xf1, &amp;value);</p>
+<p>    if (ret != 0) {</p>
+<p>        SENSOR_TR(&quot;read chip id low byte failed\n&quot;);</p>
+<p>        ret = -ENODEV;</p>
+<p>        goto sensor_video_probe_err;</p>
+<p>    }</p>
+<p>    pid |= (value &amp; 0xff);</p>
+<p>    SENSOR_DG(&quot;\n %s  pid = 0x%x\n&quot;, SENSOR_NAME_STRING(), pid);</p>
+<p>    if (pid == SENSOR_ID) {</p>
+<p>        sensor-&gt;model = SENSOR_V4L2_IDENT;</p>
+<p>    } else {</p>
+<p>        SENSOR_TR(&quot;error: %s mismatched   pid = 0x%x\n&quot;, SENSOR_NAME_STRING(), pid);</p>
+<p>        ret = -ENODEV;</p>
+<p>        goto sensor_video_probe_err;</p>
+<p>    }</p>
+<p>sensor-&gt;model = SENSOR_V4L2_IDENT; </p>
+<p>    return 0;</p>
+<p>sensor_video_probe_err:</p>
+<p>    return ret;</p>
+<p>}</p>
+<p>static long sensor_ioctl(struct v4l2_subdev *sd, unsigned int cmd, void *arg)</p>
+<p>{</p>
+<p>struct i2c_client *client = v4l2_get_subdevdata(sd);</p>
+<p>    struct soc_camera_device *icd = client-&gt;dev.platform_data;</p>
+<p>    struct sensor *sensor = to_sensor(client);</p>
+<p>#if CONFIG_SENSOR_Flash</p>
+<p>    int i;</p>
+<p>#endif</p>
+<p>    int ret = 0;</p>
+<p>SENSOR_DG(&quot;\n%s..%s..cmd:%x \n&quot;,SENSOR_NAME_STRING(),<strong>FUNCTION</strong>,cmd);</p>
+<p>switch (cmd)</p>
+<p>{</p>
+<p>case RK29_CAM_SUBDEV_DEACTIVATE:</p>
+<p>{</p>
+<p>sensor_deactivate(client);</p>
+<p>break;</p>
+<p>}</p>
+<p>case RK29_CAM_SUBDEV_IOREQUEST:</p>
+<p>{</p>
+<p>sensor-&gt;sensor_io_request = (struct rk29camera_platform_data*)arg;           </p>
+<p>            if (sensor-&gt;sensor_io_request != NULL) { </p>
+<p>                sensor-&gt;sensor_gpio_res = NULL;</p>
+<p>                for (i=0; i&lt;RK29_CAM_SUPPORT_NUMS;i++) {</p>
+<p>                    if (sensor-&gt;sensor_io_request-&gt;gpio_res[i].dev_name &amp;&amp; </p>
+<p>                        (strcmp(sensor-&gt;sensor_io_request-&gt;gpio_res[i].dev_name, dev_name(icd-&gt;pdev)) == 0)) {</p>
+<p>                        sensor-&gt;sensor_gpio_res = (struct rk29camera_gpio_res*)&amp;sensor-&gt;sensor_io_request-&gt;gpio_res[i];</p>
+<p>                    }</p>
+<p>                }</p>
+<p>                if (sensor-&gt;sensor_gpio_res == NULL) {</p>
+<p>                    SENSOR_TR(&quot;%s %s obtain gpio resource failed when RK29_CAM_SUBDEV_IOREQUEST \n&quot;,SENSOR_NAME_STRING(),<strong>FUNCTION</strong>);</p>
+<p>                    ret = -EINVAL;</p>
+<p>                    goto sensor_ioctl_end;</p>
+<p>                }</p>
+<p>            } else {</p>
+<p>                SENSOR_TR(&quot;%s %s RK29_CAM_SUBDEV_IOREQUEST fail\n&quot;,SENSOR_NAME_STRING(),<strong>FUNCTION</strong>);</p>
+<p>                ret = -EINVAL;</p>
+<p>                goto sensor_ioctl_end;</p>
+<p>            }</p>
+<p>            /* <a href="mailto:&#100;&#x64;&#108;&#64;&#114;&#x6f;&#x63;&#107;&#x2d;&#x63;&#x68;&#105;&#112;&#115;&#46;&#x63;&#111;&#109;">&#100;&#x64;&#108;&#64;&#114;&#x6f;&#x63;&#107;&#x2d;&#x63;&#x68;&#105;&#112;&#115;&#46;&#x63;&#111;&#109;</a> : if gpio_flash havn’t been set in board-xxx.c, sensor driver must notify is not support flash control </p>
+<p>               for this project */</p>
+<p>            #if CONFIG_SENSOR_Flash</p>
+<p>        if (sensor-&gt;sensor_gpio_res) {</p>
+<p>                if (sensor-&gt;sensor_gpio_res-&gt;gpio_flash == INVALID_GPIO) {</p>
+<p>                    for (i = 0; i &lt; icd-&gt;ops-&gt;num_controls; i++) {</p>
+<p>                if (V4L2_CID_FLASH == icd-&gt;ops-&gt;controls[i].id) {</p>
+<p>                //memset((char*)&amp;icd-&gt;ops-&gt;controls[i],0x00,sizeof(struct v4l2_queryctrl));  </p>
+<p>                              sensor_controls[i].id=0xffff;        </p>
+<p>                }</p>
+<p>                    }</p>
+<p>                    sensor-&gt;info_priv.flash = 0xff;</p>
+<p>                    SENSOR_DG(&quot;%s flash gpio is invalidate!\n&quot;,SENSOR_NAME_STRING());</p>
+<p>                }else{ //two cameras are the same,need to deal diffrently ,zyc</p>
+<p>                    for (i = 0; i &lt; icd-&gt;ops-&gt;num_controls; i++) {</p>
+<p>                           if(0xffff == icd-&gt;ops-&gt;controls[i].id){</p>
+<p>                              sensor_controls[i].id=V4L2_CID_FLASH;</p>
+<p>                           }               </p>
+<p>                    }</p>
+<p>                }</p>
+<p>        }</p>
+<p>            #endif</p>
+<p>break;</p>
+<p>}</p>
+<p>default:</p>
+<p>{</p>
+<p>SENSOR_TR(&quot;%s %s cmd(0x%x) is unknown !\n&quot;,SENSOR_NAME_STRING(),<strong>FUNCTION</strong>,cmd);</p>
+<p>break;</p>
+<p>}</p>
+<p>}</p>
+<p>sensor_ioctl_end:</p>
+<p>return ret;</p>
+<p>}</p>
+<p>static int sensor_enum_fmt(struct v4l2_subdev *sd, unsigned int index,</p>
+<p>   enum v4l2_mbus_pixelcode *code)</p>
+<p>{</p>
+<p>if (index &gt;= ARRAY_SIZE(sensor_colour_fmts))</p>
+<p>return -EINVAL;</p>
+<p>*code = sensor_colour_fmts[index].code;</p>
+<p>return 0;</p>
+<p>}</p>
+<p>static struct v4l2_subdev_core_ops sensor_subdev_core_ops = {</p>
+<p>.init = sensor_init,</p>
+<p>.g_ctrl = sensor_g_control,</p>
+<p>.s_ctrl = sensor_s_control,</p>
+<p>.g_ext_ctrls          = sensor_g_ext_controls,</p>
+<p>.s_ext_ctrls          = sensor_s_ext_controls,</p>
+<p>.g_chip_ident = sensor_g_chip_ident,</p>
+<p>.ioctl = sensor_ioctl,</p>
+<p>};</p>
+<p>static struct v4l2_subdev_video_ops sensor_subdev_video_ops = {</p>
+<p>.s_mbus_fmt = sensor_s_fmt,</p>
+<p>.g_mbus_fmt = sensor_g_fmt,</p>
+<p>.try_mbus_fmt = sensor_try_fmt,</p>
+<p>.enum_mbus_fmt = sensor_enum_fmt,</p>
+<p>};</p>
+<p>static struct v4l2_subdev_ops sensor_subdev_ops = {</p>
+<p>.core = &amp;sensor_subdev_core_ops,</p>
+<p>.video = &amp;sensor_subdev_video_ops,</p>
+<p>};</p>
+<p>#if lily_debug</p>
+<p>int ov5642_write_proc (struct file *file, const char *buffer,</p>
+<p>                      unsigned long count, void *data)</p>
+<p>{</p>
+<p>char kbuf[14]={0,0,0,0,0,0,0,0,0,0,0,0,0,0};</p>
+<p>char vol[10]={0,0,0,0,0,0,0,0,0,0};</p>
+<p>char v[4]={0,0,0,0};</p>
+<p>unsigned long totime;</p>
+<p>unsigned short vol2=0;</p>
+<p>char offset = 0;</p>
+<p>int32_t rc = 0;</p>
+<p>unsigned short vol1=0;</p>
+<p>//u16 reg = 0;</p>
+<p>char  val = 0;</p>
+<p>struct clk *clk = NULL;</p>
+<p>char value;</p>
+<p>if (count &gt;= 14)</p>
+<p>return -EINVAL;</p>
+<p>if (copy_from_user(kbuf, buffer, count))</p>
+<p>return -EFAULT;</p>
+<p>if (‘w’ == kbuf[0]) {</p>
+<p>memcpy(vol, kbuf+1, 2);</p>
+<p>offset = (char) simple_strtoul(vol, NULL, 16);</p>
+<p>memcpy(v,kbuf+3,2);</p>
+<p>value = (u8) simple_strtoul(v,NULL,16);</p>
+<p>sensor_write(g_client, offset, value);</p>
+<p>printk(&quot;honghaishen_test %x %x \n &quot;,offset ,value);</p>
+<p>}</p>
+<p>else if(‘r’==kbuf[0])</p>
+<p>{</p>
+<p>memcpy(vol, kbuf+1, 2);</p>
+<p>offset = (char) simple_strtoul(vol, NULL, 16);</p>
+<p>sensor_read(g_client,offset,&amp;val);</p>
+<p>printk(&quot;honghaishen_test read val is %x \n&quot;,val);</p>
+<p>}</p>
+<p>else if(‘i’==kbuf[0])</p>
+<p>{</p>
+<p>sensor_write_array(g_client, sensor_init_data);</p>
+<p>}</p>
+<p>return count;</p>
+<p>}</p>
+<p>int ov5642_read_proc (char *buffer, char **buffer_location, off_t offset,</p>
+<p>                            int buffer_length, int *zero, void *ptr)</p>
+<p>{</p>
+<p>if(offset &gt; 0)</p>
+<p>return 0;</p>
+<p>return offset;</p>
+<p>}</p>
+<p>static void create_ov5642_proc_file(void)</p>
+<p>{</p>
+<p>struct proc_dir_entry *ov5642_proc_file =</p>
+<p>create_proc_entry(&quot;ov5642&quot;, 0666, NULL);</p>
+<p>if (ov5642_proc_file) {</p>
+<p>ov5642_proc_file-&gt;read_proc = ov5642_read_proc;</p>
+<p>ov5642_proc_file-&gt;write_proc = ov5642_write_proc;</p>
+<p>} else</p>
+<p>printk(KERN_NOTICE &quot;lily:(%d)%s:proc file create failed! \n&quot;,<strong>LINE</strong>,<strong>func</strong>);</p>
+<p>}</p>
+<p>#endif</p>
+<p>static int sensor_probe(struct i2c_client *client,</p>
+<p>const struct i2c_device_id *did)</p>
+<p>{</p>
+<p>    struct sensor *sensor;</p>
+<p>    struct soc_camera_device *icd = client-&gt;dev.platform_data;</p>
+<p>    struct i2c_adapter *adapter = to_i2c_adapter(client-&gt;dev.parent);</p>
+<p>    struct soc_camera_link *icl;</p>
+<p>    int ret;</p>
+<p>#if lily_debug</p>
+<p>   g_client = client;</p>
+<p>#endif</p>
+<p>    SENSOR_DG(&quot;\n%s..%s..%d..\n&quot;,<strong>FUNCTION</strong>,<strong>FILE</strong>,<strong>LINE</strong>);</p>
+<p>    if (!icd) {</p>
+<p>        dev_err(&amp;client-&gt;dev, &quot;%s: missing soc-camera data!\n&quot;,SENSOR_NAME_STRING());</p>
+<p>        return -EINVAL;</p>
+<p>    }</p>
+<p>#if lily_debug</p>
+<p>create_ov5642_proc_file();</p>
+<p>#endif</p>
+<p>    icl = to_soc_camera_link(icd);</p>
+<p>    if (!icl) {</p>
+<p>        dev_err(&amp;client-&gt;dev, &quot;%s driver needs platform data\n&quot;, SENSOR_NAME_STRING());</p>
+<p>        return -EINVAL;</p>
+<p>    }</p>
+<p>    if (!i2c_check_functionality(adapter, I2C_FUNC_I2C)) {</p>
+<p>        dev_warn(&amp;adapter-&gt;dev,</p>
+<p>        &quot;I2C-Adapter doesn’t support I2C_FUNC_I2C\n&quot;);</p>
+<p>        return -EIO;</p>
+<p>    }</p>
+<p>    sensor = kzalloc(sizeof(struct sensor), GFP_KERNEL);</p>
+<p>    if (!sensor)</p>
+<p>        return -ENOMEM;</p>
+<p>    v4l2_i2c_subdev_init(&amp;sensor-&gt;subdev, client, &amp;sensor_subdev_ops);</p>
+<p>    /* Second stage probe - when a capture adapter is there */</p>
+<p>    icd-&gt;ops = &amp;sensor_ops;</p>
+<p>    sensor-&gt;info_priv.fmt = sensor_colour_fmts[0];</p>
+<p>#if CONFIG_SENSOR_I2C_NOSCHED</p>
+<p>atomic_set(&amp;sensor-&gt;tasklock_cnt,0);</p>
+<p>#endif</p>
+<p>    ret = sensor_video_probe(icd, client);</p>
+<p>    if (ret &lt; 0) {</p>
+<p>        icd-&gt;ops = NULL;</p>
+<p>        i2c_set_clientdata(client, NULL);</p>
+<p>        kfree(sensor);</p>
+<p>sensor = NULL;</p>
+<p>    }</p>
+<p>hrtimer_init(&amp;(flash_off_timer.timer), CLOCK_MONOTONIC, HRTIMER_MODE_REL);</p>
+<p>    SENSOR_DG(&quot;\n%s..%s..%d  ret = %x \n&quot;,<strong>FUNCTION</strong>,<strong>FILE</strong>,<strong>LINE</strong>,ret);</p>
+<p>    return ret;</p>
+<p>}</p>
+<p>static int sensor_remove(struct i2c_client *client)</p>
+<p>{</p>
+<p>    struct sensor *sensor = to_sensor(client);</p>
+<p>    struct soc_camera_device *icd = client-&gt;dev.platform_data;</p>
+<p>    icd-&gt;ops = NULL;</p>
+<p>    i2c_set_clientdata(client, NULL);</p>
+<p>    client-&gt;driver = NULL;</p>
+<p>    kfree(sensor);</p>
+<p>    return 0;</p>
+<p>}</p>
+<p>static const struct i2c_device_id sensor_id[] = {</p>
+<p>{SENSOR_NAME_STRING(), 0 },</p>
+<p>{ }</p>
+<p>};</p>
+<p>MODULE_DEVICE_TABLE(i2c, sensor_id);</p>
+<p>static struct i2c_driver sensor_i2c_driver = {</p>
+<p>.driver = {</p>
+<p>.name = SENSOR_NAME_STRING(),</p>
+<p>},</p>
+<p>.probe = sensor_probe,</p>
+<p>.remove = sensor_remove,</p>
+<p>.id_table = sensor_id,</p>
+<p>};</p>
+<p>static int __init sensor_mod_init(void)</p>
+<p>{</p>
+<p>    SENSOR_DG(&quot;\n%s..%s.. \n&quot;,<strong>FUNCTION</strong>,SENSOR_NAME_STRING());</p>
+<p>    return i2c_add_driver(&amp;sensor_i2c_driver);</p>
+<p>}</p>
+<p>static void __exit sensor_mod_exit(void)</p>
+<p>{</p>
+<p>    i2c_del_driver(&amp;sensor_i2c_driver);</p>
+<p>}</p>
+<p>device_initcall_sync(sensor_mod_init);</p>
+<p>module_exit(sensor_mod_exit);</p>
+<p>MODULE_DESCRIPTION(SENSOR_NAME_STRING(Camera sensor driver));</p>
+<p>MODULE_AUTHOR(&quot;ddl &lt;kernel@rock-chips&gt;&quot;);</p>
+<p>MODULE_LICENSE(&quot;GPL&quot;);</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/Gallery%E5%B1%8F%E8%94%BDcamera%E6%8C%89%E9%92%AE/" rel="prev" title="Gallery屏蔽camera按钮">
+      <i class="fa fa-chevron-left"></i> Gallery屏蔽camera按钮
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/GitHubBitbucket%20%E9%80%9A%E8%BF%87%20SSH%20%E5%AF%86%E9%92%A5%E8%BF%9E%E6%8E%A5/" rel="next" title="GitHubBitbucket 通过 SSH 密钥连接">
+      GitHubBitbucket 通过 SSH 密钥连接 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Edward"
+      src="/uploads/avatar.gif">
+  <p class="site-author-name" itemprop="name">Edward</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">570</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Edward</span>
+</div>
+
+        
+
+
+
+
+
+
+<script>
+  (function() {
+    function leancloudSelector(url) {
+      url = encodeURI(url);
+      return document.getElementById(url).querySelector('.leancloud-visitors-count');
+    }
+
+    function addCount(Counter) {
+      var visitors = document.querySelector('.leancloud_visitors');
+      var url = decodeURI(visitors.id);
+      var title = visitors.dataset.flagTitle;
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          if (results.length > 0) {
+            var counter = results[0];
+            leancloudSelector(url).innerText = counter.time + 1;
+            Counter('put', '/classes/Counter/' + counter.objectId, { time: { '__op': 'Increment', 'amount': 1 } })
+              .catch(error => {
+                console.error('Failed to save visitor count', error);
+              });
+          } else {
+              Counter('post', '/classes/Counter', { title, url, time: 1 })
+                .then(response => response.json())
+                .then(() => {
+                  leancloudSelector(url).innerText = 1;
+                })
+                .catch(error => {
+                  console.error('Failed to create', error);
+                });
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    function showTime(Counter) {
+      var visitors = document.querySelectorAll('.leancloud_visitors');
+      var entries = [...visitors].map(element => {
+        return decodeURI(element.id);
+      });
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url: { '$in': entries } })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          for (let url of entries) {
+            let target = results.find(item => item.url === url);
+            leancloudSelector(url).innerText = target ? target.time : 0;
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    let { app_id, app_key, server_url } = {"enable":true,"app_id":"wxYx0BX9gaKA3XC4LuO2of0v-gzGzoHsz","app_key":"LQMcs6IDIE4YAm10vMsn9IYq","server_url":"https://wxyx0bx9.lc-cn-n1-shared.com","security":false};
+    function fetchData(api_server) {
+      var Counter = (method, url, data) => {
+        return fetch(`${api_server}/1.1${url}`, {
+          method,
+          headers: {
+            'X-LC-Id'     : app_id,
+            'X-LC-Key'    : app_key,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data)
+        });
+      };
+      if (CONFIG.page.isPost) {
+        if (CONFIG.hostname !== location.hostname) return;
+        addCount(Counter);
+      } else if (document.querySelectorAll('.post-title-link').length >= 1) {
+        showTime(Counter);
+      }
+    }
+
+    let api_server = app_id.slice(-9) !== '-MdYXbMMI' ? server_url : `https://${app_id.slice(0, 8).toLowerCase()}.api.lncldglobal.com`;
+
+    if (api_server) {
+      fetchData(api_server);
+    } else {
+      fetch('https://app-router.leancloud.cn/2/route?appId=' + app_id)
+        .then(response => response.json())
+        .then(({ api_server }) => {
+          fetchData('https://' + api_server);
+        });
+    }
+  })();
+</script>
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

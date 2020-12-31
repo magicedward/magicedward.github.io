@@ -1,0 +1,694 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"edward.org.cn","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="获取机器的最小屏幕宽度： 代码中可以用getResources().getConfiguration().smallestScreenWidthDp获取sw 这里的sw代表smallwidth的意思，当你所有屏幕的最小宽度都大于600dp时,屏幕就会自动到带sw600dp后缀的资源文件里去寻找相关资源文件，这里的最小宽度是指屏幕宽高的较小值，每个屏幕都是固定的，不会随着屏幕横向纵向改变而改变。 当">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android多屏幕适配方案 sw">
+<meta property="og:url" content="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/Android%E5%A4%9A%E5%B1%8F%E5%B9%95%E9%80%82%E9%85%8D%E6%96%B9%E6%A1%88%20sw/index.html">
+<meta property="og:site_name" content="点点滴滴">
+<meta property="og:description" content="获取机器的最小屏幕宽度： 代码中可以用getResources().getConfiguration().smallestScreenWidthDp获取sw 这里的sw代表smallwidth的意思，当你所有屏幕的最小宽度都大于600dp时,屏幕就会自动到带sw600dp后缀的资源文件里去寻找相关资源文件，这里的最小宽度是指屏幕宽高的较小值，每个屏幕都是固定的，不会随着屏幕横向纵向改变而改变。 当">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-12-31T06:48:00.948Z">
+<meta property="article:modified_time" content="2020-01-16T04:37:33.961Z">
+<meta property="article:author" content="Edward">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/Android%E5%A4%9A%E5%B1%8F%E5%B9%95%E9%80%82%E9%85%8D%E6%96%B9%E6%A1%88%20sw/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>Android多屏幕适配方案 sw | 点点滴滴</title>
+  
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?a92ed22eafce466e7a7b17546bb0dc6f";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">点点滴滴</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/Android%E5%A4%9A%E5%B1%8F%E5%B9%95%E9%80%82%E9%85%8D%E6%96%B9%E6%A1%88%20sw/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/avatar.gif">
+      <meta itemprop="name" content="Edward">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="点点滴滴">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Android多屏幕适配方案 sw
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-12-31 14:48:00" itemprop="dateCreated datePublished" datetime="2020-12-31T14:48:00+08:00">2020-12-31</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-01-16 12:37:33" itemprop="dateModified" datetime="2020-01-16T12:37:33+08:00">2020-01-16</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%83%82%E7%AC%94%E5%A4%B4/" itemprop="url" rel="index"><span itemprop="name">烂笔头</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/Android%E5%A4%9A%E5%B1%8F%E5%B9%95%E9%80%82%E9%85%8D%E6%96%B9%E6%A1%88%20sw/" class="post-meta-item leancloud_visitors" data-flag-title="Android多屏幕适配方案 sw" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>获取机器的最小屏幕宽度：</p>
+<p>代码中可以用getResources().getConfiguration().smallestScreenWidthDp获取sw</p>
+<p>这里的sw代表smallwidth的意思，当你所有屏幕的最小宽度都大于600dp时,屏幕就会自动到带sw600dp后缀的资源文件里去寻找相关资源文件，这里的最小宽度是指屏幕宽高的较小值，每个屏幕都是固定的，不会随着屏幕横向纵向改变而改变。</p>
+<p>当应用程序提供了多个带有不同值的最小宽度限定符资源目录时，系统会使用最接近（不超出）设备最小宽度的那个资源。<br>这个限定符被添加在API级别13中。<br>还要看android:requiresSmallestWidthDp属性，它声明了与你的应用程序兼容的最小的最小宽度，并且smallestScreenWidthDp配置字段会持有这个设备最小宽度的值。</p>
+<p>dip和dp是一个意思，都是Density Independent Pixels的缩写，即密度无关像素，规定以160dpi为基准，1dip=1px，如果密度是320dpi，则1dip=2px，以此类推。</p>
+<p>理论计算公式：</p>
+<p>smallestScreenWidthDp  =  最小宽度 * 160 / DPI </p>
+<p>图片尺寸</p>
+<p>密度</p>
+<p>建议尺寸</p>
+<p>mipmap-mdpi</p>
+<p>48 * 48</p>
+<p>mipmap-hdpi</p>
+<p>72 * 72</p>
+<p>mipmap-xhdpi</p>
+<p>96 * 96</p>
+<p>mipmap-xxhdpi</p>
+<p>144 * 144</p>
+<p>mipmap-xxxhdpi</p>
+<p>192 * 192</p>
+<p>DPI:每英寸像素数</p>
+<p>简单的屏幕分辨率计算方法：</p>
+<p>DisplayMetrics metrics = this.getResources().getDisplayMetrics();<br>float density = metrics.density;<br>int dpi = metrics.densityDpi;<br>int heightPixels = metrics.heightPixels;<br>int widthPixels = metrics.widthPixels;<br>Log.e(&quot;—metrics—&quot;, &quot;比例:&quot;+density+&quot;dpi:&quot;+dpi+&quot;高像素:&quot;+heightPixels+&quot;宽像素:&quot;+widthPixels);</p>
+<p>dp与px计算图（mdpi  1dp=1px）：</p>
+<p>ldpi:1dp=0.75px  mdpi:1dp=1px  hdpi:1dp=1.5px  xhdpi:1dp=2px  xxhdpi:1dp=3px  xxxhdpi:1dp=4px</p>
+<p>Android手机屏幕标准                      对应图标尺寸标准      屏幕密度         比例</p>
+<p>xxxhdpi 3840<em>2160                           192</em>192             640          16</p>
+<p>xxhdpi 1920<em>1080                            144</em>144             480          12</p>
+<p>xhdpi  1280<em>720                            96</em>96              320           8</p>
+<p>hdpi   480<em>800                             72</em>72              240           6</p>
+<p>mdpi   480<em>320                             48</em>48              160           4</p>
+<p>ldpi   320<em>240                             36</em>36              120           3</p>
+<p>注：Android studio mipmap文件夹只存放启动图标icon</p>
+<p>自动生成 values-swxxdp/strings.xml </p>
+<p>import java.io.BufferedReader;<br>import java.io.BufferedWriter;<br>import java.io.File;<br>import java.io.FileReader;<br>import java.io.FileWriter;<br>import java.io.IOException;<br>import java.io.PrintWriter;<br>import java.text.DecimalFormat;</p>
+<p>public class DimenTool {</p>
+<pre><code>public static void gen() &#123;
+    //以此文件夹下的dimens.xml文件内容为初始值参照
+    File file = new File(&amp;quot;./Adiag/src/main/res/values/dimens.xml&amp;quot;);
+
+    BufferedReader reader = null;
+    StringBuilder sw480 = new StringBuilder();
+    StringBuilder sw600 = new StringBuilder();
+    StringBuilder sw720 = new StringBuilder();
+    StringBuilder sw800 = new StringBuilder();
+
+    try &#123;
+        System.out.println(&amp;quot;生成不同分辨率：&amp;quot;);
+        reader = new BufferedReader(new FileReader(file));
+        String tempString;
+        int line = 1;
+        // 一次读入一行，直到读入null为文件结束
+        while ((tempString = reader.readLine()) != null) &#123;
+
+            if (tempString.contains(&amp;quot;&amp;lt;/dimen&amp;gt;&amp;quot;)) &#123;
+                //tempString = tempString.replaceAll(&amp;quot; &amp;quot;, &amp;quot;&amp;quot;);
+                String start = tempString.substring(0, tempString.indexOf(&amp;quot;&amp;gt;&amp;quot;) + 1);
+                String end = tempString.substring(tempString.lastIndexOf(&amp;quot;&amp;lt;&amp;quot;) - 2);
+                //截取&amp;lt;dimen&amp;gt;&amp;lt;/dimen&amp;gt;标签内的内容，从&amp;gt;右括号开始，到左括号减2，取得配置的数字
+                Double num = Double.parseDouble
+                        (tempString.substring(tempString.indexOf(&amp;quot;&amp;gt;&amp;quot;) + 1,
+                                tempString.indexOf(&amp;quot;&amp;lt;/dimen&amp;gt;&amp;quot;) - 2));
+                //根据不同的尺寸，计算新的值，拼接新的字符串，并且结尾处换行。
+                DecimalFormat df = new DecimalFormat(&amp;quot;#0.00&amp;quot;);
+                //df.setMinimumFractionDigits(2);</code></pre>
+<p>//                    sw480.append(start).append(df.format(num * 0.8)).append(end).append(&quot;\r\n&quot;);<br>//                    sw600.append(start).append(df.format(num * 1)).append(end).append(&quot;\r\n&quot;);<br>//                    sw720.append(start).append(df.format(num * 1.2)).append(end).append(&quot;\r\n&quot;);<br>//                    sw800.append(start).append(df.format(num * 8/6)).append(end).append(&quot;\r\n&quot;);</p>
+<pre><code>                sw480.append(start).append(df.format(num * 0.6)).append(end).append(&amp;quot;\r\n&amp;quot;);
+                sw600.append(start).append(df.format(num * 0.75)).append(end).append(&amp;quot;\r\n&amp;quot;);
+                sw720.append(start).append(df.format(num * 0.9)).append(end).append(&amp;quot;\r\n&amp;quot;);
+                sw800.append(start).append(df.format(num * 1)).append(end).append(&amp;quot;\r\n&amp;quot;);
+
+            &#125; else &#123;
+                sw480.append(tempString).append(&amp;quot;\n&amp;quot;);
+                sw600.append(tempString).append(&amp;quot;\n&amp;quot;);
+                sw720.append(tempString).append(&amp;quot;\n&amp;quot;);
+                sw800.append(tempString).append(&amp;quot;\n&amp;quot;);
+            &#125;
+
+            line++;
+
+        &#125;
+
+        reader.close();
+        System.out.println(&amp;quot;&amp;lt;!--  sw480 --&amp;gt;&amp;quot;);
+        System.out.println(sw480);
+        System.out.println(&amp;quot;&amp;lt;!--  sw600 --&amp;gt;&amp;quot;);
+        System.out.println(sw600);
+        System.out.println(&amp;quot;&amp;lt;!--  sw720 --&amp;gt;&amp;quot;);
+        System.out.println(sw720);
+        System.out.println(&amp;quot;&amp;lt;!--  sw800 --&amp;gt;&amp;quot;);
+        System.out.println(sw800);
+
+
+        String sw480file = &amp;quot;./Adiag/src/main/res/values-sw480dp/dimens.xml&amp;quot;;
+
+        String sw600file = &amp;quot;./Adiag/src/main/res/values-sw600dp/dimens.xml&amp;quot;;
+
+        String sw720file = &amp;quot;./Adiag/src/main/res/values-sw720dp/dimens.xml&amp;quot;;
+
+        String sw800file = &amp;quot;./Adiag/src/main/res/values-sw800dp/dimens.xml&amp;quot;;
+
+
+        //将新的内容，写入到指定的文件中去
+
+        writeFile(sw480file, sw480.toString());
+        writeFile(sw600file, sw600.toString());
+        writeFile(sw720file, sw720.toString());
+        writeFile(sw800file, sw800.toString());
+
+    &#125; catch (IOException e) &#123;
+        e.printStackTrace();
+    &#125; finally &#123;
+        if (reader != null) &#123;
+            try &#123;
+                reader.close();
+            &#125; catch (IOException e1) &#123;
+                e1.printStackTrace();
+            &#125;
+        &#125;
+
+    &#125;
+
+&#125;
+
+
+/**
+ * 写入方法
+ */
+
+public static void writeFile(String file, String text) &#123;
+
+    PrintWriter out = null;
+    File fileOut = new File(file);
+    if(!fileOut.getParentFile().exists())
+        fileOut.getParentFile().mkdirs();
+    try &#123;
+        out = new PrintWriter(new BufferedWriter(new FileWriter(file)));
+        out.println(text);
+    &#125; catch (IOException e) &#123;
+        e.printStackTrace();
+    &#125;
+    try &#123;
+        out = new PrintWriter(new BufferedWriter(new FileWriter(file)));
+        out.println(text);
+    &#125; catch (IOException e) &#123;
+        e.printStackTrace();
+    &#125;
+
+    out.close();
+
+&#125;
+
+public static void main(String[] args) &#123;
+    gen();
+&#125;</code></pre>
+<p>}</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/Android%E5%8A%A8%E7%94%BB%E6%95%88%E6%9E%9C%E4%B9%8B%E5%88%9D%E8%AF%86Property%20Animation%EF%BC%88%E5%B1%9E%E6%80%A7%E5%8A%A8%E7%94%BB%EF%BC%89/" rel="prev" title="Android动画效果之初识Property Animation（属性动画）">
+      <i class="fa fa-chevron-left"></i> Android动画效果之初识Property Animation（属性动画）
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/Android%E7%A6%81%E6%AD%A2%E7%B3%BB%E7%BB%9F%E5%8D%87%E7%BA%A7/" rel="next" title="Android禁止系统升级">
+      Android禁止系统升级 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Edward"
+      src="/uploads/avatar.gif">
+  <p class="site-author-name" itemprop="name">Edward</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">570</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Edward</span>
+</div>
+
+        
+
+
+
+
+
+
+<script>
+  (function() {
+    function leancloudSelector(url) {
+      url = encodeURI(url);
+      return document.getElementById(url).querySelector('.leancloud-visitors-count');
+    }
+
+    function addCount(Counter) {
+      var visitors = document.querySelector('.leancloud_visitors');
+      var url = decodeURI(visitors.id);
+      var title = visitors.dataset.flagTitle;
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          if (results.length > 0) {
+            var counter = results[0];
+            leancloudSelector(url).innerText = counter.time + 1;
+            Counter('put', '/classes/Counter/' + counter.objectId, { time: { '__op': 'Increment', 'amount': 1 } })
+              .catch(error => {
+                console.error('Failed to save visitor count', error);
+              });
+          } else {
+              Counter('post', '/classes/Counter', { title, url, time: 1 })
+                .then(response => response.json())
+                .then(() => {
+                  leancloudSelector(url).innerText = 1;
+                })
+                .catch(error => {
+                  console.error('Failed to create', error);
+                });
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    function showTime(Counter) {
+      var visitors = document.querySelectorAll('.leancloud_visitors');
+      var entries = [...visitors].map(element => {
+        return decodeURI(element.id);
+      });
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url: { '$in': entries } })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          for (let url of entries) {
+            let target = results.find(item => item.url === url);
+            leancloudSelector(url).innerText = target ? target.time : 0;
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    let { app_id, app_key, server_url } = {"enable":true,"app_id":"wxYx0BX9gaKA3XC4LuO2of0v-gzGzoHsz","app_key":"LQMcs6IDIE4YAm10vMsn9IYq","server_url":"https://wxyx0bx9.lc-cn-n1-shared.com","security":false};
+    function fetchData(api_server) {
+      var Counter = (method, url, data) => {
+        return fetch(`${api_server}/1.1${url}`, {
+          method,
+          headers: {
+            'X-LC-Id'     : app_id,
+            'X-LC-Key'    : app_key,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data)
+        });
+      };
+      if (CONFIG.page.isPost) {
+        if (CONFIG.hostname !== location.hostname) return;
+        addCount(Counter);
+      } else if (document.querySelectorAll('.post-title-link').length >= 1) {
+        showTime(Counter);
+      }
+    }
+
+    let api_server = app_id.slice(-9) !== '-MdYXbMMI' ? server_url : `https://${app_id.slice(0, 8).toLowerCase()}.api.lncldglobal.com`;
+
+    if (api_server) {
+      fetchData(api_server);
+    } else {
+      fetch('https://app-router.leancloud.cn/2/route?appId=' + app_id)
+        .then(response => response.json())
+        .then(({ api_server }) => {
+          fetchData('https://' + api_server);
+        });
+    }
+  })();
+</script>
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

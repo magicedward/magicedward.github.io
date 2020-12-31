@@ -1,0 +1,1027 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"edward.org.cn","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="Android蓝牙系统 1.1 蓝牙技术简介 蓝牙(Bleuetooth)原是十世纪统一了丹麦的一个国王的名字，现取其“统一”的含义，用来意在统一无线局域网通讯的标准的蓝牙技术。蓝牙技术是爱立信，IBM，Intel等世界5家著名大公司在1998年联合推出的一项无线通讯规范。随后成立的蓝牙技术特殊兴趣组织（SIG）来负责该技术的开发和技术协议的制定，如今全世界已有1800多家公司加盟该组织，最近微软">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android蓝牙系统">
+<meta property="og:url" content="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/Android%E8%93%9D%E7%89%99%E7%B3%BB%E7%BB%9F/index.html">
+<meta property="og:site_name" content="点点滴滴">
+<meta property="og:description" content="Android蓝牙系统 1.1 蓝牙技术简介 蓝牙(Bleuetooth)原是十世纪统一了丹麦的一个国王的名字，现取其“统一”的含义，用来意在统一无线局域网通讯的标准的蓝牙技术。蓝牙技术是爱立信，IBM，Intel等世界5家著名大公司在1998年联合推出的一项无线通讯规范。随后成立的蓝牙技术特殊兴趣组织（SIG）来负责该技术的开发和技术协议的制定，如今全世界已有1800多家公司加盟该组织，最近微软">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-12-31T06:48:00.955Z">
+<meta property="article:modified_time" content="2020-01-16T04:37:32.426Z">
+<meta property="article:author" content="Edward">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/Android%E8%93%9D%E7%89%99%E7%B3%BB%E7%BB%9F/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>Android蓝牙系统 | 点点滴滴</title>
+  
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?a92ed22eafce466e7a7b17546bb0dc6f";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">点点滴滴</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/Android%E8%93%9D%E7%89%99%E7%B3%BB%E7%BB%9F/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/avatar.gif">
+      <meta itemprop="name" content="Edward">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="点点滴滴">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Android蓝牙系统
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-12-31 14:48:00" itemprop="dateCreated datePublished" datetime="2020-12-31T14:48:00+08:00">2020-12-31</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-01-16 12:37:32" itemprop="dateModified" datetime="2020-01-16T12:37:32+08:00">2020-01-16</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%83%82%E7%AC%94%E5%A4%B4/" itemprop="url" rel="index"><span itemprop="name">烂笔头</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/Android%E8%93%9D%E7%89%99%E7%B3%BB%E7%BB%9F/" class="post-meta-item leancloud_visitors" data-flag-title="Android蓝牙系统" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>Android蓝牙系统</p>
+<p>1.1 蓝牙技术简介</p>
+<p>蓝牙(Bleuetooth)原是十世纪统一了丹麦的一个国王的名字，现取其“统一”的含义，用来意在统一无线局域网通讯的标准的蓝牙技术。蓝牙技术是爱立信，IBM，Intel等世界5家著名大公司在1998年联合推出的一项无线通讯规范。随后成立的蓝牙技术特殊兴趣组织（SIG）来负责该技术的开发和技术协议的制定，如今全世界已有1800多家公司加盟该组织，最近微软公司也正式加盟并成为SIG组织的领导成员之一。它以低成本的近距离无线连接为基础，为移动通信设备建立一个短程无线连接。其实质内容是建立通用的无线电空中接口，使计算机和通信设备进一步结合，让不同的厂家生产便携式设备在没有电缆或电线相互连接的情况下，能在近距离范围内具有相互通信的一种技术。</p>
+<p>1.2 蓝牙技术的特点</p>
+<p>Ø         全球范围适用</p>
+<p>蓝牙技术使用无需经过许可的工业、科研和医疗(ISM)波段（2.4至2.485 GHz），使用展频、调频、全双工信号，标称速率为1600跳/秒。在大多数国家，无需经过许可便可使用2.4 GHz ISM波段。</p>
+<p>Ø         抗干扰</p>
+<p>蓝牙技术的适配跳频(AFH)能力的设计目的是为了减少共用2.4 GHz频谱的无线技术之间出现的干扰。该功能会在频谱中寻找并无被占用的频带以供蓝牙技术使用。AFH的工作原理是识别该频谱中的其他设备并避开这些设备所用的频带。跳频功能以1 MHz的频率在79个频段中进行切换，从而获得了较高的抗干扰能力，同时使该频谱中能够实现更加高效的传输。有了跳频功能，尽管其他技术与蓝牙技术同时使用，但蓝牙技术的用户仍能享有优质的性能表现。</p>
+<p>Ø         射程</p>
+<p>射程根据不同的具体应用而定，尽管核心规格规定了最低射程，但这并非限制，制造商仍可根据其具体用例调整射程应用。</p>
+<p>根据具体应用中使用的射频种类，射程将有所不同：</p>
+<p>第三类射频 – 射程最高1米或3英尺</p>
+<p>第二类射频 – 最常见于移动设备，射程为10米或33英尺</p>
+<p>第一类射频 – 主要用于工业用例，射程为100米或300英尺</p>
+<p>Ø         低功耗</p>
+<p>最常用的射频为第二类，其能耗为2.5 mW。蓝牙技术的设计能耗非常之低。此外，规格允许射频处于非活跃状态时可以断电则进一步降低了能耗。3.0版HS中的通用替代MAC/PHY能够发现高速设备的AMP，并仅在需要进行数据传输时开启射频，实现了节能优势，同时增强了射频的安全性。对于无需高速数据传输率但需要最大限度延长电池寿命的设备而言，蓝牙低耗能技术为其实现了优化效果，其耗电量仅为传统蓝牙技术的1/2至1/100。</p>
+<p>1.3 蓝牙技术在android中的应用</p>
+<p>1.3.1 蓝牙服务的启动</p>
+<p>在前面章节android启动过程中介绍到android服务的启动，init进程中，启动Zygote后，然后由SystemServer启动一系列服务，蓝牙服务就是在这个时候启动的。详细见代码：</p>
+<p>/framework/base/services/java/com/android/server/SystemServer.java</p>
+<p>if (SystemProperties.get(&quot;ro.kernel.qemu&quot;).equals(&quot;1&quot;)) {</p>
+<p>} else {</p>
+<p>……</p>
+<p>bluetooth = new BluetoothService(context);</p>
+<p>……</p>
+<p>bluetoothA2dp = new BluetoothA2dpService(context, bluetooth);</p>
+<p>……</p>
+<p>if (airplaneModeOn == 0 &amp;&amp; bluetoothOn != 0) {</p>
+<p>                    bluetooth.enable();</p>
+<p> }  </p>
+<p>Bluetooth服务的代码首先通过SystemProperties的get方法来判断系统是不是使用模拟器内核，如果是使用模拟器内核来启动android的系统，那么就会跳过蓝牙服务的启动，也就是说Android 4.0模拟器是不支持蓝牙系统的。否则就是一个实在的设备产品(ro.kernel.qemu=0)</p>
+<p>就是构造一个bluetooth的服务(BluetoothService)和一个蓝牙耳机服务(BluetoothA2dpService)。</p>
+<p>代码段最后一部分是判断开机是否要启用蓝牙，通过函数我们可以看到如果设备的飞行模式是关闭的并且bluetooth的那个开关是在on。就是调用bluetoothService的enable方法使得我们设备开机的时候就将蓝牙开启。飞行模式就是那些使用无线频谱的模块都必须关掉，譬如：wifi,Bluetooth,GPS等。接下来就是BluetoothService的enable方法了。</p>
+<p>/framework/base/core/java/android/server/BluetoothService.java</p>
+<p>public synchronized boolean enable(boolean saveSetting) {</p>
+<p>mContext.enforceCallingOrSelfPermission(BLUETOOTH_ADMIN_PERM,&quot;Need BLUETOOTH_ADMIN permission&quot;);</p>
+<p>if (mIsAirplaneSensitive &amp;&amp; isAirplaneModeOn() &amp;&amp; !mIsAirplaneToggleable) {</p>
+<p>            return false;</p>
+<p> }   </p>
+<p>mBluetoothState.sendMessage(BluetoothAdapterStateMachine.USER_TURN_ON, saveSetting);</p>
+<p>        return true;</p>
+<p> }   </p>
+<p>蓝牙服务的enable的方法会先判断进程有没有操作权限，需要蓝牙管理的权限才能去enable蓝牙模块，然后还会再次判断系统的飞行模式有没有打开，如果此时飞行模式是on的话，那么会返回，还是不能打开服务。在确保拥有权限并且不是出于飞行模式的情况下，就会往蓝牙状态机发送一个USER_TURN_ON的命令。下面介绍一下android中的蓝牙状态机。</p>
+<p>Ø         Poweroff</p>
+<p>这就是蓝牙模块没有初始化的状态，这时候硬件模块是出于没有上电的状态。</p>
+<p>Ø         Warmup</p>
+<p>这个状态就是给设备上电，使设备能够从没电到待机状态。</p>
+<p>Ø         Hotoff</p>
+<p>Hotoff我个人理解就是在模块上电了，出于一种待命的状态，如果收到了turn_on_coninue的命令时候就会去将蓝牙模块切换到工作状态。如果接收到了turn_cold的命令时候，设备就会断电进入poweroff状态。</p>
+<p>Ø         Switching</p>
+<p>这也是一个中间状态，需要继续接收命令。</p>
+<p>Ø         Bluetoothon</p>
+<p>这时蓝牙模块出于正常工作的状态。</p>
+<p>根据android中蓝牙状态的源码中，具体的各个状态机相互转换图如下：</p>
+<p>   n</p>
+<p>/framework/base/core/java/android/server/BluetoothAdapterStateMachine.java</p>
+<p>private class PowerOff extends State {</p>
+<p>public void enter() {</p>
+<p>   if (DBG) log(&quot;Enter PowerOff: &quot; + getCurrentMessage().what);</p>
+<p>   } </p>
+<p>……</p>
+<p>case USER_TURN_ON:</p>
+<p>broadcastState(BluetoothAdapter.STATE_TURNING_ON);</p>
+<p> transitionTo(mWarmUp);</p>
+<p>……</p>
+<p>if (prepareBluetooth()) {</p>
+<p>if ((Boolean) message.obj) {</p>
+<p>   persistSwitchSetting(true);</p>
+<p>}</p>
+<p>deferMessage(obtainMessage(TURN_ON_CONTINUE));</p>
+<p>蓝牙状态机初始化时PowerOff的，从上面的BluetoothService的enable函数中USER_TURN_ON命令。从上面代码中可以看出蓝牙状态机在接收到USER_TURN_ON后，首先就像蓝牙适配器广播蓝牙正处于STATE_TRUNING_ON的状态，蓝牙的适配器的蓝牙状态有四个：</p>
+<p>分别是,state_off(10),state_turning_on(11),state_on(12),state_turning_off(14)。由于我们刚开机所以蓝牙适配器的状态必然是从10-&gt;11。然后将蓝牙状态机的状态切换到mWaremUp状态。</p>
+<p>接下来调用了prepareBluetooth()方法。接下来看看prepareBluetooth方法。代码如下：</p>
+<p>/framework/base/core/java/android/server/BluetoothAdapterStateMachine.java</p>
+<p>private boolean prepareBluetooth() {</p>
+<p>  if (mBluetoothService.enableNative() != 0) {</p>
+<p>          return false;</p>
+<p>   }</p>
+<p>……</p>
+<p>int retryCount = 2；</p>
+<p>boolean eventLoopStarted = false;</p>
+<p>while ((retryCount– &gt; 0) &amp;&amp; !eventLoopStarted) {</p>
+<p>mEventLoop.start();</p>
+<p>while ((pollCount– &gt; 0) &amp;&amp; !eventLoopStarted) {</p>
+<p>         if (mEventLoop.isEventLoopRunning()) {</p>
+<p>                 eventLoopStarted = true;</p>
+<p>                     break;</p>
+<p>      }</p>
+<p>在preprareBluetooth方法中，首先就是调用了BluetoothService的enableNative()的方法，只要一看到这种带Native的方法，JNI的代码是少不了的。由于enableNative方法走的路有点多，所以先直接到BluetoothService的代码中寻找enableNative()看个究竟。</p>
+<p>framework/base/core/java/android/server/BluetoothService.java</p>
+<p>/<em>package</em>/ native int enableNative();</p>
+<p>Framework/base/core/jni/ android_server_BluetoothService.cpp</p>
+<p>static JNINativeMethod sMethods[] = {</p>
+<p>……</p>
+<p>{&quot;enableNative&quot;, &quot;()I&quot;, (void *)enableNative},</p>
+<p>……</p>
+<p>}</p>
+<p>static jint enableNative(JNIEnv *env, jobject object) {</p>
+<p>return bt_enable();</p>
+<p>}</p>
+<p>从上面的代码可以看出，BluetoothService的enableNative就是直接调用了JNI的代码，JNI是java native interface的 缩写，中文叫java本地接口。Android上层跑的java代码，而底层代码都是c语言。以android的一贯作风是通过JNI代码调用HAL层，然后就可以直接调用驱动代码或者经由内核达到操作驱动代码。enableNative的代码很简单，就是调用了bt_enable。我们可以继续找到这个函数的实现。</p>
+<p>System/bluetooth/bluedroid/bluetooth.c</p>
+<p>int bt_enable() {</p>
+<p>……</p>
+<p>if (set_bluetooth_power(1) &lt; 0) goto out</p>
+<p>……</p>
+<p>if (property_set(&quot;ctl.start&quot;, &quot;hciattach&quot;) &lt; 0)</p>
+<p>……</p>
+<p>for (attempt = 1000; attempt &gt; 0;  attempt–) {</p>
+<p>hci_sock = create_hci_sock();</p>
+<p>……</p>
+<p>ret = ioctl(hci_sock, HCIDEVUP, HCI_DEV_ID);</p>
+<p>……</p>
+<p>}</p>
+<p>Set_bluetooth_power()函数会根据蓝牙的硬件开关，也就是hci设备注册的时候会同时在linux内核中注册一个rfkill类，比如我们在电脑键盘上面可能会看见一个按键来开关蓝牙或者wifi之类的。这里会去读这个键值，如果是1代表可以开启蓝牙的，否则是没法使用蓝牙的，在开发过程中如果没这样的按键，可将这行代码拿掉。Propery_set(“ctl.start”,hciattach)。这个函数会去启动hciattach服务，具体这个服务是以二进制文件存储在系统system/bin目录下面的。</p>
+<p>我们可以从andriod启动脚本文件找到名字叫hciattach服务。当然这个是针对接串口的蓝牙来说需要启动服务，如果我们的设备是通过USB总线接入系统的话，其实这个服务也是可以不启动的。剩下的代码是一个for循环,先建立一个bluetooth的套接字，然后通过ioctl来和bluez的代码来打开蓝牙设备，可以重试1000次。接下来的代码就要跑到内核的BlueZ了。</p>
+<p>Kernel/net/bluetooth/hci_sock.c</p>
+<p>static int hci_sock_ioctl(struct socket *sock, unsigned int cmd, unsigned long arg){</p>
+<p>……</p>
+<p>case HCIDEVUP:</p>
+<p>                if (!capable(CAP_NET_ADMIN))</p>
+<p>                        return -EACCES;</p>
+<p>                return hci_dev_open(arg);</p>
+<p>……</p>
+<p>}</p>
+<p>从上面的ioctl下来的代码可以看出，当函数第二个参数cmd为HCIDEVUP时，就会直接调用hci_dev_open(arg)方法。这个函数就好比我们在终端下面使用蓝牙调试工具hciconfig,执行了</p>
+<p>#hciconfig hci0 up。</p>
+<p>Kernel/net/bluetooth/hci_core.c</p>
+<p>int hci_dev_open(__u16 dev)</p>
+<p>{</p>
+<p>……</p>
+<p>hdev = hci_dev_get(dev);</p>
+<p>……</p>
+<p>if (hdev-&gt;open(hdev)) {</p>
+<p>                ret = -EIO;</p>
+<p>                goto done;</p>
+<p>  }</p>
+<p>}</p>
+<p>在kernel的bluez调用hci_dev_open，而在这个函数中又hdev-&gt;open(hdev),这个就是我们驱动注册时候的回调函数open。由于我们平台使用的是usb的蓝牙接入方式，我就以usb的蓝牙驱动为例，看看驱动的open函数。</p>
+<p>Kernel/driver/bluetooth/btusb.c</p>
+<p>static int btusb_open(struct hci_dev *hdev){</p>
+<p>……</p>
+<p>err = btusb_submit_intr_urb(hdev, GFP_KERNEL);</p>
+<p>……</p>
+<p>err = btusb_submit_bulk_urb(hdev, GFP_KERNEL);</p>
+<p>……</p>
+<p>}</p>
+<p>USB hci设备打开后，首先将设备的interface配置为HCI_RUNNING状态，然后为数据传输初始化设备的端点和管道，初始化和填充urb。代码到这，蓝牙设备就算是真正打开了。</p>
+<p>回到之前的蓝牙状态机的代码：</p>
+<p>/framework/base/core/java/android/server/BluetoothAdapterStateMachine.java</p>
+<p>private boolean prepareBluetooth() {</p>
+<p>  if (mBluetoothService.enableNative() != 0) {</p>
+<p>          return false;</p>
+<p>   }</p>
+<p>……</p>
+<p>int retryCount = 2；</p>
+<p>boolean eventLoopStarted = false;</p>
+<p>while ((retryCount– &gt; 0) &amp;&amp; !eventLoopStarted) {</p>
+<p>mEventLoop.start();</p>
+<p>while ((pollCount– &gt; 0) &amp;&amp; !eventLoopStarted) {</p>
+<p>         if (mEventLoop.isEventLoopRunning()) {</p>
+<p>                 eventLoopStarted = true;</p>
+<p>                     break;</p>
+<p>      }</p>
+<p>mBluetoothService在enableNative()函数主要功能就是通过一系列代码来打开蓝牙设备。如果设备驱动代码没有问题的话，我们enableNative()返回的将会是true。在实际调试蓝牙设备时候，我们可以通过在linux或者android的终端下面使用自带的工具命令(hciconfig),执行：</p>
+<h1 id="hciconfig-–a如果驱动能够和设备绑定的话，我们就会看到蓝牙设备的一些比较重要信息，如：蓝牙的物理地址，总线类型，协议类型等。"><a href="#hciconfig-–a如果驱动能够和设备绑定的话，我们就会看到蓝牙设备的一些比较重要信息，如：蓝牙的物理地址，总线类型，协议类型等。" class="headerlink" title="hciconfig –a如果驱动能够和设备绑定的话，我们就会看到蓝牙设备的一些比较重要信息，如：蓝牙的物理地址，总线类型，协议类型等。"></a>hciconfig –a如果驱动能够和设备绑定的话，我们就会看到蓝牙设备的一些比较重要信息，如：蓝牙的物理地址，总线类型，协议类型等。</h1><p>上面的代码接下来会是一个while循环，执行2次。mEventLoop.start()。也就是说调用了EventLoop的start方法。</p>
+<p>/framework/base/core/java/android/server/BluetoothEventLoop.java</p>
+<p>/* package */ void start() {</p>
+<p>   if (!isEventLoopRunningNative()) {</p>
+<p>            if (DBG) log(&quot;Starting Event Loop thread&quot;);</p>
+<p>            startEventLoopNative();</p>
+<p>        }   </p>
+<p>}</p>
+<p>第一次进入这个函数isEventLoopRunningNative肯定是返回false的，所以直接进入了startEventLoopNative()，前面说过了一般带native的函数结尾的函数都是JNI。看到这里又要进JNI了。</p>
+<p>Framework/base/core/jni/android_server_BluetoothEventLoop.cpp</p>
+<p>static JNINativeMethod sMethods[] = {</p>
+<p>……</p>
+<p>{&quot;startEventLoopNative&quot;, &quot;()V&quot;, (void *)startEventLoopNative},</p>
+<p>……</p>
+<p>}</p>
+<p>static jboolean startEventLoopNative(JNIEnv *env, jobject object) {</p>
+<p>……</p>
+<p>nat-&gt;pollData = (struct pollfd *)malloc(sizeof(struct pollfd) *</p>
+<p>            DEFAULT_INITIAL_POLLFD_COUNT);</p>
+<p>……</p>
+<p>nat-&gt;watchData = (DBusWatch **)malloc(sizeof(DBusWatch *) *</p>
+<p>            DEFAULT_INITIAL_POLLFD_COUNT);</p>
+<p>……</p>
+<p>if (socketpair(AF_LOCAL, SOCK_STREAM, 0, &amp;(nat-&gt;controlFdR))) {</p>
+<p>        LOGE(&quot;Error getting BT control socket&quot;);</p>
+<p>        goto done;</p>
+<p>}</p>
+<p>……</p>
+<p>if (setUpEventLoop(nat) != JNI_TRUE) {</p>
+<p>        LOGE(&quot;failure setting up Event Loop!&quot;);</p>
+<p>        goto done;</p>
+<p> }</p>
+<p>pthread_create(&amp;(nat-&gt;thread), NULL, eventLoopMain, nat);</p>
+<p>……</p>
+<p>}</p>
+<p>为socket文件描述符分配内存数据，同时为DBusWatch结构体分配内存，socketpair创建了一对套接字(AF_LOCAL域中使用)，这个描述符可以是单双工也可以是全双工的，这里是单双工的，也就是只能从这个描述符中读取数据，而不能写数据。如果socketpair的第四个参数是个数组，也可以实现一个描述符读，另外一个描述符写。从而实现全双工。然后就是setUpEventLoop函数，最后就是创建了eventLoopMain的线程。</p>
+<p>Framework/base/core/jni/android_server_BluetoothEventLoop.cpp</p>
+<p>static jboolean setUpEventLoop(native_data_t *nat) {</p>
+<p>……</p>
+<p>dbus_threads_init_default();</p>
+<p>……</p>
+<p>dbus_error_init(&amp;err);</p>
+<p>……</p>
+<p>if (!dbus_connection_add_filter(nat-&gt;conn, event_filter, nat, NULL)){</p>
+<p>            return JNI_FALSE;</p>
+<p>        }</p>
+<p>……</p>
+<p>dbus_bus_add_match(nat-&gt;conn,</p>
+<p>                &quot;type=’signal’,interface=’org.freedesktop.DBus’&quot;,   &amp;err);</p>
+<p>dbus_bus_add_match(nat-&gt;conn,</p>
+<p>   &quot;type=’signal’,interface=’&quot;BLUEZ_DBUS_BASE_IFC&quot;.Adapter’&quot;,&amp;err);</p>
+<p>……</p>
+<p>}</p>
+<p>这里是初始化dbus，是bluez能够挂接上dbus。建立一个dbus连接之后，为这个dbus连接起名，为我们将要进行的消息循环添加匹配条件(就是通过信号名和信号接口名来进行匹配控制的) – dbus_bus_add_match()。我们进入等待循环后，只需要对信号名，信号接口名进行判断就可以分别处理各种信号了。在各个处理分支上。我们可以分离出消息中的参数。对参数类型进行判断和其他的处理。具体对dbus感兴趣的话可以参照：<a target="_blank" rel="noopener" href="http://dbus.freedesktop.org./">http://dbus.freedesktop.org。</a></p>
+<p>Framework/base/core/jni/android_server_BluetoothEventLoop.cpp</p>
+<p>static void *eventLoopMain(void *ptr) {</p>
+<p>……</p>
+<p>while (1) {</p>
+<p>……</p>
+<p>if (nat-&gt;pollData[i].fd == nat-&gt;controlFdR) {</p>
+<p>while (recv(nat-&gt;controlFdR, &amp;data, sizeof(char), MSG_DONTWAIT) != -1) {</p>
+<p>……</p>
+<p>switch (data) {</p>
+<p>case EVENT_LOOP_EXIT:</p>
+<p>   dbus_connection_set_watch_functions(nat-&gt;conn,NULL, NULL, NULL, NULL, NULL);</p>
+<p>   tearDownEventLoop(nat);</p>
+<p>   nat-&gt;vm-&gt;DetachCurrentThread();</p>
+<p>……</p>
+<p>case EVENT_LOOP_ADD:</p>
+<p>    {</p>
+<p>     handleWatchAdd(nat);</p>
+<p>         break;</p>
+<p>     }</p>
+<p>case EVENT_LOOP_REMOVE:</p>
+<p>     {</p>
+<p>      handleWatchRemove(nat);</p>
+<p>          break;</p>
+<p>      }</p>
+<p>以轮训的方式从socket的描述符中不断的接收数据，如果有数据到来，就根据数据的类型做相应的处理。到这里dbus就和bluez建立连接。还是回到之前我们prepareBluetooth的函数。</p>
+<p>/framework/base/core/java/android/server/BluetoothAdapterStateMachine.java</p>
+<p>private class PowerOff extends State {</p>
+<p>public void enter() {</p>
+<p>   if (DBG) log(&quot;Enter PowerOff: &quot; + getCurrentMessage().what);</p>
+<p>   } </p>
+<p>……</p>
+<p>case USER_TURN_ON:</p>
+<p>broadcastState(BluetoothAdapter.STATE_TURNING_ON);</p>
+<p> transitionTo(mWarmUp);</p>
+<p>……</p>
+<p>if (prepareBluetooth()) {</p>
+<p>if ((Boolean) message.obj) {</p>
+<p>   persistSwitchSetting(true);</p>
+<p>}</p>
+<p>deferMessage(obtainMessage(TURN_ON_CONTINUE));</p>
+<p>前面的代码我们分析完了prepareBluetooth()，如果没有问题就进入了persistSwitchSetting()。</p>
+<p>然后就是讲蓝牙状态机切换到mWarnUp状态。并向蓝牙状态机发送了一个TURN_ON_CONTINUE的命令。</p>
+<p>/framework/base/core/java/android/server/BluetoothAdapterStateMachine.java</p>
+<p>private class WarmUp extends State {</p>
+<p>……</p>
+<p>public boolean processMessage(Message message) {</p>
+<p>   log(&quot;WarmUp process message: &quot; + message.what);</p>
+<p>……</p>
+<p>switch(message.what) {</p>
+<p>case TURN_ON_CONTINUE:</p>
+<p>这个命令在WarmUp状态里面什么也没做。直接通过deferMessage()到HotOff状态里面重新发送了TURN_ON_CONTINUE的命令。那我们HotOff状态机。</p>
+<p>/framework/base/core/java/android/server/BluetoothAdapterStateMachine.java</p>
+<p>private class HotOff extends State {</p>
+<p>……</p>
+<p>public boolean processMessage(Message message) {</p>
+<p>    log(&quot;HotOff process message: &quot; + message.what);</p>
+<p>……</p>
+<p>switch(message.what) {</p>
+<p>case TURN_ON_CONTINUE:</p>
+<p>        int retryCount = 5</p>
+<p>……</p>
+<p>mBluetoothService.switchConnectable(true);</p>
+<p>transitionTo(mSwitching);</p>
+<p>……</p>
+<p>}</p>
+<p>在HotOff状态机中，接收到TURN_ON_CONTINUE命令后，先调用了BluetoothService的switchConnectable(true);然后将蓝牙的状态机切换到Switching状态。</p>
+<p>/framework/base/core/java/android/server/BluetoothService.java</p>
+<p>/<em>package</em>/ synchronized void switchConnectable(boolean on) {</p>
+<p>        setAdapterPropertyBooleanNative(&quot;Powered&quot;, on ? 1 : 0);</p>
+<p>    }</p>
+<p>又到了以Native结尾的函数，还是到JNI里面找到它的实现吧。</p>
+<p>Framework/base/core/jni/android_server_BluetoothService.cpp</p>
+<p>static jboolean setAdapterPropertyNative(JNIEnv *env, jobject object, jstring key,</p>
+<p>                                         void *value, jint type) {</p>
+<p>……</p>
+<p>msg = dbus_message_new_method_call(BLUEZ_DBUS_BASE_IFC,get_adapter_path(env, object),</p>
+<p>DBUS_ADAPTER_IFACE, &quot;SetProperty&quot;);</p>
+<p>……</p>
+<p>dbus_message_append_args(msg, DBUS_TYPE_STRING, &amp;c_key, DBUS_TYPE_INVALID);</p>
+<p>dbus_message_iter_init_append(msg, &amp;iter);</p>
+<p>……</p>
+<p>reply = dbus_connection_send_with_reply(nat-&gt;conn, msg, NULL, -1);</p>
+<p>……</p>
+<p>}</p>
+<p>通过Dbus向bluez发送SetPropery的信息(message)，当成功的时候，我们在另外一端就会收到powerChanged的信号。具体处理如下的代码：</p>
+<p>Framework/base/core/java/android/server/BluetoothEventLoop.java</p>
+<p>/<em>package</em>/ void onPropertyChanged(String[] propValues) {</p>
+<p>……</p>
+<p>BluetoothAdapterProperties adapterProperties = mBluetoothService.getAdapterProperties();</p>
+<p>……</p>
+<p>else if (name.equals(&quot;Pairable&quot;) || name.equals(&quot;Discoverable&quot;)) {</p>
+<p> adapterProperties.setProperty(name, propValues[1]);</p>
+<p>if (name.equals(&quot;Discoverable&quot;)) {</p>
+<p>          mBluetoothState.sendMessage(BluetoothAdapterStateMachine.SCAN_MODE_CHANGED);</p>
+<p>            } </p>
+<p>……</p>
+<p>else if (name.equals(&quot;Powered&quot;)) {</p>
+<p>          mBluetoothState.sendMessage(BluetoothAdapterStateMachine.POWER_STATE_CHANGED,</p>
+<p>                propValues[1].equals(&quot;true&quot;) ? new Boolean(true) : new Boolean(false));</p>
+<p>当有蓝牙AdapterProperies发生变化时，在BluetoothEventLoop.java中就会有个onProperyCha</p>
+<p>nged方法来处理。首先通过BluetoothService的getAdapterProperties来获取蓝牙适配器的所有属性，都有哪些属性，在实际开发过程中我们通过调试可以看到按顺序依次是：power，</p>
+<p>Pairable，class，device，UUID，Discoverable。通过将power的value设置为true，就会向蓝牙状态发送一个POWER_STATE_CHAGED，通过Discoverable的属性来向蓝牙状态机发送一个</p>
+<p>SCAN_MODE_CHANGED的命令。</p>
+<p>/framework/base/core/java/android/server/BluetoothAdapterStateMachine.java</p>
+<p>case POWER_STATE_CHANGED:</p>
+<p>               removeMessages(POWER_DOWN_TIMEOUT);</p>
+<p>                    if (!((Boolean) message.obj)) {</p>
+<p>                        if (mPublicState == BluetoothAdapter.STATE_TURNING_OFF) {</p>
+<p>                            transitionTo(mHotOff);</p>
+<p>                            finishSwitchingOff();</p>
+<p>                            if (!mContext.getResources().getBoolean</p>
+<p>                            (com.android.internal.R.bool.config_bluetooth_adapter_quick_switch)) {</p>
+<p>                                deferMessage(obtainMessage(TURN_COLD));</p>
+<p>                            }  </p>
+<p>                        }  </p>
+<p>                    } else {</p>
+<p>                        if (mPublicState != BluetoothAdapter.STATE_TURNING_ON) {</p>
+<p>                            if (mContext.getResources().getBoolean</p>
+<p>                            (com.android.internal.R.bool.config_bluetooth_adapter_quick_switch)) {</p>
+<p>                                recoverStateMachine(TURN_HOT, null);</p>
+<p>                            } else {</p>
+<p>                                recoverStateMachine(TURN_COLD, null);</p>
+<p>                            }  </p>
+<p>                        }  </p>
+<p>                    }  </p>
+<p>在上一个HotOff的时候，已经将蓝牙状态机切换到了Switching了。所以直接在Switching这个状态里面来处理命令。第一个power_state_changed的命令很简单。在蓝牙状态机里面有个叫mPublicState的全局变量来记录蓝牙适配器的状态。如果是power的值为true，那么就将这个变量的值变为STATE_TURNING_ON，否则就是STATE_TURNING_OFF。在前面介绍过了蓝牙适配器总共有四个状态:State_off(10),state_turning_on(11),state_on(12),state_turning_off(</p>
+<p>13)。那么继续来看第二个命令，scan_mode_changed。</p>
+<p>/framework/base/core/java/android/server/BluetoothAdapterStateMachine.java</p>
+<p>case SCAN_MODE_CHANGED:</p>
+<p>     if (mPublicState == BluetoothAdapter.STATE_TURNING_ON) {</p>
+<p>        mBluetoothService.setPairable();</p>
+<p>        mBluetoothService.initBluetoothAfterTurningOn();</p>
+<p>        transitionTo(mBluetoothOn);</p>
+<p>        broadcastState(BluetoothAdapter.STATE_ON);</p>
+<p>mBluetoothService.runBluetooth();</p>
+<p>}</p>
+<p>根据第一个命令，mPublicState的值是STATE_TURNING_ON，这里又要和BluetoothService来交互了，先调用了setPairable和initBluetoothAfterTurningOn，runBluetooth并将蓝牙状态机切换到BluetoothOn的状态。接下来到bluetoothService看这个setPairable方法。</p>
+<p>/framework/base/core/java/android/server/BluetoothService.java</p>
+<p>/<em>package</em>/ synchronized void setPairable() {</p>
+<p>        String pairableString = getProperty(&quot;Pairable&quot;, false);</p>
+<p>        if (pairableString == null) {</p>
+<p>            Log.e(TAG, &quot;null pairableString&quot;);</p>
+<p>            return;</p>
+<p>        }   </p>
+<p>        if (pairableString.equals(&quot;false&quot;)) {</p>
+<p>            setAdapterPropertyBooleanNative(&quot;Pairable&quot;, 1);</p>
+<p>        }   </p>
+<p>    }   </p>
+<p>这个过程和上面的设置POWER的过程是类似的，先通过getPropery获取Pairable的状态，如果是false的话，就需要调用JNI的方法setAdapterPropertyBooleanNative来通过dbus来向bluez来设置蓝牙适配器的Pairable的值。如果设置成功的话，同样还会调用BluetoothEventLoop中的onProperyChanged方法。继续跟进代码initBluetoothAfterTurningOn：</p>
+<p>framework/base/core/java/android/server/BluetoothService.java</p>
+<p>/<em>package</em>/ void initBluetoothAfterTurningOn() {</p>
+<p>String discoverable = getProperty(&quot;Discoverable&quot;, false);</p>
+<p>        String timeout = getProperty(&quot;DiscoverableTimeout&quot;, false);</p>
+<p>        if (discoverable.equals(&quot;true&quot;) &amp;&amp; Integer.valueOf(timeout) != 0) {</p>
+<p>            setAdapterPropertyBooleanNative(&quot;Discoverable&quot;, 0);</p>
+<p>        }</p>
+<p>mBondState.initBondState();</p>
+<p>        initProfileState();</p>
+<p>        getProfileProxy();</p>
+<p>}</p>
+<p>这个函数首先还是像设置power，Parirable的属性差不多，设置Discoverable的属性。当蓝牙模块打开和蓝牙适配器配对(Pairable)之后。剩下的initProfileState可以获取蓝牙的物理地址。</p>
+<p>getProfileProxy直接调用了Adapter的getProfileProxy。得到俄ProfileProxy可以是HEADSET，</p>
+<p>A2DP，INPUT_DEVICE，PAN，HEALTH。</p>
+<p>framework/base/core/java/android/server/BluetoothService.java</p>
+<p>/<em>package</em>/ void runBluetooth() {</p>
+<p>……</p>
+<p>autoConnect();</p>
+<p>}</p>
+<p>private void autoConnect() {</p>
+<p>String[] bonds = getKnownDevices();</p>
+<p>        if (bonds == null) {</p>
+<p>            return;</p>
+<p>        }</p>
+<p>……</p>
+<p>for (String path : bonds) {</p>
+<p>            String address = getAddressFromObjectPath(path);</p>
+<p>            BluetoothDeviceProfileState state = mDeviceProfileState.get(address);</p>
+<p>            if (state != null) {</p>
+<p>                Message msg = new Message();</p>
+<p>                msg.what = BluetoothDeviceProfileState.AUTO_CONNECT_PROFILES;</p>
+<p>                state.sendMessage(msg);</p>
+<p>            }</p>
+<p>        }</p>
+<p>    }</p>
+<p>在autoConnect中，就会扫描附近的设备，并获取设备的地址和名字。这是我们看到就是能看到了一系列扫描出来的附近的设备。此时蓝牙的状态出于正常运行。到这里蓝牙模块就在</p>
+<p>Android中工作起来了。</p>
+<p>1.4 蓝牙开发在android中的调试</p>
+<p>1.4.1 内核和驱动的支持</p>
+<p>作为是linux内核的Android系统，必须在编译内核过程中将bluez编译的config选上。</p>
+<p>CONFIG_BT =y</p>
+<p>CONFIG_BT_RFCOMM =y</p>
+<p>CONFIG_BT_BNEP = y</p>
+<p>CONFIG_BT_CMTP =y</p>
+<p>CONFIG_BT_L2CAP=y</p>
+<p>CONFIG_BT_SCO=y</p>
+<p>然后根据我们的驱动使用的接入方式，常见的有串口(uart)，USB，SDIO总线等。如果我们的驱动能够正常工作工作的话，我们在linux的终端通过下面命令就可以看见hci设备了。</p>
+<p>root@android:/ # hciconfig -a                                                 </p>
+<p>hci0:   Type: BR/EDR  Bus: USB</p>
+<p>        BD Address: 74:2F:68:CE:13:57  ACL MTU: 1022:8  SCO MTU: 183:5</p>
+<p>        DOWN</p>
+<p>        RX bytes:505 acl:0 sco:0 events:22 errors:0</p>
+<p>        TX bytes:99 acl:0 sco:0 commands:22 errors:0</p>
+<p>        Features: 0xff 0xfe 0x0d 0xfe 0xd8 0x7f 0x7b 0x87</p>
+<p>        Packet type: DM1 DM3 DM5 DH1 DH3 DH5 HV1 HV2 HV3</p>
+<p>        Link policy: RSWITCH HOLD SNIFF</p>
+<p>        Link mode: SLAVE ACCEPT</p>
+<p>如果能够像上面可以看见蓝牙的类型，总线类型，物理地址等信息。说明蓝牙设备已经在内核中注册成功了，但能不能使用还要继续使用下面命令，我们注意到蓝牙模块状态时DOWN的。</p>
+<p>root@android:/ # hciconfig hci0 up</p>
+<p>root@android:/ # hciconfig -a                                                  </p>
+<p>hci0:   Type: BR/EDR  Bus: USB</p>
+<p>        BD Address: 74:2F:68:CE:13:57  ACL MTU: 1022:8  SCO MTU: 183:5</p>
+<p>        UP RUNNING</p>
+<p>        RX bytes:994 acl:0 sco:0 events:42 errors:0</p>
+<p>        TX bytes:185 acl:0 sco:0 commands:42 errors:0                          </p>
+<p>        Features: 0xff 0xfe 0x0d 0xfe 0xd8 0x7f 0x7b 0x87                      </p>
+<p>        Packet type: DM1 DM3 DM5 DH1 DH3 DH5 HV1 HV2 HV3                       </p>
+<p>        Link policy: RSWITCH HOLD SNIFF                                        </p>
+<p>        Link mode: SLAVE ACCEPT                                                </p>
+<p>        Name: ‘Bluetooth USB Host Controller’                                  </p>
+<p>        Class: 0x000000                                                         </p>
+<p>        Service Classes: Unspecified                                           </p>
+<p>        Device Class: Miscellaneous,                                           </p>
+<p>        HCI Version: 4.0 (0x6)  Revision: 0x102                                </p>
+<p>        LMP Version: 4.0 (0x6)  Subversion: 0x1                                </p>
+<p>        Manufacturer: Atheros Communications, Inc. (69)</p>
+<p>通过hciconfig hci0 up命令让蓝牙模块的状态从DOWN变成UP状态。这个时候还不能就确定蓝牙驱动是能正常工作的。需要继续看看我们的蓝牙能不能扫描其他的蓝牙设备，如果能够扫描到其他的设备，就可以说明我们的蓝牙设备在内核态是可以正常工作的。</p>
+<p>root@android:/ # hcitool scan                                                 </p>
+<p>Scanning …</p>
+<p>        00:1C:26:D5:3E:D6       DAWEIYAN-MOBL</p>
+<p>        00:1E:4C:F3:BC:FA       ZHILONGX-MOBL</p>
+<p>        00:1F:3A:F1:94:CD       JUELIUX-MOBL</p>
+<p>        00:27:13:D6:66:D9       QWANG29-MOBL2</p>
+<p>        50:63:13:C7:83:6D       YANCHAOY-MOBL</p>
+<p>        00:1C:26:FD:11:3A       ZWANG16X-MOBL</p>
+<p>好了如果能够扫描出设备的物理地址和名字的话，那我们的设备在linux 内核态就ok了。</p>
+<p>1.4.2 Android Boradconfig和服务的支持</p>
+<p>在BoardConfig.mk中添加：BOARD_HAVE_BLUETOOTH := true。因为在framework中的代码很多函数是需要这个宏的，如果这个宏没有打开的话，很多代码是走不过的。在android的添加蓝牙工作必要的服务，Dbus-daemon，bluetoothd，</p>
+<p>/init.rc</p>
+<p>service dbus /system/bin/dbus-daemon –system –nofork</p>
+<p>    class main                       </p>
+<p>    socket dbus stream 660 bluetooth bluetooth         </p>
+<p>    user bluetooth                              </p>
+<p>group bluetooth net_bt_admin  </p>
+<p>service bluetoothd /system/bin/bluetoothd -n</p>
+<p>    class main                                   </p>
+<p>    socket bluetooth stream 660 bluetooth bluetooth                  </p>
+<p>socket dbus_bluetooth stream 660 bluetooth Bluetooth</p>
+<p>service  hciattach /system/bin/hciattach  当然这个服务只针对你的蓝牙接入方式是串口的，向我们这里是USB的话，这个服务还是可以省掉的。</p>
+<p>service hfag /system/bin/sdptool add –channel=10 HFAG</p>
+<p>    user bluetooth</p>
+<p>    group bluetooth net_bt_admin</p>
+<p>    disabled</p>
+<p>oneshot</p>
+<p>service hsag /system/bin/sdptool add –channel=11 HSAG</p>
+<p>    user bluetooth</p>
+<p>    group bluetooth net_bt_admin</p>
+<p>    disabled</p>
+<p>oneshot</p>
+<p>service opush /system/bin/sdptool add –channel=12 OPUSH</p>
+<p>    user bluetooth</p>
+<p>    group bluetooth net_bt_admin</p>
+<p>    disabled</p>
+<p>oneshot</p>
+<p>service pbap /system/bin/sdptool add –channel=19 PBAP</p>
+<p>    user bluetooth</p>
+<p>    group bluetooth net_bt_admin</p>
+<p>    disabled</p>
+<p>    oneshot</p>
+<p>好了，到这里蓝牙应该就能正常工作了。上面的代码都是基于当前最新android 4.0。如果在蓝牙开发过程遇到问题的同志欢迎交流。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/Android%E5%BC%80%E5%8F%91%E4%B9%8BActivityManager/" rel="prev" title="Android开发之ActivityManager">
+      <i class="fa fa-chevron-left"></i> Android开发之ActivityManager
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/android%E4%BA%AE%E5%BA%A6%E8%B0%83%E8%8A%82/" rel="next" title="android亮度调节">
+      android亮度调节 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#hciconfig-%E2%80%93a%E5%A6%82%E6%9E%9C%E9%A9%B1%E5%8A%A8%E8%83%BD%E5%A4%9F%E5%92%8C%E8%AE%BE%E5%A4%87%E7%BB%91%E5%AE%9A%E7%9A%84%E8%AF%9D%EF%BC%8C%E6%88%91%E4%BB%AC%E5%B0%B1%E4%BC%9A%E7%9C%8B%E5%88%B0%E8%93%9D%E7%89%99%E8%AE%BE%E5%A4%87%E7%9A%84%E4%B8%80%E4%BA%9B%E6%AF%94%E8%BE%83%E9%87%8D%E8%A6%81%E4%BF%A1%E6%81%AF%EF%BC%8C%E5%A6%82%EF%BC%9A%E8%93%9D%E7%89%99%E7%9A%84%E7%89%A9%E7%90%86%E5%9C%B0%E5%9D%80%EF%BC%8C%E6%80%BB%E7%BA%BF%E7%B1%BB%E5%9E%8B%EF%BC%8C%E5%8D%8F%E8%AE%AE%E7%B1%BB%E5%9E%8B%E7%AD%89%E3%80%82"><span class="nav-number">1.</span> <span class="nav-text">hciconfig –a如果驱动能够和设备绑定的话，我们就会看到蓝牙设备的一些比较重要信息，如：蓝牙的物理地址，总线类型，协议类型等。</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Edward"
+      src="/uploads/avatar.gif">
+  <p class="site-author-name" itemprop="name">Edward</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">570</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Edward</span>
+</div>
+
+        
+
+
+
+
+
+
+<script>
+  (function() {
+    function leancloudSelector(url) {
+      url = encodeURI(url);
+      return document.getElementById(url).querySelector('.leancloud-visitors-count');
+    }
+
+    function addCount(Counter) {
+      var visitors = document.querySelector('.leancloud_visitors');
+      var url = decodeURI(visitors.id);
+      var title = visitors.dataset.flagTitle;
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          if (results.length > 0) {
+            var counter = results[0];
+            leancloudSelector(url).innerText = counter.time + 1;
+            Counter('put', '/classes/Counter/' + counter.objectId, { time: { '__op': 'Increment', 'amount': 1 } })
+              .catch(error => {
+                console.error('Failed to save visitor count', error);
+              });
+          } else {
+              Counter('post', '/classes/Counter', { title, url, time: 1 })
+                .then(response => response.json())
+                .then(() => {
+                  leancloudSelector(url).innerText = 1;
+                })
+                .catch(error => {
+                  console.error('Failed to create', error);
+                });
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    function showTime(Counter) {
+      var visitors = document.querySelectorAll('.leancloud_visitors');
+      var entries = [...visitors].map(element => {
+        return decodeURI(element.id);
+      });
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url: { '$in': entries } })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          for (let url of entries) {
+            let target = results.find(item => item.url === url);
+            leancloudSelector(url).innerText = target ? target.time : 0;
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    let { app_id, app_key, server_url } = {"enable":true,"app_id":"wxYx0BX9gaKA3XC4LuO2of0v-gzGzoHsz","app_key":"LQMcs6IDIE4YAm10vMsn9IYq","server_url":"https://wxyx0bx9.lc-cn-n1-shared.com","security":false};
+    function fetchData(api_server) {
+      var Counter = (method, url, data) => {
+        return fetch(`${api_server}/1.1${url}`, {
+          method,
+          headers: {
+            'X-LC-Id'     : app_id,
+            'X-LC-Key'    : app_key,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data)
+        });
+      };
+      if (CONFIG.page.isPost) {
+        if (CONFIG.hostname !== location.hostname) return;
+        addCount(Counter);
+      } else if (document.querySelectorAll('.post-title-link').length >= 1) {
+        showTime(Counter);
+      }
+    }
+
+    let api_server = app_id.slice(-9) !== '-MdYXbMMI' ? server_url : `https://${app_id.slice(0, 8).toLowerCase()}.api.lncldglobal.com`;
+
+    if (api_server) {
+      fetchData(api_server);
+    } else {
+      fetch('https://app-router.leancloud.cn/2/route?appId=' + app_id)
+        .then(response => response.json())
+        .then(({ api_server }) => {
+          fetchData('https://' + api_server);
+        });
+    }
+  })();
+</script>
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

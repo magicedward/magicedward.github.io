@@ -1,0 +1,1066 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"edward.org.cn","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="内核：linux2.6&#x2F;linux3.0系统：android&#x2F;android4.0 平台：samsung exynos 4210、exynos 4412 、exynos 5250 这篇我们以一个实例来说明,Samsung Exynos4412搭配TTL转LVDS芯片SN75LVDS83B、LVDS接口LCD为例说明。从硬件接口、驱动配置、背光PWM调节三部分说明。 一、LCD接口原理以及硬件电路S">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android LCD(四)：LCD驱动调试篇">
+<meta property="og:url" content="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/Android%20LCD(%E5%9B%9B)%EF%BC%9ALCD%E9%A9%B1%E5%8A%A8%E8%B0%83%E8%AF%95%E7%AF%87/index.html">
+<meta property="og:site_name" content="点点滴滴">
+<meta property="og:description" content="内核：linux2.6&#x2F;linux3.0系统：android&#x2F;android4.0 平台：samsung exynos 4210、exynos 4412 、exynos 5250 这篇我们以一个实例来说明,Samsung Exynos4412搭配TTL转LVDS芯片SN75LVDS83B、LVDS接口LCD为例说明。从硬件接口、驱动配置、背光PWM调节三部分说明。 一、LCD接口原理以及硬件电路S">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-12-31T06:48:00.877Z">
+<meta property="article:modified_time" content="2020-01-16T04:37:32.391Z">
+<meta property="article:author" content="Edward">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/Android%20LCD(%E5%9B%9B)%EF%BC%9ALCD%E9%A9%B1%E5%8A%A8%E8%B0%83%E8%AF%95%E7%AF%87/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>Android LCD(四)：LCD驱动调试篇 | 点点滴滴</title>
+  
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?a92ed22eafce466e7a7b17546bb0dc6f";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">点点滴滴</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/Android%20LCD(%E5%9B%9B)%EF%BC%9ALCD%E9%A9%B1%E5%8A%A8%E8%B0%83%E8%AF%95%E7%AF%87/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/avatar.gif">
+      <meta itemprop="name" content="Edward">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="点点滴滴">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Android LCD(四)：LCD驱动调试篇
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-12-31 14:48:00" itemprop="dateCreated datePublished" datetime="2020-12-31T14:48:00+08:00">2020-12-31</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-01-16 12:37:32" itemprop="dateModified" datetime="2020-01-16T12:37:32+08:00">2020-01-16</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%83%82%E7%AC%94%E5%A4%B4/" itemprop="url" rel="index"><span itemprop="name">烂笔头</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/Android%20LCD(%E5%9B%9B)%EF%BC%9ALCD%E9%A9%B1%E5%8A%A8%E8%B0%83%E8%AF%95%E7%AF%87/" class="post-meta-item leancloud_visitors" data-flag-title="Android LCD(四)：LCD驱动调试篇" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>内核：linux2.6/linux3.0<br>系统：android/android4.0 <br>平台：samsung exynos 4210、exynos 4412 、exynos 5250</p>
+<p>这篇我们以一个实例来说明,Samsung Exynos4412搭配TTL转LVDS芯片SN75LVDS83B、LVDS接口LCD为例说明。从硬件接口、驱动配置、背光PWM调节三部分说明。</p>
+<p>一、LCD接口原理以及硬件电路<br>Samsung Exynos4412、SN75LVDS83B、LVDS接口LCD（24bit）为例说明，三者的关系如下：</p>
+<p>如上图所示，我们在应用中我，主控（Exynos4412）输出RGB信号到TFT-LCD大体经过三部分：<br>（1）、标号1部分，主控（Exynos4412）输出TTL信号；<br>（2）、标号2部分，TTL（RGB）-LVDS转换芯片SN75LVDS83B,把ＴＴＬ信号转换成LVDS信号，传输到显示器的LVDS接收端；这部分有SN75LVDS83B编码芯片自动完成，所以我们不需要程序控制；<br>（3）、标号3部分，分两个小部分，LVDS转换成TTL，TFT-LCD显示部分；我们前面说过，TFT-LCD其实只识别TTL信号，所以要有一个转换的过程，先把LVDS信号转换、解码成TTL信号，在TFT-LCD上显示。<br>有上面的过程，其实我们关心调试的部分只有标号1部分到标号2部分，后面标号2到标号3的部分是自动完成的，不需要我们程序上控制，把标号2部分、标号3部分合并：</p>
+<p>标号二部分可以理解为一个TTL（RGB）接口的LCD,如下图所示，标号一部分就是主控信号输出端，简化图如下所示:</p>
+<p>其实最简单的做法就是找个TTL接口的TFT-LCD，这样直接接上就可以。下面我们看下硬件上的电路连接：这个和我们上篇用的相同。</p>
+<p>    有上面图可以看出：硬件连接</p>
+<p>网络标号</p>
+<p>说明</p>
+<p>管脚</p>
+<p>XvVD[0：23]</p>
+<p>XvVDEN</p>
+<p>XvVSYNC</p>
+<p>XvHSYNC</p>
+<p>XvVCLK</p>
+<p>RGB数据、使能、行场同步、时钟信号</p>
+<p> 这是TTL信号输出</p>
+<p>LCD_PWM</p>
+<p>调节背光</p>
+<p>XpwmTOUT1/LCD_PWM/GPD0_1</p>
+<p>LCD_LED_EN</p>
+<p>LCD电压（TFT电压）使能</p>
+<p>GPC1_2</p>
+<p>LED_BL_EN</p>
+<p>LED背光使能</p>
+<p>GPL2_4</p>
+<p>上面可分为几部分，电路连接部分分析：</p>
+<p>（1）、TTL数据部分<br>这张图有木有烂掉呀，哈哈，就是这些数据了。还有有木有想起来摄像头的数据（ITU接口）也是这样的？？其实视频这种信号的原理是通用的，所以LCD通了，摄像头也就知道怎么回事了。</p>
+<p>（2）、PWM背光调节<br> PWM其实也是芯片的一个功能模块，看到他的管脚就是一个复用脚XpwmTOUT1/LCD_PWM/GPD0_1。上一篇我们粗略的了解了PWM，就是用到这里。但是有一个疑问，PWM是调节背光电压的，背光电压一般都是12V以上的，我们PWM只有0-3V的样子，Exynos4412的IO只有1.8V。怎么调节电压？？？</p>
+<p>其实这个PWM只是给LCD上PWM控制部分，真正的电压还是通过LCD控制板上的电路实现。</p>
+<p>（3）、LED背光、LCD电压控制</p>
+<p>a、背光：LED+<br>我们可以看到这个升压电路，通过SY7208把VBATT升压到18V，供给LED背光。SY7208最大升压26V。这个电压是提供给我们前面讲的背光的，也就是CCFL灯管或者LED背光组的电压。</p>
+<p>b、LCD电压<br>这个电压也就是给你我们TFT阵列组用的，控制LCD液晶元素。<br>这部分电路分析完成，我们就有比较清晰的思路出，要一个LCD工作，要完成两部分内容：LCD上电控制，背光、LCD电压；信号输出。<br>二、LCD 驱动部分调试<br>    LCD这部分，像上篇我们说的frambuffer这些部分一般平台都是可以用的，除非你是芯片厂的要写这部分。一般公司拿到的demo板子这部分都是通的，只是针对自己的lCD换一些参数。<br>下面我们针对三星平台我们调试LCD的时时候程序方面的改动：<br>1、屏参数的配置<br>/kernel/drivers/video/Samsung/s3cfb_wa101s.c</p>
+<p>[cpp] view plain copy</p>
+<p>static struct s3cfb_lcd wa101 = {  </p>
+<p>    .width  = 1280,//LCD 分辨率宽1280  </p>
+<p>    .height = 800, //LCD 分辨率高 800  </p>
+<p>    .bpp    = 24,//CLD 数据位 24bit  </p>
+<p>    .freq   = 60,//LCD 像素时钟 60MHz  </p>
+<p>    .timing = {//LCD porch无效值  </p>
+<p>        .h_fp   = 70,  </p>
+<p>        .h_bp   = 70,  </p>
+<p>        .h_sw   = 20,  </p>
+<p>        .v_fp   = 10,  </p>
+<p>        .v_fpe  = 0,  </p>
+<p>        .v_bp   = 10,  </p>
+<p>        .v_bpe  = 0,  </p>
+<p>        .v_sw   = 3,  </p>
+<p>    },  </p>
+<p>    .polarity = {//时钟、行场的极性；  </p>
+<p>        .rise_vclk  = 1,  </p>
+<p>        .inv_hsync  = 1,  </p>
+<p>        .inv_vsync  = 1,  </p>
+<p>        .inv_vden   = 0,  </p>
+<p>    },  </p>
+<p>};  </p>
+<p>/* name should be fixed as ‘s3cfb_set_lcd_info’ */  </p>
+<p>void s3cfb_set_lcd_info(struct s3cfb_global *ctrl)//初始化结构体  </p>
+<p>{  </p>
+<p>    wa101.init_ldi = NULL;  </p>
+<p>    ctrl-&gt;lcd = &amp;wa101;  </p>
+<p>#endif  </p>
+<p>}  </p>
+<p>还能想起上一篇的如何阅读规格书中的那些参数不，把这些填入就可以。<br>2、数据管脚初始化</p>
+<p>kernel/arch/arm/mach-exynos/setup-fb-s5p.c</p>
+<p>[cpp] view plain copy</p>
+<p>void s3cfb_cfg_gpio(struct platform_device *pdev)  </p>
+<p>{  </p>
+<p>    s3cfb_gpio_setup_24bpp(EXYNOS4_GPF0(0), 8, S3C_GPIO_SFN(2), S5P_GPIO_DRVSTR_LV4);  </p>
+<p>    s3cfb_gpio_setup_24bpp(EXYNOS4_GPF1(0), 8, S3C_GPIO_SFN(2), S5P_GPIO_DRVSTR_LV4);  </p>
+<p>    s3cfb_gpio_setup_24bpp(EXYNOS4_GPF2(0), 8, S3C_GPIO_SFN(2), S5P_GPIO_DRVSTR_LV4);  </p>
+<p>    s3cfb_gpio_setup_24bpp(EXYNOS4_GPF3(0), 4, S3C_GPIO_SFN(2), S5P_GPIO_DRVSTR_LV4);  </p>
+<p>}  </p>
+<p>LCD 数据脚初始化，驱动能力设为最高S5P_GPIO_DRVSTR_LV4；管脚驱动能力，S5P_GPIO_DRVSTR_LV1-4四个等级选择。</p>
+<p>3、时钟控制部分<br>kernel/arch/arm/mach-exynos/setup-fb-s5p.c</p>
+<p>[cpp] view plain copy</p>
+<p>int s3cfb_clk_on(struct platform_device *pdev, struct clk **s3cfb_clk)  </p>
+<p>{  </p>
+<p>struct clk *sclk = NULL;  </p>
+<p>struct clk *mout_mpll = NULL;  </p>
+<p>struct clk *lcd_clk = NULL;  </p>
+<p>    u32 rate = 0;  </p>
+<p>int ret = 0;  </p>
+<p>    lcd_clk = clk_get(&amp;pdev-&gt;dev, &quot;lcd&quot;);  </p>
+<p>if (IS_ERR(lcd_clk)) {  </p>
+<p>        dev_err(&amp;pdev-&gt;dev, &quot;failed to get operation clk for fimd\n&quot;);  </p>
+<p>goto err_clk0;  </p>
+<p>    }  </p>
+<p>    ret = clk_enable(lcd_clk);  </p>
+<p>if (ret &lt; 0) {  </p>
+<p>        dev_err(&amp;pdev-&gt;dev, &quot;failed to clk_enable of lcd clk for fimd\n&quot;);  </p>
+<p>goto err_clk0;  </p>
+<p>    }  </p>
+<p>    clk_put(lcd_clk);  </p>
+<p>    sclk = clk_get(&amp;pdev-&gt;dev, &quot;sclk_fimd&quot;);  </p>
+<p>if (IS_ERR(sclk)) {  </p>
+<p>        dev_err(&amp;pdev-&gt;dev, &quot;failed to get sclk for fimd\n&quot;);  </p>
+<p>goto err_clk1;  </p>
+<p>    }  </p>
+<p>if (soc_is_exynos4210())  </p>
+<p>        mout_mpll = clk_get(&amp;pdev-&gt;dev, &quot;mout_mpll&quot;);  </p>
+<p>else  </p>
+<p>        mout_mpll = clk_get(&amp;pdev-&gt;dev, &quot;mout_mpll_user&quot;);  </p>
+<p>if (IS_ERR(mout_mpll)) {  </p>
+<p>        dev_err(&amp;pdev-&gt;dev, &quot;failed to get mout_mpll for fimd\n&quot;);  </p>
+<p>goto err_clk2;  </p>
+<p>    }  </p>
+<p>    ret = clk_set_parent(sclk, mout_mpll);  </p>
+<p>if (ret &lt; 0) {  </p>
+<p>        dev_err(&amp;pdev-&gt;dev, &quot;failed to clk_set_parent for fimd\n&quot;);  </p>
+<p>goto err_clk2;  </p>
+<p>    }  </p>
+<p>if ((soc_is_exynos4412()) &amp;&amp; (samsung_rev() &gt;= EXYNOS4412_REV_2_0))  </p>
+<p>        ret = clk_set_rate(sclk, 880000000);  </p>
+<p>else  </p>
+<p>        ret = clk_set_rate(sclk, 800000000);  </p>
+<p>if (ret &lt; 0) {  </p>
+<p>        dev_err(&amp;pdev-&gt;dev, &quot;failed to clk_set_rate of sclk for fimd\n&quot;);  </p>
+<p>goto err_clk2;  </p>
+<p>    }  </p>
+<p>    dev_dbg(&amp;pdev-&gt;dev, &quot;set fimd sclk rate to %d\n&quot;, rate);  </p>
+<p>    clk_put(mout_mpll);  </p>
+<p>    ret = clk_enable(sclk);  </p>
+<p>if (ret &lt; 0) {  </p>
+<p>        dev_err(&amp;pdev-&gt;dev, &quot;failed to clk_enable of sclk for fimd\n&quot;);  </p>
+<p>goto err_clk2;  </p>
+<p>    }  </p>
+<p>    *s3cfb_clk = sclk;  </p>
+<p>return 0;  </p>
+<p>err_clk2:  </p>
+<p>    clk_put(mout_mpll);  </p>
+<p>err_clk1:  </p>
+<p>    clk_put(sclk);  </p>
+<p>err_clk0:  </p>
+<p>    clk_put(lcd_clk);  </p>
+<p>return -EINVAL;  </p>
+<p>}  </p>
+<p>int s3cfb_clk_off(struct platform_device *pdev, struct clk **clk)  </p>
+<p>{  </p>
+<p>struct clk *lcd_clk = NULL;  </p>
+<p>    lcd_clk = clk_get(&amp;pdev-&gt;dev, &quot;lcd&quot;);  </p>
+<p>if (IS_ERR(lcd_clk)) {  </p>
+<p>        printk(KERN_ERR &quot;failed to get ip clk for fimd0\n&quot;);  </p>
+<p>goto err_clk0;  </p>
+<p>    }  </p>
+<p>    clk_disable(lcd_clk);  </p>
+<p>    clk_put(lcd_clk);  </p>
+<p>    clk_disable(*clk);  </p>
+<p>    clk_put(*clk);  </p>
+<p>    *clk = NULL;  </p>
+<p>return 0;  </p>
+<p>err_clk0:  </p>
+<p>    clk_put(lcd_clk);  </p>
+<p>return -EINVAL;  </p>
+<p>}  </p>
+<p>void s3cfb_get_clk_name(char *clk_name)  </p>
+<p>{  </p>
+<p>    strcpy(clk_name, &quot;sclk_fimd&quot;);  </p>
+<p>}  </p>
+<p>4、背光、LCD电压的控制</p>
+<p>LCD_LED_EN</p>
+<p>LCD电压（TFT电压）使能</p>
+<p>GPC1_2</p>
+<p>LED_BL_EN</p>
+<p>LED背光使能</p>
+<p>GPL2_4</p>
+<p>[cpp] view plain copy</p>
+<p>int s3cfb_backlight_on(struct platform_device *pdev)  </p>
+<p>{  </p>
+<p>int err;  </p>
+<p>        pwm_set();  </p>
+<p>    err = gpio_request_one(EXYNOS4_GPL2(4), GPIOF_OUT_INIT_HIGH, &quot;GPL2_4&quot;);  </p>
+<p>if (err) {  </p>
+<p>        printk(KERN_ERR &quot;failed to request GPL2 for &quot;  </p>
+<p>&quot;lcd backlight control\n&quot;);  </p>
+<p>return err;  </p>
+<p>    }  </p>
+<p>    s3c_gpio_setpull(EXYNOS4_GPL2(4),S3C_GPIO_PULL_NONE);  </p>
+<p>    gpio_direction_output(EXYNOS4_GPL2(4), 1);  </p>
+<p>    gpio_free(EXYNOS4_GPL2(4));  </p>
+<p>    mdelay(20);  </p>
+<p>    err = gpio_request_one(EXYNOS4_GPC1(2), GPIOF_OUT_INIT_HIGH, &quot;GPC1_2&quot;);  </p>
+<p>if (err) {  </p>
+<p>        printk(KERN_ERR &quot;failed to request GPC1 for &quot;  </p>
+<p>&quot;lcd backlight control\n&quot;);  </p>
+<p>return err;  </p>
+<p>    }  </p>
+<p>    s3c_gpio_setpull(EXYNOS4_GPC1(2),S3C_GPIO_PULL_NONE);  </p>
+<p>    gpio_direction_output(EXYNOS4_GPC1(2), 0);  </p>
+<p>    gpio_free(EXYNOS4_GPC1(2));  </p>
+<p>    mdelay(20);  </p>
+<p>    err = gpio_request(EXYNOS4_GPD0(1), &quot;GPD0_1&quot;);  </p>
+<p>if (err) {  </p>
+<p>        printk(KERN_ERR &quot;failed to request GPD0_1 for &quot;  </p>
+<p>&quot;lcd pwm control\n&quot;);  </p>
+<p>return err;  </p>
+<p>    }  </p>
+<p>    s3c_gpio_setpull(EXYNOS4_GPD0(1),S3C_GPIO_PULL_NONE);  </p>
+<p>    s5p_gpio_set_drvstr(EXYNOS4_GPD0(1), S5P_GPIO_DRVSTR_LV4);    </p>
+<p>    gpio_direction_output(EXYNOS4_GPD0(1), 1);  </p>
+<p>    s3c_gpio_cfgpin(EXYNOS4_GPD0(1), EXYNOS4_GPD_0_1_TOUT_1);  </p>
+<p>    gpio_free(EXYNOS4_GPD0(1));  </p>
+<p>    mdelay(20);  </p>
+<p>return 0;  </p>
+<p>return 0;  </p>
+<p>}  </p>
+<p>int s3cfb_backlight_off(struct platform_device *pdev)  </p>
+<p>{  </p>
+<p>int err;  </p>
+<p>    err = gpio_request_one(EXYNOS4_GPL2(4), GPIOF_OUT_INIT_LOW, &quot;GPL2_4&quot;);  </p>
+<p>if (err) {  </p>
+<p>        printk(KERN_ERR &quot;failed to request GPL2 for &quot;  </p>
+<p>&quot;lcd backlight control\n&quot;);  </p>
+<p>return err;  </p>
+<p>    }  </p>
+<p>    s3c_gpio_setpull(EXYNOS4_GPL2(4),S3C_GPIO_PULL_NONE);  </p>
+<p>    gpio_direction_output(EXYNOS4_GPL2(4), 0);  </p>
+<p>    gpio_free(EXYNOS4_GPL2(4));  </p>
+<p>    err = gpio_request_one(EXYNOS4_GPC1(2), GPIOF_OUT_INIT_HIGH, &quot;GPC1_2&quot;);  </p>
+<p>if (err) {  </p>
+<p>        printk(KERN_ERR &quot;failed to request GPC1 for &quot;  </p>
+<p>&quot;lcd backlight control\n&quot;);  </p>
+<p>return err;  </p>
+<p>    }  </p>
+<p>    gpio_free(EXYNOS4_GPC1(2));  </p>
+<p>return 0;  </p>
+<p>}  </p>
+<p>5、PWM的设置</p>
+<p>arch/arm/mach-exynos/mach-smdk4x12.c</p>
+<p>[cpp] view plain copy</p>
+<p>Arch/arm/mach-exynos/mach-smdk4x12.c  </p>
+<p>/* LCD Backlight data */  </p>
+<p>static struct samsung_bl_gpio_info smdk4x12_bl_gpio_info = {  </p>
+<p>    .no = EXYNOS4_GPD0(1),//PWM管脚XpwmTOUT1/LCD_PWM/GPD0_1  </p>
+<p>    .func = S3C_GPIO_SFN(2),  </p>
+<p>};  </p>
+<p>static struct platform_pwm_backlight_data smdk4x12_bl_data = {  </p>
+<p>    .pwm_id = 1,//PWM ID PWM编号为1号；  </p>
+<p>    .pwm_period_ns  = 90000,  //22k  </p>
+<p>};  </p>
+<p>static void __init smdk4x12_machine_init(void)  </p>
+<p>{     </p>
+<p>………………  </p>
+<p>samsung_bl_set(&amp;smdk4x12_bl_gpio_info, &amp;smdk4x12_bl_data);//在初始化的时候把对应的结构体初始化  </p>
+<p>………………  </p>
+<p>}  </p>
+<p>samsung_bl_set看下这个函数的实现：</p>
+<p>kernel/arch/arm/palt-samsung/dev-backlight.c</p>
+<p>[cpp] view plain copy</p>
+<p>void samsung_bl_set(struct samsung_bl_gpio_info *gpio_info,  </p>
+<p>struct platform_pwm_backlight_data *bl_data)  </p>
+<p>{  </p>
+<p>int ret = 0;  </p>
+<p>struct platform_device *samsung_bl_device;  </p>
+<p>struct platform_pwm_backlight_data *samsung_bl_data;  </p>
+<p>    samsung_bl_device = kmemdup(&amp;samsung_dfl_bl_device,  </p>
+<p>sizeof(struct platform_device), GFP_KERNEL);//（1）、分配内存空间；  </p>
+<p>if (!samsung_bl_device) {  </p>
+<p>        printk(KERN_ERR &quot;%s: no memory for platform dev\n&quot;, <strong>func</strong>);  </p>
+<p>return;  </p>
+<p>    }  </p>
+<p>    samsung_bl_data = s3c_set_platdata(&amp;samsung_dfl_bl_data,  </p>
+<p>sizeof(struct platform_pwm_backlight_data), samsung_bl_device);//（2）、  </p>
+<p>if (!samsung_bl_data) {  </p>
+<p>        printk(KERN_ERR &quot;%s: no memory for platform dev\n&quot;, <strong>func</strong>);  </p>
+<p>goto err_data;  </p>
+<p>    }  </p>
+<p>/* Copy board specific data provided by user */  </p>
+<p>    samsung_bl_data-&gt;pwm_id = bl_data-&gt;pwm_id;//(3）、把具体配置的数据给samsung_bl_data  </p>
+<p>    samsung_bl_device-&gt;dev.parent =  </p>
+<p>            &amp;s3c_device_timer[samsung_bl_data-&gt;pwm_id].dev;  </p>
+<p>if (bl_data-&gt;max_brightness)//(4)、对bl_data的结构体检查，如果没有复制则用default的值  </p>
+<p>        samsung_bl_data-&gt;max_brightness = bl_data-&gt;max_brightness;  </p>
+<p>if (bl_data-&gt;dft_brightness)  </p>
+<p>        samsung_bl_data-&gt;dft_brightness = bl_data-&gt;dft_brightness;  </p>
+<p>if (bl_data-&gt;lth_brightness)  </p>
+<p>        samsung_bl_data-&gt;lth_brightness = bl_data-&gt;lth_brightness;  </p>
+<p>if (bl_data-&gt;pwm_period_ns)  </p>
+<p>        samsung_bl_data-&gt;pwm_period_ns = bl_data-&gt;pwm_period_ns;  </p>
+<p>if (bl_data-&gt;init)  </p>
+<p>        samsung_bl_data-&gt;init = bl_data-&gt;init;  </p>
+<p>if (bl_data-&gt;notify)  </p>
+<p>        samsung_bl_data-&gt;notify = bl_data-&gt;notify;  </p>
+<p>if (bl_data-&gt;exit)  </p>
+<p>        samsung_bl_data-&gt;exit = bl_data-&gt;exit;  </p>
+<p>if (bl_data-&gt;check_fb)  </p>
+<p>        samsung_bl_data-&gt;check_fb = bl_data-&gt;check_fb;  </p>
+<p>/* Keep the GPIO info for future use */  </p>
+<p>    s3c_device_timer[samsung_bl_data-&gt;pwm_id].dev.platform_data = gpio_info;  </p>
+<p>/* Register the specific PWM timer dev for Backlight control */  </p>
+<p>    ret = platform_device_register(//(5)、注册PWM设备驱动；  </p>
+<p>            &amp;s3c_device_timer[samsung_bl_data-&gt;pwm_id]);  </p>
+<p>if (ret) {  </p>
+<p>        printk(KERN_ERR &quot;failed to register pwm timer for backlight: %d\n&quot;, ret);  </p>
+<p>goto err_plat_reg1;  </p>
+<p>    }  </p>
+<p>/* Register the Backlight dev */  </p>
+<p>    ret = platform_device_register(samsung_bl_device);//(6)、注册背光设备驱动；  </p>
+<p>if (ret) {  </p>
+<p>        printk(KERN_ERR &quot;failed to register backlight device: %d\n&quot;, ret);  </p>
+<p>goto err_plat_reg2;  </p>
+<p>    }  </p>
+<p>return;  </p>
+<p>err_plat_reg2://(7)、如果有异常的情况下退出；  </p>
+<p>    platform_device_unregister(&amp;s3c_device_timer[samsung_bl_data-&gt;pwm_id]);  </p>
+<p>err_plat_reg1:  </p>
+<p>    kfree(samsung_bl_data);  </p>
+<p>err_data:  </p>
+<p>    kfree(samsung_bl_device);  </p>
+<p>return;  </p>
+<p>}  </p>
+<p>(1)、分配内存空间</p>
+<p>[cpp] view plain copy</p>
+<p>    samsung_bl_device = kmemdup(&amp;samsung_dfl_bl_device,  </p>
+<p>sizeof(struct platform_device), GFP_KERNEL);  </p>
+<p>其中：  </p>
+<p>static struct platform_pwm_backlight_data samsung_dfl_bl_data = {  </p>
+<p>    .max_brightness = 255,  </p>
+<p>    .dft_brightness = 140,   </p>
+<p>    .pwm_period_ns  = 78770,  </p>
+<p>    .init           = samsung_bl_init,  </p>
+<p>    .exit           = samsung_bl_exit,  </p>
+<p>};  </p>
+<p>static struct platform_device samsung_dfl_bl_device = {  </p>
+<p>    .name       = &quot;pwm-backlight&quot;,  </p>
+<p>};  </p>
+<p>(2)、</p>
+<p>(3)、把具体配置的数据给samsung_bl_data</p>
+<p>[cpp] view plain copy</p>
+<p>arch/arm/mach-exynos/mach-smdk4x12.c  </p>
+<p>static struct samsung_bl_gpio_info smdk4x12_bl_gpio_info = {  </p>
+<p>    .no = EXYNOS4_GPD0(1),//PWM管脚XpwmTOUT1/LCD_PWM/GPD0_1  </p>
+<p>    .func = S3C_GPIO_SFN(2),  </p>
+<p>};  </p>
+<p>static struct platform_pwm_backlight_data smdk4x12_bl_data = {  </p>
+<p>    .pwm_id = 1,//PWM ID PWM编号为1号；  </p>
+<p>    .pwm_period_ns  = 90000,  //22k  </p>
+<p>};  </p>
+<p>(4)、对bl_data的结构体检查，如果没有复制则用default的值</p>
+<p>参考（1）中的那些值。</p>
+<p>(5)、注册PWM设备驱动；</p>
+<p>[cpp] view plain copy</p>
+<p>ret = platform_device_register(  </p>
+<p>        &amp;s3c_device_timer[samsung_bl_data-&gt;pwm_id]);  </p>
+<p>其中s3c_device_timer[]这个结构体如下：</p>
+<p>[cpp] view plain copy</p>
+<p>struct platform_device s3c_device_timer[] = {  </p>
+<p>    [0] = { DEFINE_S3C_TIMER(0, IRQ_TIMER0) },  </p>
+<p>    [1] = { DEFINE_S3C_TIMER(1, IRQ_TIMER1) },  </p>
+<p>    [2] = { DEFINE_S3C_TIMER(2, IRQ_TIMER2) },  </p>
+<p>    [3] = { DEFINE_S3C_TIMER(3, IRQ_TIMER3) },  </p>
+<p>    [4] = { DEFINE_S3C_TIMER(4, IRQ_TIMER4) },  </p>
+<p>我们饿samsung_bl_data-&gt;pwm_id=1;所以选择[1] = { DEFINE_S3C_TIMER(1, IRQ_TIMER1) },</p>
+<p>(6)、注册背光设备驱动；</p>
+<p>[cpp] view plain copy</p>
+<p>ret =platform_device_register(samsung_bl_device);   </p>
+<p>其中：samsung_bl_device</p>
+<p>[cpp] view plain copy</p>
+<p>samsung_bl_data = s3c_set_platdata(&amp;samsung_dfl_bl_data,  </p>
+<p>sizeof(struct platform_pwm_backlight_data), samsung_bl_device);  </p>
+<p>(7)、如果有异常的情况下退出；</p>
+<p>6、PWM_BL背光驱动分析：</p>
+<p>Kernel/drivers/video/backlight/pwm_bl.c</p>
+<p>（1）、驱动注册：</p>
+<p>[cpp] view plain copy</p>
+<p>static struct platform_driver pwm_backlight_driver = {  </p>
+<p>    .driver     = {  </p>
+<p>        .name   = &quot;pwm-backlight&quot;,  </p>
+<p>        .owner  = THIS_MODULE,  </p>
+<p>    },  </p>
+<p>    .probe      = pwm_backlight_probe,  </p>
+<p>    .remove     = pwm_backlight_remove,  </p>
+<p>    .suspend    = pwm_backlight_suspend,  </p>
+<p>    .resume     = pwm_backlight_resume,  </p>
+<p>};  </p>
+<p>static int __init pwm_backlight_init(void)  </p>
+<p>{  </p>
+<p>return platform_driver_register(&amp;pwm_backlight_driver);  </p>
+<p>}  </p>
+<p>（2）、probe函数分析</p>
+<p>[cpp] view plain copy</p>
+<p>static int pwm_backlight_probe(struct platform_device *pdev)  </p>
+<p>{  </p>
+<p>struct backlight_properties props;  </p>
+<p>struct platform_pwm_backlight_data *data = pdev-&gt;dev.platform_data;  </p>
+<p>struct backlight_device *bl;  </p>
+<p>struct pwm_bl_data *pb;  </p>
+<p>int ret;  </p>
+<p>if (!data) {  </p>
+<p>        dev_err(&amp;pdev-&gt;dev, &quot;failed to find platform data\n&quot;);  </p>
+<p>return -EINVAL;  </p>
+<p>    }  </p>
+<p>if (data-&gt;init) {  </p>
+<p>        ret = data-&gt;init(&amp;pdev-&gt;dev);  </p>
+<p>if (ret &lt; 0)  </p>
+<p>return ret;  </p>
+<p>    }  </p>
+<p>    pb = kzalloc(sizeof(*pb), GFP_KERNEL);  </p>
+<p>if (!pb) {  </p>
+<p>        dev_err(&amp;pdev-&gt;dev, &quot;no memory for state\n&quot;);  </p>
+<p>        ret = -ENOMEM;  </p>
+<p>goto err_alloc;  </p>
+<p>    }  </p>
+<p>    global_pb=pb;  </p>
+<p>    INIT_DELAYED_WORK_DEFERRABLE(&amp;key_event, key_event_work);//1）、任务队列初始化；  </p>
+<p>    pb-&gt;period = data-&gt;pwm_period_ns;//2）、pb结构体初始化；  </p>
+<p>    pb-&gt;notify = data-&gt;notify;  </p>
+<p>    pb-&gt;check_fb = data-&gt;check_fb;  </p>
+<p>    pb-&gt;lth_brightness = data-&gt;lth_brightness *  </p>
+<p>        (data-&gt;pwm_period_ns / data-&gt;max_brightness);  </p>
+<p>    pb-&gt;dev = &amp;pdev-&gt;dev;  </p>
+<p>    pb-&gt;pwm = pwm_request(data-&gt;pwm_id, &quot;backlight&quot;);  </p>
+<p>if (IS_ERR(pb-&gt;pwm)) {  </p>
+<p>        dev_err(&amp;pdev-&gt;dev, &quot;unable to request PWM for backlight\n&quot;);  </p>
+<p>        ret = PTR_ERR(pb-&gt;pwm);  </p>
+<p>goto err_pwm;  </p>
+<p>    } else  </p>
+<p>        dev_dbg(&amp;pdev-&gt;dev, &quot;got pwm for backlight\n&quot;);  </p>
+<p>    memset(&amp;props, 0, sizeof(struct backlight_properties));  </p>
+<p>    props.type = BACKLIGHT_RAW;  </p>
+<p>    props.max_brightness = data-&gt;max_brightness;  </p>
+<p>    bl = backlight_device_register(dev_name(&amp;pdev-&gt;dev), &amp;pdev-&gt;dev, pb,  </p>
+<p>                       &amp;pwm_backlight_ops, &amp;props);  </p>
+<p>if (IS_ERR(bl)) {  </p>
+<p>        dev_err(&amp;pdev-&gt;dev, &quot;failed to register backlight\n&quot;);  </p>
+<p>        ret = PTR_ERR(bl);  </p>
+<p>goto err_bl;  </p>
+<p>    }  </p>
+<p>    global_bl=bl;  </p>
+<p>    bl-&gt;props.brightness = data-&gt;dft_brightness;  </p>
+<p>    backlight_update_status(bl);//3）、更新背光状态；  </p>
+<p>    platform_set_drvdata(pdev, bl);  </p>
+<p>return 0;  </p>
+<p>err_bl:  </p>
+<p>    pwm_free(pb-&gt;pwm);  </p>
+<p>err_pwm:  </p>
+<p>    kfree(pb);  </p>
+<p>err_alloc:  </p>
+<p>if (data-&gt;exit)  </p>
+<p>        data-&gt;exit(&amp;pdev-&gt;dev);  </p>
+<p>return ret;  </p>
+<p>}  </p>
+<p>1）、任务队列初始化；</p>
+<p>把key_event_work加入key_event队列，</p>
+<p>[cpp] view plain copy</p>
+<p>INIT_DELAYED_WORK_DEFERRABLE(&amp;key_event, key_event_work);  </p>
+<p>队列调度函数：</p>
+<p>[cpp] view plain copy</p>
+<p>static void key_event_work(struct work_struct *work)  </p>
+<p>{  </p>
+<p>    global_pb-&gt;period=90000;  </p>
+<p>    global_bl-&gt;props.brightness=global_brightness;  </p>
+<p>    backlight_update_status(global_bl);  </p>
+<p>return ;  </p>
+<p>}  </p>
+<p>backlight_update_status</p>
+<p>[cpp] view plain copy</p>
+<p>static inline void backlight_update_status(struct backlight_device *bd)  </p>
+<p>{  </p>
+<p>    mutex_lock(&amp;bd-&gt;update_lock);  </p>
+<p>if (bd-&gt;ops &amp;&amp; bd-&gt;ops-&gt;update_status)  </p>
+<p>        bd-&gt;ops-&gt;update_status(bd);  </p>
+<p>    mutex_unlock(&amp;bd-&gt;update_lock);  </p>
+<p>}  </p>
+<p>update_status在pwm_backlight_ops结构体重指定：</p>
+<p>[cpp] view plain copy</p>
+<p>static const struct backlight_ops pwm_backlight_ops = {  </p>
+<p>    .update_status  = pwm_backlight_update_status,  </p>
+<p>    …………}  </p>
+<p>pwm_backlight_update_status我们后面分析，这个其实就是我们PWM设定实现的具体实施过程。</p>
+<p>2）、pb结构体初始化；</p>
+<p>[cpp] view plain copy</p>
+<p>pb-&gt;period = data-&gt;pwm_period_ns; pb-&gt;notify = data-&gt;notify;  </p>
+<p>pb-&gt;check_fb = data-&gt;check_fb;  </p>
+<p>pb-&gt;lth_brightness = data-&gt;lth_brightness *  </p>
+<p>    (data-&gt;pwm_period_ns / data-&gt;max_brightness);  </p>
+<p>pb-&gt;dev = &amp;pdev-&gt;dev;  </p>
+<p>pb-&gt;pwm = pwm_request(data-&gt;pwm_id, &quot;backlight&quot;);  </p>
+<p>3）、更新背光状态</p>
+<p>[cpp] view plain copy</p>
+<p>backlight_update_status(bl);  </p>
+<p>（4）、PWM_SET</p>
+<p>当UI设置PWM时，会调用到驱动中的pwm_set(void)这个函数。这个函数主要在开机时使用。</p>
+<p>[cpp] view plain copy</p>
+<p>int pwm_set(void)  </p>
+<p>{  </p>
+<p>int error;  </p>
+<p>struct backlight_device *bl = global_bl;  </p>
+<p>struct pwm_bl_data *pb = global_pb;  </p>
+<p>    printk(&quot;%s__%d\n&quot;,<strong>func</strong>,pb-&gt;period);  </p>
+<p>    pb-&gt;period=410000;  </p>
+<p>    backlight_update_status(bl);  </p>
+<p>    schedule_delayed_work(&amp;key_event, 600); //调用队列，跟新亮度信息；  </p>
+<p>return 0;  </p>
+<p>}  </p>
+<p>（5）、pwm_backlight_update_status这个就是PWM变化的具体实现，当应用层调节时，会调用到这个函数，把改变的值填入寄存器。</p>
+<p>[cpp] view plain copy</p>
+<p>static int pwm_backlight_update_status(struct backlight_device *bl)  </p>
+<p>{  </p>
+<p>struct pwm_bl_data *pb = dev_get_drvdata(&amp;bl-&gt;dev);  </p>
+<p>int brightness = bl-&gt;props.brightness;  </p>
+<p>int max = bl-&gt;props.max_brightness;  </p>
+<p>//if(brightness==0)  </p>
+<p>//  return 0;  </p>
+<p>//printk(&quot;#####%s#%d__%d\n&quot;,<strong>func</strong>,pb-&gt;period,brightness);  </p>
+<p>    global_brightness=brightness;  </p>
+<p>if (bl-&gt;props.power != FB_BLANK_UNBLANK)  </p>
+<p>        brightness = 0;  </p>
+<p>if (bl-&gt;props.fb_blank != FB_BLANK_UNBLANK)  </p>
+<p>        brightness = 0;  </p>
+<p>if (pb-&gt;notify)  </p>
+<p>        brightness = pb-&gt;notify(pb-&gt;dev, brightness);  </p>
+<p>if (brightness == 0) {  </p>
+<p>        pwm_config(pb-&gt;pwm, 0, pb-&gt;period);  </p>
+<p>        pwm_disable(pb-&gt;pwm);  </p>
+<p>    } else {  </p>
+<p>    #if 1  </p>
+<p>        brightness = pb-&gt;lth_brightness +  </p>
+<p>            (brightness * (pb-&gt;period - pb-&gt;lth_brightness) / max);  </p>
+<p>    #else  </p>
+<p>     brightness = pb-&gt;lth_brightness +  </p>
+<p>                        (((pb-&gt;period - pb-&gt;lth_brightness) / max) * brightness );  </p>
+<p>    #endif  </p>
+<p>        pwm_config(pb-&gt;pwm, brightness, pb-&gt;period);//这里对PWM寄存器的具体操作；  </p>
+<p>        pwm_enable(pb-&gt;pwm);  </p>
+<p>    }  </p>
+<p>return 0;  </p>
+<p>}  </p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/Android%20LCD(%E4%B8%89)%EF%BC%9ASamsung%20LCD%E6%8E%A5%E5%8F%A3%E7%AF%87/" rel="prev" title="Android LCD(三)：Samsung LCD接口篇">
+      <i class="fa fa-chevron-left"></i> Android LCD(三)：Samsung LCD接口篇
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/Android%20LCD(%E4%B8%80)%EF%BC%9ALCD%E5%9F%BA%E6%9C%AC%E5%8E%9F%E7%90%86%E7%AF%87/" rel="next" title="Android LCD(一)：LCD基本原理篇">
+      Android LCD(一)：LCD基本原理篇 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Edward"
+      src="/uploads/avatar.gif">
+  <p class="site-author-name" itemprop="name">Edward</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">570</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Edward</span>
+</div>
+
+        
+
+
+
+
+
+
+<script>
+  (function() {
+    function leancloudSelector(url) {
+      url = encodeURI(url);
+      return document.getElementById(url).querySelector('.leancloud-visitors-count');
+    }
+
+    function addCount(Counter) {
+      var visitors = document.querySelector('.leancloud_visitors');
+      var url = decodeURI(visitors.id);
+      var title = visitors.dataset.flagTitle;
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          if (results.length > 0) {
+            var counter = results[0];
+            leancloudSelector(url).innerText = counter.time + 1;
+            Counter('put', '/classes/Counter/' + counter.objectId, { time: { '__op': 'Increment', 'amount': 1 } })
+              .catch(error => {
+                console.error('Failed to save visitor count', error);
+              });
+          } else {
+              Counter('post', '/classes/Counter', { title, url, time: 1 })
+                .then(response => response.json())
+                .then(() => {
+                  leancloudSelector(url).innerText = 1;
+                })
+                .catch(error => {
+                  console.error('Failed to create', error);
+                });
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    function showTime(Counter) {
+      var visitors = document.querySelectorAll('.leancloud_visitors');
+      var entries = [...visitors].map(element => {
+        return decodeURI(element.id);
+      });
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url: { '$in': entries } })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          for (let url of entries) {
+            let target = results.find(item => item.url === url);
+            leancloudSelector(url).innerText = target ? target.time : 0;
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    let { app_id, app_key, server_url } = {"enable":true,"app_id":"wxYx0BX9gaKA3XC4LuO2of0v-gzGzoHsz","app_key":"LQMcs6IDIE4YAm10vMsn9IYq","server_url":"https://wxyx0bx9.lc-cn-n1-shared.com","security":false};
+    function fetchData(api_server) {
+      var Counter = (method, url, data) => {
+        return fetch(`${api_server}/1.1${url}`, {
+          method,
+          headers: {
+            'X-LC-Id'     : app_id,
+            'X-LC-Key'    : app_key,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data)
+        });
+      };
+      if (CONFIG.page.isPost) {
+        if (CONFIG.hostname !== location.hostname) return;
+        addCount(Counter);
+      } else if (document.querySelectorAll('.post-title-link').length >= 1) {
+        showTime(Counter);
+      }
+    }
+
+    let api_server = app_id.slice(-9) !== '-MdYXbMMI' ? server_url : `https://${app_id.slice(0, 8).toLowerCase()}.api.lncldglobal.com`;
+
+    if (api_server) {
+      fetchData(api_server);
+    } else {
+      fetch('https://app-router.leancloud.cn/2/route?appId=' + app_id)
+        .then(response => response.json())
+        .then(({ api_server }) => {
+          fetchData('https://' + api_server);
+        });
+    }
+  })();
+</script>
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

@@ -1,0 +1,701 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"edward.org.cn","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="预科班C语言基础 预处理：gcc -E test.c -o test.i 1.文件包含，2.宏替换。3.条件编译 。 4.去除注释 int 字长与机器长度一样 float 4 byte  double 8 byte &#x2F;&#x2F;*.h头文件 普通函数声明 内联、静态的函数定义 结构体 联合体 枚举等模板 宏定义">
+<meta property="og:type" content="article">
+<meta property="og:title" content="C语言注意点">
+<meta property="og:url" content="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/C%E8%AF%AD%E8%A8%80%E6%B3%A8%E6%84%8F%E7%82%B9/index.html">
+<meta property="og:site_name" content="点点滴滴">
+<meta property="og:description" content="预科班C语言基础 预处理：gcc -E test.c -o test.i 1.文件包含，2.宏替换。3.条件编译 。 4.去除注释 int 字长与机器长度一样 float 4 byte  double 8 byte &#x2F;&#x2F;*.h头文件 普通函数声明 内联、静态的函数定义 结构体 联合体 枚举等模板 宏定义">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-12-31T06:48:01.091Z">
+<meta property="article:modified_time" content="2020-01-16T04:37:32.033Z">
+<meta property="article:author" content="Edward">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/C%E8%AF%AD%E8%A8%80%E6%B3%A8%E6%84%8F%E7%82%B9/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>C语言注意点 | 点点滴滴</title>
+  
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?a92ed22eafce466e7a7b17546bb0dc6f";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">点点滴滴</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/C%E8%AF%AD%E8%A8%80%E6%B3%A8%E6%84%8F%E7%82%B9/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/avatar.gif">
+      <meta itemprop="name" content="Edward">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="点点滴滴">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          C语言注意点
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-12-31 14:48:01" itemprop="dateCreated datePublished" datetime="2020-12-31T14:48:01+08:00">2020-12-31</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-01-16 12:37:32" itemprop="dateModified" datetime="2020-01-16T12:37:32+08:00">2020-01-16</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%83%82%E7%AC%94%E5%A4%B4/" itemprop="url" rel="index"><span itemprop="name">烂笔头</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/C%E8%AF%AD%E8%A8%80%E6%B3%A8%E6%84%8F%E7%82%B9/" class="post-meta-item leancloud_visitors" data-flag-title="C语言注意点" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>预科班C语言基础</p>
+<p>预处理：gcc -E test.c -o test.i</p>
+<p>1.文件包含，2.宏替换。3.条件编译 。 4.去除注释</p>
+<p>int 字长与机器长度一样</p>
+<p>float 4 byte  double 8 byte</p>
+<p>//*.h头文件</p>
+<p>普通函数声明</p>
+<p>内联、静态的函数定义</p>
+<p>结构体 联合体 枚举等模板</p>
+<p>宏定义</p>
+<p>全局变量</p>
+<p>strlen 实际长度</p>
+<p>sizeof 存储长度  (关键长度)</p>
+<p>//数组：</p>
+<p>int a[5]</p>
+<p>1.a是常量</p>
+<p>2.a表示数组首元素地址</p>
+<p>3.&amp;a表示数组首地址  &amp;a+1 表示数组外第一个地址</p>
+<p>int *p;</p>
+<p>*p表示一个指针</p>
+<p>int 表示指针指向内存的类型</p>
+<p>段错误：常量字符串值不能改变(rodata)</p>
+<p>函数传参：</p>
+<p>1.实参与形参相对独立</p>
+<p>2.形参通过实参初始化</p>
+<p>声明：1.可多次声明。2.不分配空间</p>
+<p>定义：1.只能定义一次。2.分配空间 3.定义是特殊的声明</p>
+<p>typedef : 定义一个类型；给类型取别名</p>
+<p>区别：</p>
+<p>typedef:1.关键字。2.typedef int *p ;(运行时)  3.不能扩展。</p>
+<p>#define:1.宏定义。2.#define p int * (宏替换)  3. 可扩展。</p>
+<p>对于C 非0即真</p>
+<p>int a; a=’A’+1.6 =&gt; a为B  </p>
+<p>int a = 1.6  =&gt;a=1</p>
+<p>i[ch] &lt;==&gt; ch[i]</p>
+<p>T *s = NULL  F(s,100);  ….属于值传递</p>
+<p>%d 有符号十进制整数</p>
+<p>%o 无符号八进制整数</p>
+<p>%u 无符号十进制整数</p>
+<p>%x 无符号十六进制整数</p>
+<p>%c 一个字符</p>
+<p>%s 字符串</p>
+<p>%f 十进制计数法的浮点数</p>
+<p>%e E-计数法的浮点数</p>
+<p>%p 指针</p>
+<p>函数传参：若需改变实参的值，用地址传递；否则值传递。</p>
+<p>1.赋值传递 2. 地址传递 3.全局变量</p>
+<p>const型指针</p>
+<p>const int *p; 或者 int const *p;</p>
+<p>p为指向整型变量指针，且该变量相对于p而言只读。</p>
+<p>int *const p;</p>
+<p>p为指向整型变量指针，且该指针p本身只读。</p>
+<p>const int *const p; 或者 int const *const p;</p>
+<p>p为指向整型变量只读指针，且该变量相对于p而言也是只读的。</p>
+<p>局部变量 全局变量</p>
+<p>存储类别 auto register 局部static 外部static 外部</p>
+<p>存储方式 自动 静态</p>
+<p>存储区 栈内存 寄存器 静态存储区（数据段）</p>
+<p>生存期 函数调用开始至结束 程序整个运行期间</p>
+<p>作用域 定义变量的函数或复合语句内 本文件 其他文件</p>
+<p>赋初值 每次函数调用时 编译时赋初值，只赋一次</p>
+<p>未赋初值 不确定 自动赋初值为零值或NULL</p>
+<p>每个Linux程序都有一个运行时存储器映像。</p>
+<p>代码段总是从地址0x08048000开始，</p>
+<p>而数据段在接下来的下一个4K对齐的地址上，</p>
+<p>运行时堆在接下来的读写段之后的第一个4K对齐的地址处，</p>
+<p>并通过调用malloc函数族向上增长。</p>
+<p>用户栈总是从地址0xbfffffff处开始向下增长，</p>
+<p>从栈的上部开始于地址0xc0000000处的段是为OS驻留存储器部分的代码和数据保留的。</p>
+<p>宏定义</p>
+<p>1、预定义符号</p>
+<p><strong>FILE</strong> 正在编译的文件名</p>
+<p><strong>LINE</strong> 文件当前的行号</p>
+<p><strong>FUNCTION</strong> 当前所在的函数名</p>
+<p><strong>DATE</strong> 预编译文件的日期</p>
+<p><strong>TIME</strong> 预编译文件的时间</p>
+<p><strong>STDC</strong> 判断编译器是否遵循ANSI C，是则为1</p>
+<p>其中， __LINE__和__STDC__是整型常量，其余为字符串常量。</p>
+<p>const 修饰的是readonly变量，不是常量，因此，不能作业数据大小也不能放在case后</p>
+<p>也不能做数组的维数</p>
+<p>//结构体部分初始化</p>
+<p>struct student Michael = {.age=25, .score=88.5};</p>
+<p>结构体指针</p>
+<p>结构体指针也就是指向结构体的指针，例如：</p>
+<p>struct student *pstudent = &amp;Bill; //指向结构体Bill的指针</p>
+<p>用点运算符引用成员变量： (*pstudent).age = 27;</p>
+<p>用箭头引用成员变量：pstudent-&gt;age = 27;</p>
+<p>register 变量必须是一个单个的值，并且其长度应小于或等于整型的长度。而且register 变量可能不存放在内存中，所以不能用取址运算符“&amp;”</p>
+<p>来获取register 变量的地址</p>
+<p>0x01&lt;&lt;2+3；  =32</p>
+<p>“+”号的优先级比移位运算符的优先级高</p>
+<p>不能用define 宏定义注释符号</p>
+<p>#define SEC_A_YEAR 60<em>60</em>24*365 (int 溢出)</p>
+<p>#define SEC_A_YEAR (60<em>60</em>24*365)UL (正确)</p>
+<p>每个成员按其类型的对齐参数(通常是这个类型的大小)和指定对齐参数(这里是n 字节)中较小的一个对齐，即：min( n, sizeof( item )) 。并且结构的长度必须为所用过的所有对齐参数的整数倍,不够就补空字节。</p>
+<p>不论类型是什么,对齐的边界一定是1,2,4,8,16,32,64….中的一个</p>
+<p>int *p = NULL;</p>
+<p>在定义变量p 的同时把p 的值设置为0x00000000，而不是把*p 的值设置为0x00000000。这个过程叫做初始化，是在编译的时候进行的。</p>
+<p>size of long is 4</p>
+<p>size of long long  is 8</p>
+<p>//变量： 是对程序中数据的存储空间的抽象。</p>
+<p>1.预处理  Pre-Processing  (调用cpp预处理)</p>
+<p>   *.c -&gt; *.i </p>
+<p>gcc -E test.c -o test.i</p>
+<p>2.编译 Compiling (cc1编译) 转化为汇编代码</p>
+<p>  *.c/ *i  -&gt; *.s</p>
+<p>gcc -S test.c -o test.s</p>
+<p>3.汇编 Assembling (as 汇编)  </p>
+<p>  *.c/ *.s -&gt; *.o  目标文件(可重定位文件)</p>
+<p>gcc -c test.c -o test.o</p>
+<p>4.链接 Linking -&gt; 可执行文件  (ld链接)</p>
+<p>符号解析；重定位 多个elf -&gt; 可执行</p>
+<p>//自然对齐：</p>
+<p>变量存放的地址，能被变量的类型长度整除</p>
+<p>那么，变量按照自然对齐存放</p>
+<p>各种类型的长度(byte):</p>
+<p>char 1  int 4    short 2   double 8 </p>
+<p>//结构体类型的m值</p>
+<p>1.若结构体中成员类型最大的m1&lt;机器字长 m=m1</p>
+<p>2.基结构体中成员类型最大的m1&gt;=机器字长 m=机器字长</p>
+<p>//变量m值的确定：(即m值&lt;=机器字长)</p>
+<p>变量类型长度&lt;机器字长，则变量的m值为变量类型的长度</p>
+<p>变量类型长度&gt;机器字长，则变量的m值为机器字长</p>
+<p>//makefile</p>
+<p>1.读当前目标下Makefile/makefile</p>
+<p>2.找到makefile的第1个目标(abc)</p>
+<p>3.在当前目录下找abc，若abc不存在或abc所依赖文件比abc新时，make执行相应命令，生成abc</p>
+<p>4.若abc.o不存在 把abc.o作为目标，在makefile中找abc.o所依赖文件，执行相应命令。</p>
+<p>//Makefile 规则</p>
+<p>目标：依赖文件(若多个，以空格隔开)</p>
+<p>&lt;Tab&gt;命令</p>
+<p>伪目标：all</p>
+<p>make 不会生成all(伪目标)  检查all的依赖文件</p>
+<p>//变量；</p>
+<p>自定义：递归 =   简单  :=(立即变量)   未定义就赋值 ?= (未定义时为延时变量)</p>
+<p>+=(如果前面为立即变量:=,它也是立即变量)</p>
+<p>预定义：  RM  CC  。。。</p>
+<p>     (default)</p>
+<p>AR    ar</p>
+<p>CC    cc</p>
+<p>CPP   $(cc) -E</p>
+<p>EXX   g++       </p>
+<p>RM    rm -f</p>
+<p>//自动变量</p>
+<p>$@  目标文件的完整名称</p>
+<p>$*  不包括扩展名的目标文件名称</p>
+<p>$+  所有依赖文件 以空格分开 顺序 可重复</p>
+<p>$^  所有不重复的目标依赖文件，以空格分开</p>
+<p>$&lt;  第一个依赖文件的名称</p>
+<p>$?  所有时间戳比目标文件晚的依赖文件名称 空格分开</p>
+<p>$%  目标归档成员名称</p>
+<p>隐式规则：(同名，可以不写命令)  </p>
+<p>hello.o:hello.c</p>
+<p>e.g:</p>
+<p>CC = gcc </p>
+<p>CFLAGS = -Wall -o  </p>
+<p>SRC = ${wildcard *.c}</p>
+<p>OBJ = ${patsubst %.c,%,$(SRC)}</p>
+<p>all:$(OBJ)</p>
+<p>$(OBJ):%:%.c</p>
+<p>        $(CC) $(CFLAGS) $@ $^</p>
+<p>clean:</p>
+<p>        @$(RM) -rvf $(OBJ) .*.swp</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/C%E8%AF%AD%E8%A8%80%E4%B8%AD%E6%9C%80%E5%B8%B8%E7%94%A8%E6%A0%87%E5%87%86%E5%BA%93%E5%87%BD%E6%95%B0/" rel="prev" title="C语言中最常用标准库函数">
+      <i class="fa fa-chevron-left"></i> C语言中最常用标准库函数
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/dd%20%E5%91%BD%E4%BB%A4/" rel="next" title="dd 命令">
+      dd 命令 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Edward"
+      src="/uploads/avatar.gif">
+  <p class="site-author-name" itemprop="name">Edward</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">570</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Edward</span>
+</div>
+
+        
+
+
+
+
+
+
+<script>
+  (function() {
+    function leancloudSelector(url) {
+      url = encodeURI(url);
+      return document.getElementById(url).querySelector('.leancloud-visitors-count');
+    }
+
+    function addCount(Counter) {
+      var visitors = document.querySelector('.leancloud_visitors');
+      var url = decodeURI(visitors.id);
+      var title = visitors.dataset.flagTitle;
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          if (results.length > 0) {
+            var counter = results[0];
+            leancloudSelector(url).innerText = counter.time + 1;
+            Counter('put', '/classes/Counter/' + counter.objectId, { time: { '__op': 'Increment', 'amount': 1 } })
+              .catch(error => {
+                console.error('Failed to save visitor count', error);
+              });
+          } else {
+              Counter('post', '/classes/Counter', { title, url, time: 1 })
+                .then(response => response.json())
+                .then(() => {
+                  leancloudSelector(url).innerText = 1;
+                })
+                .catch(error => {
+                  console.error('Failed to create', error);
+                });
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    function showTime(Counter) {
+      var visitors = document.querySelectorAll('.leancloud_visitors');
+      var entries = [...visitors].map(element => {
+        return decodeURI(element.id);
+      });
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url: { '$in': entries } })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          for (let url of entries) {
+            let target = results.find(item => item.url === url);
+            leancloudSelector(url).innerText = target ? target.time : 0;
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    let { app_id, app_key, server_url } = {"enable":true,"app_id":"wxYx0BX9gaKA3XC4LuO2of0v-gzGzoHsz","app_key":"LQMcs6IDIE4YAm10vMsn9IYq","server_url":"https://wxyx0bx9.lc-cn-n1-shared.com","security":false};
+    function fetchData(api_server) {
+      var Counter = (method, url, data) => {
+        return fetch(`${api_server}/1.1${url}`, {
+          method,
+          headers: {
+            'X-LC-Id'     : app_id,
+            'X-LC-Key'    : app_key,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data)
+        });
+      };
+      if (CONFIG.page.isPost) {
+        if (CONFIG.hostname !== location.hostname) return;
+        addCount(Counter);
+      } else if (document.querySelectorAll('.post-title-link').length >= 1) {
+        showTime(Counter);
+      }
+    }
+
+    let api_server = app_id.slice(-9) !== '-MdYXbMMI' ? server_url : `https://${app_id.slice(0, 8).toLowerCase()}.api.lncldglobal.com`;
+
+    if (api_server) {
+      fetchData(api_server);
+    } else {
+      fetch('https://app-router.leancloud.cn/2/route?appId=' + app_id)
+        .then(response => response.json())
+        .then(({ api_server }) => {
+          fetchData('https://' + api_server);
+        });
+    }
+  })();
+</script>
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

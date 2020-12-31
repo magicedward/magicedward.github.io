@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"edward.org.cn","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="官网资源： http:&#x2F;&#x2F;source.android.com&#x2F;compatibility&#x2F;downloads.html  什么要过CTS ？  Give your users the best possible experience with the applications they run.   When a device is compatible with Android, users">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Compatibility Test Suite (CTS)">
+<meta property="og:url" content="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/Compatibility%20Test%20Suite%20(CTS)/index.html">
+<meta property="og:site_name" content="点点滴滴">
+<meta property="og:description" content="官网资源： http:&#x2F;&#x2F;source.android.com&#x2F;compatibility&#x2F;downloads.html  什么要过CTS ？  Give your users the best possible experience with the applications they run.   When a device is compatible with Android, users">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-12-31T06:48:01.060Z">
+<meta property="article:modified_time" content="2020-01-16T04:37:33.225Z">
+<meta property="article:author" content="Edward">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/Compatibility%20Test%20Suite%20(CTS)/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>Compatibility Test Suite (CTS) | 点点滴滴</title>
+  
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?a92ed22eafce466e7a7b17546bb0dc6f";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">点点滴滴</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/Compatibility%20Test%20Suite%20(CTS)/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/avatar.gif">
+      <meta itemprop="name" content="Edward">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="点点滴滴">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Compatibility Test Suite (CTS)
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-12-31 14:48:01" itemprop="dateCreated datePublished" datetime="2020-12-31T14:48:01+08:00">2020-12-31</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-01-16 12:37:33" itemprop="dateModified" datetime="2020-01-16T12:37:33+08:00">2020-01-16</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%83%82%E7%AC%94%E5%A4%B4/" itemprop="url" rel="index"><span itemprop="name">烂笔头</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/Compatibility%20Test%20Suite%20(CTS)/" class="post-meta-item leancloud_visitors" data-flag-title="Compatibility Test Suite (CTS)" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>官网资源：</p>
+<p><a target="_blank" rel="noopener" href="http://source.android.com/compatibility/downloads.html">http://source.android.com/compatibility/downloads.html</a></p>
+<ol>
+<li><p>什么要过CTS ？</p>
+</li>
+<li><p>Give your users the best possible experience with the applications they run.</p>
+</li>
+</ol>
+<p>When a device is compatible with Android, users can choose from among many </p>
+<p>high-quality applications. Applications that take full advantage of Android’s </p>
+<p>features are likely to perform best on compatible devices.</p>
+<p>2.</p>
+<p>Make it easy for developers to write top-quality applications for your device.</p>
+<p>Developers want to streamline their applications for Android, and this is easiest for </p>
+<p>them when they are writing for a predictable platform. </p>
+<p>3.</p>
+<p>Take advantage of the Android Market.</p>
+<p>Compatible handsets can give users access to the Android Market.</p>
+<ol start="2">
+<li>adb 环境</li>
+</ol>
+<p>RK的SDK直接执行setpaths , 或参考Android官网</p>
+<p>3.拷贝媒体文件</p>
+<p>CTS Media 1.0</p>
+<p>执行 copy_media.sh</p>
+<p>4.设置及安装测试APK</p>
+<p>Settings &gt; Wi-Fi</p>
+<p>Settings &gt; Display &gt; Sleep &gt; never timeout</p>
+<p>Settings &gt; Security &gt; Screen Lock  should be ‘None’</p>
+<p>Settings &gt; Developer options &gt; USB debugging</p>
+<p>Settings &gt; Developer options &gt; Stay Awake is checked</p>
+<p>Settings &gt; Developer options &gt; Allow mock locations is checked</p>
+<p>Settings &gt; Location services &gt; Google’s location service (network location needed)</p>
+<p>Settings &gt; Data &amp; time &gt; Select time zone (some timezone doesn’t work)</p>
+<p>adb install android-cts/repository/testcases/CtsDelegatingAccessibilityService.apk</p>
+<p>enable Settings &gt; Accessibility &gt; Delegating Accessibility Service</p>
+<p>adb install android-cts/repository/testcases/CtsDeviceAdmin.apk</p>
+<p>enable Settings &gt; Security &gt; Device Administrators &gt; android.deviceadmin.cts.CtsDeviceAdmin* settings</p>
+<p>Make sure the device is at the home screen at the start of CTS</p>
+<p>5. ./android-cts/tools/cts-tradefed   CTS 命令</p>
+<p>  执行  run cts –plan CTS </p>
+<p>  完成后生成报告 ：  $CTS_ROOT/repository/results/&lt;start time&gt;.zip  </p>
+<p>run cts</p>
+<p>    –plan &lt;test_plan_name&gt;</p>
+<p>    – package/-p &lt;test_package_name&gt;  [–package/-p &lt;test_package2&gt;…]</p>
+<p>    –class/-c &lt;class_name&gt; [–method/-m &lt;test_method_name&gt;</p>
+<p>    –continue-session-id</p>
+<p>    –shards  &lt;number_of_shards&gt;</p>
+<p>    –serial/-s &lt;deviceID&gt;</p>
+<p>List</p>
+<p>    list packages</p>
+<p>    list plans</p>
+<p>    list invocations</p>
+<p>    list commands</p>
+<p>    list results  (l r)</p>
+<p>    list devices</p>
+<p>Add  （添加新计划）</p>
+<p>add derivedplan –plan &lt;plan_name&gt;</p>
+<p>–result/-r</p>
+<p>[pass | fail | timeout | notExecuted]</p>
+<p>[–session/-s &lt;session_id&gt;]</p>
+<p>CTS-verifier</p>
+<p>     Data Backup test</p>
+<p>          –&gt;settings-&gt;Backup my data 勾选</p>
+<p>    进入Data Backup test -&gt; Generate Test Data</p>
+<p>  adb shell<br>                bmgr enable true</p>
+<p>                bmgr transport android/com.android.internal.backup.LocalTransport</p>
+<p>                bmgr run</p>
+<p>  卸载Cts-verifier,重新安装，数据一样表示通过。</p>
+<p>需要注意的地方：</p>
+<ol>
+<li>system/etc/permissions</li>
+</ol>
+<p> 相应权限必须对应，系统没有的功能，不能出现</p>
+<p> 如 &lt;feature name=&quot;android.hardware.sensor.accelerometer&quot; /&gt;</p>
+<p>在 hardware/rk29/sensor/st   sSensorList[] 对应定义</p>
+<p> &lt;feature name=&quot;android.hardware.camera&quot; /&gt;</p>
+<p>&lt;feature name=&quot;android.hardware.camera.front&quot; /&gt;</p>
+<p>     &lt;feature name=&quot;android.hardware.location&quot; /&gt;</p>
+<p>&lt;feature name=&quot;android.hardware.location.network&quot; /&gt;</p>
+<p>前置摄象头与网络定位如此声明</p>
+<p>2. media_profiles.xml 与 kernel 中 定义摄像头的帧率须相同</p>
+<ol start="3">
+<li>系统某些必须的APK是不能删除的，如 Phone.apk Gsmcore.apk 等</li>
+</ol>
+<p> 添加到system/app 中的apk ，需要SDK的签名。</p>
+<p>android.hardware</p>
+<p>android.hardware.cts.CameraTest</p>
+<p>android.mediastress.cts.MediaRecorderStressTest</p>
+<p>android.media.cts.CamcorderProfileTest  </p>
+<p>-m testGet</p>
+<p>-m testGetWithId</p>
+<p>//7个网络问题</p>
+<p>android.media.cts.StreamingMediaPlayerTest </p>
+<p>– testHLS </p>
+<p>– testHTTP_H263_AMR_Video1 </p>
+<p>– testHTTP_H263_AMR_Video2 </p>
+<p>– testHTTP_H264Base_AAC_Video1 </p>
+<p>– testHTTP_H264Base_AAC_Video2 </p>
+<p>– testHTTP_MPEG4SP_AAC_Video1 </p>
+<p>– testHTTP_MPEG4SP_AAC_Video2 </p>
+<p>//第一次可以过</p>
+<p>android.provider.cts.MediaStore_Audio_AlbumsTest </p>
+<p>– testStoreAudioAlbumsExternal  </p>
+<p>android.provider.cts.MediaStore_Audio_ArtistsTest </p>
+<p>– testStoreAudioArtistsExternal  </p>
+<p>android.provider.cts.MediaStore_Audio_Artists_AlbumsTest </p>
+<p>– testStoreAudioArtistsAlbumsExternal </p>
+<p>//dpi 120 才可以过  与字体大小也有关</p>
+<p>android.accessibilityservice.cts.AccessibilityTextTraversalTest </p>
+<p>–testActionNextAndPreviousAtGranularityPageOverText</p>
+<p>//Camera驱动 黑暗不行</p>
+<p>android.media.cts.MediaRecorderTest</p>
+<p>–testSetMaxFileSize</p>
+<p>//测试BuildFingerprint是否符合ccd标准</p>
+<p>android.os.cts.BuildVersionTest</p>
+<p>–testBuildFingerprint</p>
+<p>//sys不可以有写权限</p>
+<p>android.permission.cts.FileSystemPermissionTest</p>
+<p>– testAllFilesInSysAreNotWritable</p>
+<p>//去掉hardware无关的sensor</p>
+<p>// hardware\rk29\sensor\st\sensors.c  static const struct sensor_t sSensorList[]</p>
+<p>android.hardware.cts.SensorTest</p>
+<p>– testSensorOperations</p>
+<p>//检查系统features 跟/etc/permissions对应</p>
+<p>android.app.cts.SystemFeaturesTest</p>
+<p>//检查签名 注意第三方apk 可以用系统签名</p>
+<p>android.content.pm.cts.SignatureTest</p>
+<p>//不能有Debug apk</p>
+<p>android.permission.cts.DebuggableTest</p>
+<p>device/rockchip/rk30sdk/overlay/frameworks/base/core/res/res/values/config.xml </p>
+<p>//开机向导中有拨打紧急电话选项</p>
+<p>    &lt;bool name=&quot;config_voice_capable&quot;&gt;false&lt;/bool&gt;</p>
+<p>    &lt;bool name=&quot;config_sms_capable&quot;&gt;false&lt;/bool&gt;</p>
+<p>//非3G版本 网络设置</p>
+<p>&lt;string-array translatable=&quot;false&quot; name=&quot;networkAttributes&quot;&gt;</p>
+<p>        &lt;item&gt;&quot;wifi,1,1,1,-1,true&quot;&lt;/item&gt;</p>
+<p>        &lt;item&gt;&quot;wifi_p2p,13,1,0,-1,true&quot;&lt;/item&gt;</p>
+<p>        &lt;item&gt;&quot;eth,9,9,4,60000,true&quot;&lt;/item&gt;</p>
+<p> &lt;/string-array&gt;</p>
+<p> run cts -c android.view.cts.DisplayRefreshRateTest -m testRefreshRate</p>
+<p>adb logcat -s DisplayRefreshRateTest</p>
+<p>DisplayRefreshRateTest( 1943): claimed 58.343 fps, achieved 58.10854 fps</p>
+<p>只要claimed的帧数（驱动配置）与，achived得到（上层得到帧数）相当，这项测试才能通过</p>
+<p>hb + hpw = m</p>
+<p>vb + vpw = n </p>
+<p>run cts -c com.android.cts.jank.opengl.CtsHostJankOpenGl -m testPixelOutput</p>
+<p>fps &lt; = 60</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/CodeIgniter%20PHP%20MVC%E6%A1%86%E6%9E%B6/" rel="prev" title="CodeIgniter PHP MVC框架">
+      <i class="fa fa-chevron-left"></i> CodeIgniter PHP MVC框架
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/const%E5%85%B3%E9%94%AE%E5%AD%97/" rel="next" title="const关键字">
+      const关键字 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Edward"
+      src="/uploads/avatar.gif">
+  <p class="site-author-name" itemprop="name">Edward</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">570</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Edward</span>
+</div>
+
+        
+
+
+
+
+
+
+<script>
+  (function() {
+    function leancloudSelector(url) {
+      url = encodeURI(url);
+      return document.getElementById(url).querySelector('.leancloud-visitors-count');
+    }
+
+    function addCount(Counter) {
+      var visitors = document.querySelector('.leancloud_visitors');
+      var url = decodeURI(visitors.id);
+      var title = visitors.dataset.flagTitle;
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          if (results.length > 0) {
+            var counter = results[0];
+            leancloudSelector(url).innerText = counter.time + 1;
+            Counter('put', '/classes/Counter/' + counter.objectId, { time: { '__op': 'Increment', 'amount': 1 } })
+              .catch(error => {
+                console.error('Failed to save visitor count', error);
+              });
+          } else {
+              Counter('post', '/classes/Counter', { title, url, time: 1 })
+                .then(response => response.json())
+                .then(() => {
+                  leancloudSelector(url).innerText = 1;
+                })
+                .catch(error => {
+                  console.error('Failed to create', error);
+                });
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    function showTime(Counter) {
+      var visitors = document.querySelectorAll('.leancloud_visitors');
+      var entries = [...visitors].map(element => {
+        return decodeURI(element.id);
+      });
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url: { '$in': entries } })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          for (let url of entries) {
+            let target = results.find(item => item.url === url);
+            leancloudSelector(url).innerText = target ? target.time : 0;
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    let { app_id, app_key, server_url } = {"enable":true,"app_id":"wxYx0BX9gaKA3XC4LuO2of0v-gzGzoHsz","app_key":"LQMcs6IDIE4YAm10vMsn9IYq","server_url":"https://wxyx0bx9.lc-cn-n1-shared.com","security":false};
+    function fetchData(api_server) {
+      var Counter = (method, url, data) => {
+        return fetch(`${api_server}/1.1${url}`, {
+          method,
+          headers: {
+            'X-LC-Id'     : app_id,
+            'X-LC-Key'    : app_key,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data)
+        });
+      };
+      if (CONFIG.page.isPost) {
+        if (CONFIG.hostname !== location.hostname) return;
+        addCount(Counter);
+      } else if (document.querySelectorAll('.post-title-link').length >= 1) {
+        showTime(Counter);
+      }
+    }
+
+    let api_server = app_id.slice(-9) !== '-MdYXbMMI' ? server_url : `https://${app_id.slice(0, 8).toLowerCase()}.api.lncldglobal.com`;
+
+    if (api_server) {
+      fetchData(api_server);
+    } else {
+      fetch('https://app-router.leancloud.cn/2/route?appId=' + app_id)
+        .then(response => response.json())
+        .then(({ api_server }) => {
+          fetchData('https://' + api_server);
+        });
+    }
+  })();
+</script>
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

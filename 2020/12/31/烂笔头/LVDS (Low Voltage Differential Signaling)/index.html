@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"edward.org.cn","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="LVDS ： Low-Voltage Differential Signaling 低压差分信号传输 　　1994年由美国国家半导体公司提出的一种信号传输模式，是一种电平标准，广泛应用于液晶屏接口。它在提供高数据传输率的同时会有很低的功耗，另外它还有许多其他的优势： 　　1、低电压电源的兼容性 　　2、低噪声 　　3、高噪声抑制能力 　　4、可靠的信号传输 　　5、能够集成到系统级IC内 　　使用">
+<meta property="og:type" content="article">
+<meta property="og:title" content="LVDS (Low Voltage Differential Signaling)">
+<meta property="og:url" content="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/LVDS%20(Low%20Voltage%20Differential%20Signaling)/index.html">
+<meta property="og:site_name" content="点点滴滴">
+<meta property="og:description" content="LVDS ： Low-Voltage Differential Signaling 低压差分信号传输 　　1994年由美国国家半导体公司提出的一种信号传输模式，是一种电平标准，广泛应用于液晶屏接口。它在提供高数据传输率的同时会有很低的功耗，另外它还有许多其他的优势： 　　1、低电压电源的兼容性 　　2、低噪声 　　3、高噪声抑制能力 　　4、可靠的信号传输 　　5、能够集成到系统级IC内 　　使用">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-12-31T06:48:01.423Z">
+<meta property="article:modified_time" content="2020-01-16T04:37:33.398Z">
+<meta property="article:author" content="Edward">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/LVDS%20(Low%20Voltage%20Differential%20Signaling)/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>LVDS (Low Voltage Differential Signaling) | 点点滴滴</title>
+  
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?a92ed22eafce466e7a7b17546bb0dc6f";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">点点滴滴</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/LVDS%20(Low%20Voltage%20Differential%20Signaling)/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/avatar.gif">
+      <meta itemprop="name" content="Edward">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="点点滴滴">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          LVDS (Low Voltage Differential Signaling)
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-12-31 14:48:01" itemprop="dateCreated datePublished" datetime="2020-12-31T14:48:01+08:00">2020-12-31</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-01-16 12:37:33" itemprop="dateModified" datetime="2020-01-16T12:37:33+08:00">2020-01-16</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%83%82%E7%AC%94%E5%A4%B4/" itemprop="url" rel="index"><span itemprop="name">烂笔头</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/LVDS%20(Low%20Voltage%20Differential%20Signaling)/" class="post-meta-item leancloud_visitors" data-flag-title="LVDS (Low Voltage Differential Signaling)" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>LVDS ： Low-Voltage Differential Signaling 低压差分信号传输</p>
+<p>　　1994年由美国国家半导体公司提出的一种信号传输模式，是一种电平标准，广泛应用于液晶屏接口。它在提供高数据传输率的同时会有很低的功耗，另外它还有许多其他的优势：</p>
+<p>　　1、低电压电源的兼容性</p>
+<p>　　2、低噪声</p>
+<p>　　3、高噪声抑制能力</p>
+<p>　　4、可靠的信号传输</p>
+<p>　　5、能够集成到系统级IC内</p>
+<p>　　使用LVDS技术的的产品数据速率可以从几百Mbps到2Gbps。</p>
+<p>　　它是电流驱动的，通过在接收端放置一个负载而得到电压，当电流正向流动，接收端输出为1，反之为0</p>
+<p>　　他的摆幅为250mv-450mv</p>
+<p>液晶显示器驱动板输出的数字信号中，除了包括RGB数据信号外，还包括行同步、场同步、像素时钟等信号，其中像素时钟信号的最高频率可超过28MHz。采用TTL接口，数据传输速率不高，传输距离较短，且抗电磁干扰（EMI）能力也比较差，会对RGB数据造成一定的影响；另外，TTL多路数据信号采用排线的方式来传送，整个排线数量达几十路，不但连接不便，而且不适合超薄化的趋势。采用LVDS输出接口传输数据，可以使这些问题迎刃而解，实现数据的高速率、低噪声、远距离、高准确度的传输。</p>
+<p>1．LVDS接口</p>
+<p>　　那么，什么是LVDS输出接口呢？LVDS，即Low Voltage Differential Signaling，是一种低压差分信号技术接口。它是美国NS公司（美国国家半导体公司）为克服以TTL电平方式传输宽带高码率数据时功耗大、EMI电磁干扰大等缺点而研制的一种数字视频信号传输方式。</p>
+<p>　　LVDS输出接口利用非常低的电压摆幅（约350mV）在两条PCB走线或一对平衡电缆上通过差分进行数据的传输，即低压差分信号传输。采用LVDS输出接口，可以使得信号在差分PCB线或平衡电缆上以几百Mbit/s的速率传输，由于采用低压和低电流驱动方式，因此，实现了低噪声和低功耗。目前，LVDS输出接口在17in及以上液晶显示器中得到了广泛的应用。</p>
+<p>2．LVDS接口电路的组成</p>
+<p>　　在液晶显示器中，LVDS接口电路包括两部分，即驱动板侧的LVDS输出接口电路（LVDS发送器）和液晶面板侧的LVDS输入接口电路（LVDS接收器）。LVDS发送器将驱动板主控芯片输出的TTL电平并行RGB数据信号和控制信号转换成低电压串行LVDS信号，然后通过驱动板与液晶面板之间的柔性电缆（排线）将信号传送到液晶面板侧的LVDS接收器，LVDS接收器再将串行信号转换为TTL电平的并行信号，送往液晶屏时序控制与行列驱动电路。图1所示为LVDS接口电路的组成示意图。</p>
+<p>　　在数据传输过程中，还必须有时钟信号的参与，LVDS接口无论传输数据还是传输时钟，都采用差分信号对的形式进行传输。所谓信号对，是指LVDS接口电路中，每一个数据传输通道或时钟传输通道的输出都为两个信号（正输出端和负输出端）。</p>
+<p>　　需要说明的是，不同的液晶显示器，其驱动板上的LVDS发送器不尽相同，有些LVDS发送器为一片或两片独立的芯片（如DS90C383），有些则集成在主控芯片中（如主控芯片gm5221内部就集成了LVDS发送器）。</p>
+<p>3．LVDS输出接口电路类型</p>
+<p>　　与TTL输出接口相同，LVDS输出接口也分为以下四种类型：</p>
+<p>　　（l）单路6位LVDS输出接口</p>
+<p>　　这种接口电路中，采用单路方式传输，每个基色信号采用6位数据，共18位RGB数据，因此，也称18位或18bit LVDS接口。</p>
+<p>　　（2）双路6位LVDS输出接口</p>
+<p>　　这种接口电路中，采用双路方式传输，每个基色信号采用6位数据，其中奇路数据为18位，偶路数据为18位，共36位RGB数据，因此，也称36位或36bit LVDS接口。</p>
+<p>　　（3）单路8位1TL输出接口</p>
+<p>　　这种接口电路中，采用单路方式传输，每个基色信号采用8位数据，共24位RGB数据，因此，也称24位或24bit LVDS接口。</p>
+<p>　　（4）双路8位1TL输出位接口</p>
+<p>　　这种接口电路中，采用双路方式传输，每个基色信号采用8位数据，其中奇路数据为24位，偶路数据为24位，共48位RGB数据，因此，也称48位或48bit LVDS接口</p>
+<p>4．典型LVDS发送芯片介绍</p>
+<p>　　典型的LVDS发送芯片分为四通道、五通道和十通道几种，下面简要进行介绍。</p>
+<p>　　（1）四通道LVDS发送芯片</p>
+<p>　　图2 所示为四通道LVDS发送芯片（DS90C365）内部框图。包含了三个数据信号（其中包括RGB、数据使能DE、行同步信号HS、场同步信号VS）通道和一个时钟信号发送通道。</p>
+<p>　　4通道LVDS发送芯片主要用于驱动6bit液晶面板。使用四通道LVDS发送芯片可以构成单路6bit LVDS接自电路和奇/偶双路6bit LVDS接口电路。</p>
+<p>　　（2）五通道LVDS发送芯片</p>
+<p>　　图3 所示为五通道LVDS发送芯片（DS90C385）内部框图。包含了四个数据信号（其中包括RGB、数据使能DE、行同步信号HS、场同步信号vs）通道和一个时钟信号发送通道。</p>
+<p>　　五通道LVDS发送芯片主要用于驱动8bit液晶面板。使用五通道LVDS发送芯片主要用来构成单路8bit LVDS接口电路和奇/偶双路8bit LVDS接口电路。</p>
+<p>　　（3）十通道LVDS发送芯片</p>
+<p>　　图4所示为十通道LVDS发送芯片（DS90C387）内部框图。包含了八个数据信号（其中包括RGB、数据使能DE、行同步信号HS、场同步信号VS）通道和两个时钟信号发送通道。</p>
+<p>　　十通道LVDS发送芯片主要用于驱动8bit液晶面板。使用十通道LVDS发送芯片主要用来构成奇/偶双路8bit LVDS位接口电路。</p>
+<p>　　在十通道LVDS发送芯片中，设置了两个时钟脉冲输出通道，这样做的目的是可以更加灵活的适应不同类型的LVDS接收芯片。当LVDS接收电路同样使用一片十通道LVDS接收芯片时，只需使用一个通道的时钟信号即可；当LVDS接收电路使用两片五通道LVDS接收芯片时，十通道LVDS发送芯片需要为每个LVDS接收芯片提供单独的时钟信号。</p>
+<p>5．LVDS发送芯片的输入与输出信号</p>
+<p>（1）LVDS发送芯片的输入信号</p>
+<p>　　LVDS发送芯片的输入信号来自主控芯片，输入信号包含RGB数据信号、时钟信号和控制信号三大类。</p>
+<p>　　①数据信号：为了说明的方便，将RGB信号以及数据选通DE和行场同步信号都算作数据信号。</p>
+<p>　　在供6bit液晶面板使用的四通道LVDS发送芯片中，共有十八个RGB信号输入引脚，分别是R0～R5红基色数据（6bit红基色数据，R0为最低有效位，R5为最高有效位）六个，G0～G5绿基色数据六个，B0～B5蓝基色数据六个；一个显示数据使能信号DE（数据有效信号）输入引脚；一个行同步信号HS输入引脚；一个场同步信号VS输入引脚。也就是说，在四通道LVDS发送芯片中，共有二十一个数据信号输入引脚。</p>
+<p>　　在供8bit液晶面板使用的五通道LVDS发送芯片中，共有二十四个RGB信号输入引脚，分别是红基色数据R0～R7（8bit红基色数据，R0为最低有效位，R7为最高有效位）八个，绿基色数据G0～G7八个，蓝基色数据B0～B7八个；一个有效显示数据使能信号DE（数据有效信号）输入引脚；一个行同步信号HS输入引脚；一个场同步信号VS输入引脚；一个各用输入引脚。也就是说，在五通道LVDS发送芯片中，共有二十八个数据信号输入引脚。</p>
+<p>　　应该注意的是，液晶面板的输入信号中都必须要有DE信号，但有的液晶面板只使用单一的DE信号而不使用行场同步信号。因此，应用于不同的液晶面板时，有的LVDS发送芯片可能只需输入DE信号，而有的需要同时输入DE和行场同步信号。</p>
+<p>　　②输入时钟信号：即像素时钟信号，也称为数据移位时钟（在LVDS发送芯片中，将输入的并行RGB数据转换成串行数据时要使用移位寄存器）。像素时钟信号是传输数据和对数据信号进行读取的基准。</p>
+<p>　　③待机控制信号（POWER DOWN）：当此信号有效时（一般为低电平时），将关闭LVDS发送芯片中时钟PLL锁相环电路的供电，停止IC的输出。</p>
+<p>　　④数据取样点选择信号：用来选择使用时钟脉冲的上升沿还是下降沿读取所输入的RGB数据。有的LVDS发送芯片可能并不设置待机控制信号和数据取样点选择信号，但也有的除了上述两个控制信号还设置有其他一些控制信号。</p>
+<p>（2）LVDS发送芯片的输出信号</p>
+<p>　　LVDS发送芯片将以并行方式输入的TTL电平RGB数据信号转换成串行的LVDS信号后，直接送往液晶面板侧的LVDS接收芯片。</p>
+<p>　　LVDS发送芯片的输出是低摆幅差分对信号，一般包含一个通道的时钟信号和几个通道的串行数据信号。由于LVDS发送芯片是以差分信号的形式进行输出，因此，输出信号为两条线，一条线输出正信号，另一条线输出负信号。</p>
+<p>　　①时钟信号输出：LVDS发送芯片输出的时钟信号频率与输入时钟信号（像素时钟信号）频率相同。时钟信号的输出常表示为：TXCLK+和TXCLK－，时钟信号占用LVDS发送芯片的一个通道。</p>
+<p>　　②LVDS串行数据信号输出：对于四通道LVDS发送芯片，串行数据占用三个通道，其数据输出信号常表示为TXOUT0+、TXOUT0－，TXOUT1+、TXOUT1－，TXOUT2+、TXOUT2－。</p>
+<p>　　对于五通道LVDS发送芯片，串行数据占用四个通道，其数据输出信号常表示为TXOUT0+、TXOUT0－，TXOUT1+、TXOUTI－，TXOUT2+、TXOUT2－，TXOUT3+、TXOUT3－。</p>
+<p>　　对于十通道LVDS发送芯片，串行数据占用八个通道，其数据输出信号常表示为TXOUT0+、TXOUT0－，TXOUT1+、TXOUT1－，TXOUT2+、TXOUT2－，TXOUT3+、TXOUT3－，TXOUT4+、TXOUT4－，TXOUT5+、TXOUT5－，TXOUT6+、TXOUT6－，TXOUT7+、TXOLT7－。</p>
+<p>　　如果只看电路图，是不能从LVDS发送芯片的输出信号TXOUT－、TXOUT0+中看出其内部到底包含哪些信号数据，以及这些数据是怎样排列的（或者说这些数据的格式是怎样的）。事实上，不同厂家生产的LVDS发送芯片，其输出数据排列方式可能是不同的。因此，液晶显示器驱动板上的LVDS发送芯片的输出数据格式必须与液晶面板LVDS接收芯片要求的数据格式相同，否则，驱动板与液晶面板不匹配。这也是更换液晶面板时必须考虑的一个问题。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/Linux%E5%AD%97%E7%AC%A6%E8%AE%BE%E5%A4%87%E9%A9%B1%E5%8A%A8%E5%89%96%E6%9E%90/" rel="prev" title="Linux字符设备驱动剖析">
+      <i class="fa fa-chevron-left"></i> Linux字符设备驱动剖析
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/Mac%20%E8%BF%9C%E7%A8%8B%E7%9B%AE%E5%BD%95/" rel="next" title="Mac 远程目录">
+      Mac 远程目录 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Edward"
+      src="/uploads/avatar.gif">
+  <p class="site-author-name" itemprop="name">Edward</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">570</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Edward</span>
+</div>
+
+        
+
+
+
+
+
+
+<script>
+  (function() {
+    function leancloudSelector(url) {
+      url = encodeURI(url);
+      return document.getElementById(url).querySelector('.leancloud-visitors-count');
+    }
+
+    function addCount(Counter) {
+      var visitors = document.querySelector('.leancloud_visitors');
+      var url = decodeURI(visitors.id);
+      var title = visitors.dataset.flagTitle;
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          if (results.length > 0) {
+            var counter = results[0];
+            leancloudSelector(url).innerText = counter.time + 1;
+            Counter('put', '/classes/Counter/' + counter.objectId, { time: { '__op': 'Increment', 'amount': 1 } })
+              .catch(error => {
+                console.error('Failed to save visitor count', error);
+              });
+          } else {
+              Counter('post', '/classes/Counter', { title, url, time: 1 })
+                .then(response => response.json())
+                .then(() => {
+                  leancloudSelector(url).innerText = 1;
+                })
+                .catch(error => {
+                  console.error('Failed to create', error);
+                });
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    function showTime(Counter) {
+      var visitors = document.querySelectorAll('.leancloud_visitors');
+      var entries = [...visitors].map(element => {
+        return decodeURI(element.id);
+      });
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url: { '$in': entries } })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          for (let url of entries) {
+            let target = results.find(item => item.url === url);
+            leancloudSelector(url).innerText = target ? target.time : 0;
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    let { app_id, app_key, server_url } = {"enable":true,"app_id":"wxYx0BX9gaKA3XC4LuO2of0v-gzGzoHsz","app_key":"LQMcs6IDIE4YAm10vMsn9IYq","server_url":"https://wxyx0bx9.lc-cn-n1-shared.com","security":false};
+    function fetchData(api_server) {
+      var Counter = (method, url, data) => {
+        return fetch(`${api_server}/1.1${url}`, {
+          method,
+          headers: {
+            'X-LC-Id'     : app_id,
+            'X-LC-Key'    : app_key,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data)
+        });
+      };
+      if (CONFIG.page.isPost) {
+        if (CONFIG.hostname !== location.hostname) return;
+        addCount(Counter);
+      } else if (document.querySelectorAll('.post-title-link').length >= 1) {
+        showTime(Counter);
+      }
+    }
+
+    let api_server = app_id.slice(-9) !== '-MdYXbMMI' ? server_url : `https://${app_id.slice(0, 8).toLowerCase()}.api.lncldglobal.com`;
+
+    if (api_server) {
+      fetchData(api_server);
+    } else {
+      fetch('https://app-router.leancloud.cn/2/route?appId=' + app_id)
+        .then(response => response.json())
+        .then(({ api_server }) => {
+          fetchData('https://' + api_server);
+        });
+    }
+  })();
+</script>
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

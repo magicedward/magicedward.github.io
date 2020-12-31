@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"edward.org.cn","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="一、RTSP命令简述 RTSP是用来控制实时流媒体“播放”、“暂停”、“停止”、“录像”等行为的传输协议。该协议规定了一系列命令以及这些命令的发送格式，RTSP客户端可以通过发送这些指定的命令，从而控制媒体流数据的传输。rfc2326上明确指定的有以下11个命令：DESCRIBE, ANNOUNCE, GET_PARAMETER, OPTIONS, PAUSE, PLAY, RECORD, RED">
+<meta property="og:type" content="article">
+<meta property="og:title" content="RTSP命令简述">
+<meta property="og:url" content="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/RTSP%E5%91%BD%E4%BB%A4%E7%AE%80%E8%BF%B0/index.html">
+<meta property="og:site_name" content="点点滴滴">
+<meta property="og:description" content="一、RTSP命令简述 RTSP是用来控制实时流媒体“播放”、“暂停”、“停止”、“录像”等行为的传输协议。该协议规定了一系列命令以及这些命令的发送格式，RTSP客户端可以通过发送这些指定的命令，从而控制媒体流数据的传输。rfc2326上明确指定的有以下11个命令：DESCRIBE, ANNOUNCE, GET_PARAMETER, OPTIONS, PAUSE, PLAY, RECORD, RED">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-12-31T06:48:01.588Z">
+<meta property="article:modified_time" content="2020-01-16T04:37:34.087Z">
+<meta property="article:author" content="Edward">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/RTSP%E5%91%BD%E4%BB%A4%E7%AE%80%E8%BF%B0/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>RTSP命令简述 | 点点滴滴</title>
+  
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?a92ed22eafce466e7a7b17546bb0dc6f";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">点点滴滴</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/RTSP%E5%91%BD%E4%BB%A4%E7%AE%80%E8%BF%B0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/avatar.gif">
+      <meta itemprop="name" content="Edward">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="点点滴滴">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          RTSP命令简述
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-12-31 14:48:01" itemprop="dateCreated datePublished" datetime="2020-12-31T14:48:01+08:00">2020-12-31</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-01-16 12:37:34" itemprop="dateModified" datetime="2020-01-16T12:37:34+08:00">2020-01-16</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%83%82%E7%AC%94%E5%A4%B4/" itemprop="url" rel="index"><span itemprop="name">烂笔头</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/RTSP%E5%91%BD%E4%BB%A4%E7%AE%80%E8%BF%B0/" class="post-meta-item leancloud_visitors" data-flag-title="RTSP命令简述" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>一、RTSP命令简述</p>
+<p>RTSP是用来控制实时流媒体“播放”、“暂停”、“停止”、“录像”等行为的传输协议。该协议规定了一系列命令以及这些命令的发送格式，RTSP客户端可以通过发送这些指定的命令，从而控制媒体流数据的传输。rfc2326上明确指定的有以下11个命令：DESCRIBE, ANNOUNCE, GET_PARAMETER, OPTIONS, PAUSE, PLAY, RECORD, REDIRECT, SETUP, SET_PARAMETER, TEARDOWN。要完成基本的视频流传输，至少需要4个命令：DESCRIBE, SETUP, PLAY, TEARDOWN，而myRTSPClient中的example就是以这4个命令展开的，讲完了这4个命令，那我们的example程序也就基本讲完了。</p>
+<p>我们现在就先来看看这4个命令是如何实现客户端与服务端之间的交互的。</p>
+<p>（详细叙述可以参考：<a target="_blank" rel="noopener" href="http://www.cnblogs.com/qq78292959/archive/2010/08/12/2077039.html%EF%BC%89">http://www.cnblogs.com/qq78292959/archive/2010/08/12/2077039.html）</a> </p>
+<p>二、DESCRIBE、SETUP、PLAY、TEARDOWN</p>
+<p>客户端在发送这些命令的过程中，最关键的一个元素就是RTSP服务端的URI，在说明以下命令的过程中，我们假设RTSP服务端的URI为：rtsp://127.0.0.1/ansersion</p>
+<ol>
+<li>DECRIBE</li>
+</ol>
+<p>命令名称：DESCRIBE</p>
+<p>命令作用：请求SDP</p>
+<p>命令格式：</p>
+<p>DESCRIBE&lt;BLANK&gt;&lt;RTSP URI&gt;&lt;BLANK&gt;RTSP/&lt;RTSP VERSION&gt;\r\nCSeq:&lt;BLANK&gt;&lt;COMMAND SEQUENCE&gt;\r\n\r\n</p>
+<p>（Note：&lt;BLANK&gt;：空格；&lt;COMMAND SEQUENCE&gt;：命令序列，每一次发送命令该数字加1）</p>
+<p>命令示例：</p>
+<p>DESCRIBE rtsp://127.0.0.1/ansersion RTSP/1.0<br>CSeq: 1</p>
+<p>（Note：虽然看不见，但示例中最后是有空行的，必不可少哦！看看“命令格式”最后连着两个&quot;\r\n&quot;你就明白了。空行（\r\n）是RTSP数据包的结束标识。）</p>
+<p>服务端返回信息格式：</p>
+<p>RTSP/&lt;RTSP VERSION&gt;&lt;BLANK&gt;&lt;STATE ID&gt;&lt;BLANK&gt;&lt;STATE DESCRIBE&gt;\r\nCSeq:&lt;BLANK&gt;&lt;COMMAND SEQUENCE&gt;\r\n&lt;OTHER&gt;\r\n\r\n&lt;SDP&gt;</p>
+<p>（Note：&lt;OTHER&gt;: 其他描述信息；&lt;SDP&gt;: SDP描述信息，SDP不属于RTSP的打包数据，这里可以看到空行（\r\n）在SDP之前）</p>
+<p>服务端返回信息示例：</p>
+<p>RTSP/1.0 200 OK<br>CSeq: 1<br>Date: Sun, Dec 27 2015 02:16:50 GMT<br>Content-Base: rtsp://127.0.0.1/ansersion/<br>Content-Type: application/sdp<br>Content-Length: 510</p>
+<p>v=0<br>o=- 1451182595570866 1 IN IP4 192.168.81.145<br>s=Session streamed by &quot;testOnDemandRTSPServer&quot;<br>i=ansersion<br>t=0 0<br>a=tool:LIVE555 Streaming Media v2015.11.09<br>a=type:broadcast<br>a=control:*<br>a=range:npt=0-<br>a=x-qt-text-nam:Session streamed by &quot;testOnDemandRTSPServer&quot;<br>a=x-qt-text-inf:ansersion<br>m=video 0 RTP/AVP 96<br>c=IN IP4 0.0.0.0<br>b=AS:500<br>a=rtpmap:96 H264/90000<br>a=fmtp:96 packetization-mode=1;profile-level-id=4D4033;sprop-parameter-sets=Z01AM5JUDAS0IAAAAwBAAAAM0eMGVA==,aO48gA==<br>a=control:track1</p>
+<p>（Note：以RTSP客户端的角度，以上红字部分信息必须理解。</p>
+<p>首先是&quot;RTSP/1.0 200 OK&quot;，这个表示RTSP服务端成功受理客户端的请求。</p>
+<p>再者是“m=video 0 RTP/AVP 96”，该信息指出了RTSP客户端提供传输的流媒体类型，“a=control:track1”指出了访问该流媒体的方式，是后续SETUP命令的重要参数，这是一个简化的版本，有时候服务端会返回完整版本：“a=control:rtsp://127.0.0.1/ansersion/track1”。</p>
+<p>最后是“Z01AM5JUDAS0IAAAAwBAAAAM0eMGVA==”和“aO48gA==”，这是H264的SPS和PPS的Base64编码。老实说，要让RTSP客户端去考虑具体编码格式的问题，着实是一个设计上的瑕疵。后续我打算把这部分改掉，现在我们将其看作H264的重要参数即可）</p>
+<ol start="2">
+<li>SETUP</li>
+</ol>
+<p>命令名称：SETUP</p>
+<p>命令作用：建立流媒体会话，告知RTSP服务端准备资源，以待后续进一步操作（比如“PLAY”）</p>
+<p>命令格式：</p>
+<p>SETUP&lt;BLANK&gt;&lt;RTSP URI&gt;/&lt;SDP ATTRIBUTE CONTROL&gt;RTSP/&lt;RTSP VERSION&gt;\r\nTransport:&lt;BLANK&gt;&lt;PROTOCOL&gt;;&lt;CAST METHOD&gt;;client_port=&lt;RTP PORT&gt;-&lt;RTCP PORT&gt;\r\nCSeq:&lt;BLANK&gt;&lt;COMMAND SEQUENCE&gt;\r\n\r\n</p>
+<p>（Note：&lt;SDP ATTRIBUTE CONTROL&gt;：SDP中“a=control:track1”；&lt;PROTOCOL&gt;：实时流传输协议，一般为RTP+UDP；&lt;CAST METHOD&gt;：传输方式，单播或组播；）</p>
+<p>命令示例：</p>
+<p>SETUP rtsp://127.0.0.1/ansersion/track1 RTSP/1.0<br>Transport: RTP/AVP/UDP;unicast;client_port=10330-10331<br>CSeq: 2</p>
+<p>（Note：使用RTP传输（RTP/AVP/UDP），传输方式为单播（unicast），RTP和RTCP的端口号分别为10330和10331（client_port=10330-10331））</p>
+<p>服务端返回信息格式：</p>
+<p>RTSP/&lt;RTSP VERSION&gt;&lt;BLANK&gt;&lt;STATE ID&gt;&lt;BLANK&gt;&lt;STATE DESCRIBE&gt;\r\nCSeq:&lt;BLANK&gt;&lt;COMMAND SEQUENCE&gt;\r\n&lt;OTHER&gt;\r\n&lt;SESSION ID&gt;\r\n\r\n</p>
+<p>（Note：&lt;SESSION ID&gt;：服务端建立好资源后，通过该标识访问其媒体流资源。）</p>
+<p>服务端返回信息示例：</p>
+<p>RTSP/1.0 200 OK<br>CSeq: 2<br>Date: Sun, Dec 27 2015 02:28:01 GMT<br>Transport: RTP/AVP;unicast;destination=127.0.0.1;source=127.0.0.1;client_port=10330-10331;server_port=6970-6971<br>Session: ABF519D9;timeout=65</p>
+<p>（Note：其中“ABF519D9”为SESSION ID，PLAY命令以此为参数，告知服务端以SETUP命令中指定的方式（RTP、unicast、client_port=10330-10331）进行媒体流传输）</p>
+<ol start="3">
+<li>PLAY</li>
+</ol>
+<p>命令名称：PLAY</p>
+<p>命令作用：告知服务端开始传输媒体流</p>
+<p>命令格式：</p>
+<p>PLAY&lt;BLANK&gt;&lt;RTSP URI&gt;RTSP/&lt;RTSP VERSION&gt;\r\nCSeq:&lt;BLANK&gt;&lt;COMMAND SEQUENCE&gt;Session:&lt;BLANK&gt;&lt;SESSION ID&gt;\r\n\r\n</p>
+<p>命令示例：</p>
+<p>PLAY rtsp://127.0.0.1/ansersion RTSP/1.0<br>CSeq: 3<br>Session: ABF519D9</p>
+<p>（Note：“ABF519D9”为SETUP返回信息中指定的ID）</p>
+<p>服务端返回信息格式：</p>
+<p>RTSP/&lt;RTSP VERSION&gt;&lt;BLANK&gt;&lt;STATE ID&gt;&lt;BLANK&gt;&lt;STATE DESCRIBE&gt;\r\nCSeq:&lt;BLANK&gt;&lt;COMMAND SEQUENCE&gt;\r\n&lt;OTHER&gt;\r\n\r\n</p>
+<p>服务端返回信息示例：</p>
+<p>RTSP/1.0 200 OK<br>CSeq: 3<br>Date: Sun, Dec 27 2015 02:28:01 GMT<br>Range: npt=0.000-<br>Session: ABF519D9<br>RTP-Info: url=rtsp://127.0.0.1/ansersion/track1;seq=35825;rtptime=3103868658</p>
+<p>（Note：服务端受理PLAY命令之后，就会有媒体流数据向客户端发送过来了。依照SETUP中的传输方式，媒体流会通过RTP/UDP封包发送至客户端的10330端口）</p>
+<ol start="4">
+<li>TEARDOWN</li>
+</ol>
+<p>命令名称：TEARDOWN</p>
+<p>命令作用：取消会话，告知服务端停止继续发包，并销毁相关资源。</p>
+<p>命令格式：</p>
+<p>TEARDOWN&lt;BLANK&gt;&lt;RTSP URI&gt;RTSP/&lt;RTSP VERSION&gt;\r\nCSeq:&lt;BLANK&gt;&lt;COMMAND SEQUENCE&gt;Session:&lt;BLANK&gt;&lt;SESSION ID&gt;\r\n\r\n</p>
+<p>命令示例：</p>
+<p>TEARDOWN rtsp://127.0.0.1/ansersion RTSP/1.0<br>CSeq: 4<br>Session: ABF519D9</p>
+<p>服务端返回信息格式：</p>
+<p>RTSP/&lt;RTSP VERSION&gt;&lt;BLANK&gt;&lt;STATE ID&gt;&lt;BLANK&gt;&lt;STATE DESCRIBE&gt;\r\nCSeq:&lt;BLANK&gt;&lt;COMMAND SEQUENCE&gt;\r\n&lt;OTHER&gt;\r\n\r\n</p>
+<p>服务端返回信息示例：</p>
+<p>RTSP/1.0 200 OK<br>CSeq: 4<br>Date: Sun, Dec 27 2015 02:17:29 GMT</p>
+<p>（Note：服务端受理TEARDOWN命令之后，服务端就不会再发送数据“骚扰”客户端了。）</p>
+<p>三、附录</p>
+<p>以下是一份截获的网络数据包，可使用wireshark打开，以供参考。</p>
+<p><a target="_blank" rel="noopener" href="http://pan.baidu.com/s/1gfae1wv">http://pan.baidu.com/s/1gfae1wv</a></p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/rtsp%20rtmp%E6%8E%A8%E6%B5%81/" rel="prev" title="rtsp rtmp推流">
+      <i class="fa fa-chevron-left"></i> rtsp rtmp推流
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/Rxjava%20samples/" rel="next" title="Rxjava samples">
+      Rxjava samples <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Edward"
+      src="/uploads/avatar.gif">
+  <p class="site-author-name" itemprop="name">Edward</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">570</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Edward</span>
+</div>
+
+        
+
+
+
+
+
+
+<script>
+  (function() {
+    function leancloudSelector(url) {
+      url = encodeURI(url);
+      return document.getElementById(url).querySelector('.leancloud-visitors-count');
+    }
+
+    function addCount(Counter) {
+      var visitors = document.querySelector('.leancloud_visitors');
+      var url = decodeURI(visitors.id);
+      var title = visitors.dataset.flagTitle;
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          if (results.length > 0) {
+            var counter = results[0];
+            leancloudSelector(url).innerText = counter.time + 1;
+            Counter('put', '/classes/Counter/' + counter.objectId, { time: { '__op': 'Increment', 'amount': 1 } })
+              .catch(error => {
+                console.error('Failed to save visitor count', error);
+              });
+          } else {
+              Counter('post', '/classes/Counter', { title, url, time: 1 })
+                .then(response => response.json())
+                .then(() => {
+                  leancloudSelector(url).innerText = 1;
+                })
+                .catch(error => {
+                  console.error('Failed to create', error);
+                });
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    function showTime(Counter) {
+      var visitors = document.querySelectorAll('.leancloud_visitors');
+      var entries = [...visitors].map(element => {
+        return decodeURI(element.id);
+      });
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url: { '$in': entries } })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          for (let url of entries) {
+            let target = results.find(item => item.url === url);
+            leancloudSelector(url).innerText = target ? target.time : 0;
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    let { app_id, app_key, server_url } = {"enable":true,"app_id":"wxYx0BX9gaKA3XC4LuO2of0v-gzGzoHsz","app_key":"LQMcs6IDIE4YAm10vMsn9IYq","server_url":"https://wxyx0bx9.lc-cn-n1-shared.com","security":false};
+    function fetchData(api_server) {
+      var Counter = (method, url, data) => {
+        return fetch(`${api_server}/1.1${url}`, {
+          method,
+          headers: {
+            'X-LC-Id'     : app_id,
+            'X-LC-Key'    : app_key,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data)
+        });
+      };
+      if (CONFIG.page.isPost) {
+        if (CONFIG.hostname !== location.hostname) return;
+        addCount(Counter);
+      } else if (document.querySelectorAll('.post-title-link').length >= 1) {
+        showTime(Counter);
+      }
+    }
+
+    let api_server = app_id.slice(-9) !== '-MdYXbMMI' ? server_url : `https://${app_id.slice(0, 8).toLowerCase()}.api.lncldglobal.com`;
+
+    if (api_server) {
+      fetchData(api_server);
+    } else {
+      fetch('https://app-router.leancloud.cn/2/route?appId=' + app_id)
+        .then(response => response.json())
+        .then(({ api_server }) => {
+          fetchData('https://' + api_server);
+        });
+    }
+  })();
+</script>
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

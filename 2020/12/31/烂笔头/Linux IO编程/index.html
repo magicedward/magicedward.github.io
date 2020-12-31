@@ -1,0 +1,737 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"edward.org.cn","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="2012-03-06: 1.标准I&#x2F;O 缓冲   标准IO打开文件时，创建FILE结构体缓冲，我们只需用到文件指针 *fp *fp  (如：stdout(行缓冲),stderr(不缓中)) printf(&quot; &quot;); -&gt;&gt; 传递给标准IO缓冲-&gt;&gt; 内核   sync 同步 把缓冲写到文件 fprintf(stdout,&quot;helloworld&amp;">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Linux IO编程">
+<meta property="og:url" content="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/Linux%20IO%E7%BC%96%E7%A8%8B/index.html">
+<meta property="og:site_name" content="点点滴滴">
+<meta property="og:description" content="2012-03-06: 1.标准I&#x2F;O 缓冲   标准IO打开文件时，创建FILE结构体缓冲，我们只需用到文件指针 *fp *fp  (如：stdout(行缓冲),stderr(不缓中)) printf(&quot; &quot;); -&gt;&gt; 传递给标准IO缓冲-&gt;&gt; 内核   sync 同步 把缓冲写到文件 fprintf(stdout,&quot;helloworld&amp;">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-12-31T06:48:01.382Z">
+<meta property="article:modified_time" content="2020-01-16T04:37:32.203Z">
+<meta property="article:author" content="Edward">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/Linux%20IO%E7%BC%96%E7%A8%8B/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>Linux IO编程 | 点点滴滴</title>
+  
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?a92ed22eafce466e7a7b17546bb0dc6f";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">点点滴滴</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/Linux%20IO%E7%BC%96%E7%A8%8B/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/avatar.gif">
+      <meta itemprop="name" content="Edward">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="点点滴滴">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Linux IO编程
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-12-31 14:48:01" itemprop="dateCreated datePublished" datetime="2020-12-31T14:48:01+08:00">2020-12-31</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-01-16 12:37:32" itemprop="dateModified" datetime="2020-01-16T12:37:32+08:00">2020-01-16</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%83%82%E7%AC%94%E5%A4%B4/" itemprop="url" rel="index"><span itemprop="name">烂笔头</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/Linux%20IO%E7%BC%96%E7%A8%8B/" class="post-meta-item leancloud_visitors" data-flag-title="Linux IO编程" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>2012-03-06:</p>
+<p>1.标准I/O</p>
+<p>缓冲  </p>
+<p>标准IO打开文件时，创建FILE结构体缓冲，我们只需用到文件指针 *fp</p>
+<p>*fp  (如：stdout(行缓冲),stderr(不缓中))</p>
+<p>printf(&quot; &quot;); -&gt;&gt; 传递给标准IO缓冲-&gt;&gt; 内核  </p>
+<p>sync 同步 把缓冲写到文件</p>
+<p>fprintf(stdout,&quot;helloworld&quot;);  ==  printf(&quot;helloworld&quot;);</p>
+<p>cache  缓存，延时读，提高CPU效率</p>
+<p>buffer 缓冲，延时写，提高文件操作效率</p>
+<p>标准IO三种类型缓冲：(数据何时刷新到内核)</p>
+<p>全缓冲:填满缓冲后才刷新(默认)，</p>
+<p>磁盘文件，典型全缓冲</p>
+<p>行缓冲:当行缓冲满时，或遇到换行符’\n’，才刷新</p>
+<p>stdout, 典型行缓冲</p>
+<p>不带缓冲：标准出错(stderr)</p>
+<p>int fflush(FILE *fp);</p>
+<p>或fflush刷新，或fclose/正常退出，否则不刷新到内核。</p>
+<p>fflush :任何时刻，可以强制刷新数据到内核</p>
+<p>void setbuf(FILE *stream, char *buf);</p>
+<p>//更改缓冲类型//原来buffer里面的全部刷新,改用当前设置的buffer</p>
+<p>int setvbuf(FILE *stream, char *buf, int mode, size_t size);</p>
+<p>标准I/O库函数：&gt;&gt;&gt;读到缓冲</p>
+<p>fopen/fclose</p>
+<p>fgets/fputs</p>
+<p>fgetc/fputc</p>
+<p>fwrite/fread</p>
+<p>FILE *fopen(const char *path,const char *mode);</p>
+<p>:mode:</p>
+<p>r:读，文件必须存在</p>
+<p>w:写，文件不存在自动创建</p>
+<p>a:追加。</p>
+<p>b:二进制方式打开</p>
+<p>w+: …以这种方式打开，不能读取原来的值了，覆盖了</p>
+<p>r+:文件必须存在,可读写，覆盖</p>
+<p>strerror(errno) //把错误解析为错误字符串</p>
+<p>int fclose(FILE *stream); //成功返回0，失败返回EOF 并设置errno</p>
+<p>字符：</p>
+<p>int getc(FILE *stream);//实现为宏</p>
+<p>int fgetc(FILE *stream); </p>
+<p>int getchar(void); </p>
+<p>int putc(int c,FILE *stream);//实现为宏</p>
+<p>int fputc(int c,FILE *stream);</p>
+<p>int putchar(int c); </p>
+<p>行：</p>
+<p>char gets(char *s) //旧的，不将换行符存入缓冲</p>
+<p>char fgets(char *s,int size,FILE *stream)//读size-1个字符 加NULL(‘\0’)</p>
+<p>int puts(const char*s);//以null作为终止符写到标准输出,null不写出换新行</p>
+<p>int fputs(const char*s,FILE *stream);</p>
+<p>直接I/O：//每次读写指定长度//可以读写二进制数据   ///返回读到对象数  /size_t 字节</p>
+<p>size_t fread(void *ptr,size_t size,size_t,nmemb,FILE *stream);//nmemb 希望读写对象数</p>
+<p>size_t fwrite(const void *prt,size_t size,size_t nmemb,FILE *steam);</p>
+<p>标准出错函数：</p>
+<p>int feof(FILE *stream);//非0，表示结束</p>
+<p>int ferror(FILE *stream);//非0,表示出错</p>
+<p>int clearerr(FILE *stream);</p>
+<p>定位流</p>
+<p>int fseek(FILE *stream,long offset,int whence);//定位，whence:SEEK_SET/SEEK_CUR/SEEK_END </p>
+<p>long ftell(FILE *stream);//返回当前位置</p>
+<p>void rewind(FILE *steam);//指回文件开头</p>
+<p>int fgetpos(FILE *stream,fpos_t *pos); //将当位指示器值存入pos对象到成功返回0 </p>
+<p>int fsetpos(FILE *stream,fpos_t *pos); //fpot_t 为封装的long 便于移植</p>
+<p>umask 022  </p>
+<p>创建文件时 权限默认为666 &amp; 022 -&gt; 644</p>
+<p>全局错误码errno //errno.h中定义</p>
+<p>strerror(errno)//把错误码转化为字符串</p>
+<p>perror(&quot; &quot;)//打印自定义+错误</p>
+<p>2.文件I/O</p>
+<p>//通过文件描述符来访问(数组下标)</p>
+<p>//调用成功，返回文件描述符，失败返回-1，设置errno</p>
+<p>int open(const char *pathanme,int flags); 可以打开设备文件，但不能创建设备文件 使用mknod()</p>
+<p>int open(const char *pathname,int flags,mode_t mode);</p>
+<p>flags:</p>
+<p>O_RDONLY : 只读</p>
+<p>O_WRONLY ：只写 这三个参数是互斥的</p>
+<p>O_RDWR   ：读写</p>
+<p>O_CREAT  ：如文件不存在，创建</p>
+<p>O_EXCL   ：如创建时失败，返回错误信息</p>
+<p>O_NOCTTY ：如文件为终端，不可作为调用open()系统调用的进程控制终端</p>
+<p>O_TRUNC ：如文件存在，并以只读或只写成功打开，那么先删除原有数据。</p>
+<p>O_APPEND ：以添加方式打开文件，打开文件同时，文件指针指向文件末尾。</p>
+<p>mode: 如 0644  八进制表示法</p>
+<p>int close(int fildes); 成功返回0,失败返回-1</p>
+<p>ssize_t read(int fd,void *buf,size_t count) 成功返回读字节数 不成功返回-1</p>
+<p>ssize_t write(int fd,const void *buf, size_t count);</p>
+<p>off_t lseek(int fildes,off_t offset,int whence)//成功返回当前位置，失败返回-1</p>
+<p>只对常规文件有效，对socket、管道、FIFO等操作失败</p>
+<p>空洞文件，可以多线程、多进程来写</p>
+<p>int dup(int oldfd)//返回最小未用的文件描述符</p>
+<p>int dup2(int oldfd,int newfd)//复制文件描述符 old指向new</p>
+<p>int fcntl(..argc)//复制 查询状态 控制等功能</p>
+<p>3.文件及目录</p>
+<p>获取文件/目录属性信息</p>
+<p>int stat(const char *filename,struct stat *buf);//目标信息</p>
+<p>int lstat(const char*filename,struct stat *buf)//本身信息</p>
+<p>int fstat(int filedes,struct stat *buf);//在filedes打开的文件的信息</p>
+<p>struct stat</p>
+<p>{ </p>
+<p>   dev_t    st_dev;    //设备号或文件所在的设备号</p>
+<p>   ino_t    st_ino;    //inode</p>
+<p>   mode_t   st_mode;   //类型 /权限</p>
+<p>   nlink_t  st_nlink;  //引用计数</p>
+<p>   uid_t    st_uid;    //user id of owner</p>
+<p>   gid_t    st_gid;    //group id of owner</p>
+<p>   dev_t    st_rdev;   //本身设备号//必须是设备文件才有效</p>
+<p>   off_t    st_size    //total size,in bytes</p>
+<p>  bklsize_t st_blksize;//blocksize for filesystem IO</p>
+<p>   time_t   st_atime;  //time of last access</p>
+<p>   time_t   st_mtime;  //time of last modifycation</p>
+<p>   time_t   st_ctime;  //time of last status change</p>
+<p>};</p>
+<p>st_mode成员 </p>
+<p>取得文件类型的检测宏</p>
+<p>S_ISREG(m)  is it a regular file?</p>
+<p>S_ISDIR(m)  dirrectory ?</p>
+<p>S_ISCHR(m)  character device?</p>
+<p>S_ISBLK(m)  block device?</p>
+<p>S_ISFIFO(m) fifo?</p>
+<p>S_ISLNK(m)  symbolic link?</p>
+<p>S_ISSOCK(m) socket?</p>
+<p>st_mode 16位</p>
+<p>0 0 00000</p>
+<p> 第二个0代表1位</p>
+<p> 第三个起代表3位</p>
+<p>st_mode  4位(第二第三个0)代表文件类型</p>
+<p>3位(第四个0)临时权限            //1 2 4</p>
+<p>3位(第五个0)rwx 属主对文件的权限</p>
+<p>3位(第六个0)r– 属组对文件的权限</p>
+<p>3位(第七个0)r– 其他对文件的权限</p>
+<p>S_IFMT   0170000  bitmask for the file type bitfileds</p>
+<p>S_IFSOCK 0140000  socket</p>
+<p>S_IFLNK  0120000  symbolic link</p>
+<p>S_IFREG  0100000  regular file</p>
+<p>S_IFBLK  0060000  block device</p>
+<p>S_IFDIR  0040000  dirrectory</p>
+<p>S_IFCHR  0020000  character device</p>
+<p>S_IFIFO  0010000  fifo</p>
+<p>S_ISUID  0004000  set UID bit</p>
+<p>S_ISGID  0002000  set GID bit</p>
+<p>S_ISVTX  0001000  sticky bit</p>
+<p>S_IRWXU  0000700  mask for file owner permission</p>
+<p>S_IRUSR  0000400  owner has read permission</p>
+<p>S_IWUSR  0000200  owner has write permission</p>
+<p>S_IXUSR  0000100  owner has execute permission</p>
+<p>S_IRWXG  0000070  mask for group permission</p>
+<p>S_IRGRP  0000040  group has read permission</p>
+<p>S_IWGRP  0000020  group has write permission</p>
+<p>S_IXGRP  0000010  group has execute permission</p>
+<p>S_IRWXO  0000007  mask for other permission</p>
+<p>S_IROTH  0000004  others has read permission</p>
+<p>S_IWOTH  0000002  others has write permission</p>
+<p>S_IXOTH  0000001  others has execute permission</p>
+<p>目录项(存放名字、索引号)放在数据域里面，其他元数据存放在inode组</p>
+<p>空目录，硬链接为2</p>
+<p>//#include&lt;unistd.h&gt; //测试权限 文件是否存在</p>
+<p>int access(const char *path,int mode);</p>
+<p>//&lt;sys/types.h&gt; &lt;sys/stat.h&gt;</p>
+<p>mode_t umask(mode_t mask);</p>
+<p>新创建文件权限为 permission &amp; ~umask </p>
+<p>#include&lt;dirent.h&gt;</p>
+<p>DIR *opendir(const char *dirname);</p>
+<p>struct dirent *readdir(DIR *dirp);</p>
+<p>struct dirent</p>
+<p>{</p>
+<p>  char d_name[l];//可变的</p>
+<p>  int  d_fileno;</p>
+<p>};//default size is 268 </p>
+<p>静态库 xxx.a   archive          编译时写入代码  效率较高  代价 浪费空间</p>
+<p>动态库 xxx.so  share object     运时行链接      效率较高       节省空间</p>
+<p>//创建.o文件 目标文件(可重定位文件)</p>
+<p>gcc -o sum.o sum.c -c </p>
+<p>//创建静态库 *.o -&gt;.a</p>
+<p>ar crs libxxx.a sum.o</p>
+<p>//使用静态链接库 -L紧跟路径  -l紧路库名libxxx.a 中的xxx</p>
+<p>gcc main.c -o main -L. -lxxx</p>
+<p>gcc a.c -o a -ly -lx  y与x 顺序 被依赖的在前面</p>
+<p>编译时，链接库文件的顺序是需要考虑</p>
+<p>soname libxxx.so.0 只保留主版本号 方面库的维护与升级</p>
+<p>//创建动态库 -fPIC 创建与地址无关的编译程序</p>
+<p>gcc -fPIC -c hello.c -o hello.o</p>
+<p>gcc -shared -fPIC -o libxxx.so hello.o</p>
+<p>//使用动态库 方法</p>
+<p>1.设置环境变量 LD_LIBRARY_PATH</p>
+<p>2.可以直接把动态库libxxx.so放到 /lib 或 /usr/lib 目录下</p>
+<p>3.修改/etc/ld.so.conf.d/libc.conf  运行ldconfig 重建/etc/ld.so.cashe</p>
+<p>！！！动态库，是指运行时必须用到的。而编译时，必须指是定动态库的路径。</p>
+<p>nm [object] 列出库中的符号 U调用其他库的  T库中定义的  W弱态符号可能被其他库覆盖的</p>
+<p>ldd /lib/libxxx.so  查看依赖的库</p>
+<p>gcc参数</p>
+<p>-shared : 指定生成动态链接库</p>
+<p>-static : 指定生成静态链接库</p>
+<p>-fPIC   : 编译与地址无关共享库</p>
+<p>-L.     : 表示要链接的库在当前目录</p>
+<p>-lxxx : 指定链接库libxxx.so</p>
+<p>-Wall   : 生成所有警告信息</p>
+<p>-ggdb   : 尽可能生成gdb可以使用的调试信息</p>
+<p>-g      : 编译时生成调试信息</p>
+<p>-c      : 生成目标文件(.o)</p>
+<p>-Wl,options  : 把options参数传递给链接器ld 多参以,隔开</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/libstagefright%E7%89%88%E6%9C%AC%20%E8%A7%86%E9%A2%91%E5%BA%93/" rel="prev" title="libstagefright版本 视频库">
+      <i class="fa fa-chevron-left"></i> libstagefright版本 视频库
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/linux%20jdk%20%E5%AE%89%E8%A3%85/" rel="next" title="linux jdk 安装">
+      linux jdk 安装 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Edward"
+      src="/uploads/avatar.gif">
+  <p class="site-author-name" itemprop="name">Edward</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">570</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Edward</span>
+</div>
+
+        
+
+
+
+
+
+
+<script>
+  (function() {
+    function leancloudSelector(url) {
+      url = encodeURI(url);
+      return document.getElementById(url).querySelector('.leancloud-visitors-count');
+    }
+
+    function addCount(Counter) {
+      var visitors = document.querySelector('.leancloud_visitors');
+      var url = decodeURI(visitors.id);
+      var title = visitors.dataset.flagTitle;
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          if (results.length > 0) {
+            var counter = results[0];
+            leancloudSelector(url).innerText = counter.time + 1;
+            Counter('put', '/classes/Counter/' + counter.objectId, { time: { '__op': 'Increment', 'amount': 1 } })
+              .catch(error => {
+                console.error('Failed to save visitor count', error);
+              });
+          } else {
+              Counter('post', '/classes/Counter', { title, url, time: 1 })
+                .then(response => response.json())
+                .then(() => {
+                  leancloudSelector(url).innerText = 1;
+                })
+                .catch(error => {
+                  console.error('Failed to create', error);
+                });
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    function showTime(Counter) {
+      var visitors = document.querySelectorAll('.leancloud_visitors');
+      var entries = [...visitors].map(element => {
+        return decodeURI(element.id);
+      });
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url: { '$in': entries } })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          for (let url of entries) {
+            let target = results.find(item => item.url === url);
+            leancloudSelector(url).innerText = target ? target.time : 0;
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    let { app_id, app_key, server_url } = {"enable":true,"app_id":"wxYx0BX9gaKA3XC4LuO2of0v-gzGzoHsz","app_key":"LQMcs6IDIE4YAm10vMsn9IYq","server_url":"https://wxyx0bx9.lc-cn-n1-shared.com","security":false};
+    function fetchData(api_server) {
+      var Counter = (method, url, data) => {
+        return fetch(`${api_server}/1.1${url}`, {
+          method,
+          headers: {
+            'X-LC-Id'     : app_id,
+            'X-LC-Key'    : app_key,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data)
+        });
+      };
+      if (CONFIG.page.isPost) {
+        if (CONFIG.hostname !== location.hostname) return;
+        addCount(Counter);
+      } else if (document.querySelectorAll('.post-title-link').length >= 1) {
+        showTime(Counter);
+      }
+    }
+
+    let api_server = app_id.slice(-9) !== '-MdYXbMMI' ? server_url : `https://${app_id.slice(0, 8).toLowerCase()}.api.lncldglobal.com`;
+
+    if (api_server) {
+      fetchData(api_server);
+    } else {
+      fetch('https://app-router.leancloud.cn/2/route?appId=' + app_id)
+        .then(response => response.json())
+        .then(({ api_server }) => {
+          fetchData('https://' + api_server);
+        });
+    }
+  })();
+</script>
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

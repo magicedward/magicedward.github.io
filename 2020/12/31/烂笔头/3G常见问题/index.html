@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"edward.org.cn","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="一、3G相关日志信息的获取      1、使用串口捕捉LOG 信息：           A、打开串口，输入：                logcat –b radio &amp;                logcat –s pppd CHAT &amp;                此时串口屏幕上会不断打印出捕捉到的信息           B、插入Dongle 或者开启modem，">
+<meta property="og:type" content="article">
+<meta property="og:title" content="3G常见问题">
+<meta property="og:url" content="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/3G%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98/index.html">
+<meta property="og:site_name" content="点点滴滴">
+<meta property="og:description" content="一、3G相关日志信息的获取      1、使用串口捕捉LOG 信息：           A、打开串口，输入：                logcat –b radio &amp;                logcat –s pppd CHAT &amp;                此时串口屏幕上会不断打印出捕捉到的信息           B、插入Dongle 或者开启modem，">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-12-31T06:48:00.763Z">
+<meta property="article:modified_time" content="2020-01-16T04:37:32.691Z">
+<meta property="article:author" content="Edward">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/3G%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>3G常见问题 | 点点滴滴</title>
+  
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?a92ed22eafce466e7a7b17546bb0dc6f";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">点点滴滴</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/3G%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/avatar.gif">
+      <meta itemprop="name" content="Edward">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="点点滴滴">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          3G常见问题
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-12-31 14:48:00" itemprop="dateCreated datePublished" datetime="2020-12-31T14:48:00+08:00">2020-12-31</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-01-16 12:37:32" itemprop="dateModified" datetime="2020-01-16T12:37:32+08:00">2020-01-16</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%83%82%E7%AC%94%E5%A4%B4/" itemprop="url" rel="index"><span itemprop="name">烂笔头</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/3G%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98/" class="post-meta-item leancloud_visitors" data-flag-title="3G常见问题" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>一、3G相关日志信息的获取</p>
+<p>     1、使用串口捕捉LOG 信息：</p>
+<p>          A、打开串口，输入：</p>
+<p>               logcat –b radio &amp;</p>
+<p>               logcat –s pppd CHAT &amp;</p>
+<p>               此时串口屏幕上会不断打印出捕捉到的信息</p>
+<p>          B、插入Dongle 或者开启modem，把出问题的流程走一遍</p>
+<p>          C、把串口输出的信息保存成文件</p>
+<p>      2、使用 adb工具捕捉LOG信息：</p>
+<p>          A、打开adb shell： adb shell</p>
+<p>          B、输入命令</p>
+<p>               $ logcat –b radio &gt; /cache/radio.log &amp;</p>
+<p>               $ logcat –s pppd CHAT &gt; /cache/pppd.log &amp;</p>
+<p>               如果你有root 权限，还可以捕捉kernel的打印：</p>
+<p>               # cat /proc/kmsg &gt; /cache/kernel.log &amp;</p>
+<p>          C、插入 Dongle或者开启modem，把出问题的流程走一遍</p>
+<p>          D、退出adb shell，把机器中的log 文件pull到本地</p>
+<p>               $ exit</p>
+<p>               adb pull /cache/*.log d:\</p>
+<p>     3、使用 android应用捕捉LOG 信息，如aLogcat，请参考文档《通过alogcat 获取Radio日志信息.pdf》</p>
+<p>二、3G无法使用(1) – 无法找到modem设备</p>
+<p>3G出现问题，通常应先检查系统是否识别到了modem设备，可用如下命令确认：</p>
+<p>     ls /dev/ttyU*</p>
+<p>     或者</p>
+<p>     ls /dev/ttyA*</p>
+<p>如果在/dev下没有找到ttyU* 或者 ttyA* 设备，此时可通过观察内核LOG来定位问题：</p>
+<p>     1. USB设备枚举失败或者系统根本就没有发现USB设备，此时应检查硬件电路</p>
+<p>     2. USB枚举成功，但没有注册到ttyUSB或者ttyACM设备，此时应检查你的内核：</p>
+<p>          a). 你的内核没有开启usb serial功能</p>
+<p>          b). 你的内核代码中的usb serial相应驱动中没有添加该设备的VID/PID，请修改kernel/drivers/usb/serial/option.c，在数组static struct usb_device_id option_ids[] 的末尾添加上新设备的VID/PID</p>
+<p>     3. USB枚举成功，且相关配置且ID都已添加，但还是不出来 ttyUSB或者ttyACM设备，此时可观察系统是否有对它执行usb mode switch，可通过logcat：</p>
+<p>          # logcat –s Vold vold &amp;</p>
+<p>        观察是否有调用了usb_modeswitch 程序，如果没有执行，则检查如下：</p>
+<p>          a). 检查一些必要的文件是否存在：</p>
+<p>               ls /system/bin/usb_modeswitch</p>
+<p>               ls /etc/usb_modeswitch.sh</p>
+<p>               ls /etc/usb_modeswitch.d/[VID_PID]  #[VID_PID]应替换成你的modem的VID/PID，如: 12d1_1001</p>
+<p>          如果是缺少了usb_modeswitch、usb_modeswitch.sh等文件，则可能是你的gingerbread/device/rockchip/sdkDemo/BoardConfig.mk中的配置存在问题，请确认BOARD_RADIO_DATAONLY := true</p>
+<p>          如果是缺少了/etc/usb_modeswitch.d/[VID_PID]，请告知我！</p>
+<p>          b). VOLD中关于usb_modeswitch这部分的代码没有被编译，你可查看Vold的log中是否有“Start Misc devices Manager…”的字样，如果没有这串字符，请检查你的gingerbread/system/vold/下的内容。</p>
+<p>通常，3G问题中，不出来ttyUSB或者ttyACM设备，主要就是上述的那些情况</p>
+<p>三、3G无法使用(2) –有找到modem设备，但信号一直打叉</p>
+<p>     当系统已经识别到你的modem，但状态栏上的信号图标却一直是打叉的，此时你应做如下检查：</p>
+<p>     1. 先检查系统中的ril daemon是否已经正常启动。查看radio的LOG，若是不断打印字符串&quot;Do not switch user to radio&quot;，则可能是你的库的名称不对，请确定文件/default.prop中的&quot;rild.libpath=&quot;所指定的ril库与你实际使用的ril库是否一致，若不一致，请修改。例如：</p>
+<p>          我在/default.prop中指定了使用的库是&quot;rild.libpath=/system/lib/libril-rk29-mid.so&quot;，但是我实际使用的RIL库是/system/lib/libril-rk29-dataonly.so，此时需要修改/default.prop的内容： &quot;rild.libpath=/system/lib/libril-rk29-dataonly.so&quot;</p>
+<p>     2. 此modem在我们的系统中是否支持？这可以通过查看《3G_Support_List》，或者找下radio的LOG中是否有”Not support modem”的字样出现。如果检查的结果是不支持的modem，请联系我。</p>
+<p>     3. 信号图标旁边出现一个SIM卡的图标，表示没有找到SIM卡或者SIM卡有问题，此时你应检查：</p>
+<p>          a) SIM卡是否插正确</p>
+<p>          b) 是否插入了不适合的SIM卡，比如你用的WCDMA modem，却插入了电信的SIM卡。</p>
+<p>          c) SIM卡座是否出问题了？可联系硬件。</p>
+<p>     4. 该SIM卡已经欠费停机，所以信号一直是打叉的。可联系当地客服咨询。</p>
+<p>     5. Modem硬件出现问题，导致无法正常通信。此种情况可更换modem再行测试。可将LOG发给我。</p>
+<p>四、3G无法使用(3) –有信号，但无法连接上数据网络。</p>
+<p>     当系统已经识别到你的modem，且状态栏上的信号图标已经不再打叉了，说明你的modem已经初始化完成，但状态栏上没有出现新图标如”E”、”G”、”3G”等数据连接的图标，说明没有连接上数据网络，此时应做如下检查：</p>
+<p>     1. 没有勾选上“已启用数据”，可从【设置】-&gt;【无线和网络】-&gt;【移动网络】，勾选【已启用数据】。</p>
+<p>     2. 缺少拨号所需要的一些程序。可查看如下：</p>
+<p>          ls /system/bin/pppd</p>
+<p>          ls /system/bin/chat</p>
+<p>          ls /etc/ppp/</p>
+<p>               call-pppd</p>
+<p>               ip-down</p>
+<p>               ip-up</p>
+<p>               ip-up-vpn</p>
+<p>     3. kernel未开启ppp协议栈。可查看下系统中是否存在文件：/dev/ppp，如果没有这个文件，说明你的kernel没有开启ppp协议栈，请如下配置</p>
+<p>           2011-8-5 11:21:56 上传下载附件 (88.32 KB) </p>
+<p>PPP配置 </p>
+<p>     4. PS服务（即数据业务）受限，导致无法上网。可先咨询客户看该SIM卡是否已开通数据业务，且是否已欠费。</p>
+<p>     5. 缺少APN（Access Point Name），APN信息由各个运营商提供，目前在系统中默认放置的是中国大陆的运营商的APN，如果你要在其它国家或港/澳/台使用，需添加APN：</p>
+<p>          a). 手动设置APN</p>
+<p>               进入【设置】-&gt;【无线和网络】-&gt;【移动网络】-&gt;【接入点名称】，选择新建，然后手动填入APN的信息</p>
+<p>          b). 添加默认APN</p>
+<p>               修改文件 android/frameworks/base/core/res/res/xml/apns.xml，在其中添加APN，然后生成新固件</p>
+<p>     通过以上步骤，若还是无法拨号成功，请发LOG给我</p>
+<p>六、3G无法使用(5) –3G与WIFI/Ethernet的冲突</p>
+<p>     有发现如下现象：当系统中开启了3G及wifi后，当Wifi连接成功后，3G的数据连接最终会被断开，这没有问题；但是，当把wifi、3G等网络设备全部关闭后，再次打开3G，发现3G在注册网络成功后，不会自动去拨号上网，而必须手动点击两次【设置】-&gt;【无线和网络】-&gt;【移动网络】-&gt;【已启用数据】，方能正常上网。</p>
+<p>     修改代码：frameworks/base/telephony/java/com/android/internal/telephony/DataConnectionTracker.java</p>
+<p>import java.util.ArrayList;</p>
+<p>+/* BEGIN: Added by cmy, 2011/7/5 PN:[bug 110705001] */</p>
+<p>+import android.content.Context;</p>
+<p>+import android.net.IConnectivityManager;</p>
+<p>+import android.os.ServiceManager;</p>
+<p>+/* END: Added by cmy, 2011/7/5 PN:[bug 110705001] */</p>
+<p>/**</p>
+<ul>
+<li>{@hide}</li>
+</ul>
+<p>*</p>
+<p>@@ -297,6 +302,19 @@ public abstract class DataConnectionTracker extends Handler {</p>
+<p>break;</p>
+<p>case EVENT_RADIO_AVAILABLE:</p>
+<ul>
+<li><p>/* BEGIN: Added by cmy, 2011/7/5 PN:[bug 110705001] */</p>
+</li>
+<li><p>if (Settings.Secure.getInt(phone.getContext().getContentResolver(),</p>
+</li>
+<li><p>Settings.Secure.MOBILE_DATA, 1) == 1)</p>
+</li>
+<li><p>{</p>
+</li>
+<li><p>Settings.Secure.putInt(phone.getContext().getContentResolver(),</p>
+</li>
+<li><p>Settings.Secure.MOBILE_DATA, 0);</p>
+</li>
+<li><p>try {</p>
+</li>
+<li><p>IConnectivityManager.Stub.asInterface(ServiceManager.</p>
+</li>
+<li><p>getService(Context.CONNECTIVITY_SERVICE)).setMobileDataEnabled(true);</p>
+</li>
+<li><p>} catch (Exception e) {</p>
+</li>
+<li><p>}</p>
+</li>
+<li><p>}</p>
+</li>
+<li><p>/* END: Added by cmy, 2011/7/5 PN:[bug 110705001] */</p>
+</li>
+</ul>
+<p>onRadioAvailable();</p>
+<p>break;</p>
+<p>     此BUG在补丁【rk29_gingerbread_3g_patch_20110628_v2】中已有修正。</p>
+<p>七、使用3G的一些默认行为、以及如何修改</p>
+<p>     1. 当系统中同时启用3G、WIFI时，默认优先使用WIFI连接，而原有的3G连接会被断开。如何改变它们的优先级？</p>
+<p>          修改代码：frameworks/base/core/res/res/values/config.xml，其中红色数字便是优先级，数字越大，优先级超高</p>
+<p>    &lt;!– An Array of &quot;[Connection name],[ConnectivityManager connection type],</p>
+<p>         [associated radio-type],[priority]  –&gt;</p>
+<p>    &lt;string-array translatable=&quot;false&quot; name=&quot;networkAttributes&quot;&gt;</p>
+<p>        &lt;item&gt;&quot;wifi,1,1,1&quot;&lt;/item&gt;</p>
+<p>        &lt;item&gt;&quot;mobile,0,0,0&quot;&lt;/item&gt;</p>
+<p>        &lt;item&gt;&quot;mobile_mms,2,0,2&quot;&lt;/item&gt;</p>
+<p>        &lt;item&gt;&quot;mobile_supl,3,0,2&quot;&lt;/item&gt;</p>
+<p>        &lt;item&gt;&quot;mobile_hipri,5,0,3&quot;&lt;/item&gt;</p>
+<p>        &lt;item&gt;&quot;eth,7,7,7&quot;&lt;/item&gt;</p>
+<p>    &lt;/string-array&gt;</p>
+<p>     2. 当3G打开后，系统会根据所注册的网络，自动切换系统的语言、时区等。不过，如果你曾经手动设置过系统的语言、时区等，则3G打开后不会自动切换它们。如何设置以保持系统的语言、时区不因3G而改变？</p>
+<p>          修改代码：frameworks/base/telephony/java/com/android/internal/telephony/MccTable.java，</p>
+<p>    public static void updateMccMncConfiguration(PhoneBase phone, String mccmnc) {</p>
+<p>        if (!TextUtils.isEmpty(mccmnc)) {</p>
+<p>            ……</p>
+<p>            if (mcc != 0) {</p>
+<p>                setTimezoneFromMccIfNeeded(phone, mcc); // 设置时区</p>
+<p>                setLocaleFromMccIfNeeded(phone, mcc); // 设置语言</p>
+<p>                setWifiChannelsFromMcc(phone, mcc); //设置Wifi频道</p>
+<p>            }</p>
+<p>            ……</p>
+<p>        }</p>
+<p>    }     </p>
+<p>     3. 系统在首次连接上3G网络时，会因为设置默认APN的缘故，导致刚连接上网络后会自动断开并再次连接。还有，当你交替使用EVDO、WCDMA两种不同网络类型的modem时，也会出现这种现象。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/12/31/%E9%9F%B3%E8%A7%86%E9%A2%91/%E6%96%87%E6%A1%A307-H264%E4%B8%8EH265%E7%9A%84%E5%8C%BA%E5%88%AB%E4%BA%8E%E5%B7%AE%E5%BC%82/" rel="prev" title="文档07-H264与H265的区别于差异">
+      <i class="fa fa-chevron-left"></i> 文档07-H264与H265的区别于差异
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/4.0%E4%BD%BF%E7%94%A8%E6%89%8B%E6%9C%BA%E8%B5%84%E6%BA%90%EF%BC%8C%E7%9B%B4%E6%8E%A5%E5%85%B3%E6%9C%BA%E7%95%8C%E9%9D%A2%EF%BC%8C%E6%A0%B8%E5%BF%83%E9%85%8D%E7%BD%AE/" rel="next" title="4">
+      4 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Edward"
+      src="/uploads/avatar.gif">
+  <p class="site-author-name" itemprop="name">Edward</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">570</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Edward</span>
+</div>
+
+        
+
+
+
+
+
+
+<script>
+  (function() {
+    function leancloudSelector(url) {
+      url = encodeURI(url);
+      return document.getElementById(url).querySelector('.leancloud-visitors-count');
+    }
+
+    function addCount(Counter) {
+      var visitors = document.querySelector('.leancloud_visitors');
+      var url = decodeURI(visitors.id);
+      var title = visitors.dataset.flagTitle;
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          if (results.length > 0) {
+            var counter = results[0];
+            leancloudSelector(url).innerText = counter.time + 1;
+            Counter('put', '/classes/Counter/' + counter.objectId, { time: { '__op': 'Increment', 'amount': 1 } })
+              .catch(error => {
+                console.error('Failed to save visitor count', error);
+              });
+          } else {
+              Counter('post', '/classes/Counter', { title, url, time: 1 })
+                .then(response => response.json())
+                .then(() => {
+                  leancloudSelector(url).innerText = 1;
+                })
+                .catch(error => {
+                  console.error('Failed to create', error);
+                });
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    function showTime(Counter) {
+      var visitors = document.querySelectorAll('.leancloud_visitors');
+      var entries = [...visitors].map(element => {
+        return decodeURI(element.id);
+      });
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url: { '$in': entries } })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          for (let url of entries) {
+            let target = results.find(item => item.url === url);
+            leancloudSelector(url).innerText = target ? target.time : 0;
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    let { app_id, app_key, server_url } = {"enable":true,"app_id":"wxYx0BX9gaKA3XC4LuO2of0v-gzGzoHsz","app_key":"LQMcs6IDIE4YAm10vMsn9IYq","server_url":"https://wxyx0bx9.lc-cn-n1-shared.com","security":false};
+    function fetchData(api_server) {
+      var Counter = (method, url, data) => {
+        return fetch(`${api_server}/1.1${url}`, {
+          method,
+          headers: {
+            'X-LC-Id'     : app_id,
+            'X-LC-Key'    : app_key,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data)
+        });
+      };
+      if (CONFIG.page.isPost) {
+        if (CONFIG.hostname !== location.hostname) return;
+        addCount(Counter);
+      } else if (document.querySelectorAll('.post-title-link').length >= 1) {
+        showTime(Counter);
+      }
+    }
+
+    let api_server = app_id.slice(-9) !== '-MdYXbMMI' ? server_url : `https://${app_id.slice(0, 8).toLowerCase()}.api.lncldglobal.com`;
+
+    if (api_server) {
+      fetchData(api_server);
+    } else {
+      fetch('https://app-router.leancloud.cn/2/route?appId=' + app_id)
+        .then(response => response.json())
+        .then(({ api_server }) => {
+          fetchData('https://' + api_server);
+        });
+    }
+  })();
+</script>
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

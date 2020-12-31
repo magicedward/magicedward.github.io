@@ -1,0 +1,1223 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"edward.org.cn","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="2012.02.28: 顺序表和链表 顺序表: typedef struct { int data[DATA_SIZE]; &#x2F;&#x2F; store the data int length; &#x2F;&#x2F; present length }sqlist, *sqlink bool init_list(sqlink *pL) {">
+<meta property="og:type" content="article">
+<meta property="og:title" content="数据结构必备">
+<meta property="og:url" content="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E5%BF%85%E5%A4%87/index.html">
+<meta property="og:site_name" content="点点滴滴">
+<meta property="og:description" content="2012.02.28: 顺序表和链表 顺序表: typedef struct { int data[DATA_SIZE]; &#x2F;&#x2F; store the data int length; &#x2F;&#x2F; present length }sqlist, *sqlink bool init_list(sqlink *pL) {">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-12-31T06:48:02.104Z">
+<meta property="article:modified_time" content="2020-01-16T04:37:32.042Z">
+<meta property="article:author" content="Edward">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E5%BF%85%E5%A4%87/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>数据结构必备 | 点点滴滴</title>
+  
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?a92ed22eafce466e7a7b17546bb0dc6f";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">点点滴滴</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E5%BF%85%E5%A4%87/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/avatar.gif">
+      <meta itemprop="name" content="Edward">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="点点滴滴">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          数据结构必备
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-12-31 14:48:02" itemprop="dateCreated datePublished" datetime="2020-12-31T14:48:02+08:00">2020-12-31</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-01-16 12:37:32" itemprop="dateModified" datetime="2020-01-16T12:37:32+08:00">2020-01-16</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%83%82%E7%AC%94%E5%A4%B4/" itemprop="url" rel="index"><span itemprop="name">烂笔头</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E5%BF%85%E5%A4%87/" class="post-meta-item leancloud_visitors" data-flag-title="数据结构必备" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>2012.02.28:</p>
+<p>顺序表和链表</p>
+<p>顺序表:</p>
+<p>typedef struct</p>
+<p>{</p>
+<p>int data[DATA_SIZE]; // store the data</p>
+<p>int length; // present length</p>
+<p>}sqlist, *sqlink</p>
+<p>bool init_list(sqlink *pL)</p>
+<p>{</p>
+<p>*pL = (sqlink)malloc(sizeof(sqlist));</p>
+<p>if(*pL == NULL)</p>
+<p>return false;</p>
+<p>bzero(*pL, sizeof(sqlist));//将开辟的空间赋零</p>
+<p>(*pL)-&gt;last = -1; //这里以-1表示空</p>
+<p>return true;</p>
+<p>}</p>
+<p>bool insert(sqlink L, datatype x)</p>
+<p>{</p>
+<p>if(is_full(L))</p>
+<p>return false;</p>
+<p>L-&gt;data[++(L-&gt;last)] = x;//对应-1为空，++后再赋值</p>
+<p>return true;</p>
+<p>}</p>
+<p>bool delete(sqlink L, datatype x)</p>
+<p>{</p>
+<p>int pos;</p>
+<p>pos = locate(L, x);</p>
+<p>if(pos == -1)</p>
+<p>return false;</p>
+<p>for(; pos&lt;L-&gt;last; pos++) //删除后逐个往前移，使其连续存储</p>
+<p>L-&gt;data[pos] = L-&gt;data[pos+1];</p>
+<p>L-&gt;last–;</p>
+<p>return true;</p>
+<p>}</p>
+<p>链表：</p>
+<p>typedef struct node</p>
+<p>{</p>
+<p>datatype data;</p>
+<p>struct node *next;</p>
+<p>}listnode, *link;</p>
+<p>link init_list()  //开避头节点，指向NULL,返回指针</p>
+<p>{</p>
+<p>link L;</p>
+<p>L = (link)malloc(sizeof(listnode));</p>
+<p>if(L == NULL){</p>
+<p>perror(&quot;malloc error&quot;);</p>
+<p>exit(1);</p>
+<p>}</p>
+<p>L-&gt;next = NULL;</p>
+<p>return L;</p>
+<p>}</p>
+<p>void init_list(link *p2head) //直接传入地址，开避空间，作为头节点，再指向空</p>
+<p>{</p>
+<p>*p2head = (list)malloc(sizeof(node));</p>
+<p>(*p2head)-&gt;next = NULL;</p>
+<p>}</p>
+<p>bool insert(link L, datatype x)</p>
+<p>{</p>
+<p>link new = (link)malloc(sizeof(listnode));</p>
+<p>if(new == NULL)</p>
+<p>return false;</p>
+<p>new-&gt;data = x;</p>
+<p>new-&gt;next = NULL;//作为链尾指向NULL</p>
+<p>link p = L;</p>
+<p>while(p-&gt;next != NULL)</p>
+<p>p = p-&gt;next; //找到链尾</p>
+<p>p-&gt;next = new; //接上即可</p>
+<p>return true;</p>
+<p>}</p>
+<p>单向循环链表插入，无头节点</p>
+<p>void insert(link *p2head, int x)</p>
+<p>{</p>
+<p>link pnew = (link)malloc(sizeof(listnode));</p>
+<p>if(*p2head == NULL){  //无头节点，原来为NULL</p>
+<p>pnew-&gt;data = x;</p>
+<p>pnew-&gt;next = pnew; //new第一个节点 指返自己</p>
+<p>*p2head = pnew;  //成为头节点</p>
+<p>}</p>
+<p>else{//第二次开始 </p>
+<p>link p = *p2head;</p>
+<p>/* find the tail of the list */</p>
+<p>while(p-&gt;next != *p2head)</p>
+<p>p = p-&gt;next;//找到最后节点</p>
+<p>pnew-&gt;data = x;</p>
+<p>p-&gt;next = pnew;  //p-&gt;next指向头节 重新指向pnew节点</p>
+<p>pnew-&gt;next = *p2head; //pnew接上后再重新指向头节点，使循环</p>
+<p>}</p>
+<p>return;</p>
+<p>}</p>
+<p>双向循环链表</p>
+<p>typedef struct DNode</p>
+<p>{</p>
+<p>int data;</p>
+<p>struct DNode *prior;//指向前驱节点</p>
+<p>struct DNode *next;//指向后继节点</p>
+<p>}DNode, *DLinkList</p>
+<p>void init_list(DLinkList *p2head)//传地址</p>
+<p>{</p>
+<p>if((*p2head=(DNode *)malloc(sizeof(DNode))) == NULL){</p>
+<p>perror(&quot;malloc faild&quot;);</p>
+<p>exit(1);</p>
+<p>}</p>
+<p>//建立头节点，使其前驱、后继都指向自己</p>
+<p>(*p2head)-&gt;prior = (*p2head)-&gt;next = *p2head;</p>
+<p>}</p>
+<p>void insert(DLinkList head, int num)</p>
+<p>{</p>
+<p>DLinkList pnew;</p>
+<p>if((pnew=(DNode *)malloc(sizeof(DNode))) == NULL)</p>
+<p>perror_exit(&quot;malloc failed&quot;);</p>
+<p>pnew-&gt;data = num;</p>
+<p>/*<strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong>**</strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></p>
+<p>insert the new node onto the tail</p>
+<p>*<strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong>**</strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong>/</p>
+<p>pnew-&gt;prior = head-&gt;prior;//从尾部插入，使pnew前驱指向原来head的前驱</p>
+<p>head-&gt;prior-&gt;next = pnew;//原来head的前驱的后继指向自已(pnew)      </p>
+<p>pnew-&gt;next = head;//pnew的后继指向头</p>
+<p>head-&gt;prior = pnew;//最后，head前驱再指回现在的尾(pnew) </p>
+<p>}</p>
+<p>void delete(dlink H,dlink p)</p>
+<p>{</p>
+<p>if(p==NULL)</p>
+<p>            perror(&quot;linknode not found.\n&quot;);</p>
+<p>        else{</p>
+<p>             (p-&gt;prior)-&gt;next = p-&gt;next;//使其前驱的后继指向下一节点</p>
+<p>             (p-&gt;next)-&gt;prior = p-&gt;prior;//再使下一节点前驱指回p的前驱</p>
+<p>             free(p);//释放</p>
+<p>        }</p>
+<p>}</p>
+<p>2012.02.29:</p>
+<p>栈与队列</p>
+<p>顺序栈：</p>
+<p>typedef struct node</p>
+<p>{</p>
+<p>   datatype data[MAXSIZE];</p>
+<p>   int top ;</p>
+<p>}seqstack;</p>
+<p>void set_is_empty(seqstack *s)</p>
+<p>{</p>
+<p>  s-&gt;top = -1;//-1表示栈空</p>
+<p>}</p>
+<p>bool is_empty(seqstack *s)</p>
+<p>{</p>
+<p>  return ((s-&gt;top&gt;=0)?false:true);</p>
+<p>}</p>
+<p>bool push(seqstack *s, datatype x)</p>
+<p>{</p>
+<p>  if(s-&gt;top==MAXSIZE-1){</p>
+<p>      printf(&quot;overflow!\n&quot;);</p>
+<p>      return false;</p>
+<p>  }</p>
+<p>   else {</p>
+<p>    s-&gt;top ++ ;</p>
+<p>    s-&gt;data[s-&gt;top] = x ;</p>
+<p>   } </p>
+<p>   return true;</p>
+<p>}</p>
+<p>bool pop(seqstack *s,datatype *loc)</p>
+<p>{</p>
+<p>  if(is_empty(s)){</p>
+<p>        printf(&quot;underflow!\n&quot;);</p>
+<p>        return false;</p>
+<p>  }else </p>
+<p>        *loc = s-&gt;data[s-&gt;top–];</p>
+<p>        return true;</p>
+<p>}</p>
+<p>bool top(seqstack *s ,datatype *loc)</p>
+<p>{</p>
+<p>    if(is_empty(s)){</p>
+<p>       printf(&quot;underflow!\n&quot;);</p>
+<p>       return false;</p>
+<p>    }</p>
+<p>   else </p>
+<p>        *loc = s-&gt;data[s-&gt;top];</p>
+<p>        return true;</p>
+<p>}</p>
+<p>bool init_stack(seqstack **p)</p>
+<p>{</p>
+<p>  <em>p =(seqstack</em>)malloc(sizeof(seqstack));</p>
+<p>   if(*p==NULL)</p>
+<p>           return false;</p>
+<p>   return true ;</p>
+<p>}</p>
+<p>汉诺塔 栈实现</p>
+<p>void towers_of_hanoi(int hanois, stack *ps1, stack *ps2, stack *ps3)</p>
+<p>{</p>
+<p>int tmp;</p>
+<p>if(hanois &gt; 0){</p>
+<p>towers_of_hanoi(hanois-1, ps1, ps3, ps2);</p>
+<p>pop(ps1, &amp;tmp);</p>
+<p>push(ps2, tmp);</p>
+<p>towers_of_hanoi(hanois-1, ps3, ps2, ps1);</p>
+<p>}</p>
+<p>}</p>
+<p>链栈：</p>
+<p>typedef struct node </p>
+<p>{ </p>
+<p>  datatype data;</p>
+<p>  struct node *next;</p>
+<p>}*linkstack;</p>
+<p>void init_stack(linkstack *ptop)</p>
+<p>{</p>
+<p>   *ptop = (linkstack)malloc(sizeof(struct node));</p>
+<p>   if(*ptop == NULL){</p>
+<p>      perror(&quot;malloc() error&quot;);</p>
+<p>      exit(1);</p>
+<p>    }</p>
+<p>    (*ptop)-&gt;next = NULL;</p>
+<p>}</p>
+<p>bool is_empty(linkstack top)</p>
+<p>{</p>
+<p>   return top-&gt;next == NULL;</p>
+<p>}</p>
+<p>bool push(linkstack *ptop,datatype x)</p>
+<p>{</p>
+<p>  linkstack new = (linkstack)malloc(sizeof (struct node));</p>
+<p>   if(new == NULL)</p>
+<p>     return false;</p>
+<p>   new-&gt;data = x; </p>
+<p>   new-&gt;next = *ptop;//new指向头节点</p>
+<p>   *ptop = new ;//将new 更新为头节点</p>
+<p> return true ;</p>
+<p>}</p>
+<p>bool pop(linkstack *ptop ,datatype *loc)</p>
+<p>{</p>
+<p>  if(is_empty(*ptop))</p>
+<p>     return false;</p>
+<p>   *loc = (*ptop)-&gt;data;</p>
+<p>   *ptop = (*ptop)-&gt;next;//出栈后更新头节点</p>
+<p>   return true;</p>
+<p>}</p>
+<p>顺序循环队列：</p>
+<p>typedef struct node</p>
+<p>{ </p>
+<p>   datatype data[MAXSIZE];  </p>
+<p>   int front ,rear;</p>
+<p>}sequeue;</p>
+<p>void set_empty(sequeue *sq)</p>
+<p>{</p>
+<p>   sq-&gt;front = sq-&gt;rear = MAXSIZE-1;//循环队列，初始化，指向哪里都一样</p>
+<p>}</p>
+<p>int is_empty(sequeue *sq)</p>
+<p>{</p>
+<p>  return (sq-&gt;front == sq-&gt;rear);//队头==队尾即为空</p>
+<p>}</p>
+<p>bool en_queue(sequeue *sq,datatype x)</p>
+<p>{</p>
+<p>  if(sq-&gt;front == (sq-&gt;rear+1)%MAXSIZE){//队尾+1==队头 即为满</p>
+<p>           printf(&quot;queue is full !\n&quot;);</p>
+<p>           return false;</p>
+<p>    }else {                         //队头队尾运算都要取模 %MAXSIZE</p>
+<p>       sq-&gt;rear = (sq-&gt;rear+1)%MAXSIZE; </p>
+<p>       sq-&gt;data[sq-&gt;rear]=x;</p>
+<p>       return true; </p>
+<p> } </p>
+<p>}</p>
+<p>bool de_queue(sequeue *sq,datatype *x)</p>
+<p>{</p>
+<p>  if(is_empty(sq)){</p>
+<p>     printf(&quot;queue is empty\n&quot;);</p>
+<p>     return false; </p>
+<p>  }else {</p>
+<p>  sq-&gt;front = (sq-&gt;front+1)%MAXSIZE;</p>
+<p>  *x = sq-&gt;data[sq-&gt;front];</p>
+<p> }</p>
+<p>return true;</p>
+<p>}</p>
+<p>bool re_queue(sequeue *sq,datatype *x)</p>
+<p>{</p>
+<p>  if(is_empty(sq)){</p>
+<p>     printf(&quot;queue is empty\n&quot;);</p>
+<p>     return false; </p>
+<p>  }else {</p>
+<p>  *x = sq-&gt;data[(sq-&gt;front+1)%MAXSIZE];</p>
+<p> }</p>
+<p>return true;</p>
+<p>}</p>
+<p>链队列：</p>
+<p>typedef struct node</p>
+<p>{</p>
+<p> datatype data;</p>
+<p> struct node *next;</p>
+<p>}linklist;  </p>
+<p>typedef struct</p>
+<p>{</p>
+<p>  linklist *front,*rear;</p>
+<p>}linkqueue;  //将队头与队尾指针打包起来</p>
+<p>bool set_empty(linkqueue **pq)</p>
+<p>{</p>
+<p>  (*pq) = malloc(sizeof(linkqueue));</p>
+<p>   if(*pq == NULL)</p>
+<p>        return false;</p>
+<p>    (*pq)-&gt;front = (*pq)-&gt;rear = malloc(sizeof(linklist));//开辟队头，占空位</p>
+<p>    (*pq)-&gt;front-&gt;next =NULL;//front下一节点置空</p>
+<p>    return true;</p>
+<p>}</p>
+<p>bool is_empty(linkqueue *q)</p>
+<p>{</p>
+<p>  return q-&gt;front==q-&gt;rear;//相等时为空</p>
+<p>}</p>
+<p>bool en_queue(linkqueue *q,datatype x)</p>
+<p>{</p>
+<p>  q-&gt;rear-&gt;next = malloc(sizeof(linklist));</p>
+<p>  if(q-&gt;rear-&gt;next == NULL)</p>
+<p>           return false;</p>
+<p>  q-&gt;rear = q-&gt;rear-&gt;next;//队尾前移到新开辟的空间</p>
+<p>  q-&gt;rear-&gt;data =x;</p>
+<p>  q-&gt;rear-&gt;next =NULL;//next置空</p>
+<p>  return true;</p>
+<p>}</p>
+<p>bool front(linkqueue *q,datatype *x)</p>
+<p>{</p>
+<p>   if(is_empty(q)){</p>
+<p>        printf(&quot;queue is empty!\n&quot;);</p>
+<p>        return false;</p>
+<p>  }</p>
+<p>   else</p>
+<p>       *x = q-&gt;front-&gt;next-&gt;data;//front-&gt;next 为第一个数</p>
+<p>       return true;</p>
+<p>}</p>
+<p>bool de_queue(linkqueue *q,datatype *x)</p>
+<p>{</p>
+<p> if(is_empty(q)){</p>
+<p>     printf(&quot;queue is empty!\n&quot;);</p>
+<p>     return false;</p>
+<p> }</p>
+<p>  else {</p>
+<p>    linklist *s;</p>
+<p>    s = q-&gt;front; //保存</p>
+<p>    q-&gt;front=q-&gt;front-&gt;next;//前移到下一节点</p>
+<p>    free(s);//释放</p>
+<p>    *x = (q-&gt;front-&gt;data);//取出数据</p>
+<p>    return true;</p>
+<p> }</p>
+<p>}</p>
+<p>2012.03.01:</p>
+<p>二叉树</p>
+<p>typedef struct node</p>
+<p>{</p>
+<p>    datatype data;</p>
+<p>    struct node *lchild;   //left child</p>
+<p>    struct node *rchild;   //right child</p>
+<p>}node,*root;</p>
+<p>先序+# 建树：</p>
+<p>root create_bitree(void)</p>
+<p>{</p>
+<p>    char c;</p>
+<p>    scanf(&quot;%c&quot;,&amp;c);</p>
+<p>    root r = (root)malloc(sizeof(node));</p>
+<p>    if(‘#’ == c){   //empty treenode</p>
+<p>        return NULL;</p>
+<p>    }</p>
+<p>    else{</p>
+<p>        r-&gt;data = c;</p>
+<p>        r-&gt;lchild = create_bitree();</p>
+<p>        r-&gt;rchild = create_bitree();</p>
+<p>    }</p>
+<p>    return r;</p>
+<p>}</p>
+<p>先序+中序建树：</p>
+<p>root create_bitree(datatype *preorder,datatype *inorder,int n)//传入数组地址及数组大小</p>
+<p>{</p>
+<p>    datatype *p ,*q ;  //定义临时变量</p>
+<p>    int i ;</p>
+<p>    if(n&lt;=0)</p>
+<p>        return NULL;</p>
+<p>    root r =(root)malloc(sizeof(node));</p>
+<p>    r-&gt;data = preorder[0];//先序的第一个肯定是根</p>
+<p>    r-&gt;lchild = r-&gt;rchild = NULL ;//左右孩子初始化为空</p>
+<p>    i = 0;</p>
+<p>    while(i&lt;n){//在中序找到根，其左边的全部为左孩子部分</p>
+<p>        if(preorder[0] == inorder[i])</p>
+<p>        break;</p>
+<p>        ++i; //i 成为了左孩子的大小</p>
+<p>    }  </p>
+<p>    p = preorder + 1 ;//先序+1 左孩子地址开始</p>
+<p>    q = inorder ;</p>
+<p>    r-&gt;lchild = create_bitree(p,q,i);//左孩子递归</p>
+<p>    p = preorder + i + 1;//先序+i+1 右孩子地址开始</p>
+<p>    q = inorder + i + 1;</p>
+<p>    r-&gt;rchild = create_bitree(p,q,n-i-1);//右孩子递归</p>
+<p>    return r;</p>
+<p>}</p>
+<p>void rebuild(char *pre_order, char *in_order, int len, root *p2root)</p>
+<p>{</p>
+<p>if(pre_order==NULL || in_order==NULL)</p>
+<p>return;</p>
+<p>/* get the first node of pre_order */</p>
+<p>root ptmp = (root)malloc(sizeof(treenode));</p>
+<p>ptmp-&gt;ch = *pre_order;</p>
+<p>ptmp-&gt;lchild = NULL;</p>
+<p>ptmp-&gt;rchild = NULL;</p>
+<p>*p2root = ptmp;</p>
+<p>/* if tree’s length equals to 1, then it’s the last node */</p>
+<p>if(len == 1)</p>
+<p>return;</p>
+<p>/* find the end of the left child-tree, and its length */</p>
+<p>char *in_order_tmp = in_order;</p>
+<p>char *p2left_end = in_order;</p>
+<p>int tmp_len = 0;</p>
+<p>while(*pre_order != *p2left_end){</p>
+<p>if(in_order_tmp==NULL || p2left_end==NULL)</p>
+<p>return;</p>
+<p>tmp_len++;</p>
+<p>/* record the temperate length, avoiding overflow */</p>
+<p>if(tmp_len &gt; len)</p>
+<p>break;</p>
+<p>p2left_end++;</p>
+<p>}</p>
+<p>/* get the length of child trees */</p>
+<p>int left_len = 0, right_len = 0;</p>
+<p>left_len = (int)(p2left_end - in_order_tmp);</p>
+<p>right_len = (int)(len - left_len - 1);</p>
+<p>/*<strong><strong><strong><strong><strong><strong><strong>****</strong></strong></strong></strong></strong></strong></strong></p>
+<p>rebuild child trees</p>
+<p><strong><strong><strong><strong><strong><strong><strong><strong>**</strong></strong></strong></strong></strong></strong></strong></strong>/</p>
+<p>if(left_len &gt; 0)</p>
+<p>rebuild(pre_order + 1, in_order, left_len, &amp;((*p2root)-&gt;lchild));</p>
+<p>if(right_len &gt; 0)</p>
+<p>rebuild(pre_order + left_len + 1, in_order + left_len + 1, \</p>
+<p>right_len, &amp;((*p2root)-&gt;rchild));</p>
+<p>}</p>
+<p>先序、中序、后序遍历：</p>
+<p>/*</p>
+<p>** preorder traversal</p>
+<p>*/</p>
+<p>void preorder(root T)</p>
+<p>{</p>
+<p>    if(NULL == T)</p>
+<p>        return;</p>
+<p>    printf(&quot;%c&quot;,T-&gt;data);</p>
+<p>    preorder(T-&gt;lchild);</p>
+<p>    preorder(T-&gt;rchild);</p>
+<p>}</p>
+<p>/*</p>
+<p>** inorder traversal</p>
+<p>*/</p>
+<p>void inorder(root T)</p>
+<p>{</p>
+<p>    if(NULL == T)</p>
+<p>        return;</p>
+<p>    inorder(T-&gt;lchild);</p>
+<p>    printf(&quot;%c&quot;,T-&gt;data);</p>
+<p>    inorder(T-&gt;rchild);</p>
+<p>}</p>
+<p>/*</p>
+<p>** postorder traversal</p>
+<p>*/</p>
+<p>void postorder(root T)</p>
+<p>{</p>
+<p>    if(NULL == T)</p>
+<p>        return;</p>
+<p>    postorder(T-&gt;lchild);</p>
+<p>    postorder(T-&gt;rchild);</p>
+<p>    printf(&quot;%c&quot;,T-&gt;data);</p>
+<p>}</p>
+<p>分层遍历 队列实现</p>
+<p>void travel_level(root t)</p>
+<p>{</p>
+<p>linkqueue q;</p>
+<p>queue_init(&amp;q);//队列初始化，开辟队头==队尾,队尾-&gt;next=NULL</p>
+<p>while(t != NULL){</p>
+<p>fprintf(stderr, &quot;%c&quot;, t-&gt;ch);//打印</p>
+<p>if(t-&gt;lchild != NULL)</p>
+<p>en_queue(q, t-&gt;lchild);//左孩子非空，入队</p>
+<p>if(t-&gt;rchild != NULL)</p>
+<p>en_queue(q, t-&gt;rchild);//右孩子非空，入队</p>
+<p>if(!out_queue(q, &amp;t))//队头出队</p>
+<p>return;</p>
+<p>}//出队完成，root==NULL 遍历完成</p>
+<p>}</p>
+<p>非递归前序遍历 栈实现</p>
+<p>void travel_pre(root T)</p>
+<p>{</p>
+<p>if(T == NULL)</p>
+<p>return;</p>
+<p>stack top;       //定义一个栈 </p>
+<p>init_stack(&amp;top);//初始化栈</p>
+<p>push(&amp;top, T);//把第一个压栈</p>
+<p>datatype x;</p>
+<p>while(!is_empty(top)){//栈非空时循环  出栈完成即遍历未完成</p>
+<p>pop(&amp;top, &amp;x);//先出栈</p>
+<p>fprintf(stderr, &quot;%c&quot;, x-&gt;ch);</p>
+<p>//压栈：从右到左   出栈才能从左到右</p>
+<p>if(x-&gt;rchild != NULL)//右孩子非空，压栈</p>
+<p>push(&amp;top, x-&gt;rchild);</p>
+<p>if(x-&gt;lchild != NULL)//左孩子非空，压栈</p>
+<p>push(&amp;top, x-&gt;lchild);</p>
+<p>}</p>
+<p>}</p>
+<p>非递归中序遍历 栈实现 </p>
+<p>void travel_inorder(root T)</p>
+<p>{</p>
+<p>stack top;</p>
+<p>init_stack(&amp;top);//栈初始化</p>
+<p>while(T != NULL || !is_empty(top)){//NULL说明树为空  栈空即出栈完成</p>
+<p>if(T != NULL){//节点非空</p>
+<p>push(&amp;top, T);//父节点压栈</p>
+<p>T = T-&gt;lchild;//指向左孩子 </p>
+<p>}</p>
+<p>else{//左孩子为空</p>
+<p>pop(&amp;top, &amp;T);//出栈左孩子的父节点</p>
+<p>printf(&quot;%c&quot;, T-&gt;ch);//打印</p>
+<p>T = T-&gt;rchild;//指向右孩子</p>
+<p>}</p>
+<p>}</p>
+<p>}</p>
+<p>非递归后序遍历 栈实现</p>
+<p>void travel_post(root T)</p>
+<p>{</p>
+<p>stack top;</p>
+<p>init_stack(&amp;top);//栈初始化</p>
+<p>if(T == NULL)   //树空直接返回</p>
+<p>return;</p>
+<p>push(&amp;top, T);//父节点压栈 //为了第一个pop不为空</p>
+<p>while(!is_empty(top)){//栈空表示遍历完成</p>
+<p>datatype x;</p>
+<p>pop(&amp;top, &amp;x);//出栈 </p>
+<p>if(x-&gt;pushed)//有出栈标记 才打印   pushed标记是否可以出栈</p>
+<p>fprintf(stderr, &quot;%c&quot;, x-&gt;ch);</p>
+<p>else{</p>
+<p>push(&amp;top, x);//父节点压栈 最后遍历</p>
+<p>if(x-&gt;rchild != NULL)//如果非空</p>
+<p>push(&amp;top, x-&gt;rchild);//右孩子压栈 </p>
+<p>if(x-&gt;lchild != NULL)//如果非空</p>
+<p>push(&amp;top, x-&gt;lchild);//左孩子压栈</p>
+<p>x-&gt;pushed = true;//父-&gt;右-&gt;左 依次压栈后 push置位 </p>
+<p>}</p>
+<p>}</p>
+<p>}</p>
+<p>2012.03.02:</p>
+<p>查找</p>
+<p>顺序查找</p>
+<p>int sequential_search(sqlink L, int x)</p>
+<p>{</p>
+<p>int i=0 ;</p>
+<p>while(L-&gt;data[i] != x){</p>
+<p>i++;</p>
+<p>if(i &gt; L-&gt;length)</p>
+<p>return -1;</p>
+<p>}</p>
+<p>return i;</p>
+<p>}</p>
+<p>折半查找 </p>
+<p>int binary_search(sqlink L, int x)</p>
+<p>{</p>
+<p>int low,high,mid;</p>
+<p>low = 1; //初始化时，low=1  hight=n  0没有数据</p>
+<p>high = get_len(L);//high=L-&gt;Length; </p>
+<p>while(low &lt;= high){</p>
+<p>mid = (low + high) / 2;   //每次都取mid值</p>
+<p>if(x == L-&gt;data[mid])</p>
+<p>return mid ;</p>
+<p>else if(x &lt; L-&gt;data[mid]) //比mid的小 high=mid-1</p>
+<p>high = mid - 1;</p>
+<p>else </p>
+<p>low = mid + 1;   //比mid大 low=mid+1</p>
+<p>}</p>
+<p>return -1;</p>
+<p>}</p>
+<p>直接插入排序：</p>
+<p>void insertion_sort(int num[])</p>
+<p>{</p>
+<p>int i, j;</p>
+<p>int tmp;</p>
+<p>for(i=1; i&lt;SIZE; i++){//从1开始</p>
+<p>if(num[i-1] &lt; num[i]){//如果前&lt;后，直接跳过 </p>
+<p>continue;</p>
+<p>}</p>
+<p>else{</p>
+<p>tmp = num[i];//保存i处的值(需要移走的值) 此时比i-1处值小</p>
+<p>for(j=i-1; tmp&lt;num[j] &amp;&amp; j&gt;= 0; j–){//tmp与i之前的逐一比较</p>
+<p>num[j+1] = num[j];//比tmp大的逐一后移</p>
+<p>}</p>
+<p>num[j+1] = tmp;//最后插入适当的位置</p>
+<p>}</p>
+<p>}//for</p>
+<p>}</p>
+<p>折半插入排序：</p>
+<p>void binary_insertion_sort(int num[])</p>
+<p>{</p>
+<p>int i, j;</p>
+<p>int tmp, low, high, m;</p>
+<p>for(i=1; i&lt;SIZE; ++i){</p>
+<p>tmp = num[i];</p>
+<p>low = 0; high = i-1;</p>
+<p>/* find the position for inserting */</p>
+<p>while(low &lt;= high){</p>
+<p>m = (low + high)/2;</p>
+<p>if(tmp &lt; num[m])//每次要插的值tmp都与中间的值比较 前面已有序</p>
+<p>high = m-1;</p>
+<p>else</p>
+<p>low = m+1;</p>
+<p>}</p>
+<p>/* moves the records */</p>
+<p>for(j=i-1; j &gt;= high+1; –j)//high&lt;tmp 最大一个</p>
+<p>num[j+1] = num[j];//high 后面的都要后移</p>
+<p>num[high+1] = tmp;//最后插入tmp</p>
+<p>}</p>
+<p>}</p>
+<p>冒泡排序：</p>
+<p>void bubble_sort(int num[])</p>
+<p>{</p>
+<p>int i, j;</p>
+<p>for(i=SIZE; i&gt;0; –i){</p>
+<p>   int flag = 0;</p>
+<p>   for(j=0; j&lt;i-1; j++){//i个数比较i-1次</p>
+<p>       int tmp;</p>
+<p>       if(num[j] &gt; num[j+1]){//前&gt;后，需要换位</p>
+<p>           tmp = num[j];</p>
+<p>           num[j] = num[j+1];</p>
+<p>           num[j+1] = tmp;</p>
+<p>           flag = 1;//换位 置1</p>
+<p>       }</p>
+<p>   }</p>
+<p>   if(flag == 0) //经过一趟也没有换位，说明有序了</p>
+<p>       break;</p>
+<p>}</p>
+<p>return;</p>
+<p>}</p>
+<p>希尔排序(shell 排序)：</p>
+<p>void shell_insert(int num[], int dk)//以dk为增量，一趟插入排序</p>
+<p>{</p>
+<p>int i, j;</p>
+<p>for(i=dk+1; i&lt;SIZE; ++i){</p>
+<p>if(num[i] &lt; num[i-dk]){</p>
+<p>num[0] = num[i];//num[0]存放要插入的值</p>
+<p>for(j=i-dk; j&gt;0&amp;&amp;(num[0]&lt;num[j]); j-=dk)//以增量dk向前查找合适的位置</p>
+<p>num[j+dk] = num[j];</p>
+<p>num[j+dk] = num[0];//放到上面移走数据的位置</p>
+<p>}</p>
+<p>}</p>
+<p>}</p>
+<p>void shell_sort(int num[], int dlta[], int t)//dlta[] 存放递减的增量 t为增量的个数</p>
+<p>{</p>
+<p>int k;</p>
+<p>for(k=0; k&lt;t; ++k){</p>
+<p>shell_insert(num, dlta[k]);//用递减的增量，一趟一趟地插入</p>
+<p>}</p>
+<p>快速排序：</p>
+<p>int partition(int num[], int low, int high)//一次划分</p>
+<p>{</p>
+<p>        int r = num[low];</p>
+<p>        int pivotloc = num[low];//以第一个为基准</p>
+<p>        while(low &lt; high){</p>
+<p>        /* move the data which is SMALLER than the PIVOT forward */</p>
+<p>            while(low&lt;high &amp;&amp; num[high]&gt;=pivotloc)</p>
+<p>                –high;//high 的大，不换位，high– 即可</p>
+<p>            num[low] = num[high];//从while中跳出，说明high的小，要移到low处</p>
+<p>            /* move the data which is LARGER than the PIVOT backward */</p>
+<p>            while(low&lt;high &amp;&amp; num[low]&lt;=pivotloc)</p>
+<p>                ++low;//low 的小 不换位， low++ 即可</p>
+<p>            num[high] = num[low];//从while中跳出,说明low的大，要移到high处</p>
+<p>        }</p>
+<p>        num[low] = r; //最后，比基准值大的已后移，小的已前移。基准值放回合适的位置</p>
+<p>        return low; //返回基准值位置</p>
+<p>}</p>
+<p>void quick_sort(int num[], int low, int high)</p>
+<p>{</p>
+<p>        int pivotloc; //基准</p>
+<p>        if(low &lt; high){</p>
+<p>            pivotloc = partition(num, low, high);//一次划分后，找到了基准值所在的位置</p>
+<p>            /* recurs sorting sub-table */</p>
+<p>            quick_sort(num, low, pivotloc-1);//递归排序原基准值前面的数</p>
+<p>            quick_sort(num, pivotloc+1, high);//递归排序原基准值后面的数</p>
+<p>        }</p>
+<p>        return;</p>
+<p>}</p>
+<p>hash查找: </p>
+<p>key–&gt;H(key)–&gt;key  存放与查找方法一样却可 </p>
+<p>hash函数H(key)、解决冲突方法</p>
+<p>linux 内核 hash表 &gt;&gt; </p>
+<p>构造哈希函数方法：</p>
+<p>1.直接定址法；</p>
+<p>2.平方取中法；</p>
+<p>3.折叠法；</p>
+<p>4.除留余数法；</p>
+<p>解决冲突：</p>
+<p>1.开放定址法</p>
+<p>2.再哈希法</p>
+<p>3.链地址法</p>
+<p> 内核中宏两种常用写法：</p>
+<p>#define XXX  ({; ; ;})</p>
+<p>#define XXX  do { ; ; ; } while(0)</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/%E8%BE%93%E5%85%A5%E6%B3%95%E5%85%A8%E5%B1%8F/" rel="prev" title="输入法全屏">
+      <i class="fa fa-chevron-left"></i> 输入法全屏
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/%E6%95%B0%E5%88%B6%E8%BD%AC%E6%8D%A2/" rel="next" title="数制转换">
+      数制转换 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Edward"
+      src="/uploads/avatar.gif">
+  <p class="site-author-name" itemprop="name">Edward</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">570</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Edward</span>
+</div>
+
+        
+
+
+
+
+
+
+<script>
+  (function() {
+    function leancloudSelector(url) {
+      url = encodeURI(url);
+      return document.getElementById(url).querySelector('.leancloud-visitors-count');
+    }
+
+    function addCount(Counter) {
+      var visitors = document.querySelector('.leancloud_visitors');
+      var url = decodeURI(visitors.id);
+      var title = visitors.dataset.flagTitle;
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          if (results.length > 0) {
+            var counter = results[0];
+            leancloudSelector(url).innerText = counter.time + 1;
+            Counter('put', '/classes/Counter/' + counter.objectId, { time: { '__op': 'Increment', 'amount': 1 } })
+              .catch(error => {
+                console.error('Failed to save visitor count', error);
+              });
+          } else {
+              Counter('post', '/classes/Counter', { title, url, time: 1 })
+                .then(response => response.json())
+                .then(() => {
+                  leancloudSelector(url).innerText = 1;
+                })
+                .catch(error => {
+                  console.error('Failed to create', error);
+                });
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    function showTime(Counter) {
+      var visitors = document.querySelectorAll('.leancloud_visitors');
+      var entries = [...visitors].map(element => {
+        return decodeURI(element.id);
+      });
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url: { '$in': entries } })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          for (let url of entries) {
+            let target = results.find(item => item.url === url);
+            leancloudSelector(url).innerText = target ? target.time : 0;
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    let { app_id, app_key, server_url } = {"enable":true,"app_id":"wxYx0BX9gaKA3XC4LuO2of0v-gzGzoHsz","app_key":"LQMcs6IDIE4YAm10vMsn9IYq","server_url":"https://wxyx0bx9.lc-cn-n1-shared.com","security":false};
+    function fetchData(api_server) {
+      var Counter = (method, url, data) => {
+        return fetch(`${api_server}/1.1${url}`, {
+          method,
+          headers: {
+            'X-LC-Id'     : app_id,
+            'X-LC-Key'    : app_key,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data)
+        });
+      };
+      if (CONFIG.page.isPost) {
+        if (CONFIG.hostname !== location.hostname) return;
+        addCount(Counter);
+      } else if (document.querySelectorAll('.post-title-link').length >= 1) {
+        showTime(Counter);
+      }
+    }
+
+    let api_server = app_id.slice(-9) !== '-MdYXbMMI' ? server_url : `https://${app_id.slice(0, 8).toLowerCase()}.api.lncldglobal.com`;
+
+    if (api_server) {
+      fetchData(api_server);
+    } else {
+      fetch('https://app-router.leancloud.cn/2/route?appId=' + app_id)
+        .then(response => response.json())
+        .then(({ api_server }) => {
+          fetchData('https://' + api_server);
+        });
+    }
+  })();
+</script>
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

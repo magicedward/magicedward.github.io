@@ -1,0 +1,888 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"edward.org.cn","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="dev_t –&gt; unsigned int  &#x2F;&#x2F;32位整数 高12位为主设备号，低20位为次设备号 获取主、次设备号 MAJOR(dev_t dev); MANOR(dev_t dev); 从inode获取主次设备号 unsigned int imajor(struct inode *inode) unsigned int iminor(struct inode *inode) 生成设备号">
+<meta property="og:type" content="article">
+<meta property="og:title" content="驱动基础">
+<meta property="og:url" content="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/%E9%A9%B1%E5%8A%A8%E5%9F%BA%E7%A1%80/index.html">
+<meta property="og:site_name" content="点点滴滴">
+<meta property="og:description" content="dev_t –&gt; unsigned int  &#x2F;&#x2F;32位整数 高12位为主设备号，低20位为次设备号 获取主、次设备号 MAJOR(dev_t dev); MANOR(dev_t dev); 从inode获取主次设备号 unsigned int imajor(struct inode *inode) unsigned int iminor(struct inode *inode) 生成设备号">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-12-31T06:48:02.009Z">
+<meta property="article:modified_time" content="2020-01-16T04:37:32.267Z">
+<meta property="article:author" content="Edward">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/%E9%A9%B1%E5%8A%A8%E5%9F%BA%E7%A1%80/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>驱动基础 | 点点滴滴</title>
+  
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?a92ed22eafce466e7a7b17546bb0dc6f";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">点点滴滴</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/%E9%A9%B1%E5%8A%A8%E5%9F%BA%E7%A1%80/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/avatar.gif">
+      <meta itemprop="name" content="Edward">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="点点滴滴">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          驱动基础
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-12-31 14:48:02" itemprop="dateCreated datePublished" datetime="2020-12-31T14:48:02+08:00">2020-12-31</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-01-16 12:37:32" itemprop="dateModified" datetime="2020-01-16T12:37:32+08:00">2020-01-16</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%83%82%E7%AC%94%E5%A4%B4/" itemprop="url" rel="index"><span itemprop="name">烂笔头</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/%E9%A9%B1%E5%8A%A8%E5%9F%BA%E7%A1%80/" class="post-meta-item leancloud_visitors" data-flag-title="驱动基础" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>dev_t –&gt; unsigned int  //32位整数</p>
+<p>高12位为主设备号，低20位为次设备号</p>
+<p>获取主、次设备号</p>
+<p>MAJOR(dev_t dev);</p>
+<p>MANOR(dev_t dev);</p>
+<p>从inode获取主次设备号</p>
+<p>unsigned int imajor(struct inode *inode)</p>
+<p>unsigned int iminor(struct inode *inode)</p>
+<p>生成设备号</p>
+<p>MKDEV(int major,int minor);</p>
+<p>申请主设备号：</p>
+<p>int  register_chrdev (major, name,&amp;fops);(老)</p>
+<p>major = MKDEV(major,0);原型：register_chrdev_region (major,count,name)(新)</p>
+<p>major为0时，动态申请</p>
+<p>//创建设备节点</p>
+<p>手工：mknod filename type major minor</p>
+<p>mknod led c 100 0</p>
+<p>自动创建：</p>
+<p>hello_class =class_create(THIS_MODULE, &quot;hello_class&quot;);</p>
+<p>class_device_create(hello_class, NULL, MKDEV(hello_major,0), NULL, &quot;hello&quot;);</p>
+<p>在 linux2.6 内核中，字符设备使用 struct cdev 结构来描</p>
+<p>struct cdev {</p>
+<p>struct kobject kobj;   / * 内嵌的 kobject 对象 * /</p>
+<p>struct module  * owner; / * 所属模块 * /</p>
+<p>const struct file_operations  * ops; / * 文件操作结构体 * /</p>
+<p>struct list_head list;</p>
+<p>dev_t dev; / * 设备号 * /</p>
+<p>unsigned int count;</p>
+<p>};</p>
+<p>字条设备注册：</p>
+<p>1.struct cdev *cdev_alloc(void) //静态的不需要分配</p>
+<p>2.void cdev_init(struct cdev *cdev,const struct file_operations *fops);</p>
+<p>3.int cdev_add(struct cdev *p,dev_t dev,unsigned count)</p>
+<p>include/linux/fs.h</p>
+<p>struct inode {</p>
+<p>           ……</p>
+<p>dev_t  i_rdev; // 包含真正的设备编号</p>
+<p>struct  cdev   * i_cdev; // 指向 cdev 结构的指针</p>
+<p>……</p>
+<p>};</p>
+<p>struct file {</p>
+<p>mode_t  f_mode; //权限</p>
+<p>loff_t   f_ops; //当前读/写位置</p>
+<p>unsigned int  f_flags; </p>
+<p>struct  file_operations //与文件相关操作</p>
+<p>void   * private_data;</p>
+<p>struct  dentry    * f_dentry;</p>
+<p>};</p>
+<p>struct file_operations {</p>
+<p>struct module  * owner;</p>
+<p>loff_t ( * llseek) (struct file  * , loff_t, int);</p>
+<p>ssize_t ( * read) (struct file  * , char __user  * , size_t, loff_t  * );</p>
+<p>ssize_t ( * write) (struct file  * , const char __user  * , size_t, loff_t  * )</p>
+<p>unsigned int ( * poll) (struct file  * , struct poll_table_struct  * );</p>
+<p>int ( * ioctl) (struct inode  * , struct file  * , unsigned int, unsigned lo</p>
+<p>int ( * mmap) (struct file  * , struct vm_area_struct  * );</p>
+<p>int ( * open) (struct inode  * , struct file  * );</p>
+<p>int ( * release) (struct inode  * , struct file  * );</p>
+<p>int ( * fsync) (struct file  * , struct dentry  * , int datasync);</p>
+<p>……</p>
+<p>};</p>
+<p>static inline unsigned long __must_check </p>
+<p>copy_from_user(void *to, const void __user *from, unsigned long n)</p>
+<p>static inline unsigned long __must_check </p>
+<p>copy_to_user(void __user *to, const void *from, unsigned long n)</p>
+<p>static unsigned int hello_major =0;</p>
+<p>static struct class *hello_class =NULL</p>
+<p>static int hello_open(struct inode *inode , struct file *file</p>
+<p>struct file_operations hello_fops ={</p>
+<p>.owner= THIS_MODULE,</p>
+<p>.open =hello_open,</p>
+<p>}</p>
+<p>/<em>1.实现模块加载函数,insmod hello.ko</em>/</p>
+<p>static int __init hello_init(void)</p>
+<p>{</p>
+<p>printk(&quot;hello init!\n&quot;);</p>
+<p>/<em>1.静态方式申请主设备号</em>/</p>
+<p>//register_chrdev(hello_major, &quot;hello&quot;, &amp;hello_fops);</p>
+<p>/<em>2.动态申请主设备号</em>/</p>
+<p>hello_major =register_chrdev(0, &quot;hello&quot;,  &amp;hello_fops);</p>
+<p>/<em>3.自动创建设备节点</em>/</p>
+<p>/*3.1 首先要创建一个类,为vfs构建一些信心,mdev这个根据这些信息帮我们</p>
+<p>创建一个设备节点*/</p>
+<p>hello_class =class_create(THIS_MODULE, &quot;hello_class&quot;);</p>
+<p>/<em>3.2 在这个类下创建一个设备节点</em>/</p>
+<p>class_device_create(hello_class, NULL, MKDEV(hello_major,0), NULL, &quot;hello&quot;);</p>
+<p>return 0;</p>
+<p>}</p>
+<p>/<em>2.实现模块卸载函数,rmmod hello就会调用hello_exit</em>/</p>
+<p>static void __exit hello_exit(void)</p>
+<p>{</p>
+<p>printk(&quot;hello exit!\n&quot;);</p>
+<p>/<em>释放资源</em>/</p>
+<p>unregister_chrdev(hello_major, &quot;hello&quot;);</p>
+<p>class_device_destroy(hello_class,  MKDEV(hello_major,0));</p>
+<p>class_destroy(hello_class);</p>
+<p>}</p>
+<p>module_init(hello_init);</p>
+<p>module_exit(hello_exit);</p>
+<p>/<em>3.模块许可申明</em>/</p>
+<p>MODULE_LICENSE(&quot;GPL&quot;)</p>
+<p>获取内存区（kmalloc分配物理内存）</p>
+<p>Buffer</p>
+<p>DMA buffer</p>
+<p>ioport和iomem映射及使用</p>
+<p>用户静态映射(iodesc，iomap)</p>
+<p>动态映射(ioremap)</p>
+<p>原子操作指的是在执行过程中不会被别的代码路径所中断的操作</p>
+<p>atomic_t v = ATOMIC_INIT(0); //定义原子变量v并初始化为0</p>
+<p>atomic_read(atomic_t *v);   //返回原子变量的值</p>
+<p>void atomic_inc(atomic_t *v);    //原子变量增加1</p>
+<p>void atomic_dec(atomic_t *v);    //原子变量减少1</p>
+<p>int atomic_dec_and_test(atomic_t *v); </p>
+<p>自旋锁（spin lock）是一种对临界资源进行互斥手访问的典型手段</p>
+<p>spinlock_t spin; //1．定义自旋锁</p>
+<p>spin_lock_init(lock)//2．初始化自旋锁</p>
+<p>//该宏用于获得自旋锁lock，如果能够立即获得锁，它就马上返回，否则，它将自旋</p>
+<p>//在那里，直到该自旋锁的保持者释放；</p>
+<p>spin_lock(lock) //3．获得自旋锁</p>
+<p>//该宏尝试获得自旋锁lock，如果能立即获得锁，它获得锁并返回真，</p>
+<p>//否则立即返回假，实际上不再“在原地打转”；</p>
+<p>spin_trylock(lock)</p>
+<p>//该宏释放自旋锁lock，它与spin_trylock或spin_lock配对使用。</p>
+<p>spin_unlock(lock)//4．释放自旋锁</p>
+<p>//信号量：</p>
+<p>struct semaphore sem;//定义信号量</p>
+<p>//初始化信号量</p>
+<p>void sema_init (struct semaphore *sem, int val);</p>
+<p>void init_MUTEX(struct semaphore *sem);//初始化为1</p>
+<p>//获得信号量</p>
+<p>void down(struct semaphore * sem);</p>
+<p>int down_interruptible(struct semaphore * sem); </p>
+<p>int down_trylock(struct semaphore * sem);</p>
+<p>//释放信号量</p>
+<p>void up(struct semaphore * sem);</p>
+<p>static volatile unsigned long *gpfcon =NULL;</p>
+<p>static volatile unsigned long *gpfdat =NULL;</p>
+<p>gpfcon =ioremap(0x56000050, 8);</p>
+<p>gpfdat =gpfcon +1;</p>
+<p>int request_irq(unsigned int irq, irq_handler_t handler,</p>
+<p>unsigned long irqflags, const char *devname, void *dev_id)</p>
+<p>s3c2410_gpio_cfgpin(S3C2410_GPE11,S3C2410_GPE11_OUTP);</p>
+<p>s3c2410_gpio_setpin(S3C2410_GPE11, 0)</p>
+<p>s3c2410_gpio_getpin</p>
+<p>阻塞：</p>
+<p>1.DECLARE_WAIT_QUEUE_HEAD(buttons_wq);</p>
+<p>2.wait_event_interruptible(buttons_wq, key);</p>
+<p>3.唤醒：wake_up_interruptible(&amp;buttons_wq);</p>
+<p>poll机制：</p>
+<p>int poll(struct pollfd *fds, nfds_t nfds, int timeout);</p>
+<p>struct pollfd {</p>
+<p>   int   fd;         /<em>要查询的设备文件描述符</em>/</p>
+<p>   short events;     /<em>要查询的事件</em>/</p>
+<p>};</p>
+<p>1.DECLARE_WAIT_QUEUE_HEAD(buttons_wq);</p>
+<ol start="2">
+<li>.poll  = buttons_poll,</li>
+</ol>
+<p>static int buttons_poll (struct file *file, struct poll_table_struct *wait)</p>
+<p>poll_wait(file, &amp;buttons_wq, wait);</p>
+<p>fasync异步通知</p>
+<p>应用层：</p>
+<p>1.设置为异步通知模式</p>
+<p>int fcntl(int fd, int cmd, … /* arg */ );</p>
+<p>F_GETFL (void)  Read the file status flags; arg is ignored./<em>设置文件标识,标识为异步通知的模式</em>/</p>
+<p>F_SETFL /<em>设置为模式</em>/</p>
+<p>F_SETOWN   /<em>设置拥有者</em>/</p>
+<p>fcntl(fd,F_GETFL)</p>
+<p>2.将信号与信号处理函数绑定</p>
+<p>signal(SIGIO,signal_function);</p>
+<p>3.实现信号处理函数</p>
+<ol start="4">
+<li>设置谁发的问题,设置信号有本进程拥有</li>
+</ol>
+<p>   fcntl(fd,F_SETOWN,getpid());</p>
+<p>驱动层：</p>
+<p>1.struct fasync_struct   *button_fasync</p>
+<ol start="2">
+<li>.fasync =buttons_fasync,</li>
+</ol>
+<p>static int buttons_fasync (int fd, struct file *file, int on)</p>
+<p>{fasync_helper(fd, file, on,&amp;button_fasync);//开启异步通知}</p>
+<p>3.kill_fasync(&amp;button_fasync, SIGIO, POLLIN) //发送信号</p>
+<p>//定时器</p>
+<p>1.static struct timer_list buttons_timer;</p>
+<p>2.init_timer(&amp;buttons_timer);</p>
+<p>3.</p>
+<p>buttons_timer.function = buttons_timer_function;//指定处理函数</p>
+<p>buttons_timer.expires =jiffies + 5; //50ms</p>
+<p>add_timer(&amp;buttons_timer) // 告诉内核</p>
+<p>4.mod_timer(&amp;buttons_timer, jiffies + 5) //重新赋值</p>
+<p>5.static void buttons_timer_function(unsigned long data)//实现处理函数</p>
+<p>//linux下中断流程：</p>
+<p>按下按键-&gt;跳入中断向量表-&gt;vector_irq-&gt;保存部分现场</p>
+<p>-&gt; 调用中断处理程序irq_handler</p>
+<p>  -&gt;调用总的中断入口函数asm_do_IRQ(开始进入C语言部分)</p>
+<p>在include/linux/irq.h文件中的</p>
+<p>struct irq_desc  </p>
+<p>{</p>
+<p>irq_flow_handler_t handle_irq;   //当前中断的处理函数</p>
+<p>struct irq_chip *chip; //底层的硬件访问(设置中断促发方式,使能中断)</p>
+<p>struct irqaction <em>action; /</em> IRQ action list */</p>
+<p>unsigned int status; /* IRQ status */</p>
+<p>} ____cacheline_internodealigned_in_smp;</p>
+<p>include/linux/interrupt.h</p>
+<p>request_irq(中断号,中断服务程序,中断标号,名字,id号)</p>
+<p>struct irqaction {</p>
+<p>irq_handler_t handler;   /<em>中断服务程序(就是我们自己写的buttons_irq)</em>/</p>
+<p>unsigned long flags;     /<em>中断标号(促发方式)</em>/</p>
+<p>const char *name;       /<em>中断名字</em>/</p>
+<p>void *dev_id; /<em>中断id</em>/</p>
+<p>struct irqaction *next; /<em>说明可能有多个irqaction</em>/ </p>
+<p>int irq; /<em>中断号</em>/</p>
+<p>struct proc_dir_entry *dir;</p>
+<p>};</p>
+<p>中断下半部分</p>
+<p>tasklet:</p>
+<p>1.DECLARE_TASKLET(buttons_tasklet, buttons_tasklet_func, 0)</p>
+<p>2.static void buttons_tasklet_func(unsigned long data)</p>
+<p>3.tasklet_schedule(&amp;buttons_tasklet);//在中断上半部分告诉内核</p>
+<p>work queue:</p>
+<p>1.struct work_struct buttons_work;</p>
+<p>2.INIT_WORK(&amp;buttons_work, (void (*)(void *))buttons_work_func);</p>
+<p>3.static void buttons_work_func(unsigned long data)</p>
+<p>4.schedule_work(&amp;buttons_work); //告诉内核</p>
+<p>//设备资源层：</p>
+<p>//linux/arch/arm/plat-s3c24xx/devs.c</p>
+<p>//Base S3C24XX platform device definitions</p>
+<p>//描述资源的结构体</p>
+<p>struct resource {</p>
+<p>resource_size_t start;//IO资源的实际地址</p>
+<p>resource_size_t end;</p>
+<p>const char *name;</p>
+<p>unsigned long flags;//IORESOURCE_MEM/IORESOURCE_IRQ</p>
+<p>   //IORESOURCE_IO /IORESOURCE_DMA</p>
+<p>struct resource *parent, *sibling, *child;</p>
+<p>};//linux/ioport.h</p>
+<p>//用于平台设备驱动机制的平台设备结构体</p>
+<p>struct platform_device </p>
+<p>{</p>
+<p>const char * name;</p>
+<p>u32 id;</p>
+<p>struct device dev;</p>
+<p>u32 num_resources;</p>
+<p>struct resource * resource;</p>
+<p>};//linux/platform_device.h</p>
+<p>// add a numbers of platform devices</p>
+<p>int platform_add_devices(struct platform_device **devs, int num)</p>
+<p>// add a platform-level devic</p>
+<p>int platform_device_register(struct platform_device * pdev)</p>
+<p>{</p>
+<p>//设备属性的初始化</p>
+<p>device_initialize(&amp;pdev-&gt;dev);</p>
+<p>//将设备添加到Platfrom中 /add a platform device to device hierarchy</p>
+<p>return platform_device_add(pdev);</p>
+<p>}</p>
+<p>// add device to device hierarchy.</p>
+<p>int device_add(struct device *dev)</p>
+<p>//add device to bus</p>
+<p>void bus_attach_device(struct device * dev)</p>
+<p>//driver iterator</p>
+<p>int bus_for_each_drv(struct bus_type * bus, struct device_driver * start,</p>
+<p>    void * data, int (*fn)(struct device_driver *, void *))</p>
+<p>//attempt to bind device &amp; driver together</p>
+<p>int driver_probe_device(struct device_driver * drv, struct device * dev)</p>
+<p>–&gt; really_probe</p>
+<p>  –&gt; dev-&gt;bus-&gt;probe</p>
+<p>/<em>重要结构体及重要函数的分析</em>/</p>
+<p>struct bus_type platform_bus_type = {</p>
+<p>.name = &quot;platform&quot;,</p>
+<p>        …</p>
+<p>.match = platform_match,  </p>
+<p>}</p>
+<p>// bind platform device to platform driver.</p>
+<p>static int platform_match(struct device * dev, struct device_driver * drv)</p>
+<p>{</p>
+<p>  struct platform_device *pdev = container_of(dev, struct platform_device, dev);</p>
+<p>/<em>按名字匹配,名字相同的就调用probe函数</em>/</p>
+<p>  return (strncmp(pdev-&gt;name, drv-&gt;name, BUS_ID_SIZE) == 0);</p>
+<p>}</p>
+<p>struct platform_driver {</p>
+<p>int (*probe)(struct platform_device *);</p>
+<p>int (*remove)(struct platform_device *);</p>
+<p>void (*shutdown)(struct platform_device *);</p>
+<p>int (*suspend)(struct platform_device *, pm_message_t state);</p>
+<p>int (*suspend_late)(struct platform_device *, pm_message_t state);</p>
+<p>int (*resume_early)(struct platform_device *);</p>
+<p>int (*resume)(struct platform_device *);</p>
+<p>struct device_driver driver;</p>
+<p>};</p>
+<p>int platform_driver_register(struct platform_driver *drv)</p>
+<p>{</p>
+<p>drv-&gt;driver.bus = &amp;platform_bus_type;</p>
+<p>if (drv-&gt;probe)</p>
+<p>drv-&gt;driver.probe = platform_drv_probe;</p>
+<p>if (drv-&gt;remove)</p>
+<p>drv-&gt;driver.remove = platform_drv_remove;</p>
+<p>if (drv-&gt;shutdown)</p>
+<p>drv-&gt;driver.shutdown = platform_drv_shutdown;</p>
+<p>if (drv-&gt;suspend)</p>
+<p>drv-&gt;driver.suspend = platform_drv_suspend;</p>
+<p>if (drv-&gt;resume)</p>
+<p>drv-&gt;driver.resume = platform_drv_resume;</p>
+<p>return driver_register(&amp;drv-&gt;driver);</p>
+<p>}</p>
+<p>//运用平台设备驱动机制：</p>
+<ol>
+<li>struct platform_driver my_drv</li>
+</ol>
+<p>.probe = my_probe,</p>
+<p>…</p>
+<p>}</p>
+<p>2.static int my_probe(struct platform_device *pdev)</p>
+<p>{</p>
+<p> res = platform_get_resource(struct platform_device *dev, unsigned int type,</p>
+<p>     unsigned int num)</p>
+<p>…</p>
+<p>}</p>
+<p>3.int platform_driver_register(struct platform_driver *drv)</p>
+<p>void platform_driver_unregister(struct platform_driver *drv)</p>
+<p>I2C(Inter-Integrated Circuit)  PHILIPS 串行总线，用于连接微控制器及外围设备</p>
+<p>串行数据线:SDA  串行时钟线:SCL</p>
+<p>半双工</p>
+<p>低速模式100k/s 全速模式:400k/s 高速模式:3.4M/s</p>
+<p>同一总线上IC数量只受到最大电容400pF的限制</p>
+<p>先传高位再传低位</p>
+<p>仲裁：用于多主机，通过仲裁只有一个主机获得总线控制权</p>
+<p>开始信号(S): SCL高，SDA 高-&gt;低</p>
+<p>结束信号(p): SCL高，SDA 低-&gt;高</p>
+<p>响应信号(ACK): 接收8位数据后，在第9个时钟周期，拉低SDA</p>
+<p>SDA线上的数据,必须在SCL为高电平周期保持稳定，只能在SCL为低电平期间变化。</p>
+<p>IICCON: 控制，ACK全能，时钟，分频，中断全能等</p>
+<p>//IICCON[4] 写0清除中断标记，才会发出P信号</p>
+<p>IICSTAT:状态，工作模式、仲裁，输出使能、 S/P状态等  </p>
+<p>//IICSTAT[4]为0时方可写入：</p>
+<p>IICADD(从机地址)  IICDS(保存发送/接收的数据)</p>
+<p>I2C子系统分2个层次：</p>
+<p>1.I2C设备驱动层(drivers/i2c/chips)</p>
+<p>2.I2C总线驱动层(drivers/i2c/busses/i2c-s3c2410.c)</p>
+<p>LCD(Liquid Crystal Display) 液晶显示器</p>
+<p>总类：</p>
+<p>STN(Super Twisted Nematic) 超扭曲向列</p>
+<p>TFT(Thin Film Transistor) 薄膜晶体管</p>
+<p>LTPS(Low Temperature Polycrystalline Silicon) 低温多晶硅</p>
+<p>OLED(Organic Light Emitting Diode) 有机发光二极管</p>
+<p>VSYNC: 垂直同步信号</p>
+<p>HSYNC: 水平同步信号</p>
+<p>VD[23:0]: 数据信号</p>
+<p>LEND : 行结束信号</p>
+<p>PWREN: 电源开关信号</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/%E5%BC%BA%E5%88%B6%E4%BF%AE%E6%94%B9smallestScreenWidthDp/" rel="prev" title="强制修改smallestScreenWidthDp">
+      <i class="fa fa-chevron-left"></i> 强制修改smallestScreenWidthDp
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/%E9%A9%B1%E5%8A%A8%E6%80%BB%E7%BB%93/" rel="next" title="驱动总结">
+      驱动总结 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Edward"
+      src="/uploads/avatar.gif">
+  <p class="site-author-name" itemprop="name">Edward</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">570</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Edward</span>
+</div>
+
+        
+
+
+
+
+
+
+<script>
+  (function() {
+    function leancloudSelector(url) {
+      url = encodeURI(url);
+      return document.getElementById(url).querySelector('.leancloud-visitors-count');
+    }
+
+    function addCount(Counter) {
+      var visitors = document.querySelector('.leancloud_visitors');
+      var url = decodeURI(visitors.id);
+      var title = visitors.dataset.flagTitle;
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          if (results.length > 0) {
+            var counter = results[0];
+            leancloudSelector(url).innerText = counter.time + 1;
+            Counter('put', '/classes/Counter/' + counter.objectId, { time: { '__op': 'Increment', 'amount': 1 } })
+              .catch(error => {
+                console.error('Failed to save visitor count', error);
+              });
+          } else {
+              Counter('post', '/classes/Counter', { title, url, time: 1 })
+                .then(response => response.json())
+                .then(() => {
+                  leancloudSelector(url).innerText = 1;
+                })
+                .catch(error => {
+                  console.error('Failed to create', error);
+                });
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    function showTime(Counter) {
+      var visitors = document.querySelectorAll('.leancloud_visitors');
+      var entries = [...visitors].map(element => {
+        return decodeURI(element.id);
+      });
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url: { '$in': entries } })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          for (let url of entries) {
+            let target = results.find(item => item.url === url);
+            leancloudSelector(url).innerText = target ? target.time : 0;
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    let { app_id, app_key, server_url } = {"enable":true,"app_id":"wxYx0BX9gaKA3XC4LuO2of0v-gzGzoHsz","app_key":"LQMcs6IDIE4YAm10vMsn9IYq","server_url":"https://wxyx0bx9.lc-cn-n1-shared.com","security":false};
+    function fetchData(api_server) {
+      var Counter = (method, url, data) => {
+        return fetch(`${api_server}/1.1${url}`, {
+          method,
+          headers: {
+            'X-LC-Id'     : app_id,
+            'X-LC-Key'    : app_key,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data)
+        });
+      };
+      if (CONFIG.page.isPost) {
+        if (CONFIG.hostname !== location.hostname) return;
+        addCount(Counter);
+      } else if (document.querySelectorAll('.post-title-link').length >= 1) {
+        showTime(Counter);
+      }
+    }
+
+    let api_server = app_id.slice(-9) !== '-MdYXbMMI' ? server_url : `https://${app_id.slice(0, 8).toLowerCase()}.api.lncldglobal.com`;
+
+    if (api_server) {
+      fetchData(api_server);
+    } else {
+      fetch('https://app-router.leancloud.cn/2/route?appId=' + app_id)
+        .then(response => response.json())
+        .then(({ api_server }) => {
+          fetchData('https://' + api_server);
+        });
+    }
+  })();
+</script>
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

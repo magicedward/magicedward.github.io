@@ -1,0 +1,986 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"edward.org.cn","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="在linux下，按键、触摸屏、鼠标等都可以利用input接口函数来实现设备驱动。 从上图可知： 输入子系统由三部分构成： 1 驱动 2 输入子系统 3 处理函数 其中2,3都是内核已经完成，我们要完成的就是1驱动 设备用input_dev结构体描述，使用input子系统实现输入设备驱动的时候，驱动的核心工作是向系统报告按键、触摸屏、键盘、鼠标等输入事件（event，通过input_event结构体">
+<meta property="og:type" content="article">
+<meta property="og:title" content="深层次分析linux2">
+<meta property="og:url" content="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/%E6%B7%B1%E5%B1%82%E6%AC%A1%E5%88%86%E6%9E%90linux2.6input%E5%AD%90%E7%B3%BB%E7%BB%9F/index.html">
+<meta property="og:site_name" content="点点滴滴">
+<meta property="og:description" content="在linux下，按键、触摸屏、鼠标等都可以利用input接口函数来实现设备驱动。 从上图可知： 输入子系统由三部分构成： 1 驱动 2 输入子系统 3 处理函数 其中2,3都是内核已经完成，我们要完成的就是1驱动 设备用input_dev结构体描述，使用input子系统实现输入设备驱动的时候，驱动的核心工作是向系统报告按键、触摸屏、键盘、鼠标等输入事件（event，通过input_event结构体">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-12-31T06:48:02.048Z">
+<meta property="article:modified_time" content="2020-01-16T04:37:32.290Z">
+<meta property="article:author" content="Edward">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/%E6%B7%B1%E5%B1%82%E6%AC%A1%E5%88%86%E6%9E%90linux2.6input%E5%AD%90%E7%B3%BB%E7%BB%9F/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>深层次分析linux2 | 点点滴滴</title>
+  
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?a92ed22eafce466e7a7b17546bb0dc6f";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">点点滴滴</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/%E6%B7%B1%E5%B1%82%E6%AC%A1%E5%88%86%E6%9E%90linux2.6input%E5%AD%90%E7%B3%BB%E7%BB%9F/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/avatar.gif">
+      <meta itemprop="name" content="Edward">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="点点滴滴">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          深层次分析linux2
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-12-31 14:48:02" itemprop="dateCreated datePublished" datetime="2020-12-31T14:48:02+08:00">2020-12-31</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-01-16 12:37:32" itemprop="dateModified" datetime="2020-01-16T12:37:32+08:00">2020-01-16</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%83%82%E7%AC%94%E5%A4%B4/" itemprop="url" rel="index"><span itemprop="name">烂笔头</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/%E6%B7%B1%E5%B1%82%E6%AC%A1%E5%88%86%E6%9E%90linux2.6input%E5%AD%90%E7%B3%BB%E7%BB%9F/" class="post-meta-item leancloud_visitors" data-flag-title="深层次分析linux2" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>在linux下，按键、触摸屏、鼠标等都可以利用input接口函数来实现设备驱动。</p>
+<p>从上图可知：</p>
+<p>输入子系统由三部分构成：</p>
+<p>1 驱动</p>
+<p>2 输入子系统</p>
+<p>3 处理函数</p>
+<p>其中2,3都是内核已经完成，我们要完成的就是1驱动</p>
+<p>设备用input_dev结构体描述，使用input子系统实现输入设备驱动的时候，驱动的核心工作是向系统报告按键、触摸屏、键盘、鼠标等输入事件（event，通过input_event结构体描述），不再需要关心文件操作接口，因为input子系统已经完成了文件操作接口。驱动报告的事件经过InputCore和Eventhandler最终到达用户空间。</p>
+<p>Input_dev 结构中比较重要的域有：</p>
+<p>Name:名字</p>
+<p>Evbit:设备所支持的事件类型</p>
+<p>Keybit：按键类型</p>
+<p>注册输入设备的函数为：</p>
+<p>int input_register_device(struct input_dev *dev)</p>
+<p>注销输入设备的函数为：</p>
+<p>void input_unregister_device(struct input_dev *dev)</p>
+<p>设备所支持的事件类型有：</p>
+<p>EV_RST Reset EV_KEY 按键</p>
+<p>EV_REL 相对坐标EV_ABS绝对坐标</p>
+<p>EV_MSC 其它EV_LED LED</p>
+<p>EV_SND 声音EV_REP Repeat</p>
+<p>EV_FF 力反馈</p>
+<p>并使用set_bit(EV_KEY, button_dev.evbit)告知结构体支持哪种设备类型</p>
+<p>用于报告EV_KEY、EV_REL和EV_ABS事件的函数分别为：</p>
+<p>void input_report_key(struct input_dev *dev,unsigned int code, int value)</p>
+<p>void input_report_rel(struct input_dev *dev,unsigned int code, int value)</p>
+<p>void input_report_abs(struct input_dev *dev,unsigned int code, int value)</p>
+<p>code：</p>
+<p>事件的代码。如果事件的类型是EV_KEY，该代码code为设备键盘代码。代码值0<del>127为键盘上的按键代码，0x110</del>0x116为鼠标上按键代码，其中0x110(BTN_LEFT)为鼠标左键，0x111(BTN_RIGHT)为鼠标右键,0x112(BTN_ MIDDLE)为鼠标中键。其它代码含义请参看include/linux/input.h文件</p>
+<p>value</p>
+<p>事件的值。如果事件的类型是EV_KEY,当按键按下时值为1,松开时值为0。</p>
+<p>input_sync()用于事件同步，它告知事件的接收者：驱动已经发出了一个完整的报告。</p>
+<p>在中断中，使用input_report_key等函数想用户空间报告，在应用程序中直接读取状态。</p>
+<p>输入子系统的设备文件名默认为event0 – event31主设备号默认为13，类似于misc混杂设备。</p>
+<p>下面基于mini2440的input输入按键驱动代码：</p>
+<p>#include &lt;linux/module.h&gt;</p>
+<p>#include &lt;linux/kernel.h&gt;</p>
+<p>#include &lt;linux/fs.h&gt;</p>
+<p>#include &lt;linux/init.h&gt;</p>
+<p>#include &lt;linux/delay.h&gt;</p>
+<p>#include &lt;linux/poll.h&gt;</p>
+<p>#include &lt;linux/irq.h&gt;</p>
+<p>#include &lt;asm/irq.h&gt;</p>
+<p>#include &lt;linux/interrupt.h&gt;</p>
+<p>#include &lt;asm/uaccess.h&gt;</p>
+<p>#include &lt;mach/regs-gpio.h&gt;</p>
+<p>#include &lt;mach/hardware.h&gt;</p>
+<p>#include &lt;linux/platform_device.h&gt;</p>
+<p>#include &lt;linux/cdev.h&gt;</p>
+<p>#include &lt;linux/miscdevice.h&gt;</p>
+<p>#include &lt;linux/input.h&gt;</p>
+<p>struct input_dev *button_dev;</p>
+<p>struct button_irq_desc {</p>
+<p>int irq;</p>
+<p>int pin;</p>
+<p>int pin_setting;</p>
+<p>int number;</p>
+<p>char *name;   </p>
+<p>};</p>
+<p>static struct button_irq_desc button_irqs [] = {</p>
+<p>{IRQ_EINT8 , S3C2410_GPG0 ,  S3C2410_GPG0_EINT8  , 0, &quot;KEY0&quot;}, </p>
+<p>{IRQ_EINT11, S3C2410_GPG3 ,  S3C2410_GPG3_EINT11 , 1, &quot;KEY1&quot;},</p>
+<p>{IRQ_EINT13, S3C2410_GPG5 ,  S3C2410_GPG5_EINT13 , 2, &quot;KEY2&quot;},</p>
+<p>{IRQ_EINT14, S3C2410_GPG6 ,  S3C2410_GPG6_EINT14 , 3, &quot;KEY3&quot;},</p>
+<p>{IRQ_EINT15, S3C2410_GPG7 ,  S3C2410_GPG7_EINT15 , 4, &quot;KEY4&quot;},</p>
+<p>{IRQ_EINT19, S3C2410_GPG11,  S3C2410_GPG11_EINT19, 5, &quot;KEY5&quot;},</p>
+<p>};</p>
+<p>static int key_values = 0;</p>
+<p>static irqreturn_t buttons_interrupt(int irq, void *dev_id)</p>
+<p>{</p>
+<p>struct button_irq_desc *button_irqs = (struct button_irq_desc *)dev_id;</p>
+<p>int down;</p>
+<p>udelay(0);</p>
+<p>down = !s3c2410_gpio_getpin(button_irqs-&gt;pin);   //down: 1(按下)，0（弹起）</p>
+<p>if (!down) {</p>
+<p>/<em>报告事件</em>/</p>
+<p>key_values = button_irqs-&gt;number;</p>
+<p>//printk(&quot;====&gt;rising key_values=%d\n&quot;,key_values);</p>
+<p>if(key_values==0)</p>
+<p>    input_report_key(button_dev, KEY_1, 0);</p>
+<p>if(key_values==1)</p>
+<p>    input_report_key(button_dev, KEY_2, 0);</p>
+<p>if(key_values==2)</p>
+<p>    input_report_key(button_dev, KEY_3, 0);</p>
+<p>if(key_values==3)</p>
+<p>    input_report_key(button_dev, KEY_4, 0);</p>
+<p>if(key_values==4)</p>
+<p>    input_report_key(button_dev, KEY_5, 0);</p>
+<p>if(key_values==5)</p>
+<p>    input_report_key(button_dev, KEY_6, 0);</p>
+<p>input_sync(button_dev);     </p>
+<p>   }</p>
+<p>else {</p>
+<p>key_values = button_irqs-&gt;number;</p>
+<p>//printk(&quot;====&gt;falling key_values=%d\n&quot;,key_values);</p>
+<p>if(key_values==0)</p>
+<p>input_report_key(button_dev, KEY_1, 1);</p>
+<p>if(key_values==1)</p>
+<p>input_report_key(button_dev, KEY_2, 1);</p>
+<p>if(key_values==2)</p>
+<p>input_report_key(button_dev, KEY_3, 1);</p>
+<p>if(key_values==3)</p>
+<p>input_report_key(button_dev, KEY_4, 1);</p>
+<p>if(key_values==4)</p>
+<p>input_report_key(button_dev, KEY_5, 1);</p>
+<p>if(key_values==5)</p>
+<p>input_report_key(button_dev, KEY_6, 1);</p>
+<p>input_sync(button_dev);     </p>
+<p>}</p>
+<p>return IRQ_RETVAL(IRQ_HANDLED);</p>
+<p>}</p>
+<p>static int s3c24xx_request_irq(void)</p>
+<p>{</p>
+<p>int i;</p>
+<p>int err = 0;</p>
+<p>for (i = 0; i &lt; sizeof(button_irqs)/sizeof(button_irqs[0]); i++) {</p>
+<p>if (button_irqs[i].irq &lt; 0) {</p>
+<p>continue;</p>
+<p>}</p>
+<p>     /* IRQ_TYPE_EDGE_FALLING,IRQ_TYPE_EDGE_RISING,IRQ_TYPE_EDGE_BOTH */</p>
+<p>err = request_irq(button_irqs[i].irq, buttons_interrupt, IRQ_TYPE_EDGE_BOTH,</p>
+<p>button_irqs[i].name, (void *)&amp;button_irqs[i]);</p>
+<p>if (err)</p>
+<p>break;</p>
+<p>}</p>
+<p>if (err) {</p>
+<p>i–;</p>
+<p>for (; i &gt;= 0; i–) {</p>
+<p>    if (button_irqs[i].irq &lt; 0) {</p>
+<p>continue;</p>
+<p>    }</p>
+<p>    disable_irq(button_irqs[i].irq);</p>
+<p>free_irq(button_irqs[i].irq, (void *)&amp;button_irqs[i]);</p>
+<p>}</p>
+<p>return -EBUSY;</p>
+<p>}</p>
+<p>return 0;</p>
+<p>}</p>
+<p>static int __init dev_init(void)</p>
+<p>{</p>
+<p>/<em>request irq</em>/</p>
+<p>s3c24xx_request_irq();</p>
+<p>/* Initialise input stuff */</p>
+<p>button_dev = input_allocate_device();</p>
+<p>if (!button_dev) {</p>
+<p>printk(KERN_ERR &quot;Unable to allocate the input device !!\n&quot;);</p>
+<p>return -ENOMEM;</p>
+<p>}</p>
+<p>button_dev-&gt;name = &quot;s3c2440_button&quot;;</p>
+<p>button_dev-&gt;id.bustype = BUS_RS232;</p>
+<p>button_dev-&gt;id.vendor = 0xDEAD;</p>
+<p>button_dev-&gt;id.product = 0xBEEF;</p>
+<p>button_dev-&gt;id.version = 0x0100;</p>
+<p>button_dev-&gt;evbit[0] = BIT_MASK(EV_KEY) | BIT(EV_SYN);</p>
+<p>//set_bit(EV_KEY, button_dev-&gt;evbit)//支持EV_KEY事件</p>
+<p>set_bit(KEY_1,   button_dev-&gt;keybit);</p>
+<p>set_bit(KEY_2,   button_dev-&gt;keybit);</p>
+<p>set_bit(KEY_3,   button_dev-&gt;keybit);</p>
+<p>set_bit(KEY_4,   button_dev-&gt;keybit);</p>
+<p>set_bit(KEY_5,   button_dev-&gt;keybit);</p>
+<p>set_bit(KEY_6,   button_dev-&gt;keybit);</p>
+<p>//printk(&quot;KEY_RESERVED=%d ,KEY_1=%d&quot;,KEY_RESERVED,KEY_1);</p>
+<p>input_register_device(button_dev);   //注册input设备</p>
+<p>printk (&quot;initialized\n&quot;);</p>
+<p>return 0;</p>
+<p>}</p>
+<p>static void __exit dev_exit(void)</p>
+<p>{</p>
+<p>    int i;</p>
+<p>for (i = 0; i &lt; sizeof(button_irqs)/sizeof(button_irqs[0]); i++) {</p>
+<p>if (button_irqs[i].irq &lt; 0) {</p>
+<p>        continue;</p>
+<p>}</p>
+<p>free_irq(button_irqs[i].irq, (void *)&amp;button_irqs[i]);</p>
+<p>}</p>
+<p>input_unregister_device(button_dev);</p>
+<p>}</p>
+<p>module_init(dev_init);</p>
+<p>module_exit(dev_exit);</p>
+<p>MODULE_LICENSE(&quot;GPL&quot;);</p>
+<p>MODULE_AUTHOR(&quot;David Xie&quot;);</p>
+<p>应用程序：</p>
+<p>#include &lt;stdio.h&gt;</p>
+<p>#include &lt;stdlib.h&gt;</p>
+<p>#include &lt;unistd.h&gt;</p>
+<p>#include &lt;sys/ioctl.h&gt;</p>
+<p>#include &lt;sys/types.h&gt;</p>
+<p>#include &lt;sys/stat.h&gt;</p>
+<p>#include &lt;fcntl.h&gt;</p>
+<p>#include &lt;sys/select.h&gt;</p>
+<p>#include &lt;sys/time.h&gt;</p>
+<p>#include &lt;errno.h&gt;</p>
+<p>#include &lt;linux/input.h&gt;</p>
+<p>int main(void)</p>
+<p>{</p>
+<p>int buttons_fd;</p>
+<p>int key_value,i=0,count;</p>
+<p>struct input_event ev_key;</p>
+<p>buttons_fd = open(&quot;/dev/event0&quot;, O_RDWR);</p>
+<p>if (buttons_fd &lt; 0) {</p>
+<p>perror(&quot;open device buttons&quot;);</p>
+<p>exit(1);</p>
+<p>}</p>
+<p>for (;;) {</p>
+<p>count = read(buttons_fd,&amp;ev_key,sizeof(struct input_event));</p>
+<p>//     printf(&quot;count=%d\n&quot;,count);</p>
+<p>for(i=0; i&lt;(int)count/sizeof(struct input_event); i++)</p>
+<p>if(EV_KEY==ev_key.type)</p>
+<p>printf(&quot;type:%d,code:%d,value:%d\n&quot;, ev_key.type,ev_key.code-1,ev_key.value);</p>
+<p>if(EV_SYN==ev_key.type)</p>
+<p>printf(&quot;syn event\n\n&quot;);</p>
+<p>}</p>
+<p>close(buttons_fd);</p>
+<p>return 0;</p>
+<p>}</p>
+<p>加载内核模块：</p>
+<p>多了event0设备文件</p>
+<p>运行应用程序：</p>
+<p>、</p>
+<p>下面我们分析input子系统源码：</p>
+<p>在分析源代码之前，我们要先了解几个主要的结构：</p>
+<p>Input_dev是代表一个输入设备。</p>
+<p>struct input_dev {<br> const char *name;<br> const char <em>phys;<br> const char *uniq;<br> struct input_id id;  /*ID域</em>/</p>
+<p> unsigned long evbit[BITS_TO_LONGS(EV_CNT)]; /<em>设备所支持的事件类型</em>/<br> unsigned long keybit[BITS_TO_LONGS(KEY_CNT)];/<em>键值</em>/<br> unsigned long relbit[BITS_TO_LONGS(REL_CNT)];<br> unsigned long absbit[BITS_TO_LONGS(ABS_CNT)];<br> unsigned long mscbit[BITS_TO_LONGS(MSC_CNT)];<br> unsigned long ledbit[BITS_TO_LONGS(LED_CNT)];<br> unsigned long sndbit[BITS_TO_LONGS(SND_CNT)];<br> unsigned long ffbit[BITS_TO_LONGS(FF_CNT)];<br> unsigned long swbit[BITS_TO_LONGS(SW_CNT)];</p>
+<p> unsigned int keycodemax;<br> unsigned int keycodesize;<br> void *keycode;<br> int (*setkeycode)(struct input_dev *dev, int scancode, int keycode);<br> int (*getkeycode)(struct input_dev *dev, int scancode, int *keycode);</p>
+<p> struct ff_device *ff;</p>
+<p> unsigned int repeat_key;<br> struct timer_list timer;</p>
+<p> int sync;</p>
+<p> int abs[ABS_MAX + 1];<br> int rep[REP_MAX + 1];</p>
+<p> unsigned long key[BITS_TO_LONGS(KEY_CNT)];<br> unsigned long led[BITS_TO_LONGS(LED_CNT)];<br> unsigned long snd[BITS_TO_LONGS(SND_CNT)];<br> unsigned long sw[BITS_TO_LONGS(SW_CNT)];</p>
+<p> int absmax[ABS_MAX + 1];<br> int absmin[ABS_MAX + 1];<br> int absfuzz[ABS_MAX + 1];<br> int absflat[ABS_MAX + 1];<br> int absres[ABS_MAX + 1];</p>
+<p> int (*open)(struct input_dev *dev);  <br> void (*close)(struct input_dev *dev);<br> int (*flush)(struct input_dev *dev, struct file *file);<br> int (*event)(struct input_dev *dev, unsigned int type, unsigned int code, int value);</p>
+<p> struct input_handle *grab;   /<em>用于连接input_handler和input_dev的结构</em>/</p>
+<p> spinlock_t event_lock;<br> struct mutex mutex;</p>
+<p> unsigned int users;<br> bool going_away;</p>
+<p> struct device dev;</p>
+<p> struct list_head h_list;   /<em>链表连接input_handle</em>/<br> struct list_head node;/<em>链表连接下一个input_dev</em>/<br>};</p>
+<p> input_handler表示一个Input设备对应的handler</p>
+<p>struct input_handler {</p>
+<p> void <em>private;<br> /<em>事件处理函数</em>/<br> void (<em>event)(struct input_handle *handle, unsigned int type, unsigned int code, int value);<br> /*用来连接handler和dev的函数</em>/<br> int (<em>connect)(struct input_handler *handler, struct input_dev *dev, const struct input_device_id *id);<br> void (*disconnect)(struct input_handle *handle);<br> void (*start)(struct input_handle *handle);<br> /*操作函数集</em>/<br> const struct file_operations *fops;<br> /*次设备号</em>/<br> int minor;<br> const char <em>name;<br> /<em>用来识别驱动是否能够处理的表</em>/<br> const struct input_device_id *id_table;<br> /*用来识别驱动不能处理的表(黑名单)</em>/<br> const struct input_device_id *blacklist;<br> /<em>用来连接handle</em>/<br> struct list_head h_list;<br> /<em>用来连接下一个hanlder</em>/<br> struct list_head node;<br>};</p>
+<p>input_handle是用来连接input_handler和input_dev的结构</p>
+<p> /<em>用于连接input_dev和input_hander</em>/<br>struct input_handle {</p>
+<p> void *private; /<em>私有指针</em>/<br> /<em>打开计数</em>/<br> int open;   <br> const char *name;</p>
+<p> struct input_dev <em>dev;  /<em>依附的input_dev结构</em>/<br> struct input_handler *handler; /*依附的handler</em>/</p>
+<p> struct list_head d_node; /<em>连接dev</em>/<br> struct list_head h_node;/<em>连接handler</em>/<br>};</p>
+<p>在内核中，因为Input是作为子系统存在，跟其子系统一样，首先会执行input.c的input_init,(如rtc子系统在加载具体设备驱动程序之前会加载rtc_init,iic子系统会加载iic_init)。</p>
+<p>其中input_init的标志是subsys_initcall(input_init);“优先级”比module_init更高。</p>
+<p>static int __init input_init(void)<br>{<br> int err;<br> /<em>填充input_abs_bypass数组</em>/<br> input_init_abs_bypass();<br> /<em>注册input类，在/sys/class/input</em>/<br> err = class_register(&amp;input_class);<br> if (err) {<br>  printk(KERN_ERR &quot;input: unable to register input_dev class\n&quot;);<br>  return err;<br> }<br> /<em>在Proc建立相关文件</em>/<br> err = input_proc_init();<br> if (err)<br>  goto fail1;<br> /<em>注册cdev结构 主设备号是13</em>/<br> err = register_chrdev(INPUT_MAJOR, &quot;input&quot;, &amp;input_fops);<br> if (err) {<br>  printk(KERN_ERR &quot;input: unable to register char major %d&quot;, INPUT_MAJOR);<br>  goto fail2;<br> }</p>
+<p> return 0;</p>
+<p> fail2: input_proc_exit();<br> fail1: class_unregister(&amp;input_class);<br> return err;<br>}</p>
+<p>有上可知 input_init主要功能（1）填充input_abs_bypass数组并注册input类（2）在proc目录下建立交互文件（3）注册cdev，主设备号为13</p>
+<p>我们在查看input_fops结构：</p>
+<p>static const struct file_operations input_fops = {<br> .owner = THIS_MODULE,<br> .open = input_open_file,<br>};<br>只有open函数，为什么呢，我们查看input_open_file的源码：</p>
+<p>static int input_open_file(struct inode *inode, struct file *file)<br>{<br> struct input_handler *handler;<br> const struct file_operations *old_fops, *new_fops = NULL;<br> int err;</p>
+<p> lock_kernel();<br> /* No load-on-demand here? */<br> /<em>通过次设备号左移5位找到handler结构，也就是次设备号0-31对应的handler结构都一样 <br> 32-63一样，依次类推</em>/<br> handler = input_table[iminor(inode) &gt;&gt; 5];<br>  /<em>获取handler中的fops</em>/<br> if (!handler || !(new_fops = fops_get(handler-&gt;fops))) {<br>  err = -ENODEV;<br>  goto out;<br> }</p>
+<p> /*<br>  * That’s <em>really</em> odd. Usually NULL -&gt;open means &quot;nothing special&quot;,<br>  * not &quot;no device&quot;. Oh, well…<br>  */<br>  /<em>如果open函数指针为空</em>/<br> if (!new_fops-&gt;open) {<br>  fops_put(new_fops);<br>  err = -ENODEV;<br>  goto out;<br> }<br> old_fops = file-&gt;f_op;<br> file-&gt;f_op = new_fops;<br> /<em>执行handler的open函数</em>/<br> err = new_fops-&gt;open(inode, file);<br> if (err) {<br>  fops_put(file-&gt;f_op);<br>  file-&gt;f_op = fops_get(old_fops);<br> }<br> fops_put(old_fops);<br>out:<br> unlock_kernel();<br> return err;<br>}</p>
+<p>由上可知：open函数最终会调用对应handler的open函数。</p>
+<p>子系统初始化之后，下面就是事件的驱动了，在这里我们支持的是按键，对应的驱动是evdev.c</p>
+<p>static int __init evdev_init(void)<br>{<br> return input_register_handler(&amp;evdev_handler);<br>}</p>
+<p>static struct input_handler evdev_handler = {<br> .event  = evdev_event,<br> .connect = evdev_connect,<br> .disconnect = evdev_disconnect,<br> .fops  = &amp;evdev_fops,<br> .minor  = EVDEV_MINOR_BASE,<br> .name  = &quot;evdev&quot;,<br> .id_table = evdev_ids,<br>};</p>
+<p>int input_register_handler(struct input_handler *handler)<br>{<br> struct input_dev *dev;<br> int retval;</p>
+<p> retval = mutex_lock_interruptible(&amp;input_mutex);<br> if (retval)<br>  return retval;</p>
+<p> INIT_LIST_HEAD(&amp;handler-&gt;h_list);<br> /<em>将handler存于input_handler数组</em>/<br> if (handler-&gt;fops != NULL) {<br>  if (input_table[handler-&gt;minor &gt;&gt; 5]) {<br>   retval = -EBUSY;<br>   goto out;<br>  }<br>  input_table[handler-&gt;minor &gt;&gt; 5] = handler;<br> }<br> /<em>将hander添加到input_handler_list</em>/<br> list_add_tail(&amp;handler-&gt;node, &amp;input_handler_list);<br> /<em>遍历整个input_dev_list</em>/<br> list_for_each_entry(dev, &amp;input_dev_list, node)<br>  input_attach_handler(dev, handler);</p>
+<p> input_wakeup_procfs_readers();</p>
+<p> out:<br> mutex_unlock(&amp;input_mutex);<br> return retval;<br>}</p>
+<p>事件层注册完之后</p>
+<p>下面就是具体按键驱动的注册了：</p>
+<p>首先：</p>
+<p>struct input_dev <em>input_allocate_device(void)<br>{<br> struct input_dev *dev;<br> /*分配内存空间</em>/<br> dev = kzalloc(sizeof(struct input_dev), GFP_KERNEL);<br> if (dev) {<br>  /<em>填充结构</em>/<br>  dev-&gt;dev.type = &amp;input_dev_type;<br>  dev-&gt;dev.class = &amp;input_class;<br>  /<em>设备初始化，在/sys/device目录下建立目录</em>/<br>  device_initialize(&amp;dev-&gt;dev);<br>  mutex_init(&amp;dev-&gt;mutex);<br>  spin_lock_init(&amp;dev-&gt;event_lock);<br>  INIT_LIST_HEAD(&amp;dev-&gt;h_list);<br>  INIT_LIST_HEAD(&amp;dev-&gt;node);</p>
+<p>  __module_get(THIS_MODULE);<br> }</p>
+<p> return dev;<br>}</p>
+<p>input_allocate_device分配一个input_dev,并在/sys/device下建立目录。</p>
+<p>下面注册dev结构</p>
+<p>int input_register_device(struct input_dev <em>dev)<br>{<br> static atomic_t input_no = ATOMIC_INIT(0);<br> struct input_handler *handler;<br> const char *path;<br> int error;<br> /</em> 对每个输入设备都设置EV_SYN位 <em>/<br> __set_bit(EV_SYN, dev-&gt;evbit);<br> /</em><br>  * If delay and period are pre-set by the driver, then autorepeating<br>  * is handled by the driver itself and we don’t do it in input.c.<br>  */<br> /<em>初始化内核定时器</em>/<br> init_timer(&amp;dev-&gt;timer);<br> if (!dev-&gt;rep[REP_DELAY] &amp;&amp; !dev-&gt;rep[REP_PERIOD]) {<br>  dev-&gt;timer.data = (long) dev;<br>  dev-&gt;timer.function = input_repeat_key;<br>  dev-&gt;rep[REP_DELAY] = 250;<br>  dev-&gt;rep[REP_PERIOD] = 33;<br> }</p>
+<p> if (!dev-&gt;getkeycode)<br>  dev-&gt;getkeycode = input_default_getkeycode;</p>
+<p> if (!dev-&gt;setkeycode)<br>  dev-&gt;setkeycode = input_default_setkeycode;</p>
+<p> dev_set_name(&amp;dev-&gt;dev, &quot;input%ld&quot;,<br>       (unsigned long) atomic_inc_return(&amp;input_no) - 1);<br> /<em>添加设备到device</em>/<br> error = device_add(&amp;dev-&gt;dev);<br> if (error)<br>  return error;<br>  /<em>获取kobj路径</em>/<br> path = kobject_get_path(&amp;dev-&gt;dev.kobj, GFP_KERNEL);<br> printk(KERN_INFO &quot;input: %s as %s\n&quot;,<br>  dev-&gt;name ? dev-&gt;name : &quot;Unspecified device&quot;, path ? path : &quot;N/A&quot;);<br> kfree(path);<br> /<em>互斥锁上锁</em>/<br> error = mutex_lock_interruptible(&amp;input_mutex);<br> if (error) {<br>  device_del(&amp;dev-&gt;dev);<br>  return error;<br> }<br> /<em>将dev结构加入到input_dev_list链表头</em>/<br> list_add_tail(&amp;dev-&gt;node, &amp;input_dev_list);<br> /<em>遍历整个input_handler_list链表，通过判断handler的id域和dev的id域是否匹配，如果匹配将handler和dev联系起来</em>/<br> list_for_each_entry(handler, &amp;input_handler_list, node)<br>  input_attach_handler(dev, handler);<br> /<em>唤醒等待队列</em>/<br> input_wakeup_procfs_readers();<br> /<em>互斥锁解锁</em>/<br> mutex_unlock(&amp;input_mutex);</p>
+<p> return 0;<br>}</p>
+<p>input_register_device的主要作用是</p>
+<p>（1）      对形参Input_dev结构的一些默认参数做填充，包括支持的事件类型，timer函数，getkeycode函数指针，setkeycode函数指针，并且对dev域的name填充。</p>
+<p>（2）      device_add 添加设备到device核心</p>
+<p>（3）      将该Input_dev结构加入到input_dev_list链表</p>
+<p>（4）      遍历整个input_handler_list链表，找到一个handler的id_table和input_dev的id一直的handler结构，并将此hanlder和此input_dev结构联系起来</p>
+<p>对(4)要重点分析：</p>
+<p>list_for_each_entry(handler, &amp;input_handler_list, node)</p>
+<p>input_attach_handler(dev, handler);</p>
+<p>list_for_each_entry之前已经讲过，就是对input_handler_list整个链表进行遍历。</p>
+<p>static int input_attach_handler(struct input_dev *dev, struct input_handler <em>handler)<br>{<br> const struct input_device_id *id;<br> int error;<br> /*如果该dev的id在handler的blacklist已经登记，则跳过</em>/<br> if (handler-&gt;blacklist &amp;&amp; input_match_device(handler-&gt;blacklist, dev))<br>  return -ENODEV;<br> /<em>找到handler的id_table和dev的id一致的id_table结构</em>/<br> id = input_match_device(handler-&gt;id_table, dev);<br> if (!id)<br>  return -ENODEV;<br> /<em>通过ID将input和handler联系起来了</em>/<br> error = handler-&gt;connect(handler, dev, id);<br> if (error &amp;&amp; error != -ENODEV)<br>  printk(KERN_ERR<br>   &quot;input: failed to attach handler %s to device %s, &quot;<br>   &quot;error: %d\n&quot;,<br>   handler-&gt;name, kobject_name(&amp;dev-&gt;dev.kobj), error);</p>
+<p> return error;<br>}</p>
+<p>当handler的id_table和dev的id一致就执行handler的connect函数将dev和handler联系起来。执行handler的connect函数。那么在这里对应的就是evdev_handler的evdev_connect函数。</p>
+<p>static int evdev_connect(struct input_handler <em>handler, struct input_dev *dev,<br>    const struct input_device_id *id)<br>{<br> struct evdev *evdev;<br> int minor;<br> int error;<br> /*找到evdev_table中第一个为NULL的元素</em>/<br> for (minor = 0; minor &lt; EVDEV_MINORS; minor++)<br>  if (!evdev_table[minor])<br>   break;<br> /<em>如果evdev_table中每个元素存在则退出</em>/<br> if (minor == EVDEV_MINORS) {<br>  printk(KERN_ERR &quot;evdev: no more free evdev devices\n&quot;);<br>  return -ENFILE;<br> }<br> /<em>分配内存</em>/<br> evdev = kzalloc(sizeof(struct evdev), GFP_KERNEL);<br> if (!evdev)<br>  return -ENOMEM;</p>
+<p> INIT_LIST_HEAD(&amp;evdev-&gt;client_list);<br> spin_lock_init(&amp;evdev-&gt;client_lock);<br> mutex_init(&amp;evdev-&gt;mutex);<br> init_waitqueue_head(&amp;evdev-&gt;wait);</p>
+<p> dev_set_name(&amp;evdev-&gt;dev, &quot;event%d&quot;, minor);<br> evdev-&gt;exist = 1;<br> evdev-&gt;minor = minor;</p>
+<p> evdev-&gt;handle.dev = input_get_device(dev);<br> evdev-&gt;handle.name = dev_name(&amp;evdev-&gt;dev);<br> evdev-&gt;handle.handler = handler;<br> evdev-&gt;handle.private = evdev;</p>
+<p> evdev-&gt;dev.devt = MKDEV(INPUT_MAJOR, EVDEV_MINOR_BASE + minor);<br> evdev-&gt;dev.class = &amp;input_class;<br> evdev-&gt;dev.parent = &amp;dev-&gt;dev;<br> evdev-&gt;dev.release = evdev_free;<br> device_initialize(&amp;evdev-&gt;dev);<br> /<em>将hanlde handler input_dev三者联系起来</em>/<br> error = input_register_handle(&amp;evdev-&gt;handle);<br> if (error)<br>  goto err_free_evdev;<br> /<em>将evdev填充到evdev_table</em>/<br> error = evdev_install_chrdev(evdev);<br> if (error)<br>  goto err_unregister_handle;<br> /<em>添加设备</em>/<br> error = device_add(&amp;evdev-&gt;dev);<br> if (error)<br>  goto err_cleanup_evdev;</p>
+<p> return 0;</p>
+<p> err_cleanup_evdev:<br> evdev_cleanup(evdev);<br> err_unregister_handle:<br> input_unregister_handle(&amp;evdev-&gt;handle);<br> err_free_evdev:<br> put_device(&amp;evdev-&gt;dev);<br> return error;<br>}</p>
+<p>由上：evdev_connect的函数主要功能：（1）分配一个evdev，并将它填充到evdev_table中（方便以后调用），（2）调用input_register_handle将hander handle input_dev连接起来，其中handle分别和input_dev和handler相连。（3）调用device_add添加设备。</p>
+<p>调用完evdev_connect之后handle handler input_dev之间就通过链表关联起来了。</p>
+<p>对于(2)要分析一下：</p>
+<p>int input_register_handle(struct input_handle *handle)<br>{<br> struct input_handler *handler = handle-&gt;handler;<br> struct input_dev *dev = handle-&gt;dev;<br> int error;</p>
+<p> /*<br>  * We take dev-&gt;mutex here to prevent race with<br>  * input_release_device().<br>  */<br> error = mutex_lock_interruptible(&amp;dev-&gt;mutex);<br> if (error)<br>  return error;<br> /<em>将handle连接到input的头部</em>/<br> list_add_tail_rcu(&amp;handle-&gt;d_node, &amp;dev-&gt;h_list);<br> mutex_unlock(&amp;dev-&gt;mutex);</p>
+<p> /*<br>  * Since we are supposed to be called from -&gt;connect()<br>  * which is mutually exclusive with -&gt;disconnect()<br>  * we can’t be racing with input_unregister_handle()<br>  * and so separate lock is not needed here.<br>  */<br>  /<em>将handle连接到handler的尾部</em>/<br> list_add_tail(&amp;handle-&gt;h_node, &amp;handler-&gt;h_list);<br> /<em>如果存在start域，则执行start</em>/<br> if (handler-&gt;start)<br>  handler-&gt;start(handle);</p>
+<p> return 0;<br>}</p>
+<p>通过input_register_handle就将handler handle input_dev3个结构通过链表联系起来了。</p>
+<p>当上面这些步骤完成之前，驱动就在内核注册好了，驱动程序加载完后，在/dev/input目录下就生成了even0设备，它的主设备号是13，次设备号为64.</p>
+<p>当应用程序使用open函数打开/dev/input/even0设备时，在内核中Input子系统，open对应的驱动时input.c的input_open_file函数：</p>
+<p>static int input_open_file(struct inode *inode, struct file *file)<br>{<br> struct input_handler *handler;<br> const struct file_operations *old_fops, *new_fops = NULL;<br> int err;</p>
+<p> lock_kernel();<br> /* No load-on-demand here? */<br> /<em>通过次设备号左移5位找到handler结构，也就是次设备号0-31对应的handler结构都一样 <br> 32-63一样，依次类推</em>/<br> handler = input_table[iminor(inode) &gt;&gt; 5];<br>  /<em>获取handler中的fops</em>/<br> if (!handler || !(new_fops = fops_get(handler-&gt;fops))) {<br>  err = -ENODEV;<br>  goto out;<br> }</p>
+<p> /*<br>  * That’s <em>really</em> odd. Usually NULL -&gt;open means &quot;nothing special&quot;,<br>  * not &quot;no device&quot;. Oh, well…<br>  */<br>  /<em>如果open函数指针为空</em>/<br> if (!new_fops-&gt;open) {<br>  fops_put(new_fops);<br>  err = -ENODEV;<br>  goto out;<br> }<br> old_fops = file-&gt;f_op;<br> file-&gt;f_op = new_fops;<br> /<em>执行handler的open函数</em>/<br> err = new_fops-&gt;open(inode, file);<br> if (err) {<br>  fops_put(file-&gt;f_op);<br>  file-&gt;f_op = fops_get(old_fops);<br> }<br> fops_put(old_fops);<br>out:<br> unlock_kernel();<br> return err;<br>}</p>
+<p>input_open_file主要做了以下事情：（1）通过此设备号右移5位（因为Input_register_handler中次设备号左移5位存储于Input_table中）获取handler结构，在此处就是evdev_handler。（2）如果evdev_handler的open函数存在就执行evdev_handler的open函数。</p>
+<p>上面已经提到：evdev_handler的fops：下面就执行evdev_handler的fops的open了。</p>
+<p>static int evdev_open(struct inode <em>inode, struct file <em>file)<br>{<br> struct evdev *evdev;<br> /*evdev_client结构对应一个具体的设备</em>/<br> struct evdev_client *client;<br> /*次设备号减去64=0</em>/<br> int i = iminor(inode) - EVDEV_MINOR_BASE;<br> int error;</p>
+<p> if (i &gt;= EVDEV_MINORS)<br>  return -ENODEV;</p>
+<p> error = mutex_lock_interruptible(&amp;evdev_table_mutex);<br> if (error)<br>  return error;<br> /<em>获取储存在evdev_table的evdev结构</em>/<br> evdev = evdev_table[i];<br> if (evdev)<br>  get_device(&amp;evdev-&gt;dev);<br> mutex_unlock(&amp;evdev_table_mutex);</p>
+<p> if (!evdev)<br>  return -ENODEV;</p>
+<p> client = kzalloc(sizeof(struct evdev_client), GFP_KERNEL);<br> if (!client) {<br>  error = -ENOMEM;<br>  goto err_put_evdev;<br> }</p>
+<p> spin_lock_init(&amp;client-&gt;buffer_lock);<br> client-&gt;evdev = evdev;<br> /<em>通过链表将client置于evdev的链表头</em>/<br> evdev_attach_client(evdev, client);</p>
+<p> error = evdev_open_device(evdev);<br> if (error)<br>  goto err_free_client;<br> /<em>将client置于file的私有指针域</em>/<br> file-&gt;private_data = client;<br> return 0;</p>
+<p> err_free_client:<br> evdev_detach_client(evdev, client);<br> kfree(client);<br> err_put_evdev:<br> put_device(&amp;evdev-&gt;dev);<br> return error;<br>}</p>
+<p>evdev_open函数主要做了以下事情：（1）通过次设备号获取evdev结构（2）分配一个endev_client结构并将client-&gt;evdev指向获取的evdev结构（3）调用evdev_attach_client函数将client置于evdev的链表头（4）调用evdev_open_device函数</p>
+<p>evdev_open_device函数：</p>
+<p>{</p>
+<p>int retval;</p>
+<p>retval = mutex_lock_interruptible(&amp;evdev-&gt;mutex);</p>
+<p>if (retval)</p>
+<p>return retval;</p>
+<p>if (!evdev-&gt;exist)</p>
+<p>retval = -ENODEV;</p>
+<p>else if (!evdev-&gt;open++) {</p>
+<p>retval = input_open_device(&amp;evdev-&gt;handle);</p>
+<p>if (retval)</p>
+<p>evdev-&gt;open–;</p>
+<p>}</p>
+<p>mutex_unlock(&amp;evdev-&gt;mutex);</p>
+<p>return retval;</p>
+<p>}</p>
+<p>函数调用input_open_device函数</p>
+<p>int input_open_device(struct input_handle *handle)</p>
+<p>{</p>
+<p>struct input_dev *dev = handle-&gt;dev;</p>
+<p>int retval;</p>
+<p>retval = mutex_lock_interruptible(&amp;dev-&gt;mutex);</p>
+<p>if (retval)</p>
+<p>return retval;</p>
+<p>if (dev-&gt;going_away) {</p>
+<p>retval = -ENODEV;</p>
+<p>goto out;</p>
+<p>}</p>
+<p>/<em>open计数加一</em>/</p>
+<p>handle-&gt;open++;</p>
+<p>/<em>当用户第一次调用时会调用dev的open函数</em>/</p>
+<p>if (!dev-&gt;users++ &amp;&amp; dev-&gt;open)</p>
+<p>retval = dev-&gt;open(dev);</p>
+<p>if (retval) {</p>
+<p>dev-&gt;users–;</p>
+<p>if (!–handle-&gt;open) {</p>
+<p>/*</p>
+<p> * Make sure we are not delivering any more events</p>
+<p> * through this handle</p>
+<p> */</p>
+<p>synchronize_rcu();</p>
+<p>}</p>
+<p>}</p>
+<p>out:</p>
+<p>mutex_unlock(&amp;dev-&gt;mutex);</p>
+<p>return retval;</p>
+<p>}</p>
+<p>因为在本按键驱动中，没有设置button_dev的open域，所以这里input_open_device无意义。</p>
+<p>下面就是read函数监听键值了：</p>
+<p>Read函数对应的驱动程序是 evdev.c的evdev_read。</p>
+<p>static ssize_t evdev_read(struct file *file, char __user <em>buffer, size_t count, loff_t *ppos)<br>{<br> /*获得client结构</em>/<br> struct evdev_client <em>client = file-&gt;private_data;<br> struct evdev *evdev = client-&gt;evdev;<br> struct input_event event;<br> int retval;<br> /*如果读取的字符数小于input_event结构的大小</em>/<br> if (count &lt; input_event_size())<br>  return -EINVAL;<br> /<em>如果头结点等于尾节点而且打开标志是不阻塞的，那么直接返回</em>/<br> if (client-&gt;head == client-&gt;tail &amp;&amp; evdev-&gt;exist &amp;&amp;<br>     (file-&gt;f_flags &amp; O_NONBLOCK))<br>  return -EAGAIN;<br> /<em>条件为假阻塞，直到为真为止</em>/<br> retval = wait_event_interruptible(evdev-&gt;wait,<br>  client-&gt;head != client-&gt;tail || !evdev-&gt;exist);<br> if (retval)<br>  return retval;</p>
+<p> if (!evdev-&gt;exist)<br>  return -ENODEV;<br> while (retval + input_event_size() &lt;= count &amp;&amp;<br>        evdev_fetch_next_event(client, &amp;event)) {</p>
+<p>  if (input_event_to_user(buffer + retval, &amp;event))<br>   return -EFAULT;</p>
+<p>  retval += input_event_size();<br> }</p>
+<p> return retval;<br>}</p>
+<p>这里有必要提一下evdev_read函数中的client结构：</p>
+<p>这里有必要提一下evdev_read函数中的client结构：</p>
+<p>struct evdev_client {<br> /<em>存放事件的buffer</em>/<br> struct input_event buffer[EVDEV_BUFFER_SIZE];<br> /<em>事件头结点</em>/<br> int head;<br> /<em>事件尾节点</em>/<br> int tail;<br> spinlock_t buffer_lock; /* protects access to buffer, head and tail <em>/<br> struct fasync_struct *fasync;<br> /*evdev结构指针</em>/<br> struct evdev *evdev;<br> /<em>指向handler的链表</em>/<br> struct list_head node;<br>};</p>
+<p>这个结构中的head tail相当于一个循环队列，只有当head不等于tail的时候才表示buffer里面不为空。那么当调用evdev_read时运行到retval = wait_event_interruptible(evdev-&gt;wait,client-&gt;head != client-&gt;tail || !evdev-&gt;exist);时evdev_read会阻塞。这样就会等待按键。</p>
+<p>当按下键值，进入中断函数，调用input_report_key报告event。</p>
+<p>static inline void input_report_key(struct input_dev *dev, unsigned int code, int value)<br>{<br> input_event(dev, EV_KEY, code, !!value);<br>}</p>
+<p>void input_event(struct input_dev *dev,<br>   unsigned int type, unsigned int code, int value)<br>{<br> unsigned long flags;<br> /<em>判断evbit是否是事件所支持</em>/<br> if (is_event_supported(type, dev-&gt;evbit, EV_MAX)) {</p>
+<p>  spin_lock_irqsave(&amp;dev-&gt;event_lock, flags);<br>  add_input_randomness(type, code, value);<br>  /<em>事件处理函数</em>/<br>  input_handle_event(dev, type, code, value);<br>  spin_unlock_irqrestore(&amp;dev-&gt;event_lock, flags);<br> }<br>}</p>
+<p>函数最终调用input_handle_event</p>
+<p>input_handle_event函数再根据type类型做相应处理，该驱动去type为EV_KEY，<br>static void input_handle_event(struct input_dev *dev,<br>          unsigned int type, unsigned int code, int value)<br>{<br> int disposition = INPUT_IGNORE_EVENT;</p>
+<p> switch (type) {</p>
+<p> case EV_SYN:<br>  switch (code) {<br>  case SYN_CONFIG:<br>   disposition = INPUT_PASS_TO_ALL;<br>   break;</p>
+<p>  case SYN_REPORT:<br>   if (!dev-&gt;sync) {<br>    dev-&gt;sync = 1;<br>    disposition = INPUT_PASS_TO_HANDLERS;<br>   }<br>   break;<br>  case SYN_MT_REPORT:<br>   dev-&gt;sync = 0;<br>   disposition = INPUT_PASS_TO_HANDLERS;<br>   break;<br>  }<br>  break;</p>
+<p> case EV_KEY:<br>  /<em>再次判断keybit是否是小于最大键值</em>/<br>  if (is_event_supported(code, dev-&gt;keybit, KEY_MAX) &amp;&amp;<br>      !!test_bit(code, dev-&gt;key) != value) {</p>
+<p>   if (value != 2) {<br>    __change_bit(code, dev-&gt;key);<br>    if (value)<br>     input_start_autorepeat(dev, code);<br>    else<br>     input_stop_autorepeat(dev);<br>   }</p>
+<p>   disposition = INPUT_PASS_TO_HANDLERS;<br>  }<br>  break;</p>
+<p> case EV_SW:<br>  if (is_event_supported(code, dev-&gt;swbit, SW_MAX) &amp;&amp;<br>      !!test_bit(code, dev-&gt;sw) != value) {</p>
+<p>   __change_bit(code, dev-&gt;sw);<br>   disposition = INPUT_PASS_TO_HANDLERS;<br>  }<br>  break;</p>
+<p> case EV_ABS:<br>  if (is_event_supported(code, dev-&gt;absbit, ABS_MAX)) {</p>
+<p>   if (test_bit(code, input_abs_bypass)) {<br>    disposition = INPUT_PASS_TO_HANDLERS;<br>    break;<br>   }</p>
+<p>   value = input_defuzz_abs_event(value,<br>     dev-&gt;abs[code], dev-&gt;absfuzz[code]);</p>
+<p>   if (dev-&gt;abs[code] != value) {<br>    dev-&gt;abs[code] = value;<br>    disposition = INPUT_PASS_TO_HANDLERS;<br>   }<br>  }<br>  break;</p>
+<p> case EV_REL:<br>  if (is_event_supported(code, dev-&gt;relbit, REL_MAX) &amp;&amp; value)<br>   disposition = INPUT_PASS_TO_HANDLERS;</p>
+<p>  break;</p>
+<p> case EV_MSC:<br>  if (is_event_supported(code, dev-&gt;mscbit, MSC_MAX))<br>   disposition = INPUT_PASS_TO_ALL;</p>
+<p>  break;</p>
+<p> case EV_LED:<br>  if (is_event_supported(code, dev-&gt;ledbit, LED_MAX) &amp;&amp;<br>      !!test_bit(code, dev-&gt;led) != value) {</p>
+<p>   __change_bit(code, dev-&gt;led);<br>   disposition = INPUT_PASS_TO_ALL;<br>  }<br>  break;</p>
+<p> case EV_SND:<br>  if (is_event_supported(code, dev-&gt;sndbit, SND_MAX)) {</p>
+<p>   if (!!test_bit(code, dev-&gt;snd) != !!value)<br>    __change_bit(code, dev-&gt;snd);<br>   disposition = INPUT_PASS_TO_ALL;<br>  }<br>  break;</p>
+<p> case EV_REP:<br>  if (code &lt;= REP_MAX &amp;&amp; value &gt;= 0 &amp;&amp; dev-&gt;rep[code] != value) {<br>   dev-&gt;rep[code] = value;<br>   disposition = INPUT_PASS_TO_ALL;<br>  }<br>  break;</p>
+<p> case EV_FF:<br>  if (value &gt;= 0)<br>   disposition = INPUT_PASS_TO_ALL;<br>  break;</p>
+<p> case EV_PWR:<br>  disposition = INPUT_PASS_TO_ALL;<br>  break;<br> }</p>
+<p> if (disposition != INPUT_IGNORE_EVENT &amp;&amp; type != EV_SYN)<br>  dev-&gt;sync = 0;</p>
+<p> if ((disposition &amp; INPUT_PASS_TO_DEVICE) &amp;&amp; dev-&gt;event)<br>  dev-&gt;event(dev, type, code, value);</p>
+<p> if (disposition &amp; INPUT_PASS_TO_HANDLERS)<br>  input_pass_event(dev, type, code, value);<br>}</p>
+<p>input_handle_event最终调用：input_pass_event</p>
+<p>static void input_pass_event(struct input_dev *dev,<br>        unsigned int type, unsigned int code, int value)<br>{<br> struct input_handle *handle;</p>
+<p> rcu_read_lock();</p>
+<p> handle = rcu_dereference(dev-&gt;grab);<br> /<em>最终调用handler的event函数</em>/<br> if (handle)<br>  handle-&gt;handler-&gt;event(handle, type, code, value);<br> else<br>  list_for_each_entry_rcu(handle, &amp;dev-&gt;h_list, d_node)<br>   if (handle-&gt;open)<br>    handle-&gt;handler-&gt;event(handle,<br>       type, code, value);<br> rcu_read_unlock();<br>}</p>
+<p>input_pass_event再调用evdev_event</p>
+<p>static void evdev_event(struct input_handle *handle,<br>   unsigned int type, unsigned int code, int value)<br>{<br> struct evdev *evdev = handle-&gt;private;<br> struct evdev_client *client;<br> struct input_event event;</p>
+<p> do_gettimeofday(&amp;event.time);<br> /<em>将按键信息存于event结构</em>/<br> event.type = type;<br> event.code = code;<br> event.value = value;</p>
+<p> rcu_read_lock();<br> /<em>获得client结构</em>/<br> client = rcu_dereference(evdev-&gt;grab);<br> if (client)<br>  evdev_pass_event(client, &amp;event);<br> else<br>  list_for_each_entry_rcu(client, &amp;evdev-&gt;client_list, node)<br>   evdev_pass_event(client, &amp;event);</p>
+<p> rcu_read_unlock();</p>
+<p> wake_up_interruptible(&amp;evdev-&gt;wait);<br>}</p>
+<p>evdev_event会调用evdev_pass_event函数：</p>
+<p>static void evdev_pass_event(struct evdev_client <em>client,<br>        struct input_event <em>event)<br>{<br> /</em><br>  * Interrupts are disabled, just acquire the lock<br>  */<br> spin_lock(&amp;client-&gt;buffer_lock);<br> /<em>将事件结构存在buffer中并且head加一</em>/<br> client-&gt;buffer[client-&gt;head++] = *event;<br> /*溢出处理</em>/<br> client-&gt;head &amp;= EVDEV_BUFFER_SIZE - 1;<br> spin_unlock(&amp;client-&gt;buffer_lock);</p>
+<p> kill_fasync(&amp;client-&gt;fasync, SIGIO, POLL_IN);<br>}</p>
+<p>从evdev_pass_event函数我们可以得到：将事件结构存在buffe,client的head指针加一，那么head加一之后，也就是报告键值完毕了，回到了evdev_read函数中：此时的head是不等于tail的，所以唤醒等待队列：</p>
+<p>下面就会执行evdev_read的evdev_fetch_next_event函数：</p>
+<p>static int evdev_fetch_next_event(struct evdev_client *client,</p>
+<p>  struct input_event *event)</p>
+<p>{</p>
+<p>int have_event;</p>
+<p>spin_lock_irq(&amp;client-&gt;buffer_lock);</p>
+<p>have_event = client-&gt;head != client-&gt;tail;</p>
+<p>if (have_event) {</p>
+<p>/<em>获取事件指针并且tail加一</em>/</p>
+<p>*event = client-&gt;buffer[client-&gt;tail++];</p>
+<p>/<em>溢出处理</em>/</p>
+<p>client-&gt;tail &amp;= EVDEV_BUFFER_SIZE - 1;</p>
+<p>}</p>
+<p>spin_unlock_irq(&amp;client-&gt;buffer_lock);</p>
+<p>return have_event;</p>
+<p>}</p>
+<p>evdev_fetch_next_event将client的尾节点加一(这时候head和tail又相等了)。</p>
+<p>随后evdev_read调用input_event_to_user</p>
+<p>int input_event_to_user(char __user *buffer,<br>   const struct input_event *event)<br>{<br> if (copy_to_user(buffer, event, sizeof(struct input_event)))<br>  return -EFAULT;</p>
+<p> return 0;<br>}</p>
+<p>这样就将按键事件结构event传递到了用户空间。</p>
+<p>总结：由上我们看出，input子系统的确是很复杂的。下面画一个简单的流程图。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/%E8%BA%AB%E4%BB%BD%E9%80%9A/" rel="prev" title="身份通">
+      <i class="fa fa-chevron-left"></i> 身份通
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3Java%20Binder%20%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86%EF%BC%88ActivityManagerService%EF%BC%89/" rel="next" title="深入理解Java Binder 工作原理（ActivityManagerService）">
+      深入理解Java Binder 工作原理（ActivityManagerService） <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Edward"
+      src="/uploads/avatar.gif">
+  <p class="site-author-name" itemprop="name">Edward</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">570</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Edward</span>
+</div>
+
+        
+
+
+
+
+
+
+<script>
+  (function() {
+    function leancloudSelector(url) {
+      url = encodeURI(url);
+      return document.getElementById(url).querySelector('.leancloud-visitors-count');
+    }
+
+    function addCount(Counter) {
+      var visitors = document.querySelector('.leancloud_visitors');
+      var url = decodeURI(visitors.id);
+      var title = visitors.dataset.flagTitle;
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          if (results.length > 0) {
+            var counter = results[0];
+            leancloudSelector(url).innerText = counter.time + 1;
+            Counter('put', '/classes/Counter/' + counter.objectId, { time: { '__op': 'Increment', 'amount': 1 } })
+              .catch(error => {
+                console.error('Failed to save visitor count', error);
+              });
+          } else {
+              Counter('post', '/classes/Counter', { title, url, time: 1 })
+                .then(response => response.json())
+                .then(() => {
+                  leancloudSelector(url).innerText = 1;
+                })
+                .catch(error => {
+                  console.error('Failed to create', error);
+                });
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    function showTime(Counter) {
+      var visitors = document.querySelectorAll('.leancloud_visitors');
+      var entries = [...visitors].map(element => {
+        return decodeURI(element.id);
+      });
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url: { '$in': entries } })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          for (let url of entries) {
+            let target = results.find(item => item.url === url);
+            leancloudSelector(url).innerText = target ? target.time : 0;
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    let { app_id, app_key, server_url } = {"enable":true,"app_id":"wxYx0BX9gaKA3XC4LuO2of0v-gzGzoHsz","app_key":"LQMcs6IDIE4YAm10vMsn9IYq","server_url":"https://wxyx0bx9.lc-cn-n1-shared.com","security":false};
+    function fetchData(api_server) {
+      var Counter = (method, url, data) => {
+        return fetch(`${api_server}/1.1${url}`, {
+          method,
+          headers: {
+            'X-LC-Id'     : app_id,
+            'X-LC-Key'    : app_key,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data)
+        });
+      };
+      if (CONFIG.page.isPost) {
+        if (CONFIG.hostname !== location.hostname) return;
+        addCount(Counter);
+      } else if (document.querySelectorAll('.post-title-link').length >= 1) {
+        showTime(Counter);
+      }
+    }
+
+    let api_server = app_id.slice(-9) !== '-MdYXbMMI' ? server_url : `https://${app_id.slice(0, 8).toLowerCase()}.api.lncldglobal.com`;
+
+    if (api_server) {
+      fetchData(api_server);
+    } else {
+      fetch('https://app-router.leancloud.cn/2/route?appId=' + app_id)
+        .then(response => response.json())
+        .then(({ api_server }) => {
+          fetchData('https://' + api_server);
+        });
+    }
+  })();
+</script>
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

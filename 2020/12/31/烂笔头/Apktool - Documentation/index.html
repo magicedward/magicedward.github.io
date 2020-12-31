@@ -1,0 +1,706 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"edward.org.cn","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="Introduction Basic https:&#x2F;&#x2F;ibotpeaches.github.io&#x2F;Apktool&#x2F;documentation First lets take a lesson into apk files. Apks are nothing more than a zip file containing resources and assembled java code. If y">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Apktool - Documentation">
+<meta property="og:url" content="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/Apktool%20-%20Documentation/index.html">
+<meta property="og:site_name" content="点点滴滴">
+<meta property="og:description" content="Introduction Basic https:&#x2F;&#x2F;ibotpeaches.github.io&#x2F;Apktool&#x2F;documentation First lets take a lesson into apk files. Apks are nothing more than a zip file containing resources and assembled java code. If y">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-12-31T06:48:00.987Z">
+<meta property="article:modified_time" content="2020-01-16T04:37:33.808Z">
+<meta property="article:author" content="Edward">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/Apktool%20-%20Documentation/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>Apktool - Documentation | 点点滴滴</title>
+  
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?a92ed22eafce466e7a7b17546bb0dc6f";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">点点滴滴</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/Apktool%20-%20Documentation/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/avatar.gif">
+      <meta itemprop="name" content="Edward">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="点点滴滴">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Apktool - Documentation
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-12-31 14:48:00" itemprop="dateCreated datePublished" datetime="2020-12-31T14:48:00+08:00">2020-12-31</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-01-16 12:37:33" itemprop="dateModified" datetime="2020-01-16T12:37:33+08:00">2020-01-16</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%83%82%E7%AC%94%E5%A4%B4/" itemprop="url" rel="index"><span itemprop="name">烂笔头</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/Apktool%20-%20Documentation/" class="post-meta-item leancloud_visitors" data-flag-title="Apktool - Documentation" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>Introduction</p>
+<p>Basic</p>
+<p><a target="_blank" rel="noopener" href="https://ibotpeaches.github.io/Apktool/documentation">https://ibotpeaches.github.io/Apktool/documentation</a></p>
+<p>First lets take a lesson into apk files. Apks are nothing more than a zip file containing resources and assembled java code. If you were to simply unzip an apk like so, you would be left with files such as classes.dex and resources.arsc.</p>
+<p>$ unzip testapp.apk<br>Archive:  testapp.apk<br> inflating: AndroidManifest.xml<br> inflating: classes.dex<br> extracting: res/drawable-hdpi/ic_launcher.png<br> inflating: res/xml/literals.xml<br> inflating: res/xml/references.xml<br> extracting: resources.arsc</p>
+<p>However, at this point you have simply inflated compiled sources. If you tried to view AndroidManifest.xml. You’d be left viewing this.</p>
+<p>P4F0\fnversionCodeversionNameandroid*<a target="_blank" rel="noopener" href="http://schemas.android.com/apk/res/android%07package%18platformBuildVersionCode%18platformBuildVersionName%08manifest%14brut.apktool.testapp%031.0%0221%07APKTOOL">http://schemas.android.com/apk/res/androidpackageplatformBuildVersionCodeplatformBuildVersionNamemanifestbrut.apktool.testapp1.021APKTOOL</a></p>
+<p>Obviously, editing or viewing a compiled file is next to impossible. That is where Apktool comes into play.</p>
+<p>$ apktool d testapp.apkI: Using Apktool 2.0.0 on testapp.apk<br>I: Loading resource table…<br>I: Decoding AndroidManifest.xml with resources…<br>I: Loading resource table from file: 1.apk<br>I: Regular manifest package…<br>I: Decoding file-resources…<br>I: Decoding values <em>/</em> XMLs…<br>I: Baksmaling classes.dex…<br>I: Copying assets and libs…$</p>
+<p>Viewing AndroidManifest.xml again results in something much more human readable</p>
+<p>&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot; standalone=&quot;no&quot;?&gt;&lt;manifest xmlns:android=&quot;<a target="_blank" rel="noopener" href="https://schemas.android.com/apk/res/android">https://schemas.android.com/apk/res/android</a>&quot; package=&quot;brut.apktool.testapp&quot;platformBuildVersionCode=&quot;21&quot; platformBuildVersionName=&quot;APKTOOL&quot; /&gt;</p>
+<p>In addition to XMLs, resources such as 9 patch images, layouts, strings and much more are correctly decoded to source form.</p>
+<p>Decoding</p>
+<p>The decode option on Apktool can be invoked either from d or decode like shown below.</p>
+<p>$ apktool d foo.jar// decodes foo.jar to foo.jar.out folder$ apktool decode foo.jar// decodes foo.jar to foo.jar.out folder$ apktool d bar.apk// decodes bar.apk to bar folder$ apktool decode bar.apk// decodes bar.apk to bar folder$ apktool d bar.apk -o baz// decodes bar.apk to baz folder</p>
+<p>Building</p>
+<p>The build option can be invoked either from b or build like shown below</p>
+<p>$ apktool b foo.jar.out// builds foo.jar.out folder into foo.jar.out/dist/foo.jar file$ apktool build foo.jar.out// builds foo.jar.out folder into foo.jar.out/dist/foo.jar file$ apktool b bar// builds bar folder into bar/dist/bar.apk file$ apktool b .// builds current directory into ./dist$ apktool b bar -o new_bar.apk// builds bar folder into new_bar.apk$ apktool b bar.apk// WRONG: brut.androlib.AndrolibException: brut.directory.PathNotExist: apktool.yml// Must use folder, not apk/jar file</p>
+<p>Info In order to run a rebuilt application. You must resign the application. Android documentation can help with this.</p>
+<p>Frameworks</p>
+<p>Frameworks can be installed either from if or install-framework, in addition two parameters</p>
+<p>-p, –frame-path &lt;dir&gt; - Store framework files into &lt;dir&gt; </p>
+<p>-t, –tag  &lt;tag&gt; - Tag frameworks using &lt;tag&gt;</p>
+<p>Allow for a finer control over how the files are named and how they are stored.</p>
+<p>$ apktool if framework-res.apkI: Framework installed to: 1.apk<br>// pkgId of framework-res.apk determines number (which is 0x01)$ apktool if com.htc.resources.apkI: Framework installed to: 2.apk<br>// pkgId of com.htc.resources is 0x02$ apktool if com.htc.resources.apk -t htcI: Framework installed to: 2-htc.apk<br>// pkgId-tag.apk$ apktool if framework-res.apk -p foo/barI: Framework installed to: foo/bar/1.apk$ apktool if framework-res.apk -t baz -p foo/barI: Framework installed to: foo/bar/1-baz.apk</p>
+<p>Intermediate</p>
+<p>Framework Files</p>
+<p>As you probably know, Android apps utilize code and resources that are found on the Android OS itself. These are known as framework resources and Apktool relies on these to properly decode and build apks.<br>Every Apktool release contains internally the most up to date AOSP framework at the time of the release. This allows you to decode and build most apks without a problem. However, manufacturers add their own framework files in addition to the regular AOSP ones. To use apktool against these manufacturer apks you must first install the manufacturer framework files.</p>
+<p>Example</p>
+<p>Lets say you want to decode HtcContacts.apk from an HTC device. If you try you will get an error message.</p>
+<p>$ apktool d HtcContacts.apkI: Loading resource table…<br>I: Decoding resources…<br>I: Loading resource table from file: 1.apk<br>W: Could not decode attr value, using undecoded value instead: ns=android, name=drawable<br>W: Could not decode attr value, using undecoded value instead: ns=android, name=iconCan’t find framework resources for package of id: 2. You must install proper framework files, see project website for more info.</p>
+<p>We must get HTC framework resources before decoding this apk. We pull com.htc.resources.apk from our device and install it</p>
+<p>$ apktool if com.htc.resources.apkI: Framework installed to: 2.apk</p>
+<p>Now we will try this decode again.</p>
+<p>$ apktool d HtcContacts.apk<br>I: Loading resource table…<br>I: Decoding resources…<br>I: Loading resource table from file: /home/brutall/apktool/framework/1.apk<br>I: Loading resource table from file: /home/brutall/apktool/framework/2.apkI: Copying assets and libs…</p>
+<p>As you can see. Apktool leveraged both 1.apk and 2.apk framework files in order to properly decode this application.</p>
+<p>Finding Frameworks</p>
+<p>For the most part any apk in /system/framework on a device will be a framework file. On some devices they might reside in/data/system-framework and even cleverly hidden in /system/app or /system/priv-app. They are usually named with the naming of &quot;resources&quot;, &quot;res&quot; or &quot;framework&quot;.</p>
+<p>Example HTC has a framework called com.htc.resources.apk, LG has one called lge-res.apk</p>
+<p>After you find a framework file you could pull it viaadb pull /path/to/fileor use a file manager application. After you have the file locally, pay attention to how Apktool installs it. The number that the framework is named during install corresponds to the pkgId of the application. These values should range from 1 to 30. Any APK that installs itself as 127 is 0x7F which is an internal pkgId.</p>
+<p>Internal Frameworks</p>
+<p>Apktool comes with an internal framework like mentioned above. This file is copied to $HOME/apktool/framework/1.apk during use.</p>
+<p>Warning Apktool has no knowledge of what version of framework resides there. It will assume its up to date, so delete the file during Apktool upgrades</p>
+<p>Managing framework files</p>
+<p>Frameworks are stored in different places depending on the OS in question.</p>
+<p>unix - $HOME/.local/share/apktool</p>
+<p>windows - $HOME/AppData/Local/apktool</p>
+<p>mac - $HOME/Library/apktool</p>
+<p>If these directories are not available it will default to java.io.tmpdir which is usually /tmp. This is a volatile directory so it would make sense to take advantage of the parameter –frame-path to select an alternative folder for framework files.<br>Since these locations are in sometimes hidden directories, managing these frameworks becomes a challenge. A simple helper function (added in v2.2.1) allows you to run apktool empty-framework-dir to empty out frameworks.</p>
+<p>Note Apktool has no control over the frameworks once installed, but you are free to manage these files on your own.</p>
+<p>Tagging framework files</p>
+<p>Frameworks are stored in the naming convention of: &lt;id&gt;-&lt;tag&gt;.apk. They are identified by pkgId and optionally custom tag. Usually tagging frameworks isn’t necessary, but if you work on apps from many different devices and they have incompatible frameworks, you will need some way to easily switch between them. You could tag frameworks by:</p>
+<p>$ apktool if com.htc.resources.apk -t heroI: Framework installed to: /home/brutall/apktool/framework/2-hero.apk$ apktool if com.htc.resources.apk -t desireI: Framework installed to: /home/brutall/apktool/framework/2-desire.apk</p>
+<p>Then:</p>
+<p>$ apktool d HtcContacts.apk -t heroI: Loading resource table…<br>I: Decoding resources…<br>I: Loading resource table from file: /home/brutall/apktool/framework/1.apk<br>I: Loading resource table from file: /home/brutall/apktool/framework/2-hero.apk<br>I: Copying assets and libs…$ apktool d HtcContacts.apk -t desireI: Loading resource table…<br>I: Decoding resources…<br>I: Loading resource table from file: /home/brutall/apktool/framework/1.apk<br>I: Loading resource table from file: /home/brutall/apktool/framework/2-desire.apkI: Copying assets and libs…</p>
+<p>You don’t have to select a tag when building apk - apktool automatically uses the same tag, as when decoding.</p>
+<p>Smali Debugging</p>
+<p>Warning SmaliDebugging has been marked as deprecated in 2.0.3, and removed in 2.1. Please check SmaliIdea for a debugger.</p>
+<p>9Patch Images</p>
+<p>Docs exist for the mysterious 9patch images hereand there. (Read these first). These docs though are meant for developers and lack information for those who work with already compiled 3rd party applications. There you can find information how to create them, but no information about how they actually work.<br>I will try and explain it here. The official docs miss one point that 9patch images come in two forms: source &amp; compiled.</p>
+<p>source - You know this one. You find it in the source of an application or freely available online. These  are images with a black border around them.</p>
+<p>compiled - The mysterious form found in apk files. There are no borders and the 9patch data is written into  a binary chunk called npTc. You can’t see or modify it easily, but Android OS can as its quicker to read.</p>
+<p>There are problems related to the above two points.</p>
+<p>You can’t move 9patch images between both types without a conversion. If you try and unpack 9patch images from an apk and use it  in the source of another, you will get errors during build. Also vice versa, you cannot take source 9patch images directly into an apk.</p>
+<p>9patch binary chunk isn’t recognized by modern image processing tools. So modifying the compiled image will more than likely break the  npTc chunk, thus breaking the image on the device.</p>
+<p>The only solution to this problem is to easily convert between these two types. The encoder (which takes source to compiled) is built into the aapt tool and is automatically used during build. This means we only need to build a decoder which has been in apktool since v1.3.0and is automatically ran on all 9patch images during decode.<br>So if you want to modify 9patch images, don’t do it directly. Use apktool to decode the application (including the 9patch images) and then modify the images. At that point when you build the application back, the source 9patch images will be compiled.</p>
+<p>Other</p>
+<p>FAQ</p>
+<p>What about the -j switch shown from the original YouTube videos?<br>Read Issue 199. In short - it doesn’t exist.<br>Is it possible to run apktool on a device?<br>Sadly not. There are some incompatibilities with SnakeYAML, java.nio and aapt<br>Where can I download sources of apktool?<br>From our Github or Bitbucket project.<br>Resulting apk file is much smaller than original! Is there something missing?<br>There are a couple of reasons that might cause this.</p>
+<p>Apktool builds unsigned apks. This means an entire directory META-INF is missing.</p>
+<p>New aapt binary. Newer versions of apktool contain a newer aapt which optimizes images differently.</p>
+<p>These points might have contributed to a smaller than normal apk<br>There is no META-INF dir in resulting apk. Is this ok?<br>Yes. META-INF contains apk signatures. After modifying the apk it is no longer signed. You can use -c / –copy-original to retain these signatures. However, using -c uses the original AndroidManifest.xml file, so changes to it will be lost.<br>What do you call &quot;magic apks&quot;?<br>For some reason there are apks that are built using modified build tools. These apks don’t work on a regular AOSP Android build, but usually are accompanied by a modified system that can read these modified apks. Apktool cannot handle these apks, therefore they are &quot;magic&quot;.<br>Could I integrate apktool into my own tool? Could I modify apktool sources? Do I have to credit you?<br>Actually the Apache License, which apktool uses, answers all these questions. Yes you can redistribute and/or modify apktool without my permission. However, if you do it would be nice to add our contributors (brut.all, iBotPeaches and JesusFreke) into your credits but it’s not required.<br>Where does apktool store its framework files?</p>
+<p>unix -</p>
+<p>$HOME/.local/share/apktool</p>
+<p>mac -</p>
+<p>$HOME/Library/apktool</p>
+<p>windows -</p>
+<p>$HOME/AppData/Local/apktool</p>
+<p>Migration Instructions</p>
+<p>v2.2.0 -&gt; v2.2.1</p>
+<p>Update apktool to v2.2.1</p>
+<p>apktool empty-framework-dir –force</p>
+<p>v2.1.1 -&gt; v2.2.0</p>
+<p>Run the following commands to migrate your framework directory</p>
+<p>Apktool will work fine without running these commands, this will just cleanup abandoned files</p>
+<p>unix -</p>
+<p>mkdir -p ~/.local/share; mv ~/apktool ~/.local/share</p>
+<p>windows -</p>
+<p>move %USERPROFILE%\apktool %USERPROFILE%\AppData\Local</p>
+<p>v2.0.1 -&gt; v2.0.2</p>
+<p>Update apktool to v2.0.2</p>
+<p>Remove framework file $HOME/apktool/framework/1.apk due to internal API update (Android Marshmallow)</p>
+<p>v1.5.x -&gt; v2.0.0</p>
+<p>Java 1.7 is required</p>
+<p>Update apktool to v2.0.0</p>
+<p>aapt is now included inside the apktool binary. It’s not required to maintain your own aapt install under $PATH. (However, features like -a / –aapt are still used and can override the internal aapt)</p>
+<p>The addition of aapt replaces the need for separate aapt download packages. Helper Scripts may be found here</p>
+<p>Remove framework $HOME/apktool/framework/1.apk</p>
+<p>Eagle eyed users will notice resources are now decoded before sources now. This is because we need to know the API version via the manifest for decoding the sources</p>
+<p>Parameter Changes</p>
+<p>Smali/baksmali 2.0 are included. This is a big change from 1.4.2. Please read the smali updates here for more information</p>
+<p>-o / –output is now used for the output of apk/directory</p>
+<p>-t / –tag is required for tagging framework files</p>
+<p>-advance / –advanced will launch advance parameters and information on the usage output</p>
+<p>-m / –match-original is a new feature for apk analysis. This retains the apk is nearly original format, but will make rebuild more than likely not work due to ignoring the changes that newer aapt requires</p>
+<p>After [d]ecode, there will be new folders (original / unknown) in the decoded apk folder</p>
+<p>original = META-INF folder / AndroidManifest.xml, which are needed to retain the signature of apks to prevent needing to resign. Used with -c / –copy-original on [b]uild</p>
+<p>unknown = Files / folders that are not part of the standard AOSP build procedure. These files will be injected back into the rebuilt APK.</p>
+<p>apktool.yml collects more information than last version</p>
+<p>SdkInfo - Used to repopulate the sdk information in AndroidManifest.xml since newer aapt requires version information to be passed via parameter</p>
+<p>packageInfo - Used to help support Android 4.2 renamed manifest feature. Automatically detects differences between resource and manifest and performs automatic –rename-manifest-package on [b]uild</p>
+<p>versionInfo - Used to repopulate the version information in AndroidManifest.xml since newer aapt requires version information to be passed via parameter</p>
+<p>compressionType - Used to determine the compression that resources.arsc had on the original apk in order to replicate during [b]uild</p>
+<p>unknownFiles - Used to record name/location of non-standard files in an apk in order to place correctly on rebuilt apk</p>
+<p>sharedLibrary - Used to help support Android 5 shared library feature by automatically detecting shared libraries and using –shared-lib on [b]uild</p>
+<p>Examples of new usage in 2.0 vs 1.5.x</p>
+<p>Old (Apktool 1.5.x)New (Apktool 2.0.x)</p>
+<p>apktool if framework-res.apk tagapktool if framework-res.apk -t tag</p>
+<p>apktool d framework-res.apk outputapktool d framework.res.apk -o output</p>
+<p>apktool b output new.apkapktool b output -o new.apk</p>
+<p>v1.4.x -&gt; v1.5.1</p>
+<p>Update apktool to v1.5.1</p>
+<p>Update aapt manually or use package r05-ibot via downloading Mac, Windows or Linux</p>
+<p>Remove framework file $HOME/apktool/framework/1.apk</p>
+<p>Options</p>
+<p>Utility</p>
+<p>Options that can be executed at any time.<br>-version, –version</p>
+<p>Outputs current version. (Ex: 1.5.2)</p>
+<p>-v, –verbose</p>
+<p>Verbose output. Must be first parameter</p>
+<p>-q, –quiet</p>
+<p>Quiet output. Must be first parameter</p>
+<p>-advance, –advanced</p>
+<p>Advance usage output</p>
+<p>Decode</p>
+<p>These are all the options when decoding an apk.<br>–api &lt;API&gt;</p>
+<p>The numeric api-level of the smali files to generate (defaults to targetSdkVersion)</p>
+<p>-b, –no-debug-info</p>
+<p>Prevents baksmali from writing out debug info (.local, .param, .line, etc). Preferred to use if you are comparing smali from the same APK of different versions. The line numbers and debug will change among versions, which can make DIFF reports a pain.</p>
+<p>-f, –force</p>
+<p>Force delete destination directory. Use when trying to decode to a folder that already exists</p>
+<p>–keep-broken-res - Advanced</p>
+<p>If there is an error like &quot;Invalid Config Flags Detected. Dropping Resources…&quot;. This means that APK has a different structure then Apktool can handle. This might be a newer Android version or a random APK that doesn’t match standards. Running this will allow the decode, but then you have to manually fix the folders with -ERR in them.</p>
+<p>-m, –match-original - Used for analysis</p>
+<p>Matches files closest as possible to original, but prevents rebuild.</p>
+<p>-o, –output &lt;DIR&gt;</p>
+<p>The name of the folder that apk gets written to</p>
+<p>-p, –frame-path &lt;DIR&gt;</p>
+<p>The folder location where framework files should be stored/read from</p>
+<p>-r, –no-res</p>
+<p>This will prevent the decompile of resources. This keeps the resources.arsc intact without any decode. If only editing Java (smali) then this is the recommended action for faster decompile &amp; rebuild</p>
+<p>-s, –no-src</p>
+<p>This will prevent the disassembly of the dex file(s). This keeps the apk dex file(s) and simply moves it during build. If you are only editing the resources. This is the recommended action for faster disassemble &amp; assemble</p>
+<p>-t, –frame-tag &lt;TAG&gt;</p>
+<p>Uses framework files tagged via &lt;TAG&gt;</p>
+<p>Rebuild</p>
+<p>These are all the options when building an apk.<br>-a, –aapt &lt;FILE&gt;</p>
+<p>Loads aapt from the specified file location, instead of relying on path. Falls back to $PATH loading, if no file found</p>
+<p>-c, –copy-original - Will still require signature resign post API18</p>
+<p>Copies original AndroidManifest.xml and META-INF folder into built apk</p>
+<p>-d, –debug</p>
+<p>Adds debuggable=&quot;true&quot; to AndroidManifest file.</p>
+<p>-f, –force-all</p>
+<p>Overwrites existing files during build, reassembling the resources.arsc file and dex file(s)</p>
+<p>-o, –output &lt;FILE&gt;</p>
+<p>The name and location of the apk that gets written</p>
+<p>-p, –frame-path &lt;DIR&gt;</p>
+<p>The location where framework files are loaded from</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/apk%20%E5%8F%8D%E7%BC%96%E8%AF%91%E5%B7%A5%E5%85%B7/" rel="prev" title="apk 反编译工具">
+      <i class="fa fa-chevron-left"></i> apk 反编译工具
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/apk%E5%AE%89%E8%A3%85timeout%E6%97%B6%E9%97%B4/" rel="next" title="apk安装timeout时间">
+      apk安装timeout时间 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Edward"
+      src="/uploads/avatar.gif">
+  <p class="site-author-name" itemprop="name">Edward</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">570</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Edward</span>
+</div>
+
+        
+
+
+
+
+
+
+<script>
+  (function() {
+    function leancloudSelector(url) {
+      url = encodeURI(url);
+      return document.getElementById(url).querySelector('.leancloud-visitors-count');
+    }
+
+    function addCount(Counter) {
+      var visitors = document.querySelector('.leancloud_visitors');
+      var url = decodeURI(visitors.id);
+      var title = visitors.dataset.flagTitle;
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          if (results.length > 0) {
+            var counter = results[0];
+            leancloudSelector(url).innerText = counter.time + 1;
+            Counter('put', '/classes/Counter/' + counter.objectId, { time: { '__op': 'Increment', 'amount': 1 } })
+              .catch(error => {
+                console.error('Failed to save visitor count', error);
+              });
+          } else {
+              Counter('post', '/classes/Counter', { title, url, time: 1 })
+                .then(response => response.json())
+                .then(() => {
+                  leancloudSelector(url).innerText = 1;
+                })
+                .catch(error => {
+                  console.error('Failed to create', error);
+                });
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    function showTime(Counter) {
+      var visitors = document.querySelectorAll('.leancloud_visitors');
+      var entries = [...visitors].map(element => {
+        return decodeURI(element.id);
+      });
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url: { '$in': entries } })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          for (let url of entries) {
+            let target = results.find(item => item.url === url);
+            leancloudSelector(url).innerText = target ? target.time : 0;
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    let { app_id, app_key, server_url } = {"enable":true,"app_id":"wxYx0BX9gaKA3XC4LuO2of0v-gzGzoHsz","app_key":"LQMcs6IDIE4YAm10vMsn9IYq","server_url":"https://wxyx0bx9.lc-cn-n1-shared.com","security":false};
+    function fetchData(api_server) {
+      var Counter = (method, url, data) => {
+        return fetch(`${api_server}/1.1${url}`, {
+          method,
+          headers: {
+            'X-LC-Id'     : app_id,
+            'X-LC-Key'    : app_key,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data)
+        });
+      };
+      if (CONFIG.page.isPost) {
+        if (CONFIG.hostname !== location.hostname) return;
+        addCount(Counter);
+      } else if (document.querySelectorAll('.post-title-link').length >= 1) {
+        showTime(Counter);
+      }
+    }
+
+    let api_server = app_id.slice(-9) !== '-MdYXbMMI' ? server_url : `https://${app_id.slice(0, 8).toLowerCase()}.api.lncldglobal.com`;
+
+    if (api_server) {
+      fetchData(api_server);
+    } else {
+      fetch('https://app-router.leancloud.cn/2/route?appId=' + app_id)
+        .then(response => response.json())
+        .then(({ api_server }) => {
+          fetchData('https://' + api_server);
+        });
+    }
+  })();
+</script>
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

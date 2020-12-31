@@ -1,0 +1,877 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"edward.org.cn","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="2012.02.17: vmware的安装 linux的介绍与安装，网络配置，vim使用 网络配置： &#x2F;etc&#x2F;network&#x2F;interfaces DNS客户端配置 &#x2F;etc&#x2F;resolv.conf   nameserver 202.96.128.166 &#x2F;&#x2F;深圳DNS nameserver 202.96.128.86  &#x2F;&#x2F;中国 &#x2F;etc&#x2F;hostname   &#x2F;&#x2F;设置主机名 &#x2F;etc&#x2F;hos">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Linux基础">
+<meta property="og:url" content="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/Linux%E5%9F%BA%E7%A1%80/index.html">
+<meta property="og:site_name" content="点点滴滴">
+<meta property="og:description" content="2012.02.17: vmware的安装 linux的介绍与安装，网络配置，vim使用 网络配置： &#x2F;etc&#x2F;network&#x2F;interfaces DNS客户端配置 &#x2F;etc&#x2F;resolv.conf   nameserver 202.96.128.166 &#x2F;&#x2F;深圳DNS nameserver 202.96.128.86  &#x2F;&#x2F;中国 &#x2F;etc&#x2F;hostname   &#x2F;&#x2F;设置主机名 &#x2F;etc&#x2F;hos">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-12-31T06:48:01.404Z">
+<meta property="article:modified_time" content="2020-01-16T04:37:32.227Z">
+<meta property="article:author" content="Edward">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/Linux%E5%9F%BA%E7%A1%80/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>Linux基础 | 点点滴滴</title>
+  
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?a92ed22eafce466e7a7b17546bb0dc6f";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">点点滴滴</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/Linux%E5%9F%BA%E7%A1%80/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/avatar.gif">
+      <meta itemprop="name" content="Edward">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="点点滴滴">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Linux基础
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-12-31 14:48:01" itemprop="dateCreated datePublished" datetime="2020-12-31T14:48:01+08:00">2020-12-31</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-01-16 12:37:32" itemprop="dateModified" datetime="2020-01-16T12:37:32+08:00">2020-01-16</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%83%82%E7%AC%94%E5%A4%B4/" itemprop="url" rel="index"><span itemprop="name">烂笔头</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/Linux%E5%9F%BA%E7%A1%80/" class="post-meta-item leancloud_visitors" data-flag-title="Linux基础" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>2012.02.17:</p>
+<p>vmware的安装 linux的介绍与安装，网络配置，vim使用</p>
+<p>网络配置：</p>
+<p>/etc/network/interfaces</p>
+<p>DNS客户端配置</p>
+<p>/etc/resolv.conf  </p>
+<p>nameserver 202.96.128.166 //深圳DNS</p>
+<p>nameserver 202.96.128.86  //中国</p>
+<p>/etc/hostname   //设置主机名</p>
+<p>/etc/hosts       //基于host列表实现命名解析</p>
+<p>auto eth0</p>
+<p>iface eth0 inet static //静态ip</p>
+<p>address 192.168.7.104</p>
+<p>gateway 192.168.7.1</p>
+<p>netmash 255.255.255.0</p>
+<p>auto eth0              //动态ip</p>
+<p>iface eth0 inet dhcp //dhcp:Dynamic Host Configuration Protocol</p>
+<p>auto lo                //loopback 回送地址 127.0.0.1 回环检测用</p>
+<p>iface lo inet loopback</p>
+<p>重启方式：</p>
+<p>/etc/init.d/networking reload/restart</p>
+<p>service networking restart</p>
+<p>SSH  使用默认配置即可 </p>
+<p>/etc/ssh/ssh_config</p>
+<p>/etc/ssh/sshd_config</p>
+<p>/etc/init.d/ssh reload/restart</p>
+<p>service ssh restart</p>
+<p>tftp</p>
+<p>sudo apt-get install tftp-hpa</p>
+<p>/etc/default/tftpd-hpa  </p>
+<p>TFTP_DIRECTORY=&quot;/home/edward/tftpboot&quot;   //tftpboot 修改权限</p>
+<p>TFTP_OPTIONS=&quot;-l -c -s&quot; //literal command/create secure ?</p>
+<p>/etc/init.d/tftpd-hpa reload/restart</p>
+<p>service tftpd restart</p>
+<p>samba</p>
+<p>/etc/samba/smb.conf</p>
+<p>/etc/init.d/smbd reload/restart</p>
+<p>service smbd restart</p>
+<p>[edward’shares]</p>
+<p>path=/home/edward/samba</p>
+<p>valid users=edward</p>
+<p>valid users = %S //表示smbpasswd创建的所有用户</p>
+<p>available=yes</p>
+<p>browseable=yes</p>
+<p>public=no     //验证</p>
+<p>writable=yes</p>
+<p>NFS</p>
+<p>sudo apt-get install nfs-kernel-server</p>
+<p>/etc/exports</p>
+<p>/rootfs  *(rw,sync,no_root_squash)</p>
+<p>$sudo dpkg-reconfigure portmap   // -&gt;&gt; no  不将 portmap 绑定在 loopback 地址</p>
+<p>/etc/default/portmap</p>
+<p>#OPTIONS=&quot;-i 127.0.0.1&quot;  注释此项</p>
+<p>$sudo /etc/init.d/portmap restart </p>
+<p>$sudo /etc/init.d/nfs-kernel-server restart</p>
+<p>2012.02.18:</p>
+<p>2012.02.19:</p>
+<p>2012.02.20:</p>
+<p>环境变量的查看和设置</p>
+<p>查看：export</p>
+<p>设置  epxort HIST=30</p>
+<p> export  PATH=$PATH:/usr/local/arm/4.2.2-eabi/usr/bin/</p>
+<p>永久设置环境变量：</p>
+<p>1，设置~/.bashrc,针对个人用户</p>
+<p>   最后面加入：export  PATH=$PATH:/usr/local/arm/4.2.2-eabi/usr/bin/</p>
+<p>   执行一次脚本</p>
+<p>      source  ~/.bashrc</p>
+<p>2,/etc/profile，针对所有用户</p>
+<p>   最后面加入：export  PATH=$PATH:/usr/local/arm/4.2.2-eabi/usr/bin/</p>
+<ol start="3">
+<li>/etc/environment  系统变量   直接加入</li>
+</ol>
+<p>丢弃所有信息       黑洞</p>
+<p>  ls abc 2&gt; /dev/null</p>
+<p>  ls abc &amp;&gt; /dev/null</p>
+<p>引号：</p>
+<p>1，双引号</p>
+<p>&quot;&quot;,里面的内容为普通字符串，同时保留shell里面的特殊符号，$</p>
+<p>2，单引号</p>
+<p>‘’,里面的内容全部当成字符串</p>
+<p>3，反单引号</p>
+<p>``：里面的字符串是个命令</p>
+<p>sync：同步</p>
+<p>用途：拨出u盘或者是硬盘的时候，先使用一下sync</p>
+<p>shutdown： 发送信号给init进程</p>
+<p>-h： halt</p>
+<p>关机：poweroff  halt   init 0 </p>
+<p>halt </p>
+<p>runlevel</p>
+<p>重启：reboot</p>
+<p>date设置时间： sudo date -s &quot;2012/02/20 12:00:00&quot;</p>
+<p>df： disk format， 磁盘格式，文件系统，查看硬盘大小和格式</p>
+<p>mount： 设备文件和路径的关联</p>
+<p>用法：sudo mount /dev/sda5 /opt/harddisk // 将/dev/sda5重新挂载到/opt这个点上</p>
+<p>sudo mount -t ext4 /dev/sda5 /opt/harddisk</p>
+<p>挂载iso文件</p>
+<p>sudo mount -o loop ./netware.iso /opt/iso</p>
+<p>-o option</p>
+<p>loop，将文件模拟成块设备文件</p>
+<p>-t iso9660</p>
+<p>卸载挂载点：sudo umount /opt/harddisk</p>
+<p>2，用户管理命令</p>
+<p>增加用户</p>
+<p>useradd(使用比较复杂)</p>
+<p>adduser：（推荐）</p>
+<p>用法： adduser peter</p>
+<p>/etc/passwd  ==&gt;存放个人信息</p>
+<p>/etc/shadow  ==》存放密码信息</p>
+<p>增加某个用户的sudo的权限</p>
+<p>sudo vim /etc/sudoers</p>
+<p>增加：peter   ALL=(ALL) ALL</p>
+<p>删除用户</p>
+<p>sudo userdel -r peter </p>
+<p>修改用户密码</p>
+<p>sudo passwd peter</p>
+<p>提示：为root设置一个密码</p>
+<p>切换用户</p>
+<p>su 用户名</p>
+<p>用户退出：</p>
+<p>exit</p>
+<p>logout</p>
+<p>3，进程管理命令</p>
+<p>pid，ppid</p>
+<p>程序和进程：</p>
+<p>1，程序就是指令的集合，静态概念，占用的资源是硬盘空间</p>
+<p>2，进程是程序在系统中运行后的结果，是一个动态的概念，占用cpu，内存，IO设备等等，</p>
+<p>联系：程序执行一次，就会产生一个进程，执行多个就有多个进程</p>
+<p>PCB：struct task_struct </p>
+<p>init进程：（通过fork产生其他子进程）</p>
+<p>查看init的家族树：pstree</p>
+<p>1，查看进程状态（某一个时刻的，自拍）</p>
+<p>七个中断： ctrl+alt+F1~F7</p>
+<p>ps aux： </p>
+<p>a：与终端相关的进程</p>
+<p>u：进程用户名</p>
+<p>x：所有的任务</p>
+<p>ps -ef</p>
+<p>e：所有任务</p>
+<p>f：详细格式</p>
+<p>2，动态查看进程状态</p>
+<p>top</p>
+<p>z：颜色显示</p>
+<p>3，终止某个进程</p>
+<p>kill给进程发送信号</p>
+<p>kill -9 pid</p>
+<p>cat:</p>
+<p>ctrl+c:终止当前运行的进程</p>
+<p>ctrl+z：让当前进程休眠</p>
+<p>jobs显示被休眠的进程</p>
+<p>fg %1：将第一个休眠的进程调到前台运行</p>
+<p>2012.02.21:</p>
+<p>1,dmesg 查看内核的调试信息（内核是用printk答应调试信息）</p>
+<p>dmesg | grep sda</p>
+<p>查看sda相关的信息</p>
+<p>ls -l</p>
+<p>查看文件夹的大小：</p>
+<p>du：</p>
+<p>用法： du -sh  src_s5pc 查看src_s5pc文件夹的大小</p>
+<p>s： sum： 总数</p>
+<p>h： human </p>
+<p>如果没有权限，如何修改</p>
+<p>chmod</p>
+<p>用法：1，chmod 777 ~/src_s5pc</p>
+<p> 2, chmod u+w,g+w,o-x  ~/src_s5pc</p>
+<p> 777 ==&gt; rwxrwxrwx ==&gt; 111 111 111 (二进制)                             7   7   7  （十进制）</p>
+<p> 755 ==&gt; rwxr-xr-x  ==&gt; 111 101 101</p>
+<p>   7   5   5</p>
+<p> u: user</p>
+<p> g: group</p>
+<p> o: other</p>
+<p> a: all</p>
+<p>chown：</p>
+<p>用法： chown  root   ~/src_s5pc</p>
+<p>chown  root:root   ~/src_s5pc 把用户名和组用户都改了</p>
+<p>单独改用户组：</p>
+<p> chgrp root ~/src_s5p</p>
+<p>修改文件夹中所有的文件的权限</p>
+<p>加上一个-R</p>
+<p>chmod 777 ~/src_s5pc -R</p>
+<p>chown  root:root   ~/src_s5pc -R</p>
+<p>cd ../../ 上上目录</p>
+<p>cd - 返回</p>
+<p>文件操作</p>
+<p>创建：</p>
+<p>文件： touch </p>
+<p>1，创建一个空的普通文件</p>
+<p>touch  rtc</p>
+<p>vim</p>
+<p>2，更新文件的最后修改时间</p>
+<p>11:11 export.log</p>
+<p>touch  export.log</p>
+<p>21:58 export.log</p>
+<p>文件夹： mkdir</p>
+<p>mkdir src</p>
+<p> 创建多层目录</p>
+<p>mkdir -p src/1/2/3</p>
+<p>删除</p>
+<p>文件： rm</p>
+<p>rm  rtc</p>
+<p>文件夹：rmdir  </p>
+<p>rm  -rf abc   //强制删除</p>
+<p>统一： rm  -rf abc zImage  </p>
+<p>或者   rm  -rf  *  // 全部删除</p>
+<p>复制，剪切和重命名</p>
+<p>cp：</p>
+<p>拷贝文件：</p>
+<p>cp  源文件  目标文件</p>
+<p>cp uImage abc/</p>
+<p>cp uImage abc/uImage_35 //拷贝的同时命名</p>
+<p>拷贝文件夹：</p>
+<p>统一： cp  -rf  abc/   /opt</p>
+<p>拷贝多个文件：</p>
+<p>cp -rf export.log  zImage_net hello.c abc/  //以最后一个参数为目的地</p>
+<p>mv</p>
+<p>移动：</p>
+<p>mv sym.sh abc/  //不需要粘贴</p>
+<p>mv 文件夹的时候，不需要加-rf</p>
+<p> 重命名：</p>
+<p>  只要源文件的路径和目的地的路径是一样的，那么就是代表重命名</p>
+<p>  mv uImage uImage_45</p>
+<p>查看</p>
+<p>cat, more , less, head, tail</p>
+<p>cat 查看全文</p>
+<p>more 和less：分页查看，  用到比较多的是less</p>
+<p>less： 支持上下左右键，还有查找</p>
+<p>一般的用法：和管道配合使用  |</p>
+<p>dmesg | less</p>
+<p>head和tail： 查看头部和尾部</p>
+<p>head  -20 /etc/samba/smb.conf  //显示文件的前20行</p>
+<p>tail -20 /etc/samba/smb.conf  //显示文件的后20行</p>
+<p>find， grep ， locate</p>
+<p>find：查找文件</p>
+<p>find  路径 -name  ‘关键字’  //在路径下，按照名字的方式，搜索’关键字’</p>
+<p>find  路径  -type  类型 //在路径下，按照文件类型的方式查找</p>
+<p>grep：查找文件中字符串</p>
+<p>grep  -rHn  ‘关键字’  路径</p>
+<p> -r： 递归的找</p>
+<p> -H： 显示关键字所在的文件名</p>
+<p> -n： 显示关键字所在的行号</p>
+<p>例子：grep -rHn ‘main’ test/</p>
+<p>test/hello.c:3:int main(void)</p>
+<p>test/abc/hello.c:3:int main(void)</p>
+<p>locate：</p>
+<p>locate  关键字</p>
+<p>会查看数据库，收集了所有的文件的信息，每次开机的时候会去收集</p>
+<p>updatedb  更新所有文件信息的数据库</p>
+<p>sudo updatedb</p>
+<p>locate wupikuaile</p>
+<p>/home/ldswfun/test/wupikuaile</p>
+<p>创建软连接：</p>
+<p>ln </p>
+<p>相对路径和路径的不同</p>
+<p>相对路径：</p>
+<p>ln  -s  目标文件   连接符号文件</p>
+<p>ln -s hello.c  hello_sf_1</p>
+<p>绝对路径：</p>
+<p>ln -s /home/ldswfun/test/hello.c  hello_sf_</p>
+<p>解压缩文件：</p>
+<p>tar</p>
+<p>归档： 打个包，不压缩</p>
+<p>     归档并压缩：</p>
+<p>    压缩：</p>
+<p>    tar -czvf 压缩包名  压缩文件列表</p>
+<p>    c： create 创建</p>
+<p>    x： extract 解压</p>
+<p>    z: 使用gzip的解压缩方式</p>
+<p>    j：使用bzip2的解压缩方式</p>
+<p>    v：显示压缩过程（可选）</p>
+<p>    f：指定压缩包名，这个选项一定要在最后</p>
+<p>    例子：</p>
+<p>    tar -cjvf all.tar.bz2  uImage wupikuaile zImage_net ear export.log fs.c</p>
+<p>    tar -czvf /home/all.tgz  uImage wupikuaile zImage_net ear export.log fs.c</p>
+<p>    注意：压缩包的命名，原则就是能让解压的人知道该文件是什么类型的</p>
+<p>    解压：</p>
+<p>    tar -xzvf all.tgz //默认解压到当前目录</p>
+<p>    tar -xzvf all.tgz -C  ./abc/    //解压到abc目录</p>
+<p>网络</p>
+<p>ifconfig</p>
+<p>1,查看 ifconfig</p>
+<p>2，禁用和激活网络接口：</p>
+<p>sudo ifconfig eth0 down  //禁用</p>
+<p>sudo ifconfig eth0 up   //激活</p>
+<p>3，配置网路接口 sudo ifconfig  eth0 192.168.7.247 netmask 255.255.255.0 //临时为eth0配置一个ip地址</p>
+<p>jobs 显示被休眠进程</p>
+<p>fg %1  将第一个休眠进程调到前台</p>
+<p>自动挂载</p>
+<p>/etc/fstab</p>
+<p>分区</p>
+<p>fdisk /dev/sdb</p>
+<p>n   new a partition</p>
+<p>w   write …  </p>
+<p>sudo fdisk -l /dev/sda</p>
+<p>ll /dev/disk/by-uuid/  查看设备号</p>
+<p>设置vim</p>
+<p>/etc/vim/vimrc</p>
+<p>/etc/vim/vimrc.local  </p>
+<p>grep -n ‘main&amp;gt;’ test.c  精确匹配</p>
+<p>-n 显示行号</p>
+<p>-v 显示不包括目标行的所有行</p>
+<p>-c 只输出匹配行计数</p>
+<p>-i 不区分大小写(单字符)</p>
+<p>-s 不显示错误信息</p>
+<p>find path -options                           </p>
+<p>          -name 指定文件名</p>
+<p>          -perm 按权限 </p>
+<p>          -user 按属主</p>
+<p>          -type 按类型    </p>
+<p>    type: b(块设备) d(目录)  f(普通文件)  p(管道)  l(链接文件)     </p>
+<p>2012.02.22:</p>
+<p>uboot命令</p>
+<p>help；</p>
+<p>printenv：查看uboot环境变量  ==》 pri缩写</p>
+<p> uboot功能：</p>
+<p> 下载内核：</p>
+<p> 怎么下载： 用tftp下载</p>
+<p>  服务器    ==》指定服务器：ubuntu ip   === serverip  </p>
+<p>  ||</p>
+<p>  客户端   ==》指定服务器 ： 开发板ip  === ipaddr</p>
+<p>setenv : 设置uboot环境变量</p>
+<p>setenv serverip 192.168.7.17         </p>
+<p>setenv ipaddr  192.168.7.252</p>
+<p>setenv bootcmd tftp 30800000 uImage ; bootm  //设置倒计时后的第一条命令，先看这个</p>
+<p>==》 tftp 192.168.7.252:30800000  192.168.7.17:/tftpboot/uImage ; bootm 30800000</p>
+<p>/tftpboot哪里来的</p>
+<p>配置tftp服务的时候，设置的</p>
+<p>setenv ethaddr 08:00:3e:26:0a:ab  //设置mac</p>
+<p>save： 保存uboot环境变量</p>
+<p>boot：重启</p>
+<p>挂载文件系统</p>
+<p>1，挂载哪个服务器</p>
+<p>2，文件系统在哪里</p>
+<p>bootargs ：uboot传递给内核参数</p>
+<p>console=ttySAC0,115200   //控制台</p>
+<p>root=/dev/nfs  //告诉内核，要用nfs的方式挂载文件系统</p>
+<p>nfsroot=192.168.7.17:/opt/filesystem  //挂载哪个服务器:文件系统在哪里</p>
+<p>ip=192.168.7.y:192.168.7.x:192.168.7.1:255.255.255.0:farsight_N:eth0:off //系统启动后，设置ip地址</p>
+<p>ip=开发板ip：nfs服务器的ip：网关：子网掩码：计算机名：网络接口：杂项</p>
+<p>init=/linuxrc //linux系统启动的第一进程</p>
+<p>setenv bootargs console=ttySAC0,115200 init=/linuxrc root=/dev/nfs nfsroot=192.168.7.17:/opt/filesystem ip=192.168.7.241:192.168.7.17:192.168.7.1:255.255.255.0:farsight_99:eth0:off</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/Linux-dd%E5%91%BD%E4%BB%A4%E8%AF%A6%E8%A7%A3/" rel="prev" title="Linux-dd命令详解">
+      <i class="fa fa-chevron-left"></i> Linux-dd命令详解
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/linux%E5%86%85%E6%A0%B8SPI%E6%80%BB%E7%BA%BF%E9%A9%B1%E5%8A%A8%E7%AE%80%E5%8D%95%E7%BC%96%E5%86%99%E6%B5%8B%E8%AF%95/" rel="next" title="linux内核SPI总线驱动简单编写测试">
+      linux内核SPI总线驱动简单编写测试 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Edward"
+      src="/uploads/avatar.gif">
+  <p class="site-author-name" itemprop="name">Edward</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">570</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Edward</span>
+</div>
+
+        
+
+
+
+
+
+
+<script>
+  (function() {
+    function leancloudSelector(url) {
+      url = encodeURI(url);
+      return document.getElementById(url).querySelector('.leancloud-visitors-count');
+    }
+
+    function addCount(Counter) {
+      var visitors = document.querySelector('.leancloud_visitors');
+      var url = decodeURI(visitors.id);
+      var title = visitors.dataset.flagTitle;
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          if (results.length > 0) {
+            var counter = results[0];
+            leancloudSelector(url).innerText = counter.time + 1;
+            Counter('put', '/classes/Counter/' + counter.objectId, { time: { '__op': 'Increment', 'amount': 1 } })
+              .catch(error => {
+                console.error('Failed to save visitor count', error);
+              });
+          } else {
+              Counter('post', '/classes/Counter', { title, url, time: 1 })
+                .then(response => response.json())
+                .then(() => {
+                  leancloudSelector(url).innerText = 1;
+                })
+                .catch(error => {
+                  console.error('Failed to create', error);
+                });
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    function showTime(Counter) {
+      var visitors = document.querySelectorAll('.leancloud_visitors');
+      var entries = [...visitors].map(element => {
+        return decodeURI(element.id);
+      });
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url: { '$in': entries } })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          for (let url of entries) {
+            let target = results.find(item => item.url === url);
+            leancloudSelector(url).innerText = target ? target.time : 0;
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    let { app_id, app_key, server_url } = {"enable":true,"app_id":"wxYx0BX9gaKA3XC4LuO2of0v-gzGzoHsz","app_key":"LQMcs6IDIE4YAm10vMsn9IYq","server_url":"https://wxyx0bx9.lc-cn-n1-shared.com","security":false};
+    function fetchData(api_server) {
+      var Counter = (method, url, data) => {
+        return fetch(`${api_server}/1.1${url}`, {
+          method,
+          headers: {
+            'X-LC-Id'     : app_id,
+            'X-LC-Key'    : app_key,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data)
+        });
+      };
+      if (CONFIG.page.isPost) {
+        if (CONFIG.hostname !== location.hostname) return;
+        addCount(Counter);
+      } else if (document.querySelectorAll('.post-title-link').length >= 1) {
+        showTime(Counter);
+      }
+    }
+
+    let api_server = app_id.slice(-9) !== '-MdYXbMMI' ? server_url : `https://${app_id.slice(0, 8).toLowerCase()}.api.lncldglobal.com`;
+
+    if (api_server) {
+      fetchData(api_server);
+    } else {
+      fetch('https://app-router.leancloud.cn/2/route?appId=' + app_id)
+        .then(response => response.json())
+        .then(({ api_server }) => {
+          fetchData('https://' + api_server);
+        });
+    }
+  })();
+</script>
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"edward.org.cn","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849505152535455565758596061626364656667686970717273747576777879808182838485868788899091929394959697989910010110210">
+<meta property="og:type" content="article">
+<meta property="og:title" content="hook">
+<meta property="og:url" content="http://edward.org.cn/2020/12/31/Android/hook.sh/index.html">
+<meta property="og:site_name" content="点点滴滴">
+<meta property="og:description" content="12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849505152535455565758596061626364656667686970717273747576777879808182838485868788899091929394959697989910010110210">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-12-31T07:36:42.935Z">
+<meta property="article:modified_time" content="2020-09-29T08:12:23.339Z">
+<meta property="article:author" content="Edward">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://edward.org.cn/2020/12/31/Android/hook.sh/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>hook | 点点滴滴</title>
+  
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?a92ed22eafce466e7a7b17546bb0dc6f";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">点点滴滴</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://edward.org.cn/2020/12/31/Android/hook.sh/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/avatar.gif">
+      <meta itemprop="name" content="Edward">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="点点滴滴">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          hook
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-12-31 15:36:42" itemprop="dateCreated datePublished" datetime="2020-12-31T15:36:42+08:00">2020-12-31</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-09-29 16:12:23" itemprop="dateModified" datetime="2020-09-29T16:12:23+08:00">2020-09-29</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Android/" itemprop="url" rel="index"><span itemprop="name">Android</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2020/12/31/Android/hook.sh/" class="post-meta-item leancloud_visitors" data-flag-title="hook" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="meta">#!/busybox/sh</span></span><br><span class="line"></span><br><span class="line">PATH=/system/bin:/busybox:<span class="variable">$PATH</span></span><br><span class="line"></span><br><span class="line">LOG ()</span><br><span class="line">&#123;</span><br><span class="line">    <span class="built_in">local</span> log_file=/dev/console</span><br><span class="line">    <span class="built_in">local</span> tag=<span class="string">&quot;CM_hook&quot;</span></span><br><span class="line"></span><br><span class="line">    <span class="built_in">local</span> sDate=`date <span class="string">&quot;+%Y-%m-%d %H:%M:%S&quot;</span>`</span><br><span class="line">    <span class="built_in">echo</span> <span class="string">&quot;[<span class="variable">$tag</span>] <span class="variable">$&#123;sDate&#125;</span> <span class="variable">$@</span>&quot;</span> &gt; <span class="variable">$log_file</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">LOG <span class="string">&quot;Start <span class="variable">$0</span>&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#turn off radar power</span></span><br><span class="line">ln -s /dev/ttyMT1  /dev/ttyS1</span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;0&quot;</span>&gt;/sys/devices/virtual/misc/radar/ctl</span><br><span class="line"></span><br><span class="line">ln -s /dev/ttyMT2  /dev/ttyS2</span><br><span class="line">ln -s /dev/ttyMT3  /dev/ttyS3</span><br><span class="line"></span><br><span class="line"><span class="built_in">echo</span> 0 &gt; /proc/hps/enabled</span><br><span class="line"><span class="built_in">echo</span> performance &gt; /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor</span><br><span class="line"><span class="built_in">echo</span> 4 &gt;proc/cpufreq/cpufreq_oppidx </span><br><span class="line"><span class="built_in">echo</span> 0 &gt;sys/devices/system/cpu/cpu3/online </span><br><span class="line"><span class="built_in">echo</span> 0 &gt;sys/devices/system/cpu/cpu2/online </span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">#set wifi bt mac addr</span></span><br><span class="line">/system/bin/wifibt_mac random&amp;</span><br><span class="line"></span><br><span class="line">gsensor_bmi=`cat /proc/cmdline | grep gs=bmi160`</span><br><span class="line"><span class="keyword">if</span> [ -n <span class="string">&quot;<span class="variable">$gsensor_bmi</span>&quot;</span> ]; <span class="keyword">then</span></span><br><span class="line">    LOG <span class="string">&quot;trigger bmibmmd for gsensor of bmi160&quot;</span></span><br><span class="line">    setprop sys.hw_gsensor.bmi 1</span><br><span class="line"><span class="keyword">fi</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">local</span> t=300</span><br><span class="line"><span class="built_in">local</span> tm_boot=0</span><br><span class="line"><span class="built_in">local</span> boot_ok=</span><br><span class="line"><span class="keyword">while</span> [ <span class="variable">$t</span> -gt 0 ]; <span class="keyword">do</span></span><br><span class="line">    boot_ok=`getprop sys.boot_completed`</span><br><span class="line">    <span class="keyword">if</span> [ <span class="string">&quot;<span class="variable">$boot_ok</span>&quot;</span> == <span class="string">&quot;1&quot;</span> ]; <span class="keyword">then</span></span><br><span class="line">        LOG <span class="string">&quot;<span class="variable">$0</span>: Boot finished(<span class="variable">$tm_boot</span>), then trigger xlog&quot;</span></span><br><span class="line">        <span class="comment">#/system/bin/xlog filter-set on</span></span><br><span class="line">        /system/bin/xlog filter-reset</span><br><span class="line">        <span class="comment">#am start -n com.mediatek.engineermode/.EngineerMode</span></span><br><span class="line">        <span class="comment">#am start -n com.mediatek.mtklogger/.MainActivity</span></span><br><span class="line">        <span class="built_in">break</span></span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">        sleep 2</span><br><span class="line">        <span class="built_in">let</span> <span class="string">&quot;t = t - 1&quot;</span></span><br><span class="line">        <span class="built_in">let</span> <span class="string">&quot;tm_boot = tm_boot + 2&quot;</span></span><br><span class="line">    <span class="keyword">fi</span></span><br><span class="line"><span class="keyword">done</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">local</span> cta=`getprop ro.cta`</span><br><span class="line"><span class="keyword">if</span> [ <span class="string">&quot;<span class="variable">$cta</span>&quot;</span> == <span class="string">&quot;1&quot;</span> ]; <span class="keyword">then</span></span><br><span class="line">    iptables -I INPUT -s 10.0.0.172 -j DROP</span><br><span class="line">    iptables -I INPUT -s mmsc.monternet.com -j DROP</span><br><span class="line"><span class="keyword">fi</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#remove it to init.project.rc</span></span><br><span class="line"><span class="comment">#default param tempCtrl/less/full Trig: 100 85 75</span></span><br><span class="line"><span class="comment">#/system/backup/bin/loop.sh 100 85 75 &amp;</span></span><br><span class="line"></span><br><span class="line">memTotal=`cat /proc/meminfo | grep MemTotal | sed <span class="string">&#x27;s/[ ]\+/ /g&#x27;</span> | cut -d<span class="string">&#x27; &#x27;</span> -f2`</span><br><span class="line">memTotal=`expr <span class="variable">$memTotal</span> \/ 1024`</span><br><span class="line"></span><br><span class="line"><span class="built_in">local</span> min_free_kbytes=`cat /proc/sys/vm/min_free_kbytes`</span><br><span class="line"></span><br><span class="line">chmod 660 /sys/module/lowmemorykiller/parameters/minfree</span><br><span class="line">lowmemkiller=`cat /sys/module/lowmemorykiller/parameters/minfree`</span><br><span class="line">LOG <span class="string">&quot;memTotal=<span class="variable">$memTotal</span> MB, org min_free_kbytes=<span class="variable">$min_free_kbytes</span> lowmemkiller=<span class="variable">$lowmemkiller</span>&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> [ <span class="variable">$memTotal</span> -gt 768 ]; <span class="keyword">then</span></span><br><span class="line">    <span class="comment">#1G DDR</span></span><br><span class="line">    min_free_kbytes=28672</span><br><span class="line">    lowmemkiller=<span class="string">&quot;6144,8192,16384,20480,22528,24576&quot;</span></span><br><span class="line"><span class="keyword">elif</span> [ <span class="variable">$memTotal</span> -gt 660 ]; <span class="keyword">then</span></span><br><span class="line">    <span class="comment">#768M DDR</span></span><br><span class="line">    min_free_kbytes=15360</span><br><span class="line">    lowmemkiller=<span class="string">&quot;2304,3072,6144,7680,8448,9216&quot;</span></span><br><span class="line"><span class="keyword">else</span></span><br><span class="line">    <span class="comment">#512M DDR</span></span><br><span class="line">    min_free_kbytes=10240</span><br><span class="line">    lowmemkiller=<span class="string">&quot;1536,2048,4096,5120,5632,6144&quot;</span></span><br><span class="line"><span class="keyword">fi</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">echo</span> <span class="variable">$min_free_kbytes</span> &gt; /proc/sys/vm/min_free_kbytes</span><br><span class="line"><span class="built_in">echo</span> <span class="variable">$lowmemkiller</span> &gt; /sys/module/lowmemorykiller/parameters/minfree</span><br><span class="line">min_free_kbytes=`cat /proc/sys/vm/min_free_kbytes`</span><br><span class="line">lowmemkiller=`cat /sys/module/lowmemorykiller/parameters/minfree`</span><br><span class="line">LOG <span class="string">&quot;new min_free_kbytes=<span class="variable">$min_free_kbytes</span> lowmemkiller=<span class="variable">$lowmemkiller</span>&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#isHeadless=`getprop ro.product.class`</span></span><br><span class="line"><span class="comment">#if [ &quot;$isHeadless&quot; == &quot;headless&quot; ]; then</span></span><br><span class="line"><span class="comment">#    curTimeoff=`sqlite3 /data/data/com.android.providers.settings/databases/settings.db \</span></span><br><span class="line"><span class="comment">#               &quot;select value from system where name=&#x27;screen_off_timeout&#x27;&quot;`</span></span><br><span class="line"><span class="comment">#    STANGE： sqlite will fail when system boot, but OK by cmd line!!!</span></span><br><span class="line"><span class="comment">#    if [ $curTimeoff -eq 30 ]; then</span></span><br><span class="line"><span class="comment">#        LOG &quot;screen off timeout is already $curTimeoff&quot;</span></span><br><span class="line"><span class="comment">#    else</span></span><br><span class="line"><span class="comment">#        LOG &quot;set screen off timeout to 30s&quot;</span></span><br><span class="line"><span class="comment">#        sqlite3 /data/data/com.android.providers.settings/databases/settings.db \</span></span><br><span class="line"><span class="comment">#        &quot;insert into system (name, value) values (&#x27;screen_off_timeout&#x27;, 30)&quot;</span></span><br><span class="line"><span class="comment">#    fi</span></span><br><span class="line"><span class="comment">#fi</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">local</span> cntFail=`getprop persist.bootup.fail`</span><br><span class="line"><span class="keyword">if</span> [ <span class="string">&quot;<span class="variable">$boot_ok</span>&quot;</span> == <span class="string">&quot;1&quot;</span> ]; <span class="keyword">then</span></span><br><span class="line">    filter_size_org=`<span class="built_in">stat</span> -c <span class="string">&quot;%s&quot;</span> /system/etc/xlog-filter-default`</span><br><span class="line">    filter_size_running=`<span class="built_in">stat</span> -c <span class="string">&quot;%s&quot;</span> /data/misc/xlog-filter`</span><br><span class="line">    size=`expr <span class="variable">$filter_size_org</span> - <span class="variable">$filter_size_running</span>`</span><br><span class="line">    abs_size=`<span class="built_in">echo</span> <span class="variable">$size</span> | tr -d -`</span><br><span class="line">    <span class="comment">#if [ $abs_size -gt 1000 ]; then</span></span><br><span class="line">    <span class="keyword">if</span> [ <span class="variable">$filter_size_running</span> -lt 1000 ]; <span class="keyword">then</span></span><br><span class="line">        LOG <span class="string">&quot;ERROR: xlog-filter size abnormal, try to filter-reset...&quot;</span></span><br><span class="line">        LOG <span class="string">&quot;org=<span class="variable">$filter_size_org</span> running=<span class="variable">$filter_size_running</span> abs=<span class="variable">$abs_size</span>&quot;</span></span><br><span class="line">        rm /data/misc/xlog-filter</span><br><span class="line">        /system/bin/xlog filter-reset</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">        LOG <span class="string">&quot;checking xlog-filter OK&quot;</span></span><br><span class="line">    <span class="keyword">fi</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> [ -n <span class="string">&quot;<span class="variable">$cntFail</span>&quot;</span> ]; <span class="keyword">then</span></span><br><span class="line">        LOG <span class="string">&quot;Bootup OK, reset cntFail(<span class="variable">$cntFail</span>)&quot;</span></span><br><span class="line">        setprop persist.bootup.fail 0</span><br><span class="line">    <span class="keyword">fi</span></span><br><span class="line"><span class="keyword">else</span></span><br><span class="line">    <span class="keyword">if</span> [ <span class="string">&quot;<span class="variable">$cntFail</span>&quot;</span> == <span class="string">&quot;&quot;</span> ]; <span class="keyword">then</span></span><br><span class="line">        cntFail=1</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">        <span class="built_in">let</span> <span class="string">&quot;cntFail = cntFail + 1&quot;</span></span><br><span class="line">    <span class="keyword">fi</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> [ <span class="variable">$cntFail</span> -gt 2 ]; <span class="keyword">then</span></span><br><span class="line">        LOG <span class="string">&quot;Bootup failed(<span class="variable">$cntFail</span>), remove all in /data/ and reboot system...&quot;</span></span><br><span class="line">        stop</span><br><span class="line">        rm -rf /data/*</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">        setprop persist.bootup.fail <span class="variable">$cntFail</span></span><br><span class="line">        LOG <span class="string">&quot;Bootup failed(<span class="variable">$cntFail</span>), reboot system...&quot;</span></span><br><span class="line">    <span class="keyword">fi</span></span><br><span class="line"></span><br><span class="line">    reboot -p</span><br><span class="line">    <span class="built_in">exit</span></span><br><span class="line"><span class="keyword">fi</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#PowerOn UsbCamara, need do it here?</span></span><br><span class="line"><span class="comment">#echo 1 &gt; /sys/devices/virtual/misc/gpio_ctl/usbcam</span></span><br><span class="line"></span><br><span class="line">LOG <span class="string">&quot;Sleeping a while to wait for T card being mounted&quot;</span></span><br><span class="line"><span class="built_in">local</span> delayT=15</span><br><span class="line"><span class="keyword">while</span> [ <span class="variable">$delayT</span> -gt 0 ]; <span class="keyword">do</span></span><br><span class="line">    <span class="built_in">local</span> T_ok=`df | grep sdcard | wc -l`</span><br><span class="line">    <span class="keyword">if</span> [ <span class="variable">$T_ok</span> -gt 0 ]; <span class="keyword">then</span></span><br><span class="line">        LOG <span class="string">&quot;T card is mounted(remain <span class="variable">$delayT</span> second)&quot;</span></span><br><span class="line">        <span class="built_in">break</span></span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">        sleep 1</span><br><span class="line">        <span class="built_in">let</span> <span class="string">&quot;delayT = delayT - 1&quot;</span></span><br><span class="line">    <span class="keyword">fi</span></span><br><span class="line"><span class="keyword">done</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/12/31/Android/loop.sh/" rel="prev" title="loop">
+      <i class="fa fa-chevron-left"></i> loop
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/12/31/Android/cpu_info.sh/" rel="next" title="cpu_info">
+      cpu_info <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Edward"
+      src="/uploads/avatar.gif">
+  <p class="site-author-name" itemprop="name">Edward</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">570</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Edward</span>
+</div>
+
+        
+
+
+
+
+
+
+<script>
+  (function() {
+    function leancloudSelector(url) {
+      url = encodeURI(url);
+      return document.getElementById(url).querySelector('.leancloud-visitors-count');
+    }
+
+    function addCount(Counter) {
+      var visitors = document.querySelector('.leancloud_visitors');
+      var url = decodeURI(visitors.id);
+      var title = visitors.dataset.flagTitle;
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          if (results.length > 0) {
+            var counter = results[0];
+            leancloudSelector(url).innerText = counter.time + 1;
+            Counter('put', '/classes/Counter/' + counter.objectId, { time: { '__op': 'Increment', 'amount': 1 } })
+              .catch(error => {
+                console.error('Failed to save visitor count', error);
+              });
+          } else {
+              Counter('post', '/classes/Counter', { title, url, time: 1 })
+                .then(response => response.json())
+                .then(() => {
+                  leancloudSelector(url).innerText = 1;
+                })
+                .catch(error => {
+                  console.error('Failed to create', error);
+                });
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    function showTime(Counter) {
+      var visitors = document.querySelectorAll('.leancloud_visitors');
+      var entries = [...visitors].map(element => {
+        return decodeURI(element.id);
+      });
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url: { '$in': entries } })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          for (let url of entries) {
+            let target = results.find(item => item.url === url);
+            leancloudSelector(url).innerText = target ? target.time : 0;
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    let { app_id, app_key, server_url } = {"enable":true,"app_id":"wxYx0BX9gaKA3XC4LuO2of0v-gzGzoHsz","app_key":"LQMcs6IDIE4YAm10vMsn9IYq","server_url":"https://wxyx0bx9.lc-cn-n1-shared.com","security":false};
+    function fetchData(api_server) {
+      var Counter = (method, url, data) => {
+        return fetch(`${api_server}/1.1${url}`, {
+          method,
+          headers: {
+            'X-LC-Id'     : app_id,
+            'X-LC-Key'    : app_key,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data)
+        });
+      };
+      if (CONFIG.page.isPost) {
+        if (CONFIG.hostname !== location.hostname) return;
+        addCount(Counter);
+      } else if (document.querySelectorAll('.post-title-link').length >= 1) {
+        showTime(Counter);
+      }
+    }
+
+    let api_server = app_id.slice(-9) !== '-MdYXbMMI' ? server_url : `https://${app_id.slice(0, 8).toLowerCase()}.api.lncldglobal.com`;
+
+    if (api_server) {
+      fetchData(api_server);
+    } else {
+      fetch('https://app-router.leancloud.cn/2/route?appId=' + app_id)
+        .then(response => response.json())
+        .then(({ api_server }) => {
+          fetchData('https://' + api_server);
+        });
+    }
+  })();
+</script>
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

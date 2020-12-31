@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"edward.org.cn","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="FFMPEG拥有强大的视频处理能力，可惜的是有很多人不知道如何使用。本文深入介绍如何用编译好ffmpeg.exe程序处理视频，既有常用的简单的处理，也有一些比较少见的高大上的处理，一定能让你受益匪浅。ffmpeg是一把宝刀，在视频处理上，基本是一刀在手，天下我有。 首先下载编译好的ffmpeg程序，可以去下面的网址，https:&#x2F;&#x2F;ffmpeg.zeranoe.com&#x2F;builds&#x2F;#  点击&amp;q">
+<meta property="og:type" content="article">
+<meta property="og:title" content="FFMPEG命令行处理视频进阶">
+<meta property="og:url" content="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/FFMPEG%E5%91%BD%E4%BB%A4%E8%A1%8C%E5%A4%84%E7%90%86%E8%A7%86%E9%A2%91%E8%BF%9B%E9%98%B6/index.html">
+<meta property="og:site_name" content="点点滴滴">
+<meta property="og:description" content="FFMPEG拥有强大的视频处理能力，可惜的是有很多人不知道如何使用。本文深入介绍如何用编译好ffmpeg.exe程序处理视频，既有常用的简单的处理，也有一些比较少见的高大上的处理，一定能让你受益匪浅。ffmpeg是一把宝刀，在视频处理上，基本是一刀在手，天下我有。 首先下载编译好的ffmpeg程序，可以去下面的网址，https:&#x2F;&#x2F;ffmpeg.zeranoe.com&#x2F;builds&#x2F;#  点击&amp;q">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-12-31T06:48:01.128Z">
+<meta property="article:modified_time" content="2020-01-16T04:37:33.990Z">
+<meta property="article:author" content="Edward">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/FFMPEG%E5%91%BD%E4%BB%A4%E8%A1%8C%E5%A4%84%E7%90%86%E8%A7%86%E9%A2%91%E8%BF%9B%E9%98%B6/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>FFMPEG命令行处理视频进阶 | 点点滴滴</title>
+  
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?a92ed22eafce466e7a7b17546bb0dc6f";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">点点滴滴</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/FFMPEG%E5%91%BD%E4%BB%A4%E8%A1%8C%E5%A4%84%E7%90%86%E8%A7%86%E9%A2%91%E8%BF%9B%E9%98%B6/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/avatar.gif">
+      <meta itemprop="name" content="Edward">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="点点滴滴">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          FFMPEG命令行处理视频进阶
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-12-31 14:48:01" itemprop="dateCreated datePublished" datetime="2020-12-31T14:48:01+08:00">2020-12-31</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-01-16 12:37:33" itemprop="dateModified" datetime="2020-01-16T12:37:33+08:00">2020-01-16</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%83%82%E7%AC%94%E5%A4%B4/" itemprop="url" rel="index"><span itemprop="name">烂笔头</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/FFMPEG%E5%91%BD%E4%BB%A4%E8%A1%8C%E5%A4%84%E7%90%86%E8%A7%86%E9%A2%91%E8%BF%9B%E9%98%B6/" class="post-meta-item leancloud_visitors" data-flag-title="FFMPEG命令行处理视频进阶" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>FFMPEG拥有强大的视频处理能力，可惜的是有很多人不知道如何使用。本文深入介绍如何用编译好ffmpeg.exe程序处理视频，既有常用的简单的处理，也有一些比较少见的高大上的处理，一定能让你受益匪浅。ffmpeg是一把宝刀，在视频处理上，基本是一刀在手，天下我有。</p>
+<p>首先下载编译好的ffmpeg程序，可以去下面的网址，<a target="_blank" rel="noopener" href="https://ffmpeg.zeranoe.com/builds/#">https://ffmpeg.zeranoe.com/builds/#</a>  点击&quot;Donload Build&quot;按钮下载最新编译的版本，解压后可以看到ffmpeg.exe文件用于处理视频，ffplay.exe文件用于播放视频。也可以去ffmpeg的官网<a target="_blank" rel="noopener" href="http://ffmpeg.org/">http://ffmpeg.org/</a>   下载源码自己编译（这个工作量比较大）。</p>
+<p>打开命令行窗口，使用cd命令行进入到ffmpeg所在的目录，接下来就可以直接输入处理命令了。下面就来介绍各种各样的命令。下面命令行中的输入视频和输出视频的路径必须正确，如果路径不存在会出错的哦。</p>
+<p>1、知道了视频流地址如何保存出本地文件：</p>
+<p>ffmpeg -i rtmp://122.202.129.136:1935/live/ch4 -map 0 d:\work\yyy.mp4</p>
+<p>2、知道了流地址，播放视频文件：</p>
+<p>ffplay -rtsp_transport tcp rtsp://192.168.201.133:554/stream1.sdp</p>
+<p>3、提取视频中的音频文件：</p>
+<p>ffmpeg -i h:\work\yyy.avi -map 0:a d:\work\yyy.mp3</p>
+<p>ffmpeg -i rtmp://122.202.129.136:1935/live/ch4 -map 0:a d:\work\yyy.mp3</p>
+<p>4、提起多媒体中的视频（不要音频）</p>
+<p>ffmpeg -i rtmp://122.202.129.136:1935/live/ch4 -map 0:v d:\work\yyy.mp4</p>
+<p>5、把音频的左右声道分别保存为两个文件：</p>
+<p>ffmpeg -i d:\work\yyy.mp3 -map_channel 0.0.0 d:\work\ch1.mp3 -map_channel 0.0.1 d:\work\ch2.mp3</p>
+<p>6、把视频的音视频同时分为两个文件保存：</p>
+<p>ffmpeg -i h:\work\video.mp4 -map 0:v  d:\work\video2.mp4 -map 0:a d:\work\video.mp3</p>
+<p>7、把单纯的视频和单纯的音频合并为一个视频文件：</p>
+<p>ffmpeg -i d:\work\out.mp4  -i d:\work\video.amr  -map 0:v  -map 1:a d:\work\strange.mp4</p>
+<p>8、在视频的屏幕左上角加一个logo标志：</p>
+<p>ffmpeg -i h:\work\video.mp4 -i h:\work\psu.png -filter_complex ‘overlay’ d:\work\video.mp4</p>
+<p>9、输出视频的yuv数据：</p>
+<p>ffmpeg -i d:\work\video.mp4 d:\work\hugefile.yuv</p>
+<p>10、把视频的图像批量输出（(-r 1)一秒钟保存一张，缩放为640*480，名称为foo-001.jpeg, foo-002.jpeg……）：</p>
+<p>ffmpeg -i h:\work\video.mp4 -r 1 -s 640x480 -f image2 d:\work\foo-%03d.jpeg</p>
+<p>还可以添加更多参数</p>
+<p>ffmpeg -i h:\work\video.mp4 -r 1 -ss 50 -vframes 3 -s 640x480 -f image2 d:\work\foo-%03d.jpeg</p>
+<p>11、把一堆图像合成为一个视频：</p>
+<p>ffmpeg -f image2 -framerate 25 -i d:\work\foo-%03d.jpeg   -s 1280x720  h:\work\foo.avi</p>
+<p>12、转换视频的分辨率：</p>
+<p>ffmpeg -i D:\work\hisense1.mp4 -vcodec libx264  -s 640x480  -acodec aac -strict experimental -ar 44100 -ac 2 -b:a 96k D:\work\outputfile.mp4</p>
+<p>13、直接将视频变为原来大小的一半：</p>
+<p>ffmpeg -i D:\work\yyy2642.mp4  -vf scale=iw/2:ih/2 D:\work\yyy2642sm.mp4</p>
+<p>14、裁剪视频中间的一段视频为一个单独视频：</p>
+<p>ffmpeg -ss 00:00:30 -vsync 0 -t 00:00:30 -i D:\work\yyy2642.mp4 -vcodec libx264-acodec libfaac D:\work\outputfile.mp4</p>
+<p>15、裁剪出视频屏幕正中间的一部分，宽度和高度都是原来视频的一半：</p>
+<p>ffmpeg -i D:\work\yyy2642.mp4 -vf crop=iw/2:ih/2 D:\work\yyy2642sm.mp4</p>
+<p>16、裁剪出视频屏幕任意一部分（注意参数）：</p>
+<p>ffmpeg -i D:\work\yyy2642.mp4  -vf crop=iw/3:ih/3:100:100 D:\work\yyy2642sm.mp4</p>
+<p>17、播放时自动检测视频周围的黑框（播放时，输出窗口可以看到检测出的crop），这个其实不是视频处理，只是播放效果：</p>
+<p>ffplay D:\work\yyy2642.mp4 -vf cropdetect</p>
+<p>18、在视频的四周增加一圈30个像素的粉红色边框：</p>
+<p>ffmpeg -i D:\work\yyy2642sm.mp4 -vf pad=iw+60:ih+60:30:30:pink D:\work\pink.mp4</p>
+<p>19、视频水平翻转：</p>
+<p>ffmpeg -i D:\work\yyy2642.mp4  -vf hflip D:\work\outputfile.mp4</p>
+<p>20、视频上下翻转：</p>
+<p>ffmpeg -i D:\work\yyy2642.mp4  -vf vflip D:\work\outputfile.mp4</p>
+<p>21、视频旋转：</p>
+<p>ffmpeg -i D:\work\yyy2642.mp4  -vf transpose=2 D:\work\outputfile.mp4</p>
+<p>22、视频模糊处理（注意参数），可以让视频变模糊：</p>
+<p>ffmpeg -i D:\work\yyy2642.mp4  -vf  boxblur=1:10:4:10  D:\work\outputfile.mp4</p>
+<p>23、视频锐化处理，一定程度可以让视频变清晰：</p>
+<p>ffmpeg -i D:\work\yyy2642.mp4  -vf unsharp=5:5:1.0:5:5:0.0 D:\work\outputfile.mp4</p>
+<p>24、删除标志logo:</p>
+<p>ffmpeg -i D:\work\outputfile.mp4 -vf delogo=10:10:256:256:0:0 D:\work\outputfile1.mp4</p>
+<p>25、添加文字到视频上</p>
+<p>ffmpeg  -i D:\work\yyy2642.mp4 -vf drawtext=&quot;fontfile=arial.ttf:text=’Happy Holidays’:x=(w-tw)/2:y=(h-th)/2:fontcolor=green:fontsize=60&quot; D:\work\outputfile.mp4</p>
+<p>其中arial.ttf是从windows\fonts目录下拷贝过来的字体文件</p>
+<p>26、添加上方的字符滚动显示（显示中文字符）：</p>
+<p>ffmpeg -i D:\work\yyy2642.mp4  -vf drawtext=&quot;fontfile=ARIALUNI.ttf:text=’程序明_Welcom’:x=w-mod(t*50,w):fontcolor=darkorange:fontsize=30&quot; D:\work\outputfile.mp4</p>
+<p>添加的文字显示在下方：</p>
+<p>ffmpeg -i D:\work\yyy2642.mp4 -vf drawtext=&quot;fontfile=ARIALUNI.ttf:text=’程序明’:x=w-mod(t*50,w):y=h-th:fontcolor=darkorange:fontsize=30&quot;</p>
+<p>27、视频右上角显示当前系统时间：</p>
+<p>ffmpeg -i D:\work\yyy2642.mp4  -vf drawtext=&quot;fontfile=arial.ttf:x=w-tw:fontcolor=white:fontsize=30:text=’%{localtime:%H\:%M\:%S}’&quot; D:\work\outputfile.mp4</p>
+<p>28、视频播放时晃动：</p>
+<p>ffplay  -i D:\work\yyy2642.mp4  -vf crop=in_w/2:in_h/2:(in_w-out_w)/2+((in_w-out_w)/2)*sin(n/10):(in_h-out_h)/2+((in_h-out_h)/2)*sin(n/7)</p>
+<p>29、播放时视频色彩不断变换：</p>
+<p>ffplay -i D:\work\yyy2642.mp4 -vf hue=&quot;H=2<em>PI</em>t:s=sin(2<em>PI</em>t)+1&quot;</p>
+<p>30、彩色视频转变为黑白视频：</p>
+<p>ffmpeg -i D:\work\yyy2642.mp4 -vf lutyuv=&quot;u=128:v=128&quot; D:\work\outputfile.mp4</p>
+<p>31、视频转码为原来的播放速度的两倍：</p>
+<p>ffmpeg -i D:\work\yyy2642.mp4 -vf setpts=PTS/2 -af atempo=2 D:\work\outputfile.mp4</p>
+<p>32、视频转为gif（参数指定了位置）:</p>
+<p>ffmpeg -i D:\work\yyy2642.mp4 -ss 50 -t 10 -pix_fmt rgb24  -s 640x480 D:\work\jidu.gif</p>
+<p>33、从视频里面截取几张图到一张图里（大图是2行3列）：</p>
+<p>ffmpeg  -i D:\work\yyy2642.mp4  -frames 1  -vf &quot;select=not(mod(n,300)),scale=320:240,tile=2x3&quot; D:\work\out.png</p>
+<p>34、两个文件左右合并（无敌了）：</p>
+<p>ffmpeg.exe -i &quot;D:\work\yyy264.mp4&quot; -vf &quot;[in] scale=iw/2:ih/2, pad=2*iw:ih [left]; movie=&#39;D:\work\yyy2642.mp4&#39;, scale=iw/2:ih/2 [right];[left][right] overlay=main_w/2:0 [out]&quot; -b:v 768k D:\work\output.mp4</p>
+<p>35、两个文件上下合并（无敌了）：</p>
+<p>ffmpeg.exe -i &quot;D:\work\yyy264.mp4&quot; -vf &quot;[in] scale=iw/2:ih/2, pad=iw:2*ih [top]; movie=&#39;D:\work\yyy2642.mp4&#39;, scale=iw/2:ih/2 [bottom];[top][bottom] overlay=0:main_h/2 [out]&quot; -b:v 768k D:\work\output.mp4</p>
+<p>36、文件重叠合并，把第二个文件的视频缩小为四分之一后，放到第一个视频的宽高八分之一画面处（更无敌）：</p>
+<p>ffmpeg.exe -i &quot;D:\work\yyy264.mp4&quot; -vf &quot;[in] scale=iw:ih, pad=iw:ih  [top]; movie=&#39;D:\work\yyy2642.mp4&#39;, scale=iw/4:ih/4 [bottom];[top][bottom] overlay=main_w/8:main_h/8 [out]&quot; -b:v 768k D:\work\output.mp4</p>
+<p>37、普通的按顺序合并两个视频：</p>
+<p>ffmpeg -i D:\work\yyy264.mp4 -qscale 0 D:\work\inputfile_01.mpg  </p>
+<p>ffmpeg -i D:\work\yyy2642.mp4 -qscale 0  D:\work\inputfile_02.mpg</p>
+<p>copy /b &quot;D:\work\inputfile_01.mpg&quot;+&quot;D:\work\inputfile_02.mpg&quot; &quot;D:\work\inputfile_all.mpg&quot;</p>
+<p>ffmpeg -i D:\work\inputfile_all.mpg -qscale 0 D:\work\outputfile.mp4</p>
+<p>38、音频的分割合并</p>
+<p>把第一段音频分成两部分</p>
+<p>ffmpeg.exe -ss 00:00:08.5 -vsync 0 -t 00:00:09 -i file1.mp3   file1end.mp3</p>
+<p>ffmpeg.exe -ss 00:00:00 -vsync 0 -t 00:00:08 -i file1.mp3   file1New.mp3</p>
+<p>把第一段音频的后半部分和第二段混音合并</p>
+<p>ffmpeg -i file2.mp3 -i file1end.mp3   -filter_complex amix=inputs=2:duration=first:dropout_transition=0 file2forNew1.mp3</p>
+<p>把第二段音频混音好的音频，分成前后两部分：</p>
+<p>ffmpeg.exe -ss 00:00:00 -vsync 0 -t 00:00:04 -i file2forNew1.mp3   file2New.mp3</p>
+<p>ffmpeg.exe -ss 00:00:04 -vsync 0 -t 00:00:05 -i file3.mp3   file2End.mp3</p>
+<p>再把第二段的后半部分和第三段混音合并：</p>
+<p>ffmpeg -i file3.mp3 -i file2End.mp3   -filter_complex amix=inputs=2:duration=first:dropout_transition=0 file3New.mp3</p>
+<p>把新的三部分音频首尾连接连到一起：</p>
+<p>ffmpeg -i file1New.mp3 -qscale 0 inputfile_01.mpg</p>
+<p>ffmpeg -i file2New.mp3 -qscale 0  inputfile_02.mpg</p>
+<p>copy /b &quot;inputfile_01.mpg&quot;+&quot;inputfile_02.mpg&quot; &quot;inputfile_all.mpg&quot;</p>
+<p>ffmpeg -i file3New.mp3 -qscale 0  inputfile_05.mpg</p>
+<p>copy /b &quot;inputfile_all.mpg&quot;+&quot;inputfile_05.mpg&quot; &quot;inputfile_al2.mpg&quot;</p>
+<p>ffmpeg -i inputfile_al2.mpg -qscale 0 file5.mp4</p>
+<p>ffmpeg -i file5.mp4 -map 0:a result.mp3</p>
+<p>上面的所有命令都是笔者自己亲自测试使用的，其中有些命令行带有不少参数，参数需要根据实际情况修改，如果有命令不理解的欢迎提问。笔者尽量在百忙之中挤出时间答疑</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/ffmpeg%20%E7%BC%96%E8%AF%91/" rel="prev" title="ffmpeg 编译">
+      <i class="fa fa-chevron-left"></i> ffmpeg 编译
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/FileProvider/" rel="next" title="FileProvider">
+      FileProvider <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Edward"
+      src="/uploads/avatar.gif">
+  <p class="site-author-name" itemprop="name">Edward</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">570</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Edward</span>
+</div>
+
+        
+
+
+
+
+
+
+<script>
+  (function() {
+    function leancloudSelector(url) {
+      url = encodeURI(url);
+      return document.getElementById(url).querySelector('.leancloud-visitors-count');
+    }
+
+    function addCount(Counter) {
+      var visitors = document.querySelector('.leancloud_visitors');
+      var url = decodeURI(visitors.id);
+      var title = visitors.dataset.flagTitle;
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          if (results.length > 0) {
+            var counter = results[0];
+            leancloudSelector(url).innerText = counter.time + 1;
+            Counter('put', '/classes/Counter/' + counter.objectId, { time: { '__op': 'Increment', 'amount': 1 } })
+              .catch(error => {
+                console.error('Failed to save visitor count', error);
+              });
+          } else {
+              Counter('post', '/classes/Counter', { title, url, time: 1 })
+                .then(response => response.json())
+                .then(() => {
+                  leancloudSelector(url).innerText = 1;
+                })
+                .catch(error => {
+                  console.error('Failed to create', error);
+                });
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    function showTime(Counter) {
+      var visitors = document.querySelectorAll('.leancloud_visitors');
+      var entries = [...visitors].map(element => {
+        return decodeURI(element.id);
+      });
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url: { '$in': entries } })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          for (let url of entries) {
+            let target = results.find(item => item.url === url);
+            leancloudSelector(url).innerText = target ? target.time : 0;
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    let { app_id, app_key, server_url } = {"enable":true,"app_id":"wxYx0BX9gaKA3XC4LuO2of0v-gzGzoHsz","app_key":"LQMcs6IDIE4YAm10vMsn9IYq","server_url":"https://wxyx0bx9.lc-cn-n1-shared.com","security":false};
+    function fetchData(api_server) {
+      var Counter = (method, url, data) => {
+        return fetch(`${api_server}/1.1${url}`, {
+          method,
+          headers: {
+            'X-LC-Id'     : app_id,
+            'X-LC-Key'    : app_key,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data)
+        });
+      };
+      if (CONFIG.page.isPost) {
+        if (CONFIG.hostname !== location.hostname) return;
+        addCount(Counter);
+      } else if (document.querySelectorAll('.post-title-link').length >= 1) {
+        showTime(Counter);
+      }
+    }
+
+    let api_server = app_id.slice(-9) !== '-MdYXbMMI' ? server_url : `https://${app_id.slice(0, 8).toLowerCase()}.api.lncldglobal.com`;
+
+    if (api_server) {
+      fetchData(api_server);
+    } else {
+      fetch('https://app-router.leancloud.cn/2/route?appId=' + app_id)
+        .then(response => response.json())
+        .then(({ api_server }) => {
+          fetchData('https://' + api_server);
+        });
+    }
+  })();
+</script>
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

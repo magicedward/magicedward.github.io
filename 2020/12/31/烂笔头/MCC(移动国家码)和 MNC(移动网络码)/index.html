@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"edward.org.cn","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="MCC(移动国家码)和 MNC(移动网络码) 国际移动用户识别码（IMSI） international mobile subscriber identity 国际上为唯一识别一个移动用户所分配的号码。　　     从技术上讲，IMSI可以彻底解决国际漫游问题。但是由于北美目前仍有大量的AMPS系统使用MIN号码，且北美的MDN和MIN采用相同的编号，系统已经无法更改，所以目前国际漫游暂时还是以M">
+<meta property="og:type" content="article">
+<meta property="og:title" content="MCC(移动国家码)和 MNC(移动网络码)">
+<meta property="og:url" content="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/MCC(%E7%A7%BB%E5%8A%A8%E5%9B%BD%E5%AE%B6%E7%A0%81)%E5%92%8C%20MNC(%E7%A7%BB%E5%8A%A8%E7%BD%91%E7%BB%9C%E7%A0%81)/index.html">
+<meta property="og:site_name" content="点点滴滴">
+<meta property="og:description" content="MCC(移动国家码)和 MNC(移动网络码) 国际移动用户识别码（IMSI） international mobile subscriber identity 国际上为唯一识别一个移动用户所分配的号码。　　     从技术上讲，IMSI可以彻底解决国际漫游问题。但是由于北美目前仍有大量的AMPS系统使用MIN号码，且北美的MDN和MIN采用相同的编号，系统已经无法更改，所以目前国际漫游暂时还是以M">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-12-31T06:48:01.441Z">
+<meta property="article:modified_time" content="2020-01-16T04:37:32.854Z">
+<meta property="article:author" content="Edward">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/MCC(%E7%A7%BB%E5%8A%A8%E5%9B%BD%E5%AE%B6%E7%A0%81)%E5%92%8C%20MNC(%E7%A7%BB%E5%8A%A8%E7%BD%91%E7%BB%9C%E7%A0%81)/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>MCC(移动国家码)和 MNC(移动网络码) | 点点滴滴</title>
+  
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?a92ed22eafce466e7a7b17546bb0dc6f";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">点点滴滴</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/MCC(%E7%A7%BB%E5%8A%A8%E5%9B%BD%E5%AE%B6%E7%A0%81)%E5%92%8C%20MNC(%E7%A7%BB%E5%8A%A8%E7%BD%91%E7%BB%9C%E7%A0%81)/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/avatar.gif">
+      <meta itemprop="name" content="Edward">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="点点滴滴">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          MCC(移动国家码)和 MNC(移动网络码)
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-12-31 14:48:01" itemprop="dateCreated datePublished" datetime="2020-12-31T14:48:01+08:00">2020-12-31</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-01-16 12:37:32" itemprop="dateModified" datetime="2020-01-16T12:37:32+08:00">2020-01-16</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%83%82%E7%AC%94%E5%A4%B4/" itemprop="url" rel="index"><span itemprop="name">烂笔头</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/MCC(%E7%A7%BB%E5%8A%A8%E5%9B%BD%E5%AE%B6%E7%A0%81)%E5%92%8C%20MNC(%E7%A7%BB%E5%8A%A8%E7%BD%91%E7%BB%9C%E7%A0%81)/" class="post-meta-item leancloud_visitors" data-flag-title="MCC(移动国家码)和 MNC(移动网络码)" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>MCC(移动国家码)和 MNC(移动网络码)</p>
+<p>国际移动用户识别码（IMSI） international mobile subscriber identity 国际上为唯一识别一个移动用户所分配的号码。　　</p>
+<p>    从技术上讲，IMSI可以彻底解决国际漫游问题。但是由于北美目前仍有大量的AMPS系统使用MIN号码，且北美的MDN和MIN采用相同的编号，系统已经无法更改，所以目前国际漫游暂时还是以MIN为主。其中以O和1打头的MIN资源称为IRM(International Roaming MIN)，由IFAST (International Forum on ANSI-41 Standards Technology)统一管理。目前联通申请的IRM资源以09打头。可以看出，随着用户的增长，用于国际漫游的MIN资源将很快耗尽，全球统一采用IMSI标识用户势在必行。</p>
+<p>    结构组合</p>
+<p>    IMSI共有15位，其结构如下：MCC+MNC+MSIN ，（MNC+MSIN=NMSI）</p>
+<p>    MCC：Mobile Country Code，移动国家码，MCC的资源由国际电联（ITU）统一分配和管理，唯一识别移动用户所属的国家，共3位，中国为460;　　</p>
+<p>    MNC:Mobile Network Code，移动网络码，共2位，中国移动TD系统使用00，中国联通GSM系统使用01，中国移动GSM系统使用02，中国电信CDMA系统使用03，一个典型的IMSI号码为460030912121001</p>
+<p>    MSIN:Mobile Subscriber Identification Number共有10位，其结构如下：09+M0M1M2M3+ABCD　其中的M0M1M2M3和MDN号码中的H0H1H2H3可存在对应关系，ABCD四位为自由分配。可以看出IMSI在MSIN号码前加了MCC即NMSI，可以区别出每个用户的来自的国家，因此可以实现国际漫游。在同一个国家内，如果有多个移动网络运营商，可以通过MNC来进行区别。</p>
+<p>MCC(3位)+MNC(2位)</p>
+<p>20201,    &quot;Cosmote&quot;,          &quot;GR&quot;</p>
+<p>20205,    &quot;Vodafone GR&quot;,      &quot;GR&quot; <br>20210,    &quot;TELESTET&quot;,         &quot;GR&quot; <br>20404,    &quot;Vodafone NL&quot;,      &quot;NL&quot; <br>20408,    &quot;KPN&quot;,              &quot;NL&quot; <br>20412,    &quot;O2 - NL&quot;,          &quot;NL&quot; <br>20416,    &quot;Ben&quot;,              &quot;NL&quot; <br>20420,    &quot;dutchtone&quot;,        &quot;NL&quot; <br>20601,    &quot;Proximus&quot;,         &quot;BE&quot; <br>20610,    &quot;Mobistar&quot;,         &quot;BE&quot; <br>20620,    &quot;Orange&quot;,           &quot;BE&quot; <br>20801,    &quot;Orange&quot;,           &quot;FR&quot; 法国 <br>20810,    &quot;SFR&quot;,              &quot;FR&quot; <br>20820,    &quot;BOUYGTEL&quot;,         &quot;FR&quot; <br>21303,    &quot;Mobiland&quot;,         &quot;AD&quot; <br>21401,    &quot;Vodafone E&quot;,       &quot;ES&quot; <br>21402,    &quot;MoviStar&quot;,         &quot;ES&quot; <br>21403,    &quot;AMENA&quot;,            &quot;ES&quot; <br>21404,    &quot;Xfera&quot;,            &quot;ES&quot; <br>21407,    &quot;MoviStar&quot;,         &quot;ES&quot; <br>21601,    &quot;Pannon GSM&quot;,       &quot;HU&quot; <br>21630,    &quot;Westel&quot;,           &quot;HU&quot; <br>21670,    &quot;Vodafone&quot;,         &quot;HU&quot; <br>21803,    &quot;ERONET&quot;,           &quot;BA&quot; <br>21805,    &quot;Mobilna Srpska&quot;,   &quot;BA&quot; <br>21890,    &quot;GSM BiH&quot;,          &quot;BA&quot; <br>21901,    &quot;CRONET&quot;,           &quot;HR&quot; <br>21910,    &quot;VIP&quot;,              &quot;HR&quot; <br>22001,    &quot;MOBTEL&quot;,           &quot;YU&quot; <br>22002,    &quot;ProMonte&quot;,         &quot;YU&quot; <br>22003,    &quot;Telekom Srbija&quot;,   &quot;YU&quot; <br>22004,    &quot;MONET&quot;,            &quot;YU&quot; <br>22201,    &quot;TIM&quot;,              &quot;IT&quot; <br>22210,    &quot;Vodafone IT&quot;,      &quot;IT&quot; <br>22288,    &quot;WIND&quot;,             &quot;IT&quot; <br>22298,    &quot;Blu SpA&quot;,          &quot;IT&quot; <br>22601,    &quot;CONNEX&quot;,           &quot;RO&quot; <br>22603,    &quot;Cosmorom&quot;,         &quot;RO&quot; <br>22610,    &quot;dialog&quot;,           &quot;RO&quot; <br>22801,    &quot;Swiss GSM&quot;,        &quot;CH&quot; <br>22802,    &quot;sunrise&quot;,          &quot;CH&quot; <br>22803,    &quot;Orange&quot;,           &quot;CH&quot; <br>23001,    &quot;PAEGAS&quot;,           &quot;CZ&quot; <br>23002,    &quot;EUROTEL&quot;,          &quot;CZ&quot; <br>23003,    &quot;OSKAR&quot;,            &quot;CZ&quot; <br>23101,    &quot;GLOBTEL&quot;,          &quot;SK&quot; <br>23102,    &quot;EUROTEL&quot;,          &quot;SK&quot; <br>23201,    &quot;A1&quot;,               &quot;AT&quot; <br>23203,    &quot;T-Mobile&quot;,         &quot;AT&quot; <br>23205,    &quot;ONE&quot;,              &quot;AT&quot; <br>23207,    &quot;tele.ring&quot;,        &quot;AT&quot; <br>23410,    &quot;O2 - UK&quot;,          &quot;GB&quot; <br>23415,    &quot;Vodafone&quot;,         &quot;GB&quot; <br>23430,    &quot;T-Mobile UK&quot;,      &quot;GB&quot; <br>23431,    &quot;T-Mobile UK&quot;,      &quot;GB&quot; <br>23432,    &quot;T-Mobile UK&quot;,      &quot;GB&quot; <br>23433,    &quot;Orange&quot;,           &quot;GB&quot; <br>23450,    &quot;JT GSM&quot;,           &quot;GB&quot; <br>23455,    &quot;GUERNSEY TEL&quot;,     &quot;GB&quot; <br>23458,    &quot;MANX&quot;,             &quot;GB&quot; <br>23801,    &quot;TDK-MOBIL&quot;,        &quot;DK&quot; <br>23802,    &quot;SONOFON&quot;,          &quot;DK&quot; <br>23820,    &quot;Telia&quot;,            &quot;DK&quot; <br>23830,    &quot;Orange&quot;,           &quot;DK&quot; <br>24001,    &quot;Telia S&quot;,          &quot;SE&quot; <br>24007,    &quot;IQ&quot;,               &quot;SE&quot; <br>24008,    &quot;Vodafone&quot;,         &quot;SE&quot; <br>24201,    &quot;TELENOR&quot;,          &quot;NO&quot; <br>24202,    &quot;NetCom&quot;,           &quot;NO&quot; <br>24403,    &quot;Telia&quot;,            &quot;FI&quot; <br>24405,    &quot;RADIOLINJA&quot;,       &quot;FI&quot; <br>24409,    &quot;FINNET&quot;,           &quot;FI&quot; <br>24412,    &quot;2G&quot;,               &quot;FI&quot; <br>24414,    &quot;AMT&quot;,              &quot;FI&quot; <br>24491,    &quot;SONERA&quot;,           &quot;FI&quot; <br>24601,    &quot;OMNITEL&quot;,          &quot;LT&quot; <br>24602,    &quot;Bite GSM&quot;,         &quot;LT&quot; <br>24603,    &quot;TELE2&quot;,            &quot;LT&quot; <br>24701,    &quot;LMT GSM&quot;,          &quot;LV&quot; <br>24702,    &quot;BALTCOM&quot;,          &quot;LV&quot; <br>24801,    &quot;EMT GSM&quot;,          &quot;EE&quot; <br>24802,    &quot;RLE&quot;,              &quot;EE&quot; <br>24803,    &quot;Q GSM&quot;,            &quot;EE&quot; <br>25001,    &quot;MTS&quot;,              &quot;RU&quot; <br>25002,    &quot;NorthWest GSM&quot;,    &quot;RU&quot; <br>25003,    &quot;NCC&quot;,              &quot;RU&quot; <br>25005,    &quot;SCS&quot;,              &quot;RU&quot; <br>25007,    &quot;SMARTS&quot;,           &quot;RU&quot; <br>25010,    &quot;DTC&quot;,              &quot;RU&quot; <br>25011,    &quot;Orensot&quot;,          &quot;RU&quot; <br>25012,    &quot;Far East&quot;,         &quot;RU&quot; <br>25013,    &quot;Kuban GSM&quot;,        &quot;RU&quot; <br>25016,    &quot;NTC&quot;,              &quot;RU&quot; <br>25017,    &quot;Ermak RMS&quot;,        &quot;RU&quot; <br>25028,    &quot;EXTEL&quot;,            &quot;RU&quot; <br>25039,    &quot;Uraltel&quot;,          &quot;RU&quot; <br>25044,    &quot;NC-GSM&quot;,           &quot;RU&quot; <br>25091,    &quot;Sonic Duo&quot;,        &quot;RU&quot; <br>25092,    &quot;Primtel&quot;,          &quot;RU&quot; <br>25093,    &quot;JSC Telecom XXI&quot;,  &quot;RU&quot; <br>25099,    &quot;Bee Line&quot;,         &quot;RU&quot; <br>25501,    &quot;UMC&quot;,              &quot;UA&quot; <br>25502,    &quot;WellCOM&quot;,          &quot;UA&quot; <br>25503,    &quot;Kyivstar&quot;,         &quot;UA&quot; <br>25505,    &quot;Golden Telecom&quot;,   &quot;UA&quot; <br>25701,    &quot;VELCOM&quot;,           &quot;BY&quot; <br>25901,    &quot;VOXTEL&quot;,           &quot;MD&quot; <br>25902,    &quot;MOLDCELL&quot;,         &quot;MD&quot; <br>26001,    &quot;Plus GSM&quot;,         &quot;PL&quot; <br>26002,    &quot;Era GSM&quot;,          &quot;PL&quot; <br>26003,    &quot;IDEA&quot;,             &quot;PL&quot; <br>26201,    &quot;T-Mobile&quot;,         &quot;DE&quot; <br>26202,    &quot;Vodafone D2&quot;,      &quot;DE&quot; <br>26203,    &quot;E-Plus&quot;,           &quot;DE&quot; <br>26207,    &quot;O2 - DE&quot;,          &quot;DE&quot; <br>26213,    &quot;Mobilcom&quot;,         &quot;DE&quot; <br>26601,    &quot;GIBTEL&quot;,           &quot;GI&quot; <br>26801,    &quot;Vodafone&quot;,         &quot;PT&quot; <br>26803,    &quot;OPTIMUS&quot;,          &quot;PT&quot; <br>26806,    &quot;TMN&quot;,              &quot;PT&quot; <br>27001,    &quot;LUXGSM&quot;,           &quot;LU&quot; <br>27077,    &quot;TANGO&quot;,            &quot;LU&quot; <br>27201,    &quot;Vodafone IRL&quot;,     &quot;IE&quot; <br>27202,    &quot;O2 - IRL&quot;,         &quot;IE&quot; <br>27203,    &quot;METEOR&quot;,           &quot;IE&quot; <br>27401,    &quot;SIMINN&quot;,           &quot;IS&quot; <br>27402,    &quot;TAL&quot;,              &quot;IS&quot; <br>27404,    &quot;Viking&quot;,           &quot;IS&quot; <br>27601,    &quot;AMC&quot;,              &quot;AL&quot; <br>27602,    &quot;Vodafone&quot;,         &quot;AL&quot; <br>27801,    &quot;Vodafone Malta&quot;,   &quot;MT&quot; <br>27821,    &quot;go mobile&quot;,        &quot;MT&quot; <br>28001,    &quot;CYTAGSM&quot;,          &quot;CY&quot; <br>28201,    &quot;GEOCELL&quot;,          &quot;GE&quot; <br>28202,    &quot;Magti GSM&quot;,        &quot;GE&quot; <br>28203,    &quot;GEO 03&quot;,           &quot;GE&quot; <br>28301,    &quot;ARMGSM&quot;,           &quot;AM&quot; <br>28401,    &quot;M-TEL GSM&quot;,        &quot;BG&quot; <br>28601,    &quot;TURKCELL&quot;,         &quot;TR&quot; <br>28602,    &quot;TELSIM&quot;,           &quot;TR&quot; <br>28603,    &quot;ARIA&quot;,             &quot;TR&quot; <br>28604,    &quot;AYCELL&quot;,           &quot;TR&quot; <br>28801,    &quot;FT GSM&quot;,           &quot;FO&quot; <br>29001,    &quot;TELE Greenland&quot;,   &quot;GR&quot; <br>29340,    &quot;SI.MOBIL&quot;,         &quot;SI&quot; <br>29341,    &quot;MOBITEL&quot;,          &quot;SI&quot; <br>29401,    &quot;MOBIMAK&quot;,          &quot;MK&quot; <br>29501,    &quot;TELECOM&quot;,          &quot;LI&quot; <br>29502,    &quot;MONTEL&quot;,           &quot;LI&quot; <br>29505,    &quot;FL1&quot;,              &quot;LI&quot; <br>29577,    &quot;LI TANGO&quot;,         &quot;LI&quot; <br>30237,    &quot;Microcell&quot;,        &quot;CA&quot; <br>30272,    &quot;Rogers AT&amp;T&quot;,      &quot;CA&quot; <br>31001,    &quot;Cellnet&quot;,          &quot;US&quot;  美国 <br>31011,    &quot;Wireless 2000&quot;,    &quot;US&quot; <br>31015,    &quot;Cingular&quot;,         &quot;US&quot; <br>31016,    &quot;T-Mobile&quot;,         &quot;US&quot; <br>31017,    &quot;Cingular&quot;,         &quot;US&quot; <br>31018,    &quot;Cingular&quot;,         &quot;US&quot; <br>31020,    &quot;T-Mobile&quot;,         &quot;US&quot; <br>31021,    &quot;T-Mobile&quot;,         &quot;US&quot; <br>31022,    &quot;T-Mobile&quot;,         &quot;US&quot; <br>31023,    &quot;T-Mobile&quot;,         &quot;US&quot; <br>31024,    &quot;T-Mobile&quot;,         &quot;US&quot; <br>31025,    &quot;T-Mobile&quot;,         &quot;US&quot; <br>31026,    &quot;T-Mobile&quot;,         &quot;US&quot; <br>31027,    &quot;T-Mobile&quot;,         &quot;US&quot; <br>31031,    &quot;T-Mobile&quot;,         &quot;US&quot; <br>31034,    &quot;WestLink&quot;,         &quot;US&quot; <br>31035,    &quot;Carolina&quot;,         &quot;US&quot; <br>31038,    &quot;AT&amp;T Wireless&quot;,    &quot;US&quot; <br>31041,    &quot;Cingular&quot;,         &quot;US&quot; <br>31046,    &quot;TMP Corp&quot;,         &quot;US&quot; <br>31058,    &quot;T-Mobile&quot;,         &quot;US&quot; <br>31061,    &quot;Epic Touch&quot;,       &quot;US&quot; <br>31063,    &quot;AmeriLink&quot;,        &quot;US&quot; <br>31064,    &quot;Einstein PCS&quot;,     &quot;US&quot; <br>31066,    &quot;T-Mobile&quot;,         &quot;US&quot; <br>31067,    &quot;Wireless 2000&quot;,    &quot;US&quot; <br>31068,    &quot;NPI Wireless&quot;,     &quot;US&quot; <br>31069,    &quot;Conestoga&quot;,        &quot;US&quot; <br>31074,    &quot;Telemetrix&quot;,       &quot;US&quot; <br>31076,    &quot;PTSI&quot;,             &quot;US&quot; <br>31077,    &quot;Iowa Wireless&quot;,    &quot;US&quot; <br>31078,    &quot;Airlink PCS&quot;,      &quot;US&quot; <br>31079,    &quot;PinPoint&quot;,         &quot;US&quot; <br>31080,    &quot;T-Mobile&quot;,         &quot;US&quot; <br>31098,    &quot;AWS&quot;,              &quot;US&quot; <br>31114,    &quot;Sprocket&quot;,         UNKNOWN_COUNTRY_CODE <br>31601,    &quot;Nextel&quot;,           UNKNOWN_COUNTRY_CODE <br>33805,    &quot;Digicel&quot;,          &quot;JM&quot; <br>34001,    &quot;Orange &quot;,          &quot;FW&quot; <br>34020,    &quot;Bouygues&quot;,         &quot;FW&quot; <br>34430,    &quot;APUA PCS&quot;,         &quot;AG&quot; <br>35001,    &quot;Telecom&quot;,          &quot;BM&quot; <br>36251,    &quot;Telcell GSM&quot;,      &quot;AN&quot; <br>36801,    &quot;C_Com&quot;,            &quot;CU&quot; <br>37001,    &quot;Orange&quot;,           &quot;DO&quot; <br>40001,    &quot;AZERCELL GSM&quot;,     &quot;AZ&quot; <br>40002,    &quot;BAKCELL GSM 2000&quot;, &quot;AZ&quot; <br>40101,    &quot;K-MOBILE&quot;,         &quot;KZ&quot; <br>40102,    &quot;K’CELL&quot;,           &quot;KZ&quot; <br>40401,    &quot;Hutch&quot;,            &quot;IN&quot; <br>40402,    &quot;Airtel&quot;,           &quot;IN&quot; <br>40403,    &quot;Airtel&quot;,           &quot;IN&quot; <br>40404,    &quot;IDEA&quot;,             &quot;IN&quot; <br>40405,    &quot;Hutch&quot;,            &quot;IN&quot; <br>40407,    &quot;IDEA&quot;,             &quot;IN&quot; <br>40409,    &quot;Reliance&quot;,         &quot;IN&quot; <br>40410,    &quot;Airtel&quot;,           &quot;IN&quot; <br>40411,    &quot;Hutch&quot;,            &quot;IN&quot; <br>40412,    &quot;IDEA&quot;,             &quot;IN&quot; <br>40413,    &quot;Hutch&quot;,            &quot;IN&quot; <br>40414,    &quot;Spice&quot;,            &quot;IN&quot; <br>40415,    &quot;Hutch&quot;,            &quot;IN&quot; <br>40416,    &quot;Airtel&quot;,           &quot;IN&quot; <br>40418,    &quot;Reliance&quot;,         &quot;IN&quot; <br>40419,    &quot;IDEA&quot;,             &quot;IN&quot; <br>40420,    &quot;Hutch&quot;,            &quot;IN&quot; <br>40421,    &quot;BPL Mobile&quot;,       &quot;IN&quot; <br>40422,    &quot;IDEA&quot;,             &quot;IN&quot; <br>40424,    &quot;IDEA&quot;,             &quot;IN&quot; <br>40427,    &quot;Hutch&quot;,            &quot;IN&quot; <br>40429,    &quot;Aircel&quot;,           &quot;IN&quot; <br>40430,    &quot;Hutch&quot;,            &quot;IN&quot; <br>40431,    &quot;Airtel&quot;,           &quot;IN&quot; <br>40434,    &quot;Cellone&quot;,          &quot;IN&quot; <br>40436,    &quot;Reliance&quot;,         &quot;IN&quot; <br>40437,    &quot;Aircel&quot;,           &quot;IN&quot; <br>40438,    &quot;Cellone&quot;,          &quot;IN&quot; <br>40440,    &quot;Airtel&quot;,           &quot;IN&quot; <br>40441,    &quot;RPG&quot;,              &quot;IN&quot; <br>40443,    &quot;Hutch&quot;,            &quot;IN&quot; <br>40444,    &quot;Spice&quot;,            &quot;IN&quot; <br>40445,    &quot;Airtel&quot;,           &quot;IN&quot; <br>40446,    &quot;Hutch&quot;,            &quot;IN&quot; <br>40449,    &quot;Airtel&quot;,           &quot;IN&quot; <br>40450,    &quot;Reliance&quot;,         &quot;IN&quot; <br>40451,    &quot;Cellone&quot;,          &quot;IN&quot; <br>40452,    &quot;Reliance&quot;,         &quot;IN&quot; <br>40453,    &quot;Cellone&quot;,          &quot;IN&quot; <br>40454,    &quot;Cellone&quot;,          &quot;IN&quot; <br>40455,    &quot;Cellone&quot;,          &quot;IN&quot; <br>40456,    &quot;IDEA&quot;,             &quot;IN&quot; <br>40457,    &quot;Cellone&quot;,          &quot;IN&quot; <br>40458,    &quot;Cellone&quot;,          &quot;IN&quot; <br>40459,    &quot;Cellone&quot;,          &quot;IN&quot; <br>40460,    &quot;Hutch&quot;,            &quot;IN&quot; <br>40462,    &quot;Cellone&quot;,          &quot;IN&quot; <br>40464,    &quot;Cellone&quot;,          &quot;IN&quot; <br>40466,    &quot;Cellone&quot;,          &quot;IN&quot; <br>40467,    &quot;Reliance&quot;,         &quot;IN&quot; <br>40468,    &quot;DOLPHIN&quot;,          &quot;IN&quot; <br>40469,    &quot;MTNL&quot;,             &quot;IN&quot; <br>40470,    &quot;Airtel&quot;,           &quot;IN&quot; <br>40471,    &quot;Cellone&quot;,          &quot;IN&quot; <br>40472,    &quot;Cellone&quot;,          &quot;IN&quot; <br>40473,    &quot;Cellone&quot;,          &quot;IN&quot; <br>40474,    &quot;Cellone&quot;,          &quot;IN&quot; <br>40475,    &quot;Cellone&quot;,          &quot;IN&quot; <br>40476,    &quot;Cellone&quot;,          &quot;IN&quot; <br>40477,    &quot;Cellone&quot;,          &quot;IN&quot; <br>40478,    &quot;IDEA&quot;,             &quot;IN&quot; <br>40479,    &quot;Cellone&quot;,          &quot;IN&quot; <br>40480,    &quot;Cellone&quot;,          &quot;IN&quot; <br>40481,    &quot;Cellone&quot;,          &quot;IN&quot; <br>40482,    &quot;IDEA&quot;,             &quot;IN&quot; <br>40483,    &quot;Reliance&quot;,         &quot;IN&quot; <br>40484,    &quot;Hutch&quot;,            &quot;IN&quot; <br>40485,    &quot;Reliance&quot;,         &quot;IN&quot; <br>40486,    &quot;Hutch&quot;,            &quot;IN&quot; <br>40487,    &quot;IDEA&quot;,             &quot;IN&quot; <br>40488,    &quot;Hutch&quot;,            &quot;IN&quot; <br>40489,    &quot;IDEA&quot;,             &quot;IN&quot; <br>40490,    &quot;Airtel&quot;,           &quot;IN&quot; <br>40492,    &quot;Airtel&quot;,           &quot;IN&quot; <br>40493,    &quot;Airtel&quot;,           &quot;IN&quot; <br>40494,    &quot;Airtel&quot;,           &quot;IN&quot; <br>40495,    &quot;Airtel&quot;,           &quot;IN&quot; <br>40496,    &quot;Airtel&quot;,           &quot;IN&quot; <br>40497,    &quot;Airtel&quot;,           &quot;IN&quot; <br>40498,    &quot;Airtel&quot;,           &quot;IN&quot; <br>40551,    &quot;Airtel&quot;,           &quot;IN&quot; <br>40552,    &quot;Airtel&quot;,           &quot;IN&quot; <br>40553,    &quot;Airtel&quot;,           &quot;IN&quot; <br>40554,    &quot;Airtel&quot;,           &quot;IN&quot; <br>40555,    &quot;Airtel&quot;,           &quot;IN&quot; <br>40556,    &quot;Airtel&quot;,           &quot;IN&quot; <br>40566,    &quot;Hutch&quot;,            &quot;IN&quot; <br>40567,    &quot;Hutch&quot;,            &quot;IN&quot; <br>41001,    &quot;Mobilink&quot;,         &quot;PK&quot; <br>41302,    &quot;DIALOG&quot;,           &quot;LK&quot; <br>41303,    &quot;CELLTEL&quot;,          &quot;LK&quot; <br>41401,    &quot;MM 900&quot;,           &quot;MM&quot; <br>41501,    &quot;Cellis&quot;,           &quot;LB&quot; <br>41503,    &quot;LibanCell&quot;,        &quot;LB&quot; <br>41601,    &quot;Fastlink&quot;,         &quot;JO&quot; <br>41677,    &quot;MobileCom&quot;,        &quot;JO&quot; <br>41702,    &quot;Spacetel&quot;,         &quot;SY&quot; <br>41709,    &quot;MOBILE SYRIA&quot;,     &quot;SY&quot; <br>41902,    &quot;MTCNet&quot;,           &quot;KW&quot; <br>41903,    &quot;WATANIYA&quot;,         &quot;KW&quot; <br>42001,    &quot;Al-Jawal&quot;,         &quot;SA&quot; <br>42007,    &quot;EAE&quot;,              &quot;SA&quot; <br>42102,    &quot;Spacetel&quot;,         &quot;YE&quot; <br>42202,    &quot;OMAN MOBILE&quot;,      &quot;OM&quot; <br>42402,    &quot;ETISALAT&quot;,         &quot;AE&quot; <br>42501,    &quot;Orange&quot;,           &quot;IL&quot; <br>42505,    &quot;JAWWAL&quot;,           &quot;IL&quot; <br>42601,    &quot;MOBILE PLUS&quot;,      &quot;BH&quot; <br>42701,    &quot;QATARNET&quot;,         &quot;QA&quot; <br>42899,    &quot;MobiCom&quot;,          &quot;MN&quot; <br>42901,    &quot;NTC&quot;,              &quot;NP&quot; <br>43211,    &quot;TCI&quot;,              &quot;IR&quot; <br>43214,    &quot;KISH&quot;,             &quot;IR&quot; <br>43401,    &quot;Buztel&quot;,           &quot;UZ&quot; <br>43402,    &quot;Uzmacom&quot;,          &quot;UZ&quot; <br>43404,    &quot;UZB DAEWOO-GSM&quot;,   &quot;UZ&quot; <br>43405,    &quot;Coscom&quot;,           &quot;UZ&quot; <br>43701,    &quot;BITEL&quot;,            &quot;KG&quot; <br>43801,    &quot;BCTI&quot;,             &quot;TM&quot; <br>45201,    &quot;MOBIFONE&quot;,         &quot;VN&quot; <br>45202,    &quot;VINAFONE&quot;,         &quot;VN&quot; <br>45400,    &quot;CSL&quot;,              &quot;HK&quot;  香港电讯 <br>45401,    &quot;NEW WORLD&quot;,        &quot;HK&quot; <br>45402,    &quot;CSL&quot;,              &quot;HK&quot;  香港电讯 <br>45404,    &quot;Orange&quot;,           &quot;HK&quot; <br>45406,    &quot;SMC&quot;,              &quot;HK&quot;  数码通 <br>45410,    &quot;NEW WORLD&quot;,        &quot;HK&quot;  新世界传动网 <br>45412,    &quot;PEOPLES&quot;,          &quot;HK&quot;  万众电话 <br>45416,    &quot;SUNDAY&quot;,           &quot;HK&quot; <br>45418,    &quot;HK TELECOM&quot;,       &quot;HK&quot;  香港电讯 <br>45500,    &quot;SmarTone&quot;,         UNKNOWN_COUNTRY_CODE //macau <br>45501,    &quot;CTMGSM&quot;,           UNKNOWN_COUNTRY_CODE <br>45503,    &quot;HT Macau&quot;,         UNKNOWN_COUNTRY_CODE <br>45601,    &quot;MobiTel&quot;,          &quot;KH&quot; <br>45602,    &quot;SAMART-GSM&quot;,       &quot;KH&quot; <br>45701,    &quot;LAO GSM&quot;,          &quot;LA&quot; <br>46000,    &quot;CHINA MOBILE&quot;,     &quot;CN&quot;  中国移动TD <br>46001,    &quot;CHN-CUGSM&quot;,        &quot;CN&quot;  中国联通 <br>46002,    &quot;CHINA MOBILE&quot;,     &quot;CN&quot;  中国移动GSM </p>
+<p>46003,    &quot;CHINA TELECOM&quot;,    &quot;CN&quot;  中国电信CDMA<br>46601,    &quot;Far EasTone&quot;,      &quot;TW&quot;  远传电讯 <br>46606,    &quot;TUNTEX&quot;,           &quot;TW&quot; <br>46668,    &quot;ACeS&quot;,             &quot;TW&quot; <br>46688,    &quot;KGT&quot;,              &quot;TW&quot;  和信电讯 <br>46692,    &quot;Chunghwa&quot;,         &quot;TW&quot;  中华电讯 <br>46693,    &quot;MobiTai&quot;,          &quot;TW&quot;  东信电讯 <br>46697,    &quot;TWN GSM&quot;,          &quot;TW&quot;  台湾大哥大 <br>46699,    &quot;TransAsia&quot;,        &quot;TW&quot;  泛亚电讯 <br>47001,    &quot;GrameemPhone&quot;,     &quot;BD&quot; <br>47002,    &quot;AKTEL&quot;,            &quot;BD&quot; <br>47003,    &quot;ShebaWorld&quot;,       &quot;BD&quot; <br>47019,    &quot;Mobile 2000&quot;,      &quot;BD&quot; <br>47201,    &quot;DHIMOBILE&quot;,        &quot;MV&quot; <br>50212,    &quot;Maxis Mobile&quot;,     &quot;MY&quot; <br>50213,    &quot;TM Touch&quot;,         &quot;MY&quot; <br>50216,    &quot;DiGi&quot;,             &quot;MY&quot; <br>50217,    &quot;ADAM&quot;,             &quot;MY&quot; <br>50219,    &quot;CELCOM&quot;,           &quot;MY&quot; <br>50501,    &quot;MobileNet&quot;,        &quot;AU&quot; <br>50502,    &quot;OPTUS&quot;,            &quot;AU&quot; <br>50503,    &quot;Vodafone&quot;,         &quot;AU&quot; <br>50508,    &quot;One.Tel&quot;,          &quot;AU&quot; <br>51000,    &quot;ACeS&quot;,             &quot;ID&quot; <br>51001,    &quot;SATELINDOCEL&quot;,     &quot;ID&quot; <br>51008,    &quot;LIPPO TEL&quot;,        &quot;ID&quot; <br>51010,    &quot;TELKOMSEL&quot;,        &quot;ID&quot; <br>51011,    &quot;GSM-XL&quot;,           &quot;ID&quot; <br>51021,    &quot;INDOSAT&quot;,          &quot;ID&quot; <br>51501,    &quot;ISLACOM&quot;,          &quot;PH&quot; <br>51502,    &quot;Globe&quot;,            &quot;PH&quot; <br>51503,    &quot;SMART&quot;,            &quot;PH&quot; <br>51505,    &quot;Digitel&quot;,          &quot;PH&quot; <br>51511,    &quot;ACeS&quot;,             &quot;PH&quot; <br>52001,    &quot;AIS GSM&quot;,          &quot;TH&quot; <br>52015,    &quot;ACT Mobile&quot;,       &quot;TH&quot; <br>52018,    &quot;WP-1800&quot;,          &quot;TH&quot; <br>52020,    &quot;ACeS&quot;,             &quot;TH&quot; <br>52023,    &quot;HELLO&quot;,            &quot;TH&quot; <br>52099,    &quot;Orange&quot;,           &quot;TH&quot; <br>52501,    &quot;ST-GSM-SGP&quot;,       &quot;SG&quot; <br>52502,    &quot;ST-GSM1800-SGP&quot;,   &quot;SG&quot; <br>52503,    &quot;M1-GSM-SGP&quot;,       &quot;SG&quot; <br>52504,    &quot;SGP-M1-3GSM&quot;,      &quot;SG&quot; <br>52505,    &quot;STARHUB-SGP&quot;,      &quot;SG&quot; <br>52811,    &quot;BRU TSTCom&quot;,       &quot;BN&quot; <br>53001,    &quot;Vodafone&quot;,         &quot;NZ&quot; <br>53901,    &quot;Tonga Comm.&quot;,      &quot;TO&quot; <br>54100,    &quot;ACeS&quot;,             &quot;VU&quot; <br>54101,    &quot;SMILE&quot;,            &quot;VU&quot; <br>54201,    &quot;Vodafone&quot;,         &quot;FJ&quot; <br>54411,    &quot;Blue Sky&quot;,         &quot;AS&quot; <br>54601,    &quot;MOBILIS&quot;,          &quot;NC&quot; <br>54720,    &quot;VINI&quot;,             &quot;PF&quot; <br>55001,    &quot;FSM&quot;,              &quot;FM&quot; <br>60201,    &quot;MobiNiL&quot;,          &quot;EG&quot; <br>60202,    &quot;CLICK GSM&quot;,        &quot;EG&quot; <br>60301,    &quot;AMN&quot;,              &quot;DZ&quot; <br>60400,    &quot;Meditel&quot;,          &quot;MA&quot; <br>60401,    &quot;IAM&quot;,              &quot;MA&quot; <br>60502,    &quot;TUNICELL&quot;,         &quot;TN&quot; <br>60801,    &quot;ALIZE&quot;,            &quot;SN&quot; <br>60802,    &quot;SENTEL&quot;,           &quot;SN&quot; <br>61001,    &quot;MALITEL&quot;,          &quot;ML&quot; <br>61101,    &quot;MOBILIS&quot;,          &quot;GN&quot; <br>61102,    &quot;LAGUI&quot;,            &quot;GN&quot; <br>61201,    &quot;CORA&quot;,             &quot;CI&quot; <br>61203,    &quot;Ivoiris&quot;,          &quot;CI&quot; <br>61205,    &quot;TELECEL&quot;,          &quot;CI&quot; <br>61302,    &quot;CELTEL&quot;,           &quot;BF&quot; <br>61402,    &quot;CELTEL&quot;,           &quot;NE&quot; <br>61501,    &quot;TOGOCEL&quot;,          &quot;TG&quot; <br>61601,    &quot;LIBERCOM&quot;,         &quot;BJ&quot; <br>61602,    &quot;Telecel Benin&quot;,    &quot;BJ&quot; <br>61603,    &quot;BENINCELL&quot;,        &quot;BJ&quot; <br>61701,    &quot;CELLPLUS&quot;,         &quot;MU&quot; <br>61710,    &quot;EMTEL&quot;,            &quot;MU&quot; <br>61801,    &quot;Omega&quot;,            &quot;LR&quot; <br>62001,    &quot;SPACEFON&quot;,         &quot;GH&quot; <br>62002,    &quot;ONEtouch&quot;,         &quot;GH&quot; <br>62003,    &quot;MOBITEL&quot;,          &quot;GH&quot; <br>62100,    &quot;MTN&quot;,              &quot;NG&quot; <br>62120,    &quot;ECONET&quot;,           &quot;NG&quot; <br>62130,    &quot;MTN&quot;,              &quot;NG&quot; <br>62140,    &quot;NITEL GSM&quot;,        &quot;NG&quot; <br>62201,    &quot;CELTEL&quot;,           &quot;TD&quot; <br>62202,    &quot;LIBERTIS&quot;,         &quot;TD&quot; <br>62401,    &quot;MTN-CAM&quot;,          &quot;CM&quot; <br>62402,    &quot;MOBILIS&quot;,          &quot;CM&quot; <br>62501,    &quot;CPV MOVEL&quot;,        &quot;CV&quot; <br>62801,    &quot;LIBERTIS&quot;,         &quot;GA&quot; <br>62802,    &quot;GO Celtel&quot;,        &quot;GA&quot; <br>62803,    &quot;CELTEL&quot;,           &quot;GA&quot; <br>62901,    &quot;CELTEL&quot;,           &quot;CG&quot; <br>62910,    &quot;LIBERTIS&quot;,         &quot;CG&quot; <br>63001,    &quot;CELLNET&quot;,          &quot;CD&quot; <br>63002,    &quot;CELTEL&quot;,           &quot;CD&quot; <br>63004,    &quot;CELLCO&quot;,           &quot;CD&quot; <br>63089,    &quot;OASIS&quot;,            &quot;CD&quot; <br>63301,    &quot;SEYCEL&quot;,           &quot;SC&quot; <br>63310,    &quot;AIRTEL&quot;,           &quot;SC&quot; <br>63401,    &quot;MobiTel&quot;,          &quot;MZ&quot; <br>63510,    &quot;Rwandacell&quot;,       &quot;RW&quot; <br>63601,    &quot;ETMTN&quot;,            &quot;ET&quot; <br>63701,    &quot;BARAKAAT&quot;,         &quot;SO&quot; <br>63902,    &quot;Safaricom&quot;,        &quot;KE&quot; <br>63903,    &quot;KENCELL&quot;,          &quot;KE&quot; <br>64001,    &quot;TRITEL&quot;,           &quot;TZ&quot; <br>64002,    &quot;MobiTel&quot;,          &quot;TZ&quot; <br>64003,    &quot;ZANTEL&quot;,           &quot;TZ&quot; <br>64004,    &quot;Vodacom&quot;,          &quot;TZ&quot; <br>64005,    &quot;CELTEL&quot;,           &quot;TZ&quot; <br>64101,    &quot;CelTel&quot;,           &quot;UG&quot; <br>64110,    &quot;MTN-UGANDA&quot;,       &quot;UG&quot; <br>64111,    &quot;UTL TELECEL&quot;,      &quot;UG&quot; <br>64201,    &quot;Spacetel&quot;,         &quot;BI&quot; <br>64202,    &quot;SAFARIS&quot;,          &quot;BI&quot; <br>64301,    &quot;mCel&quot;,             UNKNOWN_COUNTRY_CODE <br>64501,    &quot;ZAMCELL&quot;,          UNKNOWN_COUNTRY_CODE <br>64502,    &quot;TELECEL&quot;,          UNKNOWN_COUNTRY_CODE <br>64601,    &quot;Madacom&quot;,          &quot;MG&quot; <br>64602,    &quot;ANTARIS&quot;,          &quot;MG&quot; <br>64700,    &quot;Orange Reunion&quot;,   &quot;RE&quot; <br>64710,    &quot;SFR Reunion&quot;,      &quot;RE&quot; <br>64801,    &quot;NET*ONE&quot;,          &quot;ZW&quot; <br>64803,    &quot;TELECEL&quot;,          &quot;ZW&quot; <br>64804,    &quot;ECONET&quot;,           &quot;ZW&quot; <br>64901,    &quot;MTC&quot;,              &quot;NA&quot; <br>65001,    &quot;CALLPOINT 90&quot;,     &quot;MW&quot; <br>65010,    &quot;CelTel&quot;,           &quot;MW&quot; <br>65101,    &quot;Vodacom&quot;,          &quot;LS&quot; <br>65201,    &quot;MASCOM&quot;,           &quot;BW&quot; <br>65202,    &quot;VISTA&quot;,            &quot;BW&quot; <br>65310,    &quot;SwaziMTN&quot;,         &quot;SZ&quot; <br>65501,    &quot;Vodacom&quot;,          &quot;ZA&quot; <br>65507,    &quot;Cell C (Pty) Ltd&quot;, &quot;ZA&quot; <br>65510,    &quot;MTN&quot;,              &quot;ZA&quot; <br>70601,    &quot;PERSONAL&quot;,         &quot;SV&quot; <br>70602,    &quot;DIGICEL&quot;,          &quot;SV&quot; <br>71610,    &quot;TIM&quot;,              &quot;PE&quot; <br>72207,    &quot;UNIFON&quot;,           &quot;AR&quot; <br>72234,    &quot;Telecom Personal&quot;, &quot;AR&quot; <br>72235,    &quot;PORT-HABLE&quot;,       &quot;AR&quot; <br>72402,    &quot;TIM BRASIL&quot;,       &quot;BR&quot; <br>72403,    &quot;TIM BRASIL&quot;,       &quot;BR&quot; <br>72404,    &quot;TIM BRASIL&quot;,       &quot;BR&quot; <br>72405,    &quot;Claro&quot;,            &quot;BR&quot; <br>72416,    &quot;BrTCel&quot;,           &quot;BR&quot; <br>73001,    &quot;ENTEL PCS&quot;,        &quot;CL&quot; <br>73010,    &quot;ENTEL PCS&quot;,        &quot;CL&quot; <br>73401,    &quot;INFONET&quot;,          &quot;VE&quot; <br>73402,    &quot;DIGITEL&quot;,          &quot;VE&quot; <br>73601,    &quot;NUEVATEL&quot;,         &quot;BO&quot; <br>73602,    &quot;ENTEL&quot;,            &quot;BO&quot; <br>74401,    &quot;VOX&quot;,              &quot;PY&quot; <br>74402,    &quot;PY 02&quot;,            &quot;PY&quot; <br>74601,    &quot;ICMS&quot;,             &quot;SR&quot; <br>90105,    &quot;Thuraya&quot;,          UNKNOWN_COUNTRY_CODE </p>
+<p>MCC<br>202, &quot;Greece&quot;,   &quot;GR&quot;, &quot;希腊&quot; <br>204, &quot;Netherlands, The&quot;, &quot;NL&quot;， &quot;荷兰&quot; <br>206, &quot;Belgium&quot;,  &quot;BE&quot;, &quot;比利时&quot; <br>208, &quot;France&quot;,  &quot;FR&quot;, &quot;法国&quot; <br>213, &quot;Andorra&quot;,  &quot;AD&quot;, &quot;安道尔共和国&quot; <br>214, &quot;Spain&quot;,  &quot;ES&quot;, &quot;西班牙&quot; <br>216, &quot;Hungary&quot;,  &quot;HU&quot;, &quot;匈牙利&quot; <br>218, &quot;Bosnia and Herzegovina&quot;, &quot;BA&quot;, &quot;&quot; <br>219, &quot;Croatia&quot;,  &quot;HR&quot;, &quot;克罗地亚&quot; <br>220, &quot;Serbia and Montenegro&quot;, &quot;CS&quot;, &quot;塞尔维亚和黑山&quot; <br>222, &quot;Italy&quot;,  &quot;IT&quot;, &quot;意大利&quot; <br>226, &quot;Romania&quot;,  &quot;RO&quot;, &quot;罗马尼亚&quot; <br>228, &quot;Switzerland&quot;, &quot;CH&quot;, &quot;瑞士&quot; <br>230, &quot;Czech Republic&quot;, &quot;CZ&quot;, &quot;捷克&quot; <br>231, &quot;Slovakia&quot;, &quot;SK&quot;, &quot;斯洛伐克&quot; <br>232, &quot;Austria&quot;,  &quot;AT&quot;, &quot;奥地利&quot; <br>234, &quot;United Kingdom&quot;, &quot;GB&quot;, &quot;英国&quot; <br>238, &quot;Denmark&quot;,  &quot;DK&quot;, &quot;丹麦&quot; <br>240, &quot;Sweden&quot;,  &quot;SE&quot;, &quot;瑞典&quot; <br>242, &quot;Norway&quot;,  &quot;NO&quot;, &quot;挪威&quot; <br>244, &quot;Finland&quot;,  &quot;FI&quot;, &quot;芬兰&quot; <br>246, &quot;Lithuania&quot;, &quot;LT&quot;, &quot;立陶宛&quot; <br>247, &quot;Latvia&quot;,  &quot;LV&quot;, &quot;拉脱维亚&quot; <br>248, &quot;Estonia&quot;,  &quot;EE&quot;, &quot;爱沙尼亚&quot; <br>250, &quot;Russia&quot;,  &quot;RU&quot;, &quot;俄罗斯&quot; <br>255, &quot;Ukraine&quot;,  &quot;UA&quot;, &quot;乌克兰&quot; <br>257, &quot;Belarus&quot;,  &quot;BY&quot;, &quot;&quot; <br>259, &quot;Moldova&quot;,  &quot;MD&quot;, &quot;&quot; <br>260, &quot;Poland&quot;,  &quot;PL&quot;, &quot;波兰&quot; <br>262, &quot;Germany&quot;,  &quot;DE&quot;, &quot;德国&quot; <br>266, &quot;Gibraltar&quot;, &quot;GI&quot;, &quot;直布罗陀&quot; <br>268, &quot;Portugal&quot;, &quot;PT&quot;, &quot;葡萄牙&quot; <br>270, &quot;Luxembourg&quot;, &quot;LU&quot;, &quot;卢森堡&quot; <br>272, &quot;Ireland&quot;,  &quot;IE&quot;, &quot;爱尔兰&quot; <br>274, &quot;Iceland&quot;,  &quot;IS&quot;, &quot;冰岛&quot; <br>276, &quot;Albania&quot;,  &quot;AL&quot;, &quot;阿尔巴尼亚&quot; <br>278, &quot;Malta&quot;,  &quot;MT&quot;, &quot;马耳他&quot; <br>280, &quot;Cyprus&quot;,  &quot;CY&quot;, &quot;塞浦路斯&quot; <br>282, &quot;Georgia&quot;,  &quot;GE&quot;, &quot;乔治亚州&quot; <br>283, &quot;Armenia&quot;,  &quot;AM&quot;, &quot;亚美尼亚&quot; <br>284, &quot;Bulgaria&quot;, &quot;BG&quot;, &quot;保加利亚&quot; <br>286, &quot;Turkey&quot;,  &quot;TR&quot;, &quot;土耳其&quot; <br>288, &quot;Faroe Islands&quot;, &quot;FO&quot;, &quot;&quot; <br>290, &quot;Greenland&quot;, &quot;GL&quot;, &quot;格陵兰岛&quot; <br>293, &quot;Slovenia&quot;, &quot;SI&quot;, &quot;斯洛文尼亚&quot; <br>294, &quot;Macedonia, Former Yugoslav Republic of&quot;,&quot;MK&quot;, &quot;&quot; <br>295, &quot;Liechtenstein&quot;, &quot;LI&quot;, &quot;&quot; <br>302, &quot;Canada&quot;,  &quot;CA&quot;, &quot;加拿大&quot; <br>310, &quot;United States&quot;, &quot;US&quot;, &quot;美国&quot; <br>334, &quot;Mexico&quot;,  &quot;MX&quot;, &quot;墨西哥&quot; <br>338, &quot;Jamaica&quot;,  &quot;JM&quot;, &quot;牙买加&quot; <br>340, &quot;French West Indies&quot;, &quot;FW&quot;, &quot;&quot; <br>342, &quot;Barbados&quot;, &quot;BB&quot;, &quot;&quot; <br>344, &quot;Antigua and Barbuda&quot;, &quot;AG&quot;, &quot;&quot; <br>346, &quot;Cayman Islands&quot;, &quot;KY&quot;, &quot;&quot; <br>350, &quot;Bermuda&quot;,  &quot;BM&quot;, &quot;百慕大&quot; <br>352, &quot;Grenada&quot;,  &quot;GD&quot;, &quot;&quot; <br>362, &quot;Netherlands Antillies&quot;, &quot;AN&quot;, &quot;&quot; <br>363, &quot;Aruba&quot;,  &quot;AW&quot;, &quot;&quot; <br>368, &quot;Cuba&quot;,  &quot;CU&quot;, &quot;古巴&quot; <br>370, &quot;Dominican Republic&quot;, &quot;DO&quot;, &quot;&quot; <br>374, &quot;Trinidad and Tobago&quot;, &quot;TT&quot;, &quot;&quot; <br>400, &quot;Azerbaijan&quot;, &quot;AZ&quot;, &quot;&quot; <br>401, &quot;Kazakhstan&quot;, &quot;KZ&quot;, &quot;哈萨克&quot; <br>402, &quot;Bhutan&quot;,  &quot;BT&quot;, &quot;不丹&quot; <br>404, &quot;India&quot;,  &quot;IN&quot;, &quot;印度&quot; <br>410, &quot;Pakistan&quot;, &quot;PK&quot;, &quot;巴基斯坦&quot; <br>412, &quot;Afghanistan&quot;, &quot;AF&quot;, &quot;阿富汗&quot; <br>413, &quot;Sri Lanka&quot;, &quot;LK&quot;, &quot;&quot; <br>414, &quot;Myanmar&quot;,  &quot;MM&quot;, &quot;缅甸&quot; <br>415, &quot;Lebanon&quot;,  &quot;LB&quot;, &quot;黎巴嫩&quot; <br>416, &quot;Jordan&quot;,  &quot;JO&quot;, &quot;约旦&quot; <br>417, &quot;Syria&quot;,  &quot;SY&quot;, &quot;叙利亚&quot; <br>418, &quot;Iraq&quot;,  &quot;IQ&quot;, &quot;伊拉克&quot; <br>419, &quot;Kuwait&quot;,  &quot;KW&quot;, &quot;科威特&quot; <br>420, &quot;Saudi Arabia&quot;, &quot;SA&quot;, &quot;&quot; <br>421, &quot;Yemen&quot;,  &quot;YE&quot;, &quot;也门&quot; <br>422, &quot;Oman&quot;,  &quot;OM&quot;, &quot;阿曼&quot; <br>424, &quot;United Arab Emirates&quot;,&quot;AE&quot;, &quot;阿拉伯联合酋长国&quot; <br>425, &quot;Israel&quot;,  &quot;IL&quot;, &quot;以色列&quot; <br>426, &quot;Bahrain&quot;,  &quot;BH&quot;, &quot;巴林岛&quot; <br>427, &quot;Qatar&quot;,  &quot;QA&quot;, &quot;卡塔尔&quot; <br>428, &quot;Mongolia&quot;, &quot;MN&quot;, &quot;蒙古&quot; <br>429, &quot;Nepal&quot;,  &quot;NP&quot;, &quot;尼泊尔&quot; <br>432, &quot;Iran&quot;,  &quot;IR&quot;, &quot;伊朗&quot; <br>434, &quot;Uzbekistan&quot;, &quot;UZ&quot;, &quot;乌兹别克斯坦&quot; <br>437, &quot;Kyrgyzstan&quot;, &quot;KG&quot;, &quot;&quot; <br>438, &quot;Turkmenistan&quot;,&quot;TM&quot;, &quot;土库曼斯坦&quot; <br>452, &quot;Vietnam&quot;,  &quot;VN&quot;, &quot;越南&quot; <br>454, &quot;Hong Kong&quot;, &quot;HK&quot;, &quot;香港&quot; <br>456, &quot;Cambodia&quot;, &quot;KH&quot;, &quot;柬埔寨&quot; <br>457, &quot;Laos&quot;,  &quot;LA&quot;, &quot;老挝&quot; <br>460, &quot;China&quot;,  &quot;CN&quot;, &quot;中国&quot; <br>466, &quot;Taiwan&quot;,  &quot;TW&quot;, &quot;台湾&quot; <br>467, &quot;North Korea&quot;, &quot;KP&quot;, &quot;南韩&quot; <br>470, &quot;Bangladesh&quot;, &quot;BD&quot;, &quot;孟加拉国&quot; <br>472, &quot;Maldives&quot;, &quot;MV&quot;, &quot;马尔代夫&quot; <br>502, &quot;Malaysia&quot;, &quot;MY&quot;, &quot;马来西亚&quot; <br>505, &quot;Australia&quot;, &quot;AU&quot;, &quot;澳大利亚&quot; <br>510, &quot;Indonesia&quot;, &quot;ID&quot;, &quot;印尼&quot; <br>515, &quot;Philippines&quot;, &quot;PH&quot;, &quot;菲律宾&quot; <br>520, &quot;Thailand&quot;, &quot;TH&quot;, &quot;泰国&quot; <br>525, &quot;Singapore&quot;, &quot;SG&quot;, &quot;新加坡&quot; <br>528, &quot;Brunei&quot;,  &quot;BN&quot;, &quot;汶莱&quot; <br>530, &quot;New Zealand&quot;, &quot;NZ&quot;, &quot;&quot; <br>539, &quot;Tonga&quot;,  &quot;TO&quot;, &quot;东加&quot; <br>541, &quot;Vanuatu&quot;,  &quot;VU&quot;, &quot;&quot; <br>542, &quot;Fiji Islands&quot;,&quot;FJ&quot;, &quot;&quot; <br>544, &quot;American Samoa&quot;, &quot;AS&quot;, &quot;萨摩亚&quot;  <br>546, &quot;New Caledonia&quot;,&quot;NC&quot;, &quot;&quot; <br>547, &quot;French Polynesia&quot;,&quot;PF&quot;, &quot;波利尼西亚&quot;  <br>550, &quot;Micronesia&quot;, &quot;FM&quot;, &quot;&quot; <br>602, &quot;Egypt&quot;,  &quot;EG&quot;, &quot;埃及&quot; <br>603, &quot;Algeria&quot;,  &quot;DZ&quot;, &quot;阿尔及利亚&quot; <br>604, &quot;Morocco&quot;,  &quot;MA&quot;, &quot;摩洛哥&quot; <br>605, &quot;Tunisia&quot;,  &quot;TN&quot;, &quot;突尼斯&quot; <br>607, &quot;Gambia, The&quot;, &quot;GM&quot;, &quot;冈比亚&quot; <br>608, &quot;Senegal&quot;,  &quot;SN&quot;, &quot;塞内加尔&quot; <br>609, &quot;Mauritania&quot;, &quot;MR&quot;, &quot;&quot; <br>610, &quot;Mali&quot;,  &quot;ML&quot;, &quot;马里&quot; <br>611, &quot;Guinea&quot;,  &quot;GN&quot;, &quot;几内亚&quot; <br>612, &quot;C?te d’Ivoire&quot;, &quot;CI&quot;, &quot;&quot; <br>613, &quot;Burkina Faso&quot;, &quot;BF&quot;, &quot;&quot; <br>614, &quot;Niger&quot;,  &quot;NE&quot;, &quot;&quot; <br>615, &quot;Togo&quot;,  &quot;TG&quot;, &quot;多哥&quot; <br>616, &quot;Benin&quot;,  &quot;BJ&quot;, &quot;贝南&quot; <br>617, &quot;Mauritius&quot;, &quot;MU&quot;, &quot;毛里求斯&quot; <br>618, &quot;Liberia&quot;,  &quot;LR&quot;, &quot;利比里亚&quot; <br>620, &quot;Ghana&quot;,  &quot;GH&quot;, &quot;加纳&quot; <br>621, &quot;Nigeria&quot;,  &quot;NG&quot;, &quot;尼日利亚&quot; <br>622, &quot;Chad&quot;,  &quot;TD&quot;, &quot;乍得&quot; <br>623, &quot;Central African Republic&quot;,&quot;CF&quot;, &quot;中非&quot; <br>624, &quot;Cameroon&quot;, &quot;CM&quot;, &quot;喀麦隆&quot; <br>625, &quot;Cape Verde&quot;, &quot;CV&quot;, &quot;&quot; <br>626, &quot;S?o Tomé and Príncipe&quot;, &quot;ST&quot;, &quot;&quot; <br>627, &quot;Equatorial Guinea&quot;, &quot;GQ&quot;, &quot;&quot; <br>628, &quot;Gabon&quot;,  &quot;GA&quot;, &quot;加蓬&quot; <br>629, &quot;Congo&quot;,  &quot;CG&quot;, &quot;刚果&quot; <br>630, &quot;Congo (DRC)&quot;, &quot;CD&quot;, &quot;刚果&quot; <br>631, &quot;Angola&quot;,  &quot;AO&quot;, &quot;安哥拉&quot; <br>633, &quot;Seychelles&quot;, &quot;SC&quot;, &quot;&quot; <br>634, &quot;Mozambique&quot;, &quot;MZ&quot;, &quot;莫桑比克&quot; <br>634, &quot;Sudan&quot;,  &quot;SD&quot;, &quot;苏丹&quot; <br>635, &quot;Rwanda&quot;,  &quot;RW&quot;, &quot;卢安达&quot; <br>636, &quot;Ethiopia&quot;, &quot;ET&quot;, &quot;埃塞俄比亚&quot; <br>637, &quot;Somalia&quot;,  &quot;SO&quot;, &quot;索马里&quot; <br>639, &quot;Kenya&quot;,  &quot;KE&quot;, &quot;肯尼亚&quot; <br>640, &quot;Tanzania&quot;, &quot;TZ&quot;, &quot;坦桑尼亚&quot; <br>641, &quot;Uganda&quot;,  &quot;UG&quot;, &quot;乌干达&quot; <br>642, &quot;Burundi&quot;,  &quot;BI&quot;, &quot;布隆迪&quot; <br>646, &quot;Madagascar&quot;, &quot;MG&quot;, &quot;马达加斯加&quot; <br>647, &quot;Reunion&quot;,  &quot;RE&quot;, &quot;&quot; <br>648, &quot;Zimbabwe&quot;, &quot;ZW&quot;, &quot;津巴布韦&quot; <br>649, &quot;Namibia&quot;,  &quot;NA&quot;, &quot;纳米比亚&quot; <br>650, &quot;Malawi&quot;,  &quot;MW&quot;, &quot;马拉维&quot; <br>651, &quot;Lesotho&quot;,  &quot;LS&quot;, &quot;&quot; <br>652, &quot;Botswana&quot;, &quot;BW&quot;, &quot;&quot; <br>653, &quot;Swaziland&quot;, &quot;SZ&quot;, &quot;&quot; <br>654, &quot;Zambia&quot;,  &quot;ZM&quot;, &quot;赞比亚&quot; <br>655, &quot;South Africa&quot;,&quot;ZA&quot;, &quot;南非&quot; <br>702, &quot;Belize&quot;,  &quot;BZ&quot;, &quot;&quot; <br>706, &quot;El Salvador&quot;, &quot;SV&quot;, &quot;&quot; <br>710, &quot;Nicaragua&quot;, &quot;NI&quot;, &quot;尼加拉瓜&quot; <br>712, &quot;Costa Rica&quot;, &quot;CR&quot;, &quot;&quot; <br>716, &quot;Peru&quot;,  &quot;PE&quot;, &quot;秘鲁&quot; <br>722, &quot;Argentina&quot;, &quot;AR&quot;, &quot;阿根廷&quot; <br>724, &quot;Brazil&quot;,  &quot;BR&quot;, &quot;巴西&quot; <br>730, &quot;Chile&quot;,  &quot;CL&quot;, &quot;智利&quot; <br>734, &quot;Venezuela&quot;, &quot;VE&quot;, &quot;委内瑞拉&quot; <br>736, &quot;Bolivia&quot;,  &quot;BO&quot;, &quot;玻利维亚&quot; <br>744, &quot;Paraguay&quot;, &quot;PY&quot;, &quot;巴拉圭&quot; <br>746, &quot;Suriname&quot;, &quot;SR&quot;, &quot;&quot;  </p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/maps%E7%9B%B8%E5%85%B3%E9%9A%90%E8%97%8F/" rel="prev" title="maps相关隐藏">
+      <i class="fa fa-chevron-left"></i> maps相关隐藏
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/MediaActionSound/" rel="next" title="MediaActionSound">
+      MediaActionSound <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Edward"
+      src="/uploads/avatar.gif">
+  <p class="site-author-name" itemprop="name">Edward</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">570</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Edward</span>
+</div>
+
+        
+
+
+
+
+
+
+<script>
+  (function() {
+    function leancloudSelector(url) {
+      url = encodeURI(url);
+      return document.getElementById(url).querySelector('.leancloud-visitors-count');
+    }
+
+    function addCount(Counter) {
+      var visitors = document.querySelector('.leancloud_visitors');
+      var url = decodeURI(visitors.id);
+      var title = visitors.dataset.flagTitle;
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          if (results.length > 0) {
+            var counter = results[0];
+            leancloudSelector(url).innerText = counter.time + 1;
+            Counter('put', '/classes/Counter/' + counter.objectId, { time: { '__op': 'Increment', 'amount': 1 } })
+              .catch(error => {
+                console.error('Failed to save visitor count', error);
+              });
+          } else {
+              Counter('post', '/classes/Counter', { title, url, time: 1 })
+                .then(response => response.json())
+                .then(() => {
+                  leancloudSelector(url).innerText = 1;
+                })
+                .catch(error => {
+                  console.error('Failed to create', error);
+                });
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    function showTime(Counter) {
+      var visitors = document.querySelectorAll('.leancloud_visitors');
+      var entries = [...visitors].map(element => {
+        return decodeURI(element.id);
+      });
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url: { '$in': entries } })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          for (let url of entries) {
+            let target = results.find(item => item.url === url);
+            leancloudSelector(url).innerText = target ? target.time : 0;
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    let { app_id, app_key, server_url } = {"enable":true,"app_id":"wxYx0BX9gaKA3XC4LuO2of0v-gzGzoHsz","app_key":"LQMcs6IDIE4YAm10vMsn9IYq","server_url":"https://wxyx0bx9.lc-cn-n1-shared.com","security":false};
+    function fetchData(api_server) {
+      var Counter = (method, url, data) => {
+        return fetch(`${api_server}/1.1${url}`, {
+          method,
+          headers: {
+            'X-LC-Id'     : app_id,
+            'X-LC-Key'    : app_key,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data)
+        });
+      };
+      if (CONFIG.page.isPost) {
+        if (CONFIG.hostname !== location.hostname) return;
+        addCount(Counter);
+      } else if (document.querySelectorAll('.post-title-link').length >= 1) {
+        showTime(Counter);
+      }
+    }
+
+    let api_server = app_id.slice(-9) !== '-MdYXbMMI' ? server_url : `https://${app_id.slice(0, 8).toLowerCase()}.api.lncldglobal.com`;
+
+    if (api_server) {
+      fetchData(api_server);
+    } else {
+      fetch('https://app-router.leancloud.cn/2/route?appId=' + app_id)
+        .then(response => response.json())
+        .then(({ api_server }) => {
+          fetchData('https://' + api_server);
+        });
+    }
+  })();
+</script>
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

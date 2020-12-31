@@ -1,0 +1,681 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"edward.org.cn","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="一、 h264基础概念 SODB:　数据比特串－－＞最原始的编码数据 RBSP:　原始字节序列载荷－－＞在SODB的后面填加了结尾比特（RBSP trailing bits　一个bit“1”）若干比特“0”,以便字节对齐。 EBSP:　扩展字节序列载荷– &gt;在RBSP基础上填加了仿校验字节（0X03）它的原因是：　在NALU加到Annexb上时，需要填加每组NALU之前的开始码 StartC">
+<meta property="og:type" content="article">
+<meta property="og:title" content="h264基础概念">
+<meta property="og:url" content="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/h264%E5%9F%BA%E7%A1%80%E6%A6%82%E5%BF%B5/index.html">
+<meta property="og:site_name" content="点点滴滴">
+<meta property="og:description" content="一、 h264基础概念 SODB:　数据比特串－－＞最原始的编码数据 RBSP:　原始字节序列载荷－－＞在SODB的后面填加了结尾比特（RBSP trailing bits　一个bit“1”）若干比特“0”,以便字节对齐。 EBSP:　扩展字节序列载荷– &gt;在RBSP基础上填加了仿校验字节（0X03）它的原因是：　在NALU加到Annexb上时，需要填加每组NALU之前的开始码 StartC">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-12-31T06:48:01.163Z">
+<meta property="article:modified_time" content="2020-01-16T04:37:34.094Z">
+<meta property="article:author" content="Edward">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/h264%E5%9F%BA%E7%A1%80%E6%A6%82%E5%BF%B5/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>h264基础概念 | 点点滴滴</title>
+  
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?a92ed22eafce466e7a7b17546bb0dc6f";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">点点滴滴</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/h264%E5%9F%BA%E7%A1%80%E6%A6%82%E5%BF%B5/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/avatar.gif">
+      <meta itemprop="name" content="Edward">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="点点滴滴">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          h264基础概念
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-12-31 14:48:01" itemprop="dateCreated datePublished" datetime="2020-12-31T14:48:01+08:00">2020-12-31</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-01-16 12:37:34" itemprop="dateModified" datetime="2020-01-16T12:37:34+08:00">2020-01-16</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%83%82%E7%AC%94%E5%A4%B4/" itemprop="url" rel="index"><span itemprop="name">烂笔头</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/h264%E5%9F%BA%E7%A1%80%E6%A6%82%E5%BF%B5/" class="post-meta-item leancloud_visitors" data-flag-title="h264基础概念" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>一、 h264基础概念</p>
+<p>SODB:　数据比特串－－＞最原始的编码数据</p>
+<p>RBSP:　原始字节序列载荷－－＞在SODB的后面填加了结尾比特（RBSP trailing bits　一个bit“1”）若干比特“0”,以便字节对齐。</p>
+<p>EBSP:　扩展字节序列载荷– &gt;在RBSP基础上填加了仿校验字节（0X03）它的原因是：　在NALU加到Annexb上时，需要填加每组NALU之前的开始码 StartCodePrefix,如果该NALU对应的slice为一帧的开始则用4位字节表示，ox00000001,否则用3位字节表示 ox000001.<br>为了使NALU主体中不包括与开始码相冲突的，在编码时，每遇到两个字节连续为0，就插入一个字节的0x03。解码时将0x03去掉。 也称为脱壳操作。</p>
+<p>H.264的功能分为两层，视频编码层（VCL）和网络提取层（NAL） <br>VCL数据即被压缩编码后的视频数据序列。把VCL数据要封装到NAL单元中之后，才可以用来传输或存储。NAL单元格式如下图： </p>
+<p>H.264 的编码视频序列包括一系列的NAL 单元，每个NAL 单元包含一个RBSP，见表1。编码片（包括数据分割片IDR 片）和序列RBSP 结束符被定义为VCL NAL 单元，其余为NAL 单元。典型的RBSP 单元序列如图2 所示。每个单元都按独立的NAL 单元传送。单元的信息头（一个字节）定义了RBSP 单元的类型，NAL 单元的其余部分为RBSP 数据。</p>
+<p>NAL单元</p>
+<p>每个NAL单元是一个一定语法元素的可变长字节字符串，包括包含一个字节的头信息（用来表示数据类型），以及若干整数字节的负荷数据。一个NAL单元可以携带一个编码片、A/B/C型数据分割或一个序列或图像参数集。</p>
+<p>NALU 头由一个字节组成, 它的语法如下: </p>
+<p>　　NAL单元按RTP序列号按序传送。其中，T为负荷数据类型，占5bit；R为重要性指示位，占2个bit；最后的F为禁止位，占1bit。具体如下： <br>　　（1）NALU类型位 <br>　　可以表示NALU的32种不同类型特征，类型1～12是H.264定义的，类型24～31是用于H.264以外的，RTP负荷规范使用这其中的一些值来定义包聚合和分裂，其他值为H.264保留。<br>　　（2）重要性指示位 <br>　　用于在重构过程中标记一个NAL单元的重要性，值越大，越重要。值为0表示这个NAL单元没有用于预测，因此可被解码器抛弃而不会有错误扩散；值高于0表示此NAL单元要用于无漂移重构，且值越高，对此NAL单元丢失的影响越大。<br>　　（3）禁止位 <br>编码中默认值为0，当网络识别此单元中存在比特错误时，可将其设为1，以便接收方丢掉该单元，主要 用于适应不同种类的网络环境（比如有线无线相结合的环境）。</p>
+<p>264常见的帧头数据为：</p>
+<p>00 00 00 01 67 (SPS)</p>
+<p>00 00 00 01 68 (PPS)</p>
+<p>00 00 00 01 65 ( IDR 帧)</p>
+<p>00 00 00 01 61 (P帧)</p>
+<p>等等，那么他们代表的意思是什么呢？</p>
+<p>上述的67,68,65,61，还有41等，都是该NALU的识别级别。</p>
+<p>F：禁止为，0表示正常，1表示错误，一般都是0</p>
+<p>NRI：重要级别，11表示非常重要。</p>
+<p>TYPE：表示该NALU的类型是什么，</p>
+<p>见下表，由此可知7为序列参数集(SPS)，8为图像参数集(PPS)，5代表I帧。1代表非I帧。</p>
+<p>由此可知，61和41其实都是P帧（type值为1），只是重要级别不一样（它们的NRI一个是11BIN，一个是10BIN）</p>
+<p>NALU类型是我们判断帧类型的利器，从官方文档中得出如下图：</p>
+<p>H264(NAL简介与I帧判断)</p>
+<p>我们还是接着看最上面图的码流对应的数据来层层分析，以00 00 00 01分割之后的下一个字节就是NALU类型，将其转为二进制数据后，</p>
+<p>解读顺序为从左往右算，如下:</p>
+<p>（1）第1位禁止位，值为1表示语法出错</p>
+<p>（2）第2~3位为参考级别</p>
+<p>（3）第4~8为是nal单元类型</p>
+<p>例如上面00000001后有67,68以及65</p>
+<p>其中0x67的二进制码为：</p>
+<p>0110 0111</p>
+<p>4-8为00111，转为十进制7，参考第二幅图：7对应序列参数集SPS</p>
+<p>其中0x68的二进制码为：</p>
+<p>0110 1000 <br>4-8为01000，转为十进制8，参考第二幅图：8对应图像参数集PPS</p>
+<p>其中0x65的二进制码为：</p>
+<p>011 00101</p>
+<p>4-8位为00101，转为十进制5，参考第二幅图：5对应IDR图像中的片(I帧)</p>
+<p>所以判断是否为I帧的算法为：</p>
+<p>（NALU类型 &amp; 0001 1111） = 5 即 (NALU类型 &amp; 31) = 5 <br>比如0x65 &amp; 31 = 5</p>
+<p>二、RTP Header解析</p>
+<p>1)        V：RTP协议的版本号，占2位，当前协议版本号为2</p>
+<p>2)        P：填充标志，占1位，如果P=1，则在该报文的尾部填充一个或多个额外的八位组，它们不是有效载荷的一部分。</p>
+<p>3)        X：扩展标志，占1位，如果X=1，则在RTP报头后跟有一个扩展报头</p>
+<p>4)        CC：CSRC计数器，占4位，指示CSRC 标识符的个数</p>
+<p>5)        M: 标记，占1位，不同的有效载荷有不同的含义，对于视频，标记一帧的结束；对于音频，标记会话的开始。</p>
+<p>6)        PT: 有效荷载类型，占7位，用于说明RTP报文中有效载荷的类型，如GSM音频、JPEM图像等,在流媒体中大部分是用来区分音频流和视频流的，这样便于客户端进行解析。</p>
+<p>7)        序列号：占16位，用于标识发送者所发送的RTP报文的序列号，每发送一个报文，序列号增1。这个字段当下层的承载协议用UDP的时候，网络状况不好的时候可以用来检查丢包。同时出现网络抖动的情况可以用来对数据进行重新排序，序列号的初始值是随机的，同时音频包和视频包的sequence是分别记数的。</p>
+<p>8)        时戳(Timestamp)：占32位，必须使用90 kHz 时钟频率。时戳反映了该RTP报文的第一个八位组的采样时刻。接收者使用时戳来计算延迟和延迟抖动，并进行同步控制。</p>
+<p>9)        同步信源(SSRC)标识符：占32位，用于标识同步信源。该标识符是随机选择的，参加同一视频会议的两个同步信源不能有相同的SSRC。</p>
+<p>10)    特约信源(CSRC)标识符：每个CSRC标识符占32位，可以有0～15个。每个CSRC标识了包含在该RTP报文有效载荷中的所有特约信源。</p>
+<p>注：基本的RTP说明并不定义任何头扩展本身，如果遇到X=1，需要特殊处理</p>
+<p>使用Wireshark抓一段码流进行分析</p>
+<p>其中，</p>
+<p>80                    是V_P_X_CC</p>
+<p>60                    是M_PT</p>
+<p>00 01              是SequenceNum</p>
+<p>00 00  00 00  是Timestamp<br>39 6e d3 46  是SSRC</p>
+<p>把前两字节换成二进制如下</p>
+<p>1000 0000 0110 0000</p>
+<p>按顺序解释如下：</p>
+<p>10               是V；</p>
+<p>0                 是P；</p>
+<p>0                 是X；</p>
+<p>0000          是CC；</p>
+<p>0                 是M；</p>
+<p>110 0000   是PT；</p>
+<p>三、RTP荷载H264码流</p>
+<p>+—————+</p>
+<p>|0|1|2|3|4|5|6|7|</p>
+<p>  +-+-+-+-+-+-+-+-+</p>
+<p>  |F|NRI|  Type   |</p>
+<p>  +—————+</p>
+<p>荷载格式定义三个不同的基本荷载结构，接收者可以通过RTP荷载的第一个字节后5位（如上图参考RFC3984）识别荷载结构。</p>
+<ol>
+<li><p>  单个NAL单元包：荷载中只包含一个NAL单元。NAL头类型域等于原始 NAL单元类型,即在范围1到23之间</p>
+</li>
+<li><p>  聚合包：本类型用于聚合多个NAL单元到单个RTP荷载中。本包有四种版本,单时间聚合包类型A (STAP-A)，单时间聚合包类型B (STAP-B)，多时间聚合包类型(MTAP)16位位移(MTAP16), 多时间聚合包类型(MTAP)24位位移(MTAP24)。赋予STAP-A, STAP-B, MTAP16, MTAP24的NAL单元类型号分别是 24,25, 26, 27</p>
+</li>
+<li><p>  分片单元：用于分片单个NAL单元到多个RTP包。现存两个版本FU-A，FU-B,用NAL单元类型 28，29标识</p>
+</li>
+</ol>
+<p>常用的打包时的分包规则是：如果小于MTU采用单个NAL单元包，如果大于MTU就采用FUs分片方式。因为常用的打包方式就是单个NAL包和FU-A方式，所以我们只解析这两种。</p>
+<p>3.1 单个NAL单元包</p>
+<p>0                   1                   2                   3</p>
+<p>0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1</p>
+<p> +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+</p>
+<p>|F|NRI|  type   |                                               |</p>
+<p>  +-+-+-+-+-+-+-+-+                                               |</p>
+<p>|                                                               |</p>
+<p>|               Bytes 2..n of a Single NAL unit                 |</p>
+<p>|                                                               |</p>
+<p>|                               +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+</p>
+<p>  |                               :…OPTIONAL RTP padding        |</p>
+<p>  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+</p>
+<p>定义在此的NAL单元包必须只包含一个。这意味聚合包和分片单元不可以用在单个NAL 单元包中。并且RTP序号必须符合NAL单元的解码顺序。NAL单元的第一字节和RTP荷载头第一个字节重合。（如上图参考RFC3984）打包H264码流时，只需在帧前面加上12字节的RTP头即可。</p>
+<p>3.2 分片单元（FU-A）</p>
+<p>0                   1                   2                   3</p>
+<p>0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1</p>
+<p> +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+</p>
+<p>| FU indicator  |   FU header  |                               |</p>
+<p> +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+                               |</p>
+<p>  |                                                               |</p>
+<p>  |                         FU payload                            |</p>
+<p>  |                                                               |</p>
+<p>  |                               +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+</p>
+<p>|                               :…OPTIONAL RTP padding        |</p>
+<p> +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+</p>
+<p>                                图 1</p>
+<p>分片只定义于单个NAL单元不用于任何聚合包。NAL单元的一个分片由整数个连续NAL单元字节组成。每个NAL单元字节必须正好是该NAL单元一个分片的一部分。相同NAL单元的分片必须使用递增的RTP序号连续顺序发送(第一和最后分片之间没有其他的RTP包）。相似，NAL单元必须按照RTP顺序号的顺序装配。</p>
+<p>   当一个NAL单元被分片运送在分片单元(FUs)中时，被引用为分片NAL单元。STAPs,MTAPs不可以被分片。 FUs不可以嵌套。 即, 一个FU 不可以包含另一个FU。运送FU的RTP时戳被设置成分片NAL单元的NALU时刻。</p>
+<p>图 1表示FU-A的RTP荷载格式。FU-A由1字节的分片单元指示（如图2），1字节的分片单元头（如图3），和分片单元荷载组成。</p>
+<p> +—————+</p>
+<p>|0|1|2|3|4|5|6|7|</p>
+<p>  +-+-+-+-+-+-+-+-+</p>
+<p>  |F|NRI|  Type   |</p>
+<p>  +—————+</p>
+<p>        图 2</p>
+<p>FU指示字节的类型域Type=28表示FU-A。。NRI域的值必须根据分片NAL单元的NRI域的值设置。</p>
+<p>+—————+</p>
+<p>|0|1|2|3|4|5|6|7|</p>
+<p>  +-+-+-+-+-+-+-+-+</p>
+<p>  |S|E|R|  Type   |</p>
+<p> +—————+</p>
+<p>        图 3</p>
+<p>S: 1 bit 当设置成1,开始位指示分片NAL单元的开始。当跟随的FU荷载不是分片NAL单元荷载的开始，开始位设为0。</p>
+<p>E: 1 bit 当设置成1, 结束位指示分片NAL单元的结束，即, 荷载的最后字节也是分片NAL单元的最后一个字节。当跟随的 FU荷载不是分片NAL单元的最后分片,结束位设置为0。</p>
+<p>R: 1 bit 保留位必须设置为0，接收者必须忽略该位</p>
+<p>打包时，原始的NAL头的前三位为FU indicator的前三位，原始的NAL头的后五位为FU header的后五位。</p>
+<p>使用Wireshark抓一段码流进行分析</p>
+<p>前12字节是RTP Header<br>7c是FU indicator<br>85是FU Header<br>FU indicator（0x7C）和FU Header（0x85）换成二进制如下<br>0111 1100 1000 0101</p>
+<p>按顺序解析如下：</p>
+<p>0                            是F</p>
+<p>11                          是NRI</p>
+<p>11100                    是FU Type，这里是28，即FU-A</p>
+<p>1                            是S，Start，说明是分片的第一包</p>
+<p>0                            是E，End，如果是分片的最后一包，设置为1，这里不是</p>
+<p>0                            是R，Remain，保留位，总是0</p>
+<p>00101                   是NAl Type，这里是5，说明是关键帧（不知道为什么是关键帧请自行谷歌）</p>
+<p>打包时，FUindicator的F、NRI是NAL Header中的NRI，Type是28；FU Header的S、E、R分别按照分片起始位置设置，Type是NAL Header中的Type。</p>
+<p>解包时，取FU indicator的前三位和FU Header的后五位，即0110 0101（0x65）为NAL类型（即I帧）。</p>
+<p>Refrences:</p>
+<p><a target="_blank" rel="noopener" href="http://blog.csdn.net/machh/article/details/52165292">http://blog.csdn.net/machh/article/details/52165292</a></p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/GooglePlay%E6%89%8B%E5%8A%A8%E5%AE%89%E8%A3%85%E6%9B%B4%E6%96%B0%E5%87%BA%E9%94%99%E9%97%AE%E9%A2%98/" rel="prev" title="GooglePlay手动安装更新出错问题">
+      <i class="fa fa-chevron-left"></i> GooglePlay手动安装更新出错问题
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/header/" rel="next" title="header">
+      header <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Edward"
+      src="/uploads/avatar.gif">
+  <p class="site-author-name" itemprop="name">Edward</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">570</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Edward</span>
+</div>
+
+        
+
+
+
+
+
+
+<script>
+  (function() {
+    function leancloudSelector(url) {
+      url = encodeURI(url);
+      return document.getElementById(url).querySelector('.leancloud-visitors-count');
+    }
+
+    function addCount(Counter) {
+      var visitors = document.querySelector('.leancloud_visitors');
+      var url = decodeURI(visitors.id);
+      var title = visitors.dataset.flagTitle;
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          if (results.length > 0) {
+            var counter = results[0];
+            leancloudSelector(url).innerText = counter.time + 1;
+            Counter('put', '/classes/Counter/' + counter.objectId, { time: { '__op': 'Increment', 'amount': 1 } })
+              .catch(error => {
+                console.error('Failed to save visitor count', error);
+              });
+          } else {
+              Counter('post', '/classes/Counter', { title, url, time: 1 })
+                .then(response => response.json())
+                .then(() => {
+                  leancloudSelector(url).innerText = 1;
+                })
+                .catch(error => {
+                  console.error('Failed to create', error);
+                });
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    function showTime(Counter) {
+      var visitors = document.querySelectorAll('.leancloud_visitors');
+      var entries = [...visitors].map(element => {
+        return decodeURI(element.id);
+      });
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url: { '$in': entries } })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          for (let url of entries) {
+            let target = results.find(item => item.url === url);
+            leancloudSelector(url).innerText = target ? target.time : 0;
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    let { app_id, app_key, server_url } = {"enable":true,"app_id":"wxYx0BX9gaKA3XC4LuO2of0v-gzGzoHsz","app_key":"LQMcs6IDIE4YAm10vMsn9IYq","server_url":"https://wxyx0bx9.lc-cn-n1-shared.com","security":false};
+    function fetchData(api_server) {
+      var Counter = (method, url, data) => {
+        return fetch(`${api_server}/1.1${url}`, {
+          method,
+          headers: {
+            'X-LC-Id'     : app_id,
+            'X-LC-Key'    : app_key,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data)
+        });
+      };
+      if (CONFIG.page.isPost) {
+        if (CONFIG.hostname !== location.hostname) return;
+        addCount(Counter);
+      } else if (document.querySelectorAll('.post-title-link').length >= 1) {
+        showTime(Counter);
+      }
+    }
+
+    let api_server = app_id.slice(-9) !== '-MdYXbMMI' ? server_url : `https://${app_id.slice(0, 8).toLowerCase()}.api.lncldglobal.com`;
+
+    if (api_server) {
+      fetchData(api_server);
+    } else {
+      fetch('https://app-router.leancloud.cn/2/route?appId=' + app_id)
+        .then(response => response.json())
+        .then(({ api_server }) => {
+          fetchData('https://' + api_server);
+        });
+    }
+  })();
+</script>
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

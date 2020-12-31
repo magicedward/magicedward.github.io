@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"edward.org.cn","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="VBUS_DET：输入信号，用于USB DEVICE检测VBUS电平，  0：低电平约0V，1：高电平约3V。默认无连接时电平为低，连接至PC或充电器时电平为高。  USB_ID：输入信号，由USB  OTG协议定义，用于识别USB口所接设备的默认角色(host  or  device)。USB_ID默认上拉，处于device状况，如果要控制器进入host状态，需外接mini-A口或 micro-">
+<meta property="og:type" content="article">
+<meta property="og:title" content="USB2">
+<meta property="og:url" content="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/USB2.0%E6%8E%A7%E5%88%B6%E5%99%A8/index.html">
+<meta property="og:site_name" content="点点滴滴">
+<meta property="og:description" content="VBUS_DET：输入信号，用于USB DEVICE检测VBUS电平，  0：低电平约0V，1：高电平约3V。默认无连接时电平为低，连接至PC或充电器时电平为高。  USB_ID：输入信号，由USB  OTG协议定义，用于识别USB口所接设备的默认角色(host  or  device)。USB_ID默认上拉，处于device状况，如果要控制器进入host状态，需外接mini-A口或 micro-">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-12-31T06:48:01.744Z">
+<meta property="article:modified_time" content="2020-01-16T04:37:33.404Z">
+<meta property="article:author" content="Edward">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/USB2.0%E6%8E%A7%E5%88%B6%E5%99%A8/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>USB2 | 点点滴滴</title>
+  
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?a92ed22eafce466e7a7b17546bb0dc6f";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">点点滴滴</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/USB2.0%E6%8E%A7%E5%88%B6%E5%99%A8/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/avatar.gif">
+      <meta itemprop="name" content="Edward">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="点点滴滴">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          USB2
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-12-31 14:48:01" itemprop="dateCreated datePublished" datetime="2020-12-31T14:48:01+08:00">2020-12-31</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-01-16 12:37:33" itemprop="dateModified" datetime="2020-01-16T12:37:33+08:00">2020-01-16</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%83%82%E7%AC%94%E5%A4%B4/" itemprop="url" rel="index"><span itemprop="name">烂笔头</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/USB2.0%E6%8E%A7%E5%88%B6%E5%99%A8/" class="post-meta-item leancloud_visitors" data-flag-title="USB2" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>VBUS_DET：输入信号，用于USB DEVICE检测VBUS电平， </p>
+<p>0：低电平约0V，1：高电平约3V。默认无连接时电平为低，连接至PC或充电器时电平为高。 </p>
+<p>USB_ID：输入信号，由USB  OTG协议定义，用于识别USB口所接设备的默认角色(host  or </p>
+<p>device)。USB_ID默认上拉，处于device状况，如果要控制器进入host状态，需外接mini-A口或</p>
+<p>micro-A口将USB_ID短接到地。 </p>
+<p>RKELVIN：参考电阻默认44.2欧到地，可通过调节该电阻阻值来调整USB信号质量。 </p>
+<p>OTG_DRVVBUS：该信号由USB控制器的host寄存器控制，硬件上通过该信号来控制host所</p>
+<p>需5V VBUS输出，高电平输出有效。 </p>
+<p>DP/DM：即Data+, Data-，USB的两根差分信号线。 </p>
+<p>控制器如果只作为host，  需要信号DP/DM，DRV_VBUS(可选)。 </p>
+<p>控制器如果只作为device，需要信号DP/DM, VBUS_DET。 </p>
+<p>控制器作为OTG使用，需要信号DP/DM, USB_ID, DRV_VBUS, VBUS_DET。 </p>
+<p>控制器作为device功能时，一直通过VBUS_DET信号监控VBUS状态，VBUS如果为高，一</p>
+<p>般是设备通过USB线连接到PC。Kernel函数调用接口为int dwc_vbus_status( void )。 </p>
+<p>VBUS状态查询节点： </p>
+<p>/sys/bus/platform/drivers/usb20_otg/vbus_status    (read only) </p>
+<p>vbus_status可能的值为： </p>
+<p>0  VBUS为低电平(约0V)； </p>
+<p>1  VBUS为高电平(约5V)； </p>
+<p>2  VBUS为高，且DP/DM信号均为高电平(用于国标充电器判断)。</p>
+<p>设备主动连接PC使能 </p>
+<p>对应2.3节的控制器选项，用于使能控制器检测到VBUS后连接PC。 </p>
+<p>/sys/bus/platform/drivers/usb20_otg/dwc_otg_conn_en  (read&amp;write) </p>
+<p>dwc_otg_conn_en可能的值为： </p>
+<p>0  设备检测到VBUS后不发起USB连接； </p>
+<p> 1   设备检测到VBUS后会发起USB连接。 </p>
+<p>OTG控制器角色强制切换 </p>
+<p>2.3节提到OTG控制器可以作为HOST，也能作为device，控制器的角色一般由USB ID电平决</p>
+<p>定(参考1.1节USB_ID信号)，也可以由软件进行强制切换，接口如下： </p>
+<p>/sys/bus/platform/drivers/usb20_otg/force_usb_mode </p>
+<p>force_usb_mode 可能的值为：  </p>
+<p>0  depends on USB ID </p>
+<p>1  force host </p>
+<p>2  force device </p>
+<p>查询OTG控制器当前角色 </p>
+<p>USB2.0 HOST和USB1.1 HOST都只能作为host使用，而USB2.0 OTG可以作为host，也能作</p>
+<p>为device功能使用，查询当前工作的角色接口如下： </p>
+<p>/sys/devices/platform/usb20_otg/mode </p>
+<p>Mode:  </p>
+<p>0  device mode </p>
+<p>1   host mode</p>
+<p>四 USB充电器检测 </p>
+<p>USB-IF发布battery  charge1.2标准作为移动设备充电检测标准，其他一些组织也有发布类似标</p>
+<p>准，其中中国工信部标准要求USB充电器的DP, DM短接。 </p>
+<p>RK的USB控制器不支持battery charge1.2标准，但是可以检测出国标充电器的DP,DM短接。 </p>
+<p>由于PC的USB  host口默认只提供500mA的供电，而一般充电器可以达到800mA或者1A以</p>
+<p>上的电流充电，所以需要识别并做不同处理。 </p>
+<p>USB模块提供的VBUS状态和PC连接状态变化情况如下，充电模块如需使用请务必了解状态</p>
+<p>的变化过程： </p>
+<p>1 无连接，VBUS状态为0，gadget连接状态为0； </p>
+<p>2 刚连接到PC或充电器，VBUS状态为1，gadget连接状态为0； </p>
+<p>3  device会发起连接，如果是信号较好的PC，可以很快连上(1,2s 内)，如果信号较差，设备会</p>
+<p>retry 3次，每次时间约为1S，连上后VBUS状态为1，gadget连接状态为1； </p>
+<p>4 如果外接不是PC，那么3次连接超时后，会给出DP, DM的状态，如果是标准充电器VBUS</p>
+<p>状态为2，gadget连接状态为0；如果非标准充电器，VBUS状态为1，gadget连接状态为0。 </p>
+<p>MSC外设(U盘)挂载 </p>
+<p>已发布的SDK默认只支持在USB2.0  HOST控制器上挂载U盘等MSC外设，配置位于</p>
+<p>/device/rockchip/rk30sdk/vold.fstab，如果需要增加其他控制器的支持，如USB2.0 OTG，需要修改如</p>
+<p>下代码: </p>
+<p>dev_mount udisk /mnt/usb_storage auto /devices/platform/usb20_host/usb </p>
+<p>修改为 </p>
+<p>dev_mount udisk /mnt/usb_storage auto /devices/platform/usb20_host/usb /devices/platform/usb20_otg/usb </p>
+<p>系统起来后可以使用cat /system/etc/vold.fstab 命令查看实际配置。</p>
+<p>VID/PID规则及修改 </p>
+<p>USB  gadget在不同配置下，必须使用不同的PID，否则会导致PC(windows)驱动识别混乱，常用</p>
+<p>的gadget为MSC, MTP及跟ADB的组合。Google在2011年提出AOA(Android Open Accessory)，在gadget</p>
+<p>中增加一个accessory模式，对于ID强制要求为： </p>
+<p>Accessory：VID/PID = 0x18d1, 0x2d00 </p>
+<p>Accessory,adb: VID/PID = 0x18d1, 0x2d01 </p>
+<p>其他ID 可以使用vendor自己的ID，SDK默认使用rockchip的VID(0x2207),  PID(depends  on  config)，</p>
+<p>如果需要使用rockchip的ID，请使用默认值，请勿做任何修改，如果需要使用自己的VID/PID，请自</p>
+<p>行规划。VID/PID修改位于/device/rockchip/rk30sdk/init.rk30board.usb.rc 文件</p>
+<p>HOST典型供电电路及信号连接如下图，实际使用可能比下图复杂：</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/usb%20mass%20storage%20%E5%8A%A0%E5%AF%86%E7%A0%81%20%E4%BF%AE%E6%94%B9%E5%AF%86%E7%A0%81%20%20%E5%8A%A8%E6%80%81%E5%B8%83%E5%B1%80/" rel="prev" title="usb mass storage 加密码 修改密码  动态布局">
+      <i class="fa fa-chevron-left"></i> usb mass storage 加密码 修改密码  动态布局
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/verify%20apps%20over%20usb/" rel="next" title="verify apps over usb">
+      verify apps over usb <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Edward"
+      src="/uploads/avatar.gif">
+  <p class="site-author-name" itemprop="name">Edward</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">570</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Edward</span>
+</div>
+
+        
+
+
+
+
+
+
+<script>
+  (function() {
+    function leancloudSelector(url) {
+      url = encodeURI(url);
+      return document.getElementById(url).querySelector('.leancloud-visitors-count');
+    }
+
+    function addCount(Counter) {
+      var visitors = document.querySelector('.leancloud_visitors');
+      var url = decodeURI(visitors.id);
+      var title = visitors.dataset.flagTitle;
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          if (results.length > 0) {
+            var counter = results[0];
+            leancloudSelector(url).innerText = counter.time + 1;
+            Counter('put', '/classes/Counter/' + counter.objectId, { time: { '__op': 'Increment', 'amount': 1 } })
+              .catch(error => {
+                console.error('Failed to save visitor count', error);
+              });
+          } else {
+              Counter('post', '/classes/Counter', { title, url, time: 1 })
+                .then(response => response.json())
+                .then(() => {
+                  leancloudSelector(url).innerText = 1;
+                })
+                .catch(error => {
+                  console.error('Failed to create', error);
+                });
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    function showTime(Counter) {
+      var visitors = document.querySelectorAll('.leancloud_visitors');
+      var entries = [...visitors].map(element => {
+        return decodeURI(element.id);
+      });
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url: { '$in': entries } })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          for (let url of entries) {
+            let target = results.find(item => item.url === url);
+            leancloudSelector(url).innerText = target ? target.time : 0;
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    let { app_id, app_key, server_url } = {"enable":true,"app_id":"wxYx0BX9gaKA3XC4LuO2of0v-gzGzoHsz","app_key":"LQMcs6IDIE4YAm10vMsn9IYq","server_url":"https://wxyx0bx9.lc-cn-n1-shared.com","security":false};
+    function fetchData(api_server) {
+      var Counter = (method, url, data) => {
+        return fetch(`${api_server}/1.1${url}`, {
+          method,
+          headers: {
+            'X-LC-Id'     : app_id,
+            'X-LC-Key'    : app_key,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data)
+        });
+      };
+      if (CONFIG.page.isPost) {
+        if (CONFIG.hostname !== location.hostname) return;
+        addCount(Counter);
+      } else if (document.querySelectorAll('.post-title-link').length >= 1) {
+        showTime(Counter);
+      }
+    }
+
+    let api_server = app_id.slice(-9) !== '-MdYXbMMI' ? server_url : `https://${app_id.slice(0, 8).toLowerCase()}.api.lncldglobal.com`;
+
+    if (api_server) {
+      fetchData(api_server);
+    } else {
+      fetch('https://app-router.leancloud.cn/2/route?appId=' + app_id)
+        .then(response => response.json())
+        .then(({ api_server }) => {
+          fetchData('https://' + api_server);
+        });
+    }
+  })();
+</script>
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

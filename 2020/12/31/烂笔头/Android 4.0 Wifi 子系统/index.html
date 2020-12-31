@@ -1,0 +1,1042 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"edward.org.cn","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="Android 4.0 Wifi 子系统 1.wifi子系统的初始化      wifi服务初始化和其他的服务差不多，也是通过SystemService来创建的。 &lt;framework&#x2F;base&#x2F;services&#x2F;java&#x2F;com&#x2F;android&#x2F;server&#x2F;SystemServer.java                 Slog.i(TAG, &quot;">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android 4">
+<meta property="og:url" content="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/Android%204.0%20Wifi%20%E5%AD%90%E7%B3%BB%E7%BB%9F/index.html">
+<meta property="og:site_name" content="点点滴滴">
+<meta property="og:description" content="Android 4.0 Wifi 子系统 1.wifi子系统的初始化      wifi服务初始化和其他的服务差不多，也是通过SystemService来创建的。 &lt;framework&#x2F;base&#x2F;services&#x2F;java&#x2F;com&#x2F;android&#x2F;server&#x2F;SystemServer.java                 Slog.i(TAG, &quot;">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-12-31T06:48:00.845Z">
+<meta property="article:modified_time" content="2020-01-16T04:37:32.739Z">
+<meta property="article:author" content="Edward">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/Android%204.0%20Wifi%20%E5%AD%90%E7%B3%BB%E7%BB%9F/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>Android 4 | 点点滴滴</title>
+  
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?a92ed22eafce466e7a7b17546bb0dc6f";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">点点滴滴</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/Android%204.0%20Wifi%20%E5%AD%90%E7%B3%BB%E7%BB%9F/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/avatar.gif">
+      <meta itemprop="name" content="Edward">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="点点滴滴">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Android 4
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-12-31 14:48:00" itemprop="dateCreated datePublished" datetime="2020-12-31T14:48:00+08:00">2020-12-31</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-01-16 12:37:32" itemprop="dateModified" datetime="2020-01-16T12:37:32+08:00">2020-01-16</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%83%82%E7%AC%94%E5%A4%B4/" itemprop="url" rel="index"><span itemprop="name">烂笔头</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/Android%204.0%20Wifi%20%E5%AD%90%E7%B3%BB%E7%BB%9F/" class="post-meta-item leancloud_visitors" data-flag-title="Android 4" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>              Android 4.0 Wifi 子系统</p>
+<p>1.wifi子系统的初始化</p>
+<p>     wifi服务初始化和其他的服务差不多，也是通过SystemService来创建的。</p>
+<p>&lt;framework/base/services/java/com/android/server/SystemServer.java</p>
+<p>                Slog.i(TAG, &quot;Connectivity Service&quot;);</p>
+<p>                 connectivity = new ConnectivityService(</p>
+<p> context, networkManagement, networkStats, networkPolicy);</p>
+<p>                 ServiceManager.addService(Context.CONNECTIVITY_SERVICE, connectivity);</p>
+<p>                 networkStats.bindConnectivityManager(connectivity);</p>
+<p>                 networkPolicy.bindConnectivityManager(connectivity);</p>
+<p>                 wifi.checkAndStartWifi();</p>
+<p>                 wifiP2p.connectivityServiceReady();</p>
+<p>通过ServiceManager.addService启动了ConnectivityService,在android系统里面我们常见的属于Connectivity的有</p>
+<p>wifi,mobile,bluetooth,wimax,ethernet。</p>
+<p>&lt;framework/base/services/java/com/android/server/WifiService.java&gt;</p>
+<p>         public void checkAndStartWifi() {</p>
+<p>          mAirplaneModeOn.set(isAirplaneModeOn());</p>
+<p>          mPersistWifiState.set(getPersistedWifiState());</p>
+<p>          /* Start if Wi-Fi should be enabled or the saved state indicates Wi-Fi was on */</p>
+<p>          boolean wifiEnabled = shouldWifiBeEnabled() || testAndClearWifiSavedState();</p>
+<p>          Slog.i(TAG, &quot;WifiService starting up with Wi-Fi &quot; +</p>
+<p>(wifiEnabled ? &quot;enabled&quot; : &quot;disabled&quot;));</p>
+<p>          setWifiEnabled(wifiEnabled);</p>
+<p>          mWifiWatchdogStateMachine = WifiWatchdogStateMachine.</p>
+<p>                 makeWifiWatchdogStateMachine(mContext);</p>
+<p>     }</p>
+<p>     wifiService的checkAndStartWifi是启动wifiService的关键，首先会去判断是启用了飞行模式，然后根据wifi的按钮在上一次关机前的状态来确定以什么样的方式来启动wifi。本文假设wifi按钮是on的状态来启动的。那么wifiEnabled参数的至就是为ture。</p>
+<p>  &lt;framework/base/services/java/com/android/server/WifiService.java&gt;</p>
+<p> public synchronized boolean setWifiEnabled(boolean enable) {</p>
+<p>        enforceChangePermission();</p>
+<p>        if (DBG) {</p>
+<p>            Slog.e(TAG, &quot;Invoking mWifiStateMachine.setWifiEnabled\n&quot;);</p>
+<p>        }</p>
+<p>        if (enable) {</p>
+<p>            reportStartWorkSource();</p>
+<p>        }   </p>
+<p>        mWifiStateMachine.setWifiEnabled(enable);</p>
+<p>        ……</p>
+<p>        if (enable != mWifiEnabled) {</p>
+<p>            long ident = Binder.clearCallingIdentity();</p>
+<p>            persistWifiState(enable);</p>
+<p>            Binder.restoreCallingIdentity(ident);</p>
+<p>        }   </p>
+<p>        if (enable) {</p>
+<p>            if (!mIsReceiverRegistered) {</p>
+<p>                registerForBroadcasts();</p>
+<p>                mIsReceiverRegistered = true;</p>
+<p>            }   </p>
+<p>        } else if (mIsReceiverRegistered) {</p>
+<p>            mContext.unregisterReceiver(mReceiver);</p>
+<p>            mIsReceiverRegistered = false;</p>
+<p>        }   </p>
+<p>        return true;</p>
+<p>    }</p>
+<p>在之前的wifiService中初始化了一个私有类mWifiStateMachine类，在start wifiService中调用SetWifiEnabled就会去调用wifiStateMachine的setWifiEnabled方法。</p>
+<p>&lt;framework/base/wifi/java/android/net/wifi/WifiStateMachine.java&gt;</p>
+<p>    public void setWifiEnabled(boolean enable) {</p>
+<p>        mLastEnableUid.set(Binder.getCallingUid());</p>
+<p>        if (enable) {</p>
+<p>            /* Argument is the state that is entered prior to load */</p>
+<p>            sendMessage(obtainMessage(CMD_LOAD_DRIVER, WIFI_STATE_ENABLING, 0));</p>
+<p>            sendMessage(CMD_START_SUPPLICANT);</p>
+<p>        } else {</p>
+<p>            sendMessage(CMD_STOP_SUPPLICANT);</p>
+<p>            /* Argument is the state that is entered upon success */</p>
+<p>            sendMessage(obtainMessage(CMD_UNLOAD_DRIVER, WIFI_STATE_DISABLED, 0));</p>
+<p>        }</p>
+<p>    }</p>
+<p>在这个函数中我们假设wifi的状态是on的。那么参数enable就是ture，所以我们发送消息，CMD_LOAD_DRIVER。在wifi的状态机里面就会去处理这个消息。</p>
+<p>&lt;framework/base/wifi/java/android/net/wifi/WifiStateMachine.java&gt;</p>
+<p>     public boolean processMessage(Message message) {</p>
+<p>            if (DBG) log(getName() + message.toString() + &quot;\n&quot;);</p>
+<p>            switch (message.what) {</p>
+<p>                case CMD_LOAD_DRIVER:</p>
+<p>                    mWifiP2pChannel.sendMessage(WIFI_ENABLE_PENDING);</p>
+<p>                    transitionTo(mWaitForP2pDisableState);</p>
+<p>                    break;</p>
+<p>                case WifiP2pService.P2P_ENABLE_PENDING:</p>
+<p>                    mReplyChannel.replyToMessage(message, P2P_ENABLE_PROCEED);</p>
+<p>                    break;</p>
+<p>                default:</p>
+<p>                    return NOT_HANDLED;</p>
+<p>            }   </p>
+<p>            EventLog.writeEvent(EVENTLOG_WIFI_EVENT_HANDLED, message.what);</p>
+<p>            return HANDLED;</p>
+<p>        }   </p>
+<p>    }   </p>
+<p>在wifi状态机中，通过transitionTo到WaitForP2pDisableState，并发送P2P_ENABLE_PROCEED命令，到WaitFor</p>
+<p>P2pDisableState中来处理。这里解释下wifi p2p是什么，这是Andorid 4.0新增的WIFI DIRECT的功能。</p>
+<p> &lt;framework/base/wifi/java/android/net/wifi/WifiStateMachine.java&gt;  </p>
+<p>  class WaitForP2pDisableState extends State {</p>
+<p>        private int mSavedArg;</p>
+<p>        @Override</p>
+<p>        public void enter() {</p>
+<p>            if (DBG) log(getName() + &quot;\n&quot;);</p>
+<p>            EventLog.writeEvent(EVENTLOG_WIFI_STATE_CHANGED, getName());</p>
+<p>            //Preserve the argument arg1 that has information used in DriverLoadingState</p>
+<p>            mSavedArg = getCurrentMessage().arg1;</p>
+<p>        }</p>
+<p>        @Override</p>
+<p>        public boolean processMessage(Message message) {</p>
+<p>            if (DBG) log(getName() + message.toString() + &quot;\n&quot;);</p>
+<p>            switch(message.what) {</p>
+<p>                case WifiP2pService.WIFI_ENABLE_PROCEED:</p>
+<p>                    //restore argument from original message (CMD_LOAD_DRIVER)</p>
+<p>                    message.arg1 = mSavedArg;</p>
+<p>                    transitionTo(mDriverLoadingState);</p>
+<p>                    break;</p>
+<p>                case CMD_LOAD_DRIVER:</p>
+<p>               ……</p>
+<p>   }</p>
+<p>同样将wifi的状态机通过transitionTo函数切换到mDriverLoadingstate中，并发送CMD_LOAD_DRIVER命令，到mDriverLoadingState中来处理。</p>
+<p>&lt;framework/base/wifi/java/android/net/wifi/WifiStateMachine.java&gt; </p>
+<p>class DriverLoadingState extends State {</p>
+<p>        @Override</p>
+<p>        public void enter() {</p>
+<p>            if (DBG) log(getName() + &quot;\n&quot;);</p>
+<p>            EventLog.writeEvent(EVENTLOG_WIFI_STATE_CHANGED, getName());</p>
+<p>            final Message message = new Message();</p>
+<p>            message.copyFrom(getCurrentMessage());</p>
+<p>            /* TODO: add a timeout to fail when driver load is hung.</p>
+<p>             * Similarly for driver unload.</p>
+<p>             */</p>
+<p>            new Thread(new Runnable() {</p>
+<p>                public void run() {</p>
+<p>                    mWakeLock.acquire();</p>
+<p>                    //enabling state</p>
+<p>                    switch(message.arg1) {</p>
+<p>                        case WIFI_STATE_ENABLING:</p>
+<p>                            setWifiState(WIFI_STATE_ENABLING);</p>
+<p>                            break;</p>
+<p>                        case WIFI_AP_STATE_ENABLING:</p>
+<p>                            setWifiApState(WIFI_AP_STATE_ENABLING);</p>
+<p>                            break;</p>
+<p>                    }</p>
+<p>                    if(WifiNative.loadDriver()) {</p>
+<p>                        if (DBG) log(&quot;Driver load successful&quot;);</p>
+<p>                        sendMessage(CMD_LOAD_DRIVER_SUCCESS);</p>
+<p>                    } else {</p>
+<p>                        loge(&quot;Failed to load driver!&quot;);</p>
+<p>                        switch(message.arg1) {</p>
+<p>                            case WIFI_STATE_ENABLING:</p>
+<p>                                setWifiState(WIFI_STATE_UNKNOWN);</p>
+<p>                                break;</p>
+<p>                            case WIFI_AP_STATE_ENABLING:</p>
+<p>                                setWifiApState(WIFI_AP_STATE_FAILED);</p>
+<p>                                break;</p>
+<p>                        }</p>
+<p>                        sendMessage(CMD_LOAD_DRIVER_FAILURE);</p>
+<p>                    }</p>
+<p>在driverLoadingState中同过native.loadDriver()函数来真正load wifi的驱动模块，这里wifi驱动一般以模块的方式来加载。在WifiNative.java中定义了 public native static boolean loadDriver()这个函数，这就说明了loadDriver是一个native的方法，代码走到这里就要不得不说JNI了，是Java Native Interface的缩写，中文是JAVA本地调用。</p>
+<p>&lt;framework/base/core/jni/android_net_wifi_wifi.cpp&gt;</p>
+<p>static JNINativeMethod gWifiMethods[] = {</p>
+<p>    /* name, signature, funcPtr */</p>
+<p>    { &quot;loadDriver&quot;, &quot;()Z&quot;,  (void *)android_net_wifi_loadDriver },</p>
+<p>    { &quot;isDriverLoaded&quot;, &quot;()Z&quot;,  (void *)android_net_wifi_isDriverLoaded},</p>
+<p>     ……</p>
+<p>    }</p>
+<p>loadDriver这个函数在JNI里面对应的就是(void*)android_net_wifi_loadDriver函数。</p>
+<p>&lt;framework/base/core/jni/android_net_wifi_wifi.cpp&gt;</p>
+<p>static jboolean android_net_wifi_loadDriver(JNIEnv* env, jobject)</p>
+<p>{</p>
+<p>    return (jboolean)(::wifi_load_driver() == 0);</p>
+<p>}</p>
+<p>     JNI里很简单什么都没有做，直接调用了wifi的HAL层。</p>
+<p>&lt;hardware/libhardware_legacy/wifi/wifi.c&gt;</p>
+<p>int wifi_load_driver()</p>
+<p>{</p>
+<p>#ifdef WIFI_DRIVER_MODULE_PATH</p>
+<p>    char driver_status[PROPERTY_VALUE_MAX];</p>
+<p>    int count = 100; /* wait at most 20 seconds for completion */</p>
+<p>    if (is_wifi_driver_loaded()) {</p>
+<p>        return 0;</p>
+<p>    }</p>
+<p>    if (insmod(DRIVER_MODULE_PATH, DRIVER_MODULE_ARG) &lt; 0)</p>
+<p>        return -1;</p>
+<p>    if (strcmp(FIRMWARE_LOADER,&quot;&quot;) == 0) {</p>
+<p>        /* usleep(WIFI_DRIVER_LOADER_DELAY); */</p>
+<p>        property_set(DRIVER_PROP_NAME, &quot;ok&quot;);</p>
+<p>    }  </p>
+<p>    else {</p>
+<p>        property_set(&quot;ctl.start&quot;, FIRMWARE_LOADER);</p>
+<p>    }  </p>
+<p>    sched_yield();</p>
+<p>    while (count– &gt; 0) {</p>
+<p>        if (property_get(DRIVER_PROP_NAME, driver_status, NULL)) {</p>
+<p>            if (strcmp(driver_status, &quot;ok&quot;) == 0)</p>
+<p>                return 0;</p>
+<p>            else if (strcmp(DRIVER_PROP_NAME, &quot;failed&quot;) == 0) { libcutils</p>
+<p>                wifi_unload_driver();</p>
+<p>                return -1;</p>
+<p>            }  </p>
+<p>        }  </p>
+<p>        usleep(200000);</p>
+<p>    }  </p>
+<p>    property_set(DRIVER_PROP_NAME, &quot;timeout&quot;);</p>
+<p>    wifi_unload_driver();</p>
+<p>    return -1;</p>
+<p>#else</p>
+<p>    property_set(DRIVER_PROP_NAME, &quot;ok&quot;);</p>
+<p>    return 0;</p>
+<p>#endif</p>
+<p>}</p>
+<p>     wifi的驱动加载方式有两种，一种是采用buildin方式，就是直接编译到kernel的镜像文件中，还有一种就是动态以模块的方式来进行加载和卸载，我们的是采用第二种方式来实现的，就是wifi enable的时候就去加载wifi驱动，然后在disabled时候就去卸载驱动。如果驱动模块能够正常加载的话，那么整个wifi服务的初始化过程就算暂时告一段落了。还有就是这段加载驱动的代码的前提是需要WIFI_DRIVER_MODULE_PATH这个宏被定义，我们通常的做法是在BoradConfig.mk里面定义，这个宏指定了Wifi驱动模块的存放路径。</p>
+<p>2.WPA_SUPPLICANT服务的启动</p>
+<p>回到之前的wifiNative.loadDriver，当wifiNative成功加载wifi驱动后，就会发送命令CMD_LOAD_DRIVER_SUCCES</p>
+<p>S,将wifi的状态机切换到DriverLoadedState。</p>
+<p>&lt;framework/base/wifi/java/android/net/wifi/WifiStateMachine.java&gt;</p>
+<p>               if(WifiNative.loadDriver()) {</p>
+<p>                        if (DBG) log(&quot;Driver load successful&quot;);</p>
+<p>                        sendMessage(CMD_LOAD_DRIVER_SUCCESS);</p>
+<p>                    }</p>
+<p>                ……</p>
+<p>          public boolean processMessage(Message message) {</p>
+<p>          if (DBG) log(getName() + message.toString() + &quot;\n&quot;);</p>
+<p>            switch (message.what) {</p>
+<p>                case CMD_LOAD_DRIVER_SUCCESS:</p>
+<p>                    transitionTo(mDriverLoadedState);</p>
+<p>                    break;</p>
+<p>切换到了DriverLoadedState后，说明wifi的Driver成功加载的，那么就要发命令启动wpa_supplicant服务进程，具体的代码如下：</p>
+<p>&lt;framework/base/wifi/java/android/net/wifi/WifiStateMachine.java&gt;</p>
+<p>public void setWifiEnabled(boolean enable) {</p>
+<p>        mLastEnableUid.set(Binder.getCallingUid());</p>
+<p>        if (enable) {</p>
+<p>            /* Argument is the state that is entered prior to load */</p>
+<p>            sendMessage(obtainMessage(CMD_LOAD_DRIVER, WIFI_STATE_ENABLING, 0));</p>
+<p>            sendMessage(CMD_START_SUPPLICANT);</p>
+<p>        } else {</p>
+<p>            sendMessage(CMD_STOP_SUPPLICANT);</p>
+<p>            /* Argument is the state that is entered upon success */</p>
+<p>            sendMessage(obtainMessage(CMD_UNLOAD_DRIVER, WIFI_STATE_DISABLED, 0));</p>
+<p>        }   </p>
+<p>     }   </p>
+<p>&lt;framework/base/wifi/java/android/net/wifi/WifiStateMachine.java&gt;</p>
+<p>case CMD_START_SUPPLICANT:</p>
+<p>                    try {</p>
+<p>                        mNwService.wifiFirmwareReload(mInterfaceName, &quot;STA&quot;);</p>
+<p>                    } catch (Exception e) {</p>
+<p>                        loge(&quot;Failed to reload STA firmware &quot; + e);</p>
+<p>                        // continue</p>
+<p>                    }</p>
+<p>                   try {</p>
+<p>                       //A runtime crash can leave the interface up and</p>
+<p>                       //this affects connectivity when supplicant starts up.</p>
+<p>                       //Ensure interface is down before a supplicant start.</p>
+<p>                        mNwService.setInterfaceDown(mInterfaceName);</p>
+<p>                        //Set privacy extensions</p>
+<p>                        mNwService.setInterfaceIpv6PrivacyExtensions(mInterfaceName, true);</p>
+<p>                    } catch (RemoteException re) {</p>
+<p>                        loge(&quot;Unable to change interface settings: &quot; + re);</p>
+<p>                    } catch (IllegalStateException ie) {</p>
+<p>                        loge(&quot;Unable to change interface settings: &quot; + ie);</p>
+<p>                    }</p>
+<p>                    if(WifiNative.startSupplicant()) {</p>
+<p>                        if (DBG) log(&quot;Supplicant start successful&quot;);</p>
+<p>                        mWifiMonitor.startMonitoring();</p>
+<p>                        transitionTo(mSupplicantStartingState);</p>
+<p>在这里会去重新加载wifi的firmware，改变网络设置的ipv6的接口，然后WifiNative.startSupplicant通过JNI来启动wpa_supplicant服务。这里跟上面的WifiNative.loadDriver是差不多的。具体的代码流程如下：</p>
+<p>&lt;framework/base/core/jni/android_net_wifi_wifi.cpp&gt;</p>
+<p>{ &quot;startSupplicant&quot;, &quot;()Z&quot;,  (void *)android_net_wifi_startSupplicant },</p>
+<p>……</p>
+<p>static jboolean android_net_wifi_startSupplicant(JNIEnv* env, jobject)</p>
+<p>{</p>
+<p>    return (jboolean)(::wifi_start_supplicant() == 0);</p>
+<p>}</p>
+<p>还是android惯用的方式，通过JNI来调用HAL层的代码，wifi的HAL层的代码还是在android为数不多的最早的目录下面。</p>
+<p>&lt;hardware/libhardware_legacy/wifi/wifi.c&gt;</p>
+<p>int wifi_start_supplicant()</p>
+<p>{</p>
+<p>    return wifi_start_supplicant_common(SUPP_CONFIG_FILE);</p>
+<p>}</p>
+<p>其中的 SUPP_CONFIG_FILE[]    = &quot;/data/misc/wifi/wpa_supplicant.conf这就是wpa_supplicant服务启动所需要的配置文件。</p>
+<p>&lt;hardware/libhardware_legacy/wifi/wifi.c&gt;</p>
+<p>int wifi_start_supplicant_common(const char *config_file)</p>
+<p>{</p>
+<p>……</p>
+<p> if (ensure_config_file_exists(config_file) &lt; 0) {</p>
+<p>  //在启动wpa_supplicant daemon服务之前，需要检查wpa_supplicant服务配置文件是否存在。</p>
+<p>        LOGE(&quot;Wi-Fi will not be enabled&quot;);</p>
+<p>        return -1;</p>
+<p>    }</p>
+<p>……</p>
+<p>   property_get(&quot;wifi.interface&quot;, iface, WIFI_TEST_INTERFACE);</p>
+<p>    snprintf(daemon_cmd, PROPERTY_VALUE_MAX, &quot;%s:-i%s -c%s&quot;, SUPPLICANT_NAME, iface, config_file);</p>
+<p>    property_set(&quot;ctl.start&quot;, daemon_cmd);</p>
+<p>    sched_yield();</p>
+<p>……</p>
+<p> }</p>
+<p>通过将SUPPLICANT_NAME复制到daemon_cmd中，然后就可以ctl.start启动supplicant服务了，这个必须在系统启动的时候在init.rc中添加supplicant服务。</p>
+<p>service wpa_supplicant /system/bin/wpa_supplicant -dd -i wlan0 -c/etc/wifi/wpa_supplicant.conf -Dnl80211</p>
+<p>    class main</p>
+<p>    socket wpa_wlan0 dgram 660 wifi wifi</p>
+<p>    disabled</p>
+<p>    oneshot</p>
+<p>具体的wpa_supplicant的服务程序的代码在external/wpa_supplicant_8下面，以编译成libwpa_client.so和 libcutils等形式放在系统的库文件下面。wpa_supplicant具有配置和控制网络接口，加密功能，交互请求等。</p>
+<p>3.WifiMonitor的启动过程</p>
+<p>再回到之前WifiNative.startSupplicant中，如果wpa_supplicant在init.rc中有定义并且能够成功启动，就会开启WifiM</p>
+<p>onitor进程。同时将wifi状态机切换到SupplicantStartingState的状态。</p>
+<p>&lt;framework/base/wifi/java/android/net/wifi/WifiStateMachine.java&gt;</p>
+<p>           if(WifiNative.startSupplicant()) {</p>
+<p>                        if (DBG) log(&quot;Supplicant start successful&quot;);</p>
+<p>                        mWifiMonitor.startMonitoring();</p>
+<p>                        transitionTo(mSupplicantStartingState);</p>
+<p>              ……</p>
+<p>              }</p>
+<p>     WifiMonitor是一个监视线程，负责从wpa_supplicant接收事件通知和把命令下达给wpa_supplicant。下面看看WifiMo</p>
+<p>nitor的启动过程。</p>
+<p>&lt;framework/base/wifi/java/android/net/wifi/WifiMonitor.java&gt;CMD_RESET_SUPPLICANT_STATE</p>
+<p> public void startMonitoring() {</p>
+<p>        new MonitorThread().start();</p>
+<p>    }</p>
+<p>    class MonitorThread extends Thread {</p>
+<p>        public MonitorThread() {</p>
+<p>            super(&quot;WifiMonitor&quot;);</p>
+<p>        }</p>
+<p>        public void run() {</p>
+<p>            if (connectToSupplicant()) {</p>
+<p>                // Send a message indicating that it is now possible to send commands</p>
+<p>                // to the supplicant</p>
+<p>                mStateMachine.sendMessage(SUP_CONNECTION_EVENT);</p>
+<p>            } else {</p>
+<p>                mStateMachine.sendMessage(SUP_DISCONNECTION_EVENT);</p>
+<p>                return;</p>
+<p>            }</p>
+<p>            //noinspection InfiniteLoopStatement</p>
+<p>            for (;;) {</p>
+<p>                String eventStr = WifiNative.waitForEvent();</p>
+<p>                // Skip logging the common but mostly uninteresting scan-results event</p>
+<p>                if (false &amp;&amp; eventStr.indexOf(SCAN_RESULTS_STR) == -1) {</p>
+<p>                    Log.d(TAG, &quot;Event [&quot; + eventStr + &quot;]&quot;);</p>
+<p>                }</p>
+<p>                if (!eventStr.startsWith(EVENT_PREFIX_STR)) {</p>
+<p>                    if (eventStr.startsWith(WPA_EVENT_PREFIX_STR) &amp;&amp;</p>
+<p>                            0 &lt; eventStr.indexOf(PASSWORD_MAY_BE_INCORRECT_STR)) {</p>
+<p>                        mStateMachine.sendMessage(AUTHENTICATION_FAILURE_EVENT);</p>
+<p>                    } else if (eventStr.startsWith(WPS_OVERLAP_STR)) {</p>
+<p>                        mStateMachine.sendMessage(WPS_OVERLAP_EVENT);</p>
+<p>上面的函数工作有点多，一个一个慢慢来，首先，connectToSupplicant()；在WifiMonitor中调用WifiNative.connectT</p>
+<p>oSupplicant，这又调到了JNI。</p>
+<p>&lt;framework/base/wifi/java/android/net/wifi/WifiMonitor.java&gt;</p>
+<p> private boolean connectToSupplicant() {</p>
+<p>            int connectTries = 0;</p>
+<p>            while (true) {</p>
+<p>                if (WifiNative.connectToSupplicant()) {</p>
+<p>                    return true;</p>
+<p>                }</p>
+<p>                if (connectTries++ &lt; 5) {</p>
+<p>                    nap(1);</p>
+<p>                } else {</p>
+<p>                    break;</p>
+<p>                }</p>
+<p>            }</p>
+<p>            return false;</p>
+<p>        }</p>
+<p>继续上面代码，跑到JNI里面。</p>
+<p>&lt;framework/base/core/jni/android_net_wifi_wifi.cpp&gt;</p>
+<p>{ &quot;connectToSupplicant&quot;, &quot;()Z&quot;,  (void *)android_net_wifi_connectToSupplicant },</p>
+<p>static jboolean android_net_wifi_connectToSupplicant(JNIEnv* env, jobject)</p>
+<p>{</p>
+<p>    return (jboolean)(::wifi_connect_to_supplicant() == 0);</p>
+<p>}</p>
+<p>又通过JNI调到wifi HAL层。</p>
+<p>&lt;hardware/libhardware_legacy/wifi/wifi.c&gt;</p>
+<p>int wifi_connect_to_supplicant()</p>
+<p>{</p>
+<p>……</p>
+<p>ctrl_conn = wpa_ctrl_open(ifname);</p>
+<p>……</p>
+<p>monitor_conn = wpa_ctrl_open(ifname);</p>
+<p>……</p>
+<p>if (socketpair(AF_UNIX, SOCK_STREAM, 0, exit_sockets) == -1) {</p>
+<p>        wpa_ctrl_close(monitor_conn);</p>
+<p>        wpa_ctrl_close(ctrl_conn);</p>
+<p>        ctrl_conn = monitor_conn = NULL;</p>
+<p>        return -1;</p>
+<p>    }</p>
+<p>……</p>
+<p>}</p>
+<p>      java层通过connectToSupplicant调用wifi_connect_to_supplicant函数，在该函数中，将通过wpa_ctrl_open函数分别创建两个AF_UNIX地址族和数据报方式的socket，一个是ctrl_conn, 用于向wpa_supplicant发送命令并接收response, 另一个是monitor_conn, 它一直阻塞等待从wpa_supplicant过来的event。最后，通过monitor_conn向wpa_supplicant发送命令ATTACH，用于将自己的socket信息注册到wpa_supplicant, 由于socket是数据报方式的，这一步是必须的，对于存在于wpa_supplicant的服务器端，它是所有客户端共享的，由于它需要主动向monitor_conn客户端发送事件，所以它必须先记录下该客户端的详细信息，wpa_supplicant就可以将EVENT发向该socket。在完成上面这些操作后，java层会通过jni方式调用函数android_net_wifi_waitForEvent（应该是起一个线程，在线程里调用），该函数会调用wifi_wait_for_event，在wifi_wait_for_event函数里，会阻塞接收从wpa_supplicant模块传来的事件，一旦wpa_supplicant模块有事件发，wifi_wait_for_event接收到后，会将包含事件的buf通过函数参数的方式回传到java层，java收到事件后，再继续调用wifi_wait_for_event函数进行阻塞等待接收 private void handleNetworkStateChange(NetworkInfo.DetailedState newState, String data) {</p>
+<p>，从而完成一个循环。</p>
+<p>case WifiMonitor.SUP_CONNECTION_EVENT:</p>
+<p>                    if (DBG) log(&quot;Supplicant connection established&quot;);</p>
+<p>                    setWifiState(WIFI_STATE_ENABLED);</p>
+<p>                    mSupplicantRestartCount = 0;</p>
+<p>                    /* Reset the supplicant state to indicate the supplicant</p>
+<p>                     * state is not known at this time */</p>
+<p>                    mSupplicantStateTracker.sendMessage(CMD_RESET_SUPPLICANT_STATE);</p>
+<p>                    mWpsStateMachine.sendMessage(CMD_RESET_WPS_STATE);</p>
+<p>                    /* Initialize data structures */</p>
+<p>                    mLastBssid = null;</p>
+<p>                    mLastNetworkId = WifiConfiguration.INVALID_NETWORK_ID;</p>
+<p>                    mLastSignalLevel = -1;</p>
+<p>SCAN_RESULTS_STR</p>
+<p>                    mWifiInfo.setMacAddress(WifiNative.getMacAddressCommand());</p>
+<p>                    WifiConfigStore.initialize(mContext);</p>
+<p>                    sendSupplicantConnectionChangedBroadcast(true);</p>
+<p>                    transitionTo(mDriverStartedState)</p>
+<p>发送命令先重新设置supplicant服务的状态，然后通过JNI获取接口的物理地址。</p>
+<p>4.DHCPCD服务的启动</p>
+<p>在上面的WifiMonitor线程启动的过程中，会通过JNI的WifiNative.waitForEvent();当event为wpa_supplicant服务</p>
+<p>CONNECTED。就会通过eventName.equals(CONNECTED_STR),然后在handle_event()函数中来启动dhcpcd服务。具体的代码流程：</p>
+<p>&lt;framework/base/wifi/java/android/net/wifi/WifiMonitor.java&gt;</p>
+<p>                int event;</p>
+<p>                if (eventName.equals(CONNECTED_STR))</p>
+<p>                    event = CONNECTED;</p>
+<p>                ……</p>
+<p>             void handleEvent(int event, String remainder) {</p>
+<p>             switch (event) {</p>
+<p>                case DISCONNECTED:</p>
+<p>                    handleNetworkStateChange(NetworkInfo.DetailedState.DISCONNECTED, remainder);</p>
+<p>                    break;</p>
+<p>                case CONNECTED:</p>
+<p>                    handleNetworkStateChange(NetworkInfo.DetailedState.CONNECTED, remainder);</p>
+<p>                    break;</p>
+<p>                 ……</p>
+<p>   private void handleNetworkStateChange(NetworkInfo.DetailedState newState, String data) {</p>
+<p>                   ……</p>
+<p>                 notifyNetworkStateChange(newState, BSSID, networkId);</p>
+<p> ……</p>
+<p>           }</p>
+<p>   void notifyNetworkStateChange(NetworkInfo.DetailedState newState, String BSSID, int netId) {</p>
+<p>        if (newState == NetworkInfo.DetailedState.CONNECTED) {</p>
+<p>            Message m = mStateMachine.obtainMessage(NETWORK_CONNECTION_EVENT,</p>
+<p>                    netId, 0, BSSID);</p>
+<p>            mStateMachine.sendMessage(m);</p>
+<p>        } else {</p>
+<p>            Message m = mStateMachine.obtainMessage(NETWORK_DISCONNECTION_EVENT,</p>
+<p>                    netId, 0, BSSID);</p>
+<p>            mStateMachine.sendMessage(m);</p>
+<p>        }</p>
+<p>    }</p>
+<p>&lt;framework/base/wifi/java/android/net/wifi/WifiStateMachine.java&gt;</p>
+<p>case WifiMonitor.NETWORK_CONNECTION_EVENT:</p>
+<p>                    ……</p>
+<p>                   setNetworkDetailedState(DetailedState.OBTAINING_IPADDR);</p>
+<p>                    sendNetworkStateChangeBroadcast(mLastBssid);</p>
+<p>                    transitionTo(mConnectingState);</p>
+<p>……</p>
+<p> class ConnectingState extends State {</p>
+<p>        @Override</p>
+<p>        public void enter() {</p>
+<p>……</p>
+<p>mDhcpStateMachine.sendMessage(DhcpStateMachine.CMD_START_DHCP)；</p>
+<p>……</p>
+<p>}</p>
+<p>将wifi的状态机切换到ConnectingState，然后向Dhcp_statemachine发送CMD_START_DHCP。</p>
+<p>&lt;framework/base/core/java/android/net/DhcpStateMachine.java&gt;</p>
+<p>case CMD_START_DHCP:</p>
+<p>                    if (mRegisteredForPreDhcpNotification) {</p>
+<p>                        /* Notify controller before starting DHCP */</p>
+<p>                        mController.sendMessage(CMD_PRE_DHCP_ACTION);</p>
+<p>                        transitionTo(mWaitBeforeStartState);</p>
+<p>……</p>
+<p>}</p>
+<p>&lt;framework/base/wifi/java/android/net/wifi/WifiStateMachine.java&gt;</p>
+<p> case DhcpStateMachine.CMD_PRE_DHCP_ACTION:</p>
+<p>                  mDhcpStateMachine.sendMessage(DhcpStateMachine.CMD_PRE_DHCP_ACTION_COMPLETE);</p>
+<p>class WaitBeforeStartState extends State {</p>
+<p>……</p>
+<p>switch (message.what) {</p>
+<p>                case CMD_PRE_DHCP_ACTION_COMPLETE:</p>
+<p>                    if (runDhcp(DhcpAction.START)) {</p>
+<p>                        transitionTo(mRunningState);</p>
+<p>……</p>
+<p>}</p>
+<p>在runDhcp函数中，会根据你的interfaceName来申请开启DHCP服务，然后经由NetworkUtils的本地定义的JNI来真正的启动dhcp。</p>
+<p>&lt;framework/base/core/java/android/net/DhcpStateMachine.java&gt;</p>
+<p> private boolean runDhcp(DhcpAction dhcpAction) {</p>
+<p>……</p>
+<p> success = NetworkUtils.runDhcp(mInterfaceName, dhcpInfoInternal);</p>
+<p>……</p>
+<p>return success；</p>
+<p>}</p>
+<p> &lt;framework/base/core/jni/android_net_NetUtils.cpp&gt;</p>
+<p>{ &quot;runDhcp&quot;, &quot;(Ljava/lang/String;Landroid/net/DhcpInfoInternal;)Z&quot;,  (void *)android_net_utils_runDhcp }</p>
+<p>……</p>
+<p>static jboolean android_net_utils_runDhcpCommon(JNIEnv* env, jobject clazz, jstring ifname,</p>
+<p>  jobject info, bool renew)</p>
+<p>{</p>
+<p>……</p>
+<p> result = ::dhcp_do_request(nameStr, ipaddr, gateway, &amp;prefixLength,</p>
+<p>dns1, dns2, server, &amp;lease);</p>
+<p>……</p>
+<p>}</p>
+<p>&lt;/system/core/libnetutils/dhcp_utils.c&gt;</p>
+<p>int dhcp_do_request(const char *interface,</p>
+<p>char *ipaddr,</p>
+<p> char *gateway,</p>
+<p>uint32_t *prefixLength,</p>
+<p> char *dns1,</p>
+<p>  char *dns2,</p>
+<p>char *server, uint32_t  *lease)</p>
+<p>{</p>
+<p>……</p>
+<p>property_set(ctrl_prop, daemon_cmd);</p>
+<p>……</p>
+<p>}</p>
+<p>这里的daemon_cmd是dhcpcd，同样在init.rc中要dhcpcd的服务存在，否则dhcpcd服务启动失败。该service在init.</p>
+<p>Rc中的写法。</p>
+<p>service dhcpcd_wlan0 /system/bin/dhcpcd -f /system/etc/dhcpcd/dhcpcd.conf</p>
+<p>    class main</p>
+<p>    disabled</p>
+<p>    oneshot</p>
+<p>具体的dhcpcd的代码部分在external下面的dhcp文件下面，以可执行文件和库文件方式运行。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/androi%20VOLUME_MUTE%20%E7%9A%84%E5%A4%84%E7%90%86/" rel="prev" title="androi VOLUME_MUTE 的处理">
+      <i class="fa fa-chevron-left"></i> androi VOLUME_MUTE 的处理
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/android%204.2/" rel="next" title="android 4">
+      android 4 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Edward"
+      src="/uploads/avatar.gif">
+  <p class="site-author-name" itemprop="name">Edward</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">570</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Edward</span>
+</div>
+
+        
+
+
+
+
+
+
+<script>
+  (function() {
+    function leancloudSelector(url) {
+      url = encodeURI(url);
+      return document.getElementById(url).querySelector('.leancloud-visitors-count');
+    }
+
+    function addCount(Counter) {
+      var visitors = document.querySelector('.leancloud_visitors');
+      var url = decodeURI(visitors.id);
+      var title = visitors.dataset.flagTitle;
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          if (results.length > 0) {
+            var counter = results[0];
+            leancloudSelector(url).innerText = counter.time + 1;
+            Counter('put', '/classes/Counter/' + counter.objectId, { time: { '__op': 'Increment', 'amount': 1 } })
+              .catch(error => {
+                console.error('Failed to save visitor count', error);
+              });
+          } else {
+              Counter('post', '/classes/Counter', { title, url, time: 1 })
+                .then(response => response.json())
+                .then(() => {
+                  leancloudSelector(url).innerText = 1;
+                })
+                .catch(error => {
+                  console.error('Failed to create', error);
+                });
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    function showTime(Counter) {
+      var visitors = document.querySelectorAll('.leancloud_visitors');
+      var entries = [...visitors].map(element => {
+        return decodeURI(element.id);
+      });
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url: { '$in': entries } })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          for (let url of entries) {
+            let target = results.find(item => item.url === url);
+            leancloudSelector(url).innerText = target ? target.time : 0;
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    let { app_id, app_key, server_url } = {"enable":true,"app_id":"wxYx0BX9gaKA3XC4LuO2of0v-gzGzoHsz","app_key":"LQMcs6IDIE4YAm10vMsn9IYq","server_url":"https://wxyx0bx9.lc-cn-n1-shared.com","security":false};
+    function fetchData(api_server) {
+      var Counter = (method, url, data) => {
+        return fetch(`${api_server}/1.1${url}`, {
+          method,
+          headers: {
+            'X-LC-Id'     : app_id,
+            'X-LC-Key'    : app_key,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data)
+        });
+      };
+      if (CONFIG.page.isPost) {
+        if (CONFIG.hostname !== location.hostname) return;
+        addCount(Counter);
+      } else if (document.querySelectorAll('.post-title-link').length >= 1) {
+        showTime(Counter);
+      }
+    }
+
+    let api_server = app_id.slice(-9) !== '-MdYXbMMI' ? server_url : `https://${app_id.slice(0, 8).toLowerCase()}.api.lncldglobal.com`;
+
+    if (api_server) {
+      fetchData(api_server);
+    } else {
+      fetch('https://app-router.leancloud.cn/2/route?appId=' + app_id)
+        .then(response => response.json())
+        .then(({ api_server }) => {
+          fetchData('https://' + api_server);
+        });
+    }
+  })();
+</script>
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

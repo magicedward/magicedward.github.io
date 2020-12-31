@@ -1,0 +1,851 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"edward.org.cn","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="platform平台设备驱动是基于设备总线驱动模型的，它只不过是将 device 进一步封装成为 platform_device，将 device_driver 进一步封装成为 platform_device_driver,前面已经分析过设备总线驱动模型，关于device 与 device_driver 的注册过程以及它们在sysfs文件系统中的层次关系就不在分析，本文重点分析platform平">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Linux Platform devices 平台设备驱动">
+<meta property="og:url" content="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/Linux%20Platform%20devices%20%E5%B9%B3%E5%8F%B0%E8%AE%BE%E5%A4%87%E9%A9%B1%E5%8A%A8/index.html">
+<meta property="og:site_name" content="点点滴滴">
+<meta property="og:description" content="platform平台设备驱动是基于设备总线驱动模型的，它只不过是将 device 进一步封装成为 platform_device，将 device_driver 进一步封装成为 platform_device_driver,前面已经分析过设备总线驱动模型，关于device 与 device_driver 的注册过程以及它们在sysfs文件系统中的层次关系就不在分析，本文重点分析platform平">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-12-31T06:48:01.387Z">
+<meta property="article:modified_time" content="2020-01-16T04:37:32.367Z">
+<meta property="article:author" content="Edward">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/Linux%20Platform%20devices%20%E5%B9%B3%E5%8F%B0%E8%AE%BE%E5%A4%87%E9%A9%B1%E5%8A%A8/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>Linux Platform devices 平台设备驱动 | 点点滴滴</title>
+  
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?a92ed22eafce466e7a7b17546bb0dc6f";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">点点滴滴</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/Linux%20Platform%20devices%20%E5%B9%B3%E5%8F%B0%E8%AE%BE%E5%A4%87%E9%A9%B1%E5%8A%A8/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/avatar.gif">
+      <meta itemprop="name" content="Edward">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="点点滴滴">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Linux Platform devices 平台设备驱动
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-12-31 14:48:01" itemprop="dateCreated datePublished" datetime="2020-12-31T14:48:01+08:00">2020-12-31</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-01-16 12:37:32" itemprop="dateModified" datetime="2020-01-16T12:37:32+08:00">2020-01-16</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%83%82%E7%AC%94%E5%A4%B4/" itemprop="url" rel="index"><span itemprop="name">烂笔头</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/Linux%20Platform%20devices%20%E5%B9%B3%E5%8F%B0%E8%AE%BE%E5%A4%87%E9%A9%B1%E5%8A%A8/" class="post-meta-item leancloud_visitors" data-flag-title="Linux Platform devices 平台设备驱动" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p> platform平台设备驱动是基于设备总线驱动模型的，它只不过是将 device 进一步封装成为 platform_device，将 device_driver 进一步封装成为 platform_device_driver,前面已经分析过设备总线驱动模型，关于device 与 device_driver 的注册过程以及它们在sysfs文件系统中的层次关系就不在分析，本文重点分析platform平台设备驱动与设备总线驱动模型相比较新增添的那些东西。</p>
+<p>    在Linux设备模型的抽象中，存在着一类称作“Platform Device”的设备，内核是这样描述它们的（Documentation/driver-model/platform.txt）：</p>
+<p>    Platform devices are devices that typically appear as autonomous entities in the system. This includes legacy port-based devices and host bridges to peripheral buses, and most controllers integrated into system-on-chip platforms.  What they usually have in common is direct addressing from a CPU bus.  Rarely, a platform_device will be connected through a segment of some other kind of bus; but its registers will still be directly addressable.</p>
+<p>     概括来说，Platform设备包括：基于端口的设备（已不推荐使用，保留下来只为兼容旧设备，legacy）；连接物理总线的桥设备；集成在SOC平台上面的控制器；连接在其它bus上的设备（很少见）。等等。<br>    这些设备有一个基本的特征：可以通过CPU bus直接寻址（例如在嵌入式系统常见的“寄存器”）。因此，由于这个共性，内核在设备模型的基础上（device和device_driver），对这些设备进行了更进一步的封装，抽象出paltform bus、platform device和platform driver，以便驱动开发人员可以方便的开发这类设备的驱动。<br>    可以说，paltform设备对Linux驱动工程师是非常重要的，因为我们编写的大多数设备驱动，都是为了驱动plaftom设备。</p>
+<p>platform_bus_type<br>    我们知道，在设备总线驱动模型的中，BUS像一个月老一样，通过它的match函数，将注册到bus中的device与driver进行配对，那么每一个不同的bus 都有自己的match函数，我们来看看platform_bus_type.</p>
+<p>[cpp] view plain copy</p>
+<p>struct bus_type platform_bus_type = {  </p>
+<p>    .name       = &quot;platform&quot;,  </p>
+<p>    .dev_attrs  = platform_dev_attrs,  </p>
+<p>    .match      = platform_match,  </p>
+<p>    .uevent     = platform_uevent,  </p>
+<p>    .pm     = &amp;platform_dev_pm_ops,  </p>
+<p>};  </p>
+<p>[cpp] view plain copy</p>
+<p>static int platform_match(struct device *dev, struct device_driver *drv)  </p>
+<p>{  </p>
+<p>struct platform_device *pdev = to_platform_device(dev);  </p>
+<p>struct platform_driver *pdrv = to_platform_driver(drv);  </p>
+<p>/* match against the id table first */  </p>
+<p>if (pdrv-&gt;id_table)  </p>
+<p>return platform_match_id(pdrv-&gt;id_table, pdev) != NULL;  </p>
+<p>/* fall-back to driver name match */  </p>
+<p>return (strcmp(pdev-&gt;name, drv-&gt;name) == 0);  </p>
+<p>}  </p>
+<p>    如果platform_device_driver中定义了id_table，则调用 platform_match_id 进行匹配</p>
+<p>    举个例子：</p>
+<p>[cpp] view plain copy</p>
+<p>static struct platform_device_id s3c24xx_driver_ids[] = {  </p>
+<p>    {  </p>
+<p>        .name       = &quot;s3c2410-i2c&quot;,  </p>
+<p>        .driver_data    = TYPE_S3C2410,  </p>
+<p>    }, {  </p>
+<p>        .name       = &quot;s3c2440-i2c&quot;,  </p>
+<p>        .driver_data    = TYPE_S3C2440,  </p>
+<p>    }, { },  </p>
+<p>};  </p>
+<p>[cpp] view plain copy</p>
+<p>struct platform_device s3c_device_i2c0 = {  </p>
+<p>    .name         = &quot;s3c2410-i2c&quot;,  </p>
+<p>#ifdef CONFIG_S3C_DEV_I2C1  </p>
+<p>    .id       = 0,  </p>
+<p>#else  </p>
+<p>    .id       = -1,  </p>
+<p>#endif  </p>
+<p>    .num_resources    = ARRAY_SIZE(s3c_i2c_resource),  </p>
+<p>    .resource     = s3c_i2c_resource,  </p>
+<p>};  </p>
+<p>[cpp] view plain copy</p>
+<p>static const struct platform_device_id *platform_match_id(struct platform_device_id *id, struct platform_device *pdev)  </p>
+<p>{  </p>
+<p>while (id-&gt;name[0]) {  </p>
+<p>if (strcmp(pdev-&gt;name, id-&gt;name) == 0) {  </p>
+<p>            pdev-&gt;id_entry = id;  </p>
+<p>return id;  </p>
+<p>        }  </p>
+<p>        id++;  </p>
+<p>    }  </p>
+<p>return NULL;  </p>
+<p>}  </p>
+<p>显然，platform_match_id 的作用就是遍历整个 Id_table 数组，寻找是否有与 platform_device-&gt;name 同名的，如果有，则返回这个 Platform_device_id ,使用Id_table 打破了原本设备总线驱动模型，一个 device 只能用与一个 device_driver 配对的局限性。现在一个platform_device_driver 可以与多个platform_device配对。</p>
+<p>如果没有，则只是根据 platform_device_driver-&gt;name 与 platform_device-&gt;name 进行比较，这也就是老师为啥在写平台设备驱动程序的时候经常说，“将驱动注册到内核中去，如果有同名设备，则调用driver-&gt;probe函数….”。</p>
+<p>pletform_device 中的 id 的作用：</p>
+<p>    if (pdev-&gt;id != -1)      /* 如果不是-1 对name编号 <em>/  <br>        dev_set_name(&amp;pdev-&gt;dev, &quot;%s.%d&quot;, pdev-&gt;name,  pdev-&gt;id);  <br>    else                             /</em> -1时直接是名字 */<br>        dev_set_name(&amp;pdev-&gt;dev, pdev-&gt;name); </p>
+<p>从device封装而来的platform_device</p>
+<p>[cpp] view plain copy</p>
+<p>struct platform_device {  </p>
+<p>const char  * name;  </p>
+<p>int     id;  </p>
+<p>struct device   dev;  </p>
+<p>    u32     num_resources;  </p>
+<p>struct resource * resource;  </p>
+<p>struct platform_device_id   *id_entry;  </p>
+<p>/* arch specific additions */  </p>
+<p>struct pdev_archdata    archdata;  </p>
+<p>};    </p>
+<p>    name，设备的名称，该名称在设备注册时，会拷贝到dev.init_name中。<br>    dev，真正的设备，通过 container_of ,就能找到整个platform_device ，访问其它成员，如后面要提到的 resource <br>    num_resources、resource，该设备的资源描述，由struct resource（include/linux/ioport.h）结构抽象。 <br>    在Linux中，系统资源包括I/O、Memory、Register、IRQ、DMA、Bus等多种类型。这些资源大多具有独占性，不允许多个设备同时使用，因此Linux内核提供了一些API，用于分配、管理这些资源。 <br>当某个设备需要使用某些资源时，只需利用struct resource组织这些资源（如名称、类型、起始、结束地址等），并保存在该设备的resource指针中即可。然后在设备probe时，设备需求会调用资源管理接口，分配、使用这些资源。而内核的资源管理逻辑，可以判断这些资源是否已被使用、是否可被使用等等。</p>
+<p>[cpp] view plain copy</p>
+<p>struct resource {  </p>
+<p>    resource_size_t start;  </p>
+<p>    resource_size_t end;  </p>
+<p>const char *name;  </p>
+<p>    unsigned long flags;  </p>
+<p>struct resource *parent, *sibling, *child;  </p>
+<p>};  </p>
+<p>[cpp] view plain copy</p>
+<p>static struct resource led_resource[] = {   //jz2440的参数，驱动未测试   </p>
+<p>    [0] = {  </p>
+<p>        .start = 0x56000010,  </p>
+<p>        .end   = 0x56000010 + 8 - 1,  </p>
+<p>        .flags = IORESOURCE_MEM,  </p>
+<p>    },  </p>
+<p>    [1] = {  </p>
+<p>        .start = 5,  </p>
+<p>        .end   = 5,  </p>
+<p>        .flags = IORESOURCE_IRQ,  </p>
+<p>    },  </p>
+<p>};  </p>
+<p>static struct platform_device led_dev = {  </p>
+<p>    .name = &quot;myled&quot;,    //设备名字 与 驱动相匹配  </p>
+<p>    .id   = -1,  </p>
+<p>    .num_resources = ARRAY_SIZE(led_resource),  </p>
+<p>    .resource = led_resource,  </p>
+<p>    .dev = {  </p>
+<p>        .release = led_release,  </p>
+<p>//.devt = MKDEV(252, 1),  </p>
+<p>    },  </p>
+<p>};  </p>
+<p>从 device_driver 封装而来的platform_device_dirver</p>
+<p>[cpp] view plain copy</p>
+<p>struct platform_driver {  </p>
+<p>int (*probe)(struct platform_device *);  </p>
+<p>int (*remove)(struct platform_device *);  </p>
+<p>void (*shutdown)(struct platform_device *);  </p>
+<p>int (*suspend)(struct platform_device *, pm_message_t state);  </p>
+<p>int (*resume)(struct platform_device *);  </p>
+<p>struct device_driver driver;  </p>
+<p>struct platform_device_id *id_table;  </p>
+<p>};  </p>
+<p>[cpp] view plain copy</p>
+<p>int platform_driver_register(struct platform_driver *drv)  </p>
+<p>{  </p>
+<p>    drv-&gt;driver.bus = &amp;platform_bus_type;  </p>
+<p>if (drv-&gt;probe)  </p>
+<p>        drv-&gt;driver.probe = platform_drv_probe;  </p>
+<p>if (drv-&gt;remove)  </p>
+<p>        drv-&gt;driver.remove = platform_drv_remove;  </p>
+<p>if (drv-&gt;shutdown)  </p>
+<p>        drv-&gt;driver.shutdown = platform_drv_shutdown;  </p>
+<p>return driver_register(&amp;drv-&gt;driver);  </p>
+<p>}  </p>
+<p>    struct platform_driver结构和struct device_driver非常类似,上边的platform_drv_probe、platform_drv_remove、platform_drv_shutdown，只不过稍作转换调用platform_driver中的probe、remove、shutdown函数，举个例子稍微看一下</p>
+<p>[cpp] view plain copy</p>
+<p>static int platform_drv_probe(struct device *_dev)  </p>
+<p>{  </p>
+<p>struct platform_driver *drv = to_platform_driver(_dev-&gt;driver);  </p>
+<p>struct platform_device *dev = to_platform_device(_dev);  </p>
+<p>return drv-&gt;probe(dev);  </p>
+<p>}  </p>
+<p>Platform Device提供的API</p>
+<p>[cpp] view plain copy</p>
+<p>/* include/linux/platform_device.h */  </p>
+<p>extern int platform_device_register(struct platform_device *);  </p>
+<p>extern void platform_device_unregister(struct platform_device *);  </p>
+<p>extern void arch_setup_pdev_archdata(struct platform_device *);  </p>
+<p>extern struct resource *platform_get_resource(struct platform_device *, unsigned int, unsigned int);  </p>
+<p>extern int platform_get_irq(struct platform_device *, unsigned int);  </p>
+<p>extern struct resource *platform_get_resource_byname(struct platform_device *, unsigned int, const char *);  </p>
+<p>extern int platform_get_irq_byname(struct platform_device *, const char *);  </p>
+<p>extern int platform_add_devices(struct platform_device **, int);  </p>
+<p>extern struct platform_device *platform_device_register_full(const struct platform_device_info *pdevinfo);  </p>
+<p>static inline struct platform_device *platform_device_register_resndata(  </p>
+<p>struct device *parent, const char *name, int id,  </p>
+<p>const struct resource *res, unsigned int num,  </p>
+<p>const void *data, size_t size)  </p>
+<p>static inline struct platform_device *platform_device_register_simple(  </p>
+<p>const char *name, int id,  </p>
+<p>const struct resource *res, unsigned int num)  </p>
+<p>static inline struct platform_device *platform_device_register_data(  </p>
+<p>struct device *parent, const char *name, int id,  </p>
+<p>const void *data, size_t size)  </p>
+<p>extern struct platform_device *platform_device_alloc(const char *name, int id);  </p>
+<p>extern int platform_device_add_resources(struct platform_device *pdev,  </p>
+<p>const struct resource *res,  </p>
+<p>                                         unsigned int num);  </p>
+<p>extern int platform_device_add_data(struct platform_device *pdev,  </p>
+<p>const void *data, size_t size);  </p>
+<p>extern int platform_device_add(struct platform_device *pdev);  </p>
+<p>extern void platform_device_del(struct platform_device *pdev);  </p>
+<p>extern void platform_device_put(struct platform_device *pdev);  </p>
+<p>    platform_device_register、platform_device_unregister，Platform设备的注册/注销接口，和底层的device_register等接口类似。<br>    arch_setup_pdev_archdata，设置platform_device变量中的archdata指针。<br>    platform_get_resource、platform_get_irq、platform_get_resource_byname、platform_get_irq_byname，通过这些接口，可以获取platform_device变量中的resource信息，以及直接获取IRQ的number等等。<br>    platform_device_register_full、platform_device_register_resndata、platform_device_register_simple、platform_device_register_data，其它形式的设备注册。调用者只需要提供一些必要的信息，如name、ID、resource等，Platform模块就会自动分配一个struct platform_device变量，填充内容后，注册到内核中。<br>    platform_device_alloc，以name和id为参数，动态分配一个struct platform_device变量。<br>    platform_device_add_resources，向platform device中增加资源描述。<br>    platform_device_add_data，向platform device中添加自定义的数据（保存在pdev-&gt;dev.platform_data指针中）。<br>    platform_device_add、platform_device_del、platform_device_put，其它操作接口。<br>Platform Driver提供的API<br>    platform_driver_registe、platform_driver_unregister，platform driver的注册、注销接口。<br>    platform_driver_probe，主动执行probe动作。<br>    platform_set_drvdata、platform_get_drvdata，设置或者获取driver保存在device变量中的私有数据。<br>懒人API</p>
+<p>[cpp] view plain copy</p>
+<p>extern struct platform_device *platform_create_bundle(  </p>
+<p>struct platform_driver *driver, int (*probe)(struct platform_device *),  </p>
+<p>struct resource *res, unsigned int n_res,  </p>
+<p>const void *data, size_t size);  </p>
+<p>    只要提供一个platform_driver（要把driver的probe接口显式的传入），并告知该设备占用的资源信息，platform模块就会帮忙分配资源，并执行probe操作。对于那些不需要热拔插的设备来说，这种方式是最省事的了。  </p>
+<p>简单一例：</p>
+<p>    开发板：Mini2440</p>
+<p>    内核版本：2.6.32.2</p>
+<p>[cpp] view plain copy</p>
+<p>#include &lt;linux/module.h&gt;  </p>
+<p>#include &lt;linux/kernel.h&gt;  </p>
+<p>#include &lt;linux/fs.h&gt;  </p>
+<p>#include &lt;linux/init.h&gt;  </p>
+<p>#include &lt;linux/device.h&gt;  </p>
+<p>#include &lt;linux/interrupt.h&gt;  </p>
+<p>#include &lt;linux/sched.h&gt;   </p>
+<p>#include &lt;linux/irq.h&gt;  </p>
+<p>#include &lt;asm/uaccess.h&gt;  </p>
+<p>#include &lt;linux/input.h&gt;  </p>
+<p>#include &lt;linux/platform_device.h&gt;  </p>
+<p>// 设备资源  </p>
+<p>static struct resource led_resource[] = {   //jz2440的参数，驱动未测试   </p>
+<p>    [0] = {  </p>
+<p>        .start = 0x56000010,  </p>
+<p>        .end   = 0x56000010 + 8 - 1,  </p>
+<p>        .flags = IORESOURCE_MEM,  </p>
+<p>    },  </p>
+<p>    [1] = {  </p>
+<p>        .start = 5,  </p>
+<p>        .end   = 5,  </p>
+<p>        .flags = IORESOURCE_IRQ,  </p>
+<p>    },  </p>
+<p>};  </p>
+<p>static void led_release(struct device *dev){  </p>
+<p>}  </p>
+<p>// 创建一个设备  </p>
+<p>static struct platform_device led_dev = {  </p>
+<p>    .name = &quot;myled&quot;,    //设备名字 与 驱动相匹配  </p>
+<p>    .id   = -1,  </p>
+<p>    .num_resources = ARRAY_SIZE(led_resource),  </p>
+<p>    .resource = led_resource,  </p>
+<p>    .dev = {  </p>
+<p>        .release = led_release,  </p>
+<p>//.devt = MKDEV(252, 1),  </p>
+<p>    },  </p>
+<p>};  </p>
+<p>static int led_dev_init(void){  </p>
+<p>//向bus注册led_dev match drv链表进行配对  </p>
+<p>    platform_device_register(&amp;led_dev);  </p>
+<p>return 0;  </p>
+<p>}  </p>
+<p>static void led_dev_exit(void){  </p>
+<p>    platform_device_unregister(&amp;led_dev);  </p>
+<p>}  </p>
+<p>module_init(led_dev_init);  </p>
+<p>module_exit(led_dev_exit);  </p>
+<p>MODULE_LICENSE(&quot;GPL&quot;);  </p>
+<p>[cpp] view plain copy</p>
+<p>#include &lt;linux/module.h&gt;  </p>
+<p>#include &lt;linux/kernel.h&gt;  </p>
+<p>#include &lt;linux/fs.h&gt;  </p>
+<p>#include &lt;linux/init.h&gt;  </p>
+<p>#include &lt;linux/device.h&gt;  </p>
+<p>#include &lt;linux/interrupt.h&gt;  </p>
+<p>#include &lt;linux/sched.h&gt;   </p>
+<p>#include &lt;linux/irq.h&gt;  </p>
+<p>#include &lt;asm/uaccess.h&gt;  </p>
+<p>#include &lt;linux/platform_device.h&gt;  </p>
+<p>#include &lt;linux/io.h&gt;  </p>
+<p>static int major;  </p>
+<p>static struct class *cls;  </p>
+<p>static struct device *dev;  </p>
+<p>static volatile unsigned long *gpio_con;  </p>
+<p>static volatile unsigned long *gpio_dat;  </p>
+<p>static int pin;  </p>
+<p>static int led_open(struct inode *inode, struct file *file){  </p>
+<p>    <em>gpio_con &amp;= ~(0x03 &lt;&lt; (pin</em>2));  </p>
+<p>    <em>gpio_con |=  (0x01 &lt;&lt; (pin</em>2));  </p>
+<p>return 0;  </p>
+<p>}  </p>
+<p>static ssize_t led_write(struct file *file, const char __user *buf,  </p>
+<p>size_t count, loff_t *ppos){  </p>
+<p>int val;  </p>
+<p>    copy_from_user(&amp;val, buf, count);  </p>
+<p>if(val == 1){  </p>
+<p>        *gpio_dat &amp;= ~(1&lt;&lt;pin);  </p>
+<p>    }else{  </p>
+<p>        *gpio_dat &amp;=  (1&lt;&lt;pin);  </p>
+<p>    }  </p>
+<p>return 0;  </p>
+<p>}  </p>
+<p>static struct file_operations led_fops = {  </p>
+<p>    .owner = THIS_MODULE,  </p>
+<p>    .open  = led_open,  </p>
+<p>    .write = led_write,  </p>
+<p>};  </p>
+<p>static int led_probe(struct platform_device *pdev){  </p>
+<p>struct resource *res;  </p>
+<p>// 最后一个参数 0 表示第1个该类型的资源  </p>
+<p>    res = platform_get_resource(pdev, IORESOURCE_MEM, 0);  </p>
+<p>    gpio_con = ioremap(res-&gt;start, res-&gt;end - res-&gt;start + 1);  </p>
+<p>    gpio_dat = gpio_con + 1;  </p>
+<p>    res = platform_get_resource(pdev, IORESOURCE_IRQ, 0);  </p>
+<p>    pin = res-&gt;start;  </p>
+<p>    printk(&quot;led_probe, found led\n&quot;);  </p>
+<p>// 注册设备驱动 创建设备节点  </p>
+<p>    major = register_chrdev(0, &quot;myled&quot;, &amp;led_fops);  </p>
+<p>// 创建类  </p>
+<p>    cls = class_create(THIS_MODULE, &quot;myled&quot;);  </p>
+<p>// 创建设备节点  </p>
+<p>    dev = device_create(cls, NULL, MKDEV(major, 0), NULL, &quot;led&quot;);  </p>
+<p>return 0;  </p>
+<p>}  </p>
+<p>static int led_remove(struct platform_device *pdev){  </p>
+<p>    printk(&quot;led_remove, remove led\n&quot;);   </p>
+<p>// 删除设备节点  </p>
+<p>    device_unregister(dev);  </p>
+<p>// 销毁类  </p>
+<p>    class_destroy(cls);  </p>
+<p>// 取消注册设备驱动  </p>
+<p>    unregister_chrdev(major, &quot;myled&quot;);  </p>
+<p>// 取消内存映射  </p>
+<p>    iounmap(gpio_con);  </p>
+<p>return 0;  </p>
+<p>}  </p>
+<p>struct platform_driver led_drv = {  </p>
+<p>    .probe  = led_probe,    //匹配到dev之后调用probe  </p>
+<p>    .remove = led_remove,  </p>
+<p>    .driver = {  </p>
+<p>        .name = &quot;myled&quot;,  </p>
+<p>    },  </p>
+<p>};  </p>
+<p>static int led_drv_init(void){  </p>
+<p>    platform_driver_register(&amp;led_drv);  </p>
+<p>return 0;  </p>
+<p>}  </p>
+<p>static void led_drv_exit(void){  </p>
+<p>    platform_driver_unregister(&amp;led_drv);  </p>
+<p>}  </p>
+<p>module_init(led_drv_init);  </p>
+<p>module_exit(led_drv_exit);  </p>
+<p>MODULE_LICENSE(&quot;GPL&quot;);  </p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/linux%20jdk%20%E5%AE%89%E8%A3%85/" rel="prev" title="linux jdk 安装">
+      <i class="fa fa-chevron-left"></i> linux jdk 安装
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/Linux%20SPI%E6%A1%86%E6%9E%B6/" rel="next" title="Linux SPI框架">
+      Linux SPI框架 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Edward"
+      src="/uploads/avatar.gif">
+  <p class="site-author-name" itemprop="name">Edward</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">570</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Edward</span>
+</div>
+
+        
+
+
+
+
+
+
+<script>
+  (function() {
+    function leancloudSelector(url) {
+      url = encodeURI(url);
+      return document.getElementById(url).querySelector('.leancloud-visitors-count');
+    }
+
+    function addCount(Counter) {
+      var visitors = document.querySelector('.leancloud_visitors');
+      var url = decodeURI(visitors.id);
+      var title = visitors.dataset.flagTitle;
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          if (results.length > 0) {
+            var counter = results[0];
+            leancloudSelector(url).innerText = counter.time + 1;
+            Counter('put', '/classes/Counter/' + counter.objectId, { time: { '__op': 'Increment', 'amount': 1 } })
+              .catch(error => {
+                console.error('Failed to save visitor count', error);
+              });
+          } else {
+              Counter('post', '/classes/Counter', { title, url, time: 1 })
+                .then(response => response.json())
+                .then(() => {
+                  leancloudSelector(url).innerText = 1;
+                })
+                .catch(error => {
+                  console.error('Failed to create', error);
+                });
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    function showTime(Counter) {
+      var visitors = document.querySelectorAll('.leancloud_visitors');
+      var entries = [...visitors].map(element => {
+        return decodeURI(element.id);
+      });
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url: { '$in': entries } })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          for (let url of entries) {
+            let target = results.find(item => item.url === url);
+            leancloudSelector(url).innerText = target ? target.time : 0;
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    let { app_id, app_key, server_url } = {"enable":true,"app_id":"wxYx0BX9gaKA3XC4LuO2of0v-gzGzoHsz","app_key":"LQMcs6IDIE4YAm10vMsn9IYq","server_url":"https://wxyx0bx9.lc-cn-n1-shared.com","security":false};
+    function fetchData(api_server) {
+      var Counter = (method, url, data) => {
+        return fetch(`${api_server}/1.1${url}`, {
+          method,
+          headers: {
+            'X-LC-Id'     : app_id,
+            'X-LC-Key'    : app_key,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data)
+        });
+      };
+      if (CONFIG.page.isPost) {
+        if (CONFIG.hostname !== location.hostname) return;
+        addCount(Counter);
+      } else if (document.querySelectorAll('.post-title-link').length >= 1) {
+        showTime(Counter);
+      }
+    }
+
+    let api_server = app_id.slice(-9) !== '-MdYXbMMI' ? server_url : `https://${app_id.slice(0, 8).toLowerCase()}.api.lncldglobal.com`;
+
+    if (api_server) {
+      fetchData(api_server);
+    } else {
+      fetch('https://app-router.leancloud.cn/2/route?appId=' + app_id)
+        .then(response => response.json())
+        .then(({ api_server }) => {
+          fetchData('https://' + api_server);
+        });
+    }
+  })();
+</script>
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

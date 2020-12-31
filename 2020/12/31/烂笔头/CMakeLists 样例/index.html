@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"edward.org.cn","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="CMakeLists.txt cmake_minimum_required(VERSION 3.4.1)add_library(hello-jnicallback SHARED           hello-jnicallback.c) build native_app_glue as a static libadd_library(native_app_glue STATIC     ${A">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CMakeLists 样例">
+<meta property="og:url" content="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/CMakeLists%20%E6%A0%B7%E4%BE%8B/index.html">
+<meta property="og:site_name" content="点点滴滴">
+<meta property="og:description" content="CMakeLists.txt cmake_minimum_required(VERSION 3.4.1)add_library(hello-jnicallback SHARED           hello-jnicallback.c) build native_app_glue as a static libadd_library(native_app_glue STATIC     ${A">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-12-31T06:48:01.051Z">
+<meta property="article:modified_time" content="2020-01-16T04:37:33.761Z">
+<meta property="article:author" content="Edward">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/CMakeLists%20%E6%A0%B7%E4%BE%8B/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>CMakeLists 样例 | 点点滴滴</title>
+  
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?a92ed22eafce466e7a7b17546bb0dc6f";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">点点滴滴</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/CMakeLists%20%E6%A0%B7%E4%BE%8B/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/avatar.gif">
+      <meta itemprop="name" content="Edward">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="点点滴滴">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          CMakeLists 样例
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-12-31 14:48:01" itemprop="dateCreated datePublished" datetime="2020-12-31T14:48:01+08:00">2020-12-31</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-01-16 12:37:33" itemprop="dateModified" datetime="2020-01-16T12:37:33+08:00">2020-01-16</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%83%82%E7%AC%94%E5%A4%B4/" itemprop="url" rel="index"><span itemprop="name">烂笔头</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/CMakeLists%20%E6%A0%B7%E4%BE%8B/" class="post-meta-item leancloud_visitors" data-flag-title="CMakeLists 样例" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p> CMakeLists.txt</p>
+<p>cmake_minimum_required(VERSION 3.4.1)<br>add_library(hello-jnicallback SHARED<br>           hello-jnicallback.c)</p>
+<h1 id="build-native-app-glue-as-a-static-lib"><a href="#build-native-app-glue-as-a-static-lib" class="headerlink" title="build native_app_glue as a static lib"></a>build native_app_glue as a static lib</h1><p>add_library(native_app_glue STATIC</p>
+<p>    ${ANDROID_NDK}/sources/android/native_app_glue/android_native_app_glue.c)</p>
+<h1 id="Include-libraries-needed-for-hello-jnicallback-lib"><a href="#Include-libraries-needed-for-hello-jnicallback-lib" class="headerlink" title="Include libraries needed for hello-jnicallback lib"></a>Include libraries needed for hello-jnicallback lib</h1><p>target_link_libraries(hello-jnicallback<br>                     android<br>                     log)</p>
+<p>set(ndk_helper_dir ../../../../common/ndk_helper)</p>
+<p>add_subdirectory(${ndk_helper_dir} ndk_helper)</p>
+<p>target_include_directories(ChoreographerNativeActivity PRIVATE</p>
+<p>    ${ANDROID_NDK}/sources/android/cpufeatures  </p>
+<p>    ${ndk_helper_dir})</p>
+<p># Export ANativeActivity_onCreate(), </p>
+<h1 id="Refer-to-https-github-com-android-ndk-ndk-issues-381"><a href="#Refer-to-https-github-com-android-ndk-ndk-issues-381" class="headerlink" title="Refer to: https://github.com/android-ndk/ndk/issues/381."></a>Refer to: <a target="_blank" rel="noopener" href="https://github.com/android-ndk/ndk/issues/381">https://github.com/android-ndk/ndk/issues/381</a>.</h1><p>set(CMAKE_SHARED_LINKER_FLAGS</p>
+<p>    &quot;${CMAKE_SHARED_LINKER_FLAGS} -u ANativeActivity_onCreate&quot;)</p>
+<p>set(CMAKE_CXX_FLAGS &quot;${CMAKE_CXX_FLAGS} -std=gnu++11 -Wall -fno-exceptions -fno-rtti&quot;)</p>
+<p>set(CMAKE_C_FLAGS &quot;${CMAKE_C_FLAGS}  -Wall -Werror&quot;)</p>
+<p>set(CMAKE_CXX_FLAGS &quot;${CMAKE_CXX_FLAGS} -std=c++11 -Wall -Werror&quot;)</p>
+<p>set(CMAKE_C_FLAGS &quot;${CMAKE_C_FLAGS} -Wall -UNDEBUG&quot;)</p>
+<p>set(CMAKE_VERBOSE_MAKEFILE on)</p>
+<p>add_definitions(&quot;-DANDROID_NDK -DDISABLE_IMPORTGL&quot;)</p>
+<h1 id="build-app’s-shared-lib"><a href="#build-app’s-shared-lib" class="headerlink" title="build app’s shared lib"></a>build app’s shared lib</h1><h1 id="set-up-neon-build-flag-for-file-using-intrinsics"><a href="#set-up-neon-build-flag-for-file-using-intrinsics" class="headerlink" title="set up neon build flag for file using intrinsics"></a>set up neon build flag for file using intrinsics</h1><h1 id="name-helloneon-intrinsics-c-It-is-named-EXACTLY-as-this-on-disk"><a href="#name-helloneon-intrinsics-c-It-is-named-EXACTLY-as-this-on-disk" class="headerlink" title="name: helloneon-intrinsics.c (It is named EXACTLY as this on disk,"></a>name: helloneon-intrinsics.c (It is named EXACTLY as this on disk,</h1><h1 id="just-like-a-normal-source-file"><a href="#just-like-a-normal-source-file" class="headerlink" title="just like a normal source file)"></a>just like a normal source file)</h1><h1 id="then-set-up-neon-flag-for-neon-files"><a href="#then-set-up-neon-flag-for-neon-files" class="headerlink" title="then set up neon flag for neon files"></a>then set up neon flag for neon files</h1><h1 id="This-example-only-build-for-armeabi-v7a-x86-could-be-done-the-same-way"><a href="#This-example-only-build-for-armeabi-v7a-x86-could-be-done-the-same-way" class="headerlink" title="[This example only build for armeabi-v7a, x86 could be done the same way]"></a>[This example only build for armeabi-v7a, x86 could be done the same way]</h1><h1 id=""><a href="#" class="headerlink" title=""></a></h1><p>if (${ANDROID_ABI} STREQUAL &quot;armeabi-v7a&quot;)</p>
+<p>  # make a list of neon files and add neon compiling flags to them</p>
+<p>  set(neon_SRCS helloneon-intrinsics.c)</p>
+<p>  set_property(SOURCE ${neon_SRCS}</p>
+<p>               APPEND_STRING PROPERTY COMPILE_FLAGS &quot; -mfpu=neon&quot;)</p>
+<p>  add_definitions(&quot;-DHAVE_NEON=1&quot;)</p>
+<p>else ()</p>
+<p>  set(neon_SRCS)</p>
+<p>endif ()</p>
+<h1 id="copy-out-the-lib-binary-and-remove-generated-files"><a href="#copy-out-the-lib-binary-and-remove-generated-files" class="headerlink" title="copy out the lib binary and remove generated files"></a>copy out the lib binary and remove generated files</h1><p>set(distribution_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../../../../../distribution)</p>
+<p>set_target_properties(gperf</p>
+<p>                      PROPERTIES</p>
+<p>                      LIBRARY_OUTPUT_DIRECTORY</p>
+<p>                      &quot;${distribution_DIR}/gperf/lib/${ANDROID_ABI}&quot;)</p>
+<p>add_custom_command(TARGET gperf POST_BUILD</p>
+<p>                   COMMAND &quot;${CMAKE_COMMAND}&quot; -E</p>
+<p>                   copy &quot;${CMAKE_CURRENT_SOURCE_DIR}/src/gperf.h&quot;</p>
+<p>                   &quot;${distribution_DIR}/gperf/include/gperf.h&quot;</p>
+<p>                   COMMENT &quot;Copying gperf to output directory&quot;)</p>
+<p>set(CMAKE_VERBOSE_MAKEFILE on)</p>
+<p>set(lib_src_DIR ${CMAKE_CURRENT_SOURCE_DIR})</p>
+<p>set(lib_build_DIR $ENV{HOME}/tmp)</p>
+<p>file(MAKE_DIRECTORY ${lib_build_DIR})</p>
+<p>add_subdirectory(${lib_src_DIR}/gmath ${lib_build_DIR}/gmath)</p>
+<p>add_subdirectory(${lib_src_DIR}/gperf ${lib_build_DIR}/gperf)</p>
+<p>set(webp_src_dir ../libwebp)</p>
+<h1 id="clone-the-dependency-repo"><a href="#clone-the-dependency-repo" class="headerlink" title="clone the dependency repo."></a>clone the dependency repo.</h1><h1 id="git-submodule-could-also-be-used-if-this-sample-does-not-need"><a href="#git-submodule-could-also-be-used-if-this-sample-does-not-need" class="headerlink" title="git submodule could also be used if this sample does not need"></a>git submodule could also be used if this sample does not need</h1><h1 id="Android-Studio’s-quot-Import-Android-code-sample-quot-option"><a href="#Android-Studio’s-quot-Import-Android-code-sample-quot-option" class="headerlink" title="Android Studio’s &quot;Import Android code sample&quot; option"></a>Android Studio’s &quot;Import Android code sample&quot; option</h1><p>if ((NOT EXISTS ${webp_src_dir}) OR</p>
+<p>    (NOT EXISTS ${webp_src_dir}/CMakeLists.txt))</p>
+<p>    execute_process(COMMAND git clone</p>
+<p>                            <a target="_blank" rel="noopener" href="https://chromium.googlesource.com/webm/libwebp">https://chromium.googlesource.com/webm/libwebp</a></p>
+<p>                            libwebp</p>
+<p>                    WORKING_DIRECTORY  ${CMAKE_CURRENT_SOURCE_DIR}/..)</p>
+<p>endif()</p>
+<h1 id="build-native-app-glue-as-a-static-lib-1"><a href="#build-native-app-glue-as-a-static-lib-1" class="headerlink" title="build native_app_glue as a static lib"></a>build native_app_glue as a static lib</h1><p>include_directories(${ANDROID_NDK}/sources/android/native_app_glue)</p>
+<p>find_package(cdep-dependencies REQUIRED)</p>
+<p>add_all_cdep_dependencies(hello-cdep)</p>
+<p>if (${ANDROID_PLATFORM_LEVEL} LESS 12)</p>
+<p>  message(FATAL_ERROR &quot;OpenGL 2 is not supported before API level 11 (currently using ${ANDROID_PLATFORM_LEVEL}).&quot;)</p>
+<p>  return()</p>
+<p>elseif (${ANDROID_PLATFORM_LEVEL} LESS 18)</p>
+<p>  add_definitions(&quot;-DDYNAMIC_ES3&quot;)</p>
+<p>  set(OPENGL_LIB GLESv2)</p>
+<p>else ()</p>
+<p>  set(OPENGL_LIB GLESv3)</p>
+<p>endif (${ANDROID_PLATFORM_LEVEL} LESS 11)</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/chrome%20%E4%B8%8D%E6%98%BE%E7%A4%BA%E7%BA%A2%E6%A1%86/" rel="prev" title="chrome 不显示红框">
+      <i class="fa fa-chevron-left"></i> chrome 不显示红框
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/CMakeLists.txt%20%E7%BC%96%E5%86%99/" rel="next" title="CMakeLists">
+      CMakeLists <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#build-native-app-glue-as-a-static-lib"><span class="nav-number">1.</span> <span class="nav-text">build native_app_glue as a static lib</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Include-libraries-needed-for-hello-jnicallback-lib"><span class="nav-number">2.</span> <span class="nav-text">Include libraries needed for hello-jnicallback lib</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Refer-to-https-github-com-android-ndk-ndk-issues-381"><span class="nav-number">3.</span> <span class="nav-text">Refer to: https:&#x2F;&#x2F;github.com&#x2F;android-ndk&#x2F;ndk&#x2F;issues&#x2F;381.</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#build-app%E2%80%99s-shared-lib"><span class="nav-number">4.</span> <span class="nav-text">build app’s shared lib</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#set-up-neon-build-flag-for-file-using-intrinsics"><span class="nav-number">5.</span> <span class="nav-text">set up neon build flag for file using intrinsics</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#name-helloneon-intrinsics-c-It-is-named-EXACTLY-as-this-on-disk"><span class="nav-number">6.</span> <span class="nav-text">name: helloneon-intrinsics.c (It is named EXACTLY as this on disk,</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#just-like-a-normal-source-file"><span class="nav-number">7.</span> <span class="nav-text">just like a normal source file)</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#then-set-up-neon-flag-for-neon-files"><span class="nav-number">8.</span> <span class="nav-text">then set up neon flag for neon files</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#This-example-only-build-for-armeabi-v7a-x86-could-be-done-the-same-way"><span class="nav-number">9.</span> <span class="nav-text">[This example only build for armeabi-v7a, x86 could be done the same way]</span></a></li><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">10.</span> <span class="nav-text"></span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#copy-out-the-lib-binary-and-remove-generated-files"><span class="nav-number">11.</span> <span class="nav-text">copy out the lib binary and remove generated files</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#clone-the-dependency-repo"><span class="nav-number">12.</span> <span class="nav-text">clone the dependency repo.</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#git-submodule-could-also-be-used-if-this-sample-does-not-need"><span class="nav-number">13.</span> <span class="nav-text">git submodule could also be used if this sample does not need</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Android-Studio%E2%80%99s-quot-Import-Android-code-sample-quot-option"><span class="nav-number">14.</span> <span class="nav-text">Android Studio’s &quot;Import Android code sample&quot; option</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#build-native-app-glue-as-a-static-lib-1"><span class="nav-number">15.</span> <span class="nav-text">build native_app_glue as a static lib</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Edward"
+      src="/uploads/avatar.gif">
+  <p class="site-author-name" itemprop="name">Edward</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">570</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Edward</span>
+</div>
+
+        
+
+
+
+
+
+
+<script>
+  (function() {
+    function leancloudSelector(url) {
+      url = encodeURI(url);
+      return document.getElementById(url).querySelector('.leancloud-visitors-count');
+    }
+
+    function addCount(Counter) {
+      var visitors = document.querySelector('.leancloud_visitors');
+      var url = decodeURI(visitors.id);
+      var title = visitors.dataset.flagTitle;
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          if (results.length > 0) {
+            var counter = results[0];
+            leancloudSelector(url).innerText = counter.time + 1;
+            Counter('put', '/classes/Counter/' + counter.objectId, { time: { '__op': 'Increment', 'amount': 1 } })
+              .catch(error => {
+                console.error('Failed to save visitor count', error);
+              });
+          } else {
+              Counter('post', '/classes/Counter', { title, url, time: 1 })
+                .then(response => response.json())
+                .then(() => {
+                  leancloudSelector(url).innerText = 1;
+                })
+                .catch(error => {
+                  console.error('Failed to create', error);
+                });
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    function showTime(Counter) {
+      var visitors = document.querySelectorAll('.leancloud_visitors');
+      var entries = [...visitors].map(element => {
+        return decodeURI(element.id);
+      });
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url: { '$in': entries } })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          for (let url of entries) {
+            let target = results.find(item => item.url === url);
+            leancloudSelector(url).innerText = target ? target.time : 0;
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    let { app_id, app_key, server_url } = {"enable":true,"app_id":"wxYx0BX9gaKA3XC4LuO2of0v-gzGzoHsz","app_key":"LQMcs6IDIE4YAm10vMsn9IYq","server_url":"https://wxyx0bx9.lc-cn-n1-shared.com","security":false};
+    function fetchData(api_server) {
+      var Counter = (method, url, data) => {
+        return fetch(`${api_server}/1.1${url}`, {
+          method,
+          headers: {
+            'X-LC-Id'     : app_id,
+            'X-LC-Key'    : app_key,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data)
+        });
+      };
+      if (CONFIG.page.isPost) {
+        if (CONFIG.hostname !== location.hostname) return;
+        addCount(Counter);
+      } else if (document.querySelectorAll('.post-title-link').length >= 1) {
+        showTime(Counter);
+      }
+    }
+
+    let api_server = app_id.slice(-9) !== '-MdYXbMMI' ? server_url : `https://${app_id.slice(0, 8).toLowerCase()}.api.lncldglobal.com`;
+
+    if (api_server) {
+      fetchData(api_server);
+    } else {
+      fetch('https://app-router.leancloud.cn/2/route?appId=' + app_id)
+        .then(response => response.json())
+        .then(({ api_server }) => {
+          fetchData('https://' + api_server);
+        });
+    }
+  })();
+</script>
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

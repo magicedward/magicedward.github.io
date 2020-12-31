@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"edward.org.cn","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="Tween Animation（补间动画）：     Tween动画，通过对View的内容进行一系列的图形变换 (包括平移、缩放、旋转、改变透明度)来实现动画效果。动画效果的定义可以采用XML来做也可以采用编码来做。 动画类型XML配置方式Java代码实现方式 渐变透明度动画效果&lt;alpha&#x2F;&gt;AlphaAnimation 渐变尺寸缩放动画效果&lt;scale&#x2F;&gt;ScaleA">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android动画效果之Tween Animation（补间动画）">
+<meta property="og:url" content="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/Android%E5%8A%A8%E7%94%BB%E6%95%88%E6%9E%9C%E4%B9%8BTween%20Animation%EF%BC%88%E8%A1%A5%E9%97%B4%E5%8A%A8%E7%94%BB%EF%BC%89/index.html">
+<meta property="og:site_name" content="点点滴滴">
+<meta property="og:description" content="Tween Animation（补间动画）：     Tween动画，通过对View的内容进行一系列的图形变换 (包括平移、缩放、旋转、改变透明度)来实现动画效果。动画效果的定义可以采用XML来做也可以采用编码来做。 动画类型XML配置方式Java代码实现方式 渐变透明度动画效果&lt;alpha&#x2F;&gt;AlphaAnimation 渐变尺寸缩放动画效果&lt;scale&#x2F;&gt;ScaleA">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-12-31T06:48:00.943Z">
+<meta property="article:modified_time" content="2020-01-16T04:37:33.305Z">
+<meta property="article:author" content="Edward">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/Android%E5%8A%A8%E7%94%BB%E6%95%88%E6%9E%9C%E4%B9%8BTween%20Animation%EF%BC%88%E8%A1%A5%E9%97%B4%E5%8A%A8%E7%94%BB%EF%BC%89/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>Android动画效果之Tween Animation（补间动画） | 点点滴滴</title>
+  
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?a92ed22eafce466e7a7b17546bb0dc6f";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">点点滴滴</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/Android%E5%8A%A8%E7%94%BB%E6%95%88%E6%9E%9C%E4%B9%8BTween%20Animation%EF%BC%88%E8%A1%A5%E9%97%B4%E5%8A%A8%E7%94%BB%EF%BC%89/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/avatar.gif">
+      <meta itemprop="name" content="Edward">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="点点滴滴">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Android动画效果之Tween Animation（补间动画）
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-12-31 14:48:00" itemprop="dateCreated datePublished" datetime="2020-12-31T14:48:00+08:00">2020-12-31</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-01-16 12:37:33" itemprop="dateModified" datetime="2020-01-16T12:37:33+08:00">2020-01-16</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%83%82%E7%AC%94%E5%A4%B4/" itemprop="url" rel="index"><span itemprop="name">烂笔头</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/Android%E5%8A%A8%E7%94%BB%E6%95%88%E6%9E%9C%E4%B9%8BTween%20Animation%EF%BC%88%E8%A1%A5%E9%97%B4%E5%8A%A8%E7%94%BB%EF%BC%89/" class="post-meta-item leancloud_visitors" data-flag-title="Android动画效果之Tween Animation（补间动画）" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p> Tween Animation（补间动画）：</p>
+<p>    Tween动画，通过对View的内容进行一系列的图形变换 (包括平移、缩放、旋转、改变透明度)来实现动画效果。动画效果的定义可以采用XML来做也可以采用编码来做。</p>
+<p>动画类型XML配置方式Java代码实现方式</p>
+<p>渐变透明度动画效果&lt;alpha/&gt;AlphaAnimation</p>
+<p>渐变尺寸缩放动画效果&lt;scale/&gt;ScaleAnimation</p>
+<p>画面旋转动画效果&lt;rotate/&gt;RotateAnimation</p>
+<p>画面位置移动动画效果&lt;translate/&gt;TranslateAnimation</p>
+<p>组合动画效果&lt;set/&gt;AnimationSet</p>
+<p>xml文件存放目录如下图所示：</p>
+<p>具体如何实现：</p>
+<p>1.）alpha渐变透明度动画效果</p>
+<p>xml方式：</p>
+<p>&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;&lt;alpha xmlns:android=&quot;<a target="_blank" rel="noopener" href="http://schemas.android.com/apk/res/android">http://schemas.android.com/apk/res/android</a>&quot;<br>    android:duration=&quot;500&quot;<br>    android:fillAfter=&quot;false&quot;<br>    android:fromAlpha=&quot;1.0&quot;<br>    android:toAlpha=&quot;0.0&quot; /&gt;</p>
+<p>fromAlpha:开始时透明度<br>toAlpha： 结束时透明度<br>duration：动画持续时间<br>fillAfter：设置动画结束后保持当前的位置</p>
+<p>XML方式加载方式通过AnimationUtils.loadAnimation(this, R.anim.anim_alpha)获取Animation</p>
+<p>  Animation alphaAnimation = AnimationUtils.loadAnimation(this, R.anim.anim_alpha);<br>  imageView.startAnimation(alphaAnimation);</p>
+<p>Java代码方式：</p>
+<p>  Animation alphaAnimation = new AlphaAnimation(1.0f, 0.0f);<br>  alphaAnimation.setDuration(500);//设置动画持续时间为500毫秒<br>  alphaAnimation.setFillAfter(false);//设置动画结束后保持当前的位置（即不返回到动画开始前的位置）<br>  imageView.startAnimation(alphaAnimation);</p>
+<p>2.）scale渐变尺寸缩放动画效果</p>
+<p>xml方式：</p>
+<p>&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;&lt;scale xmlns:android=&quot;<a target="_blank" rel="noopener" href="http://schemas.android.com/apk/res/android">http://schemas.android.com/apk/res/android</a>&quot;<br>    android:duration=&quot;500&quot;<br>    android:fromXScale=&quot;0.0&quot;<br>    android:fromYScale=&quot;0.0&quot;<br>    android:interpolator=&quot;@android:anim/decelerate_interpolator&quot;<br>    android:pivotX=&quot;50%&quot;<br>    android:pivotY=&quot;50%&quot;<br>    android:repeatCount=&quot;1&quot;<br>    android:repeatMode=&quot;reverse&quot;<br>    android:startOffset=&quot;0&quot;<br>    android:toXScale=&quot;1.5&quot;<br>    android:toYScale=&quot;1.5&quot; /&gt;</p>
+<p>fromXDelta,fromYDelta 起始时X，Y座标,屏幕右下角的座标是X:320,Y:480<br>toXDelta， toYDelta 动画结束时X,Y的座标 <br>interpolator 指定动画插入器<br>fromXScale,fromYScale， 动画开始前X,Y的缩放，0.0为不显示， 1.0为正常大小<br>toXScale，toYScale， 动画最终缩放的倍数， 1.0为正常大小，大于1.0放大<br>pivotX， pivotY 动画起始位置，相对于屏幕的百分比,两个都为50%表示动画从自身中间开始<br>startOffset， 动画多次执行的间隔时间，如果只执行一次，执行前会暂停这段时间，单位毫秒 <br>duration，一次动画效果消耗的时间，单位毫秒，值越小动画速度越快 <br>repeatCount，动画重复的计数，动画将会执行该值+1次<br>repeatMode，动画重复的模式，reverse为反向，当第偶次执行时，动画方向会相反。restart为重新执行，方向不变</p>
+<p>Java方式：</p>
+<p> Animation scaleAnimation = new ScaleAnimation(0.0f, 1.5f, 0.0f, 1.5f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);<br>    scaleAnimation.setDuration(500);//设置动画持续时间为500毫秒<br>    scaleAnimation.setFillAfter(true);//如果fillAfter的值为true,则动画执行后，控件将停留在执行结束的状态<br>    scaleAnimation.setFillBefore(false);//如果fillBefore的值为true，则动画执行后，控件将回到动画执行之前的状态<br>    scaleAnimation.setRepeatCount(3);//设置动画循环次数    scaleAnimation.setRepeatMode(Animation.REVERSE);<br>    scaleAnimation.setStartOffset(0);<br>    scaleAnimation.setInterpolator(this, android.R.anim.decelerate_interpolator);//设置动画插入器<br>    imageView.startAnimation(scaleAnimation);</p>
+<p>3.）rotate画面旋转动画效果</p>
+<p>xml方式：</p>
+<p>&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;&lt;rotate xmlns:android=&quot;<a target="_blank" rel="noopener" href="http://schemas.android.com/apk/res/android">http://schemas.android.com/apk/res/android</a>&quot;<br>    android:duration=&quot;500&quot;<br>    android:fromDegrees=&quot;0&quot;<br>    android:interpolator=&quot;@android:anim/accelerate_decelerate_interpolator&quot;<br>    android:pivotX=&quot;50%&quot;<br>    android:pivotY=&quot;50%&quot;<br>    android:toDegrees=&quot;-360&quot; /&gt;</p>
+<p>fromDegrees 动画开始时的角度<br>toDegrees 动画结束时物件的旋转角度,正代表顺时针<br>pivotX 属性为动画相对于物件的X坐标的开始位置<br>pivotY 属性为动画相对于物件的Y坐标的开始位置</p>
+<p>Java方式：</p>
+<p>Animation rotateAnimation = new RotateAnimation(0, 360, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);<br>rotateAnimation.setDuration(500);<br>rotateAnimation.setFillAfter(true);<br>rotateAnimation.setInterpolator(this, android.R.anim.accelerate_decelerate_interpolator);//设置动画插入器imageView.startAnimation(rotateAnimation);</p>
+<p>4.）translate画面位置移动动画效果</p>
+<p>xml方式：</p>
+<p>&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;&lt;translate xmlns:android=&quot;<a target="_blank" rel="noopener" href="http://schemas.android.com/apk/res/android">http://schemas.android.com/apk/res/android</a>&quot;<br>    android:duration=&quot;500&quot;<br>    android:fromXDelta=&quot;100&quot;<br>    android:fromYDelta=&quot;0&quot;<br>    android:interpolator=&quot;@android:anim/cycle_interpolator&quot;<br>    android:toXDelta=&quot;0&quot;<br>    android:toYDelta=&quot;0&quot; /&gt;</p>
+<p>fromXDelta,fromYDelta 起始时X，Y座标,屏幕右下角的座标是X:320,Y:480<br>toXDelta， toYDelta 动画结束时X,Y的座标</p>
+<p>Java方式：</p>
+<p>Animation translateAnimation = new TranslateAnimation(0, 100, 0, 0);<br>translateAnimation.setDuration(500);<br>translateAnimation.setInterpolator(this, android.R.anim.cycle_interpolator);//设置动画插入器translateAnimation.setFillAfter(true);//设置动画结束后保持当前的位置（即不返回到动画开始前的位置）imageView.startAnimation(translateAnimation);</p>
+<p>5.）set组合动画效果</p>
+<p>xml方式：</p>
+<p>&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;&lt;set xmlns:android=&quot;<a target="_blank" rel="noopener" href="http://schemas.android.com/apk/res/android">http://schemas.android.com/apk/res/android</a>&quot;&gt;<br>    &lt;alpha<br>        android:duration=&quot;500&quot;<br>        android:fromAlpha=&quot;1.0&quot;<br>        android:toAlpha=&quot;0.0&quot; /&gt;</p>
+<pre><code>&amp;lt;scale</code></pre>
+<p>        android:duration=&quot;500&quot;<br>        android:fromXScale=&quot;0.0&quot;<br>        android:fromYScale=&quot;0.0&quot;<br>        android:interpolator=&quot;@android:anim/decelerate_interpolator&quot;<br>        android:pivotX=&quot;50%&quot;<br>        android:pivotY=&quot;50%&quot;<br>        android:repeatCount=&quot;1&quot;<br>        android:repeatMode=&quot;reverse&quot;<br>        android:startOffset=&quot;0&quot;<br>        android:toXScale=&quot;1.5&quot;<br>        android:toYScale=&quot;1.5&quot; /&gt;&lt;/set&gt;</p>
+<p>如何使用</p>
+<p>   AnimationSet animationSet = (AnimationSet) AnimationUtils.loadAnimation(this, R.anim.anim_set);<br>   imageView.startAnimation(animationSet);</p>
+<p>Java方式</p>
+<p>AnimationSet animationSet = new AnimationSet(true);</p>
+<p>Animation alphaAnimation = new AlphaAnimation(1.0f, 0.1f);<br>alphaAnimation.setDuration(500);//设置动画持续时间为500毫秒Animation scaleAnimation = new ScaleAnimation(0.0f, 1.5f, 0.0f, 1.5f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);<br>scaleAnimation.setDuration(500);//设置动画持续时间为500毫秒scaleAnimation.setRepeatMode(Animation.REVERSE);<br>scaleAnimation.setStartOffset(0);<br>scaleAnimation.setInterpolator(this, android.R.anim.decelerate_interpolator);//设置动画插入器animationSet.addAnimation(alphaAnimation);<br>animationSet.addAnimation(scaleAnimation);</p>
+<p>imageView.startAnimation(animationSet);</p>
+<p>动画监听器Animation.AnimationListener：</p>
+<p> 有时可能我们要在动画的每个周期里面做不同的操作，这时候就要借助动画监听器了</p>
+<p>  alphaAnimation.setAnimationListener(new Animation.AnimationListener() {<br>    @Override<br>    public void onAnimationStart(Animation animation) {<br>        //动画开始时调用    }</p>
+<p>    @Override<br>    public void onAnimationEnd(Animation animation) {<br>        //动画结束时调用    }</p>
+<p>    @Override<br>    public void onAnimationRepeat(Animation animation) {<br>        //动画重复时调用    }<br>    });</p>
+<p>几种自带的动画插入器</p>
+<p>AccelerateInterpolator 加速，开始时慢中间加速</p>
+<p>DecelerateInterpolator 减速，开始时快然后减速</p>
+<p>AccelerateDecelerateInterolator 先加速后减速，开始结束时慢，中间加速</p>
+<p>AnticipateInterpolator 反向，先向相反方向改变一段再加速播放</p>
+<p>AnticipateOvershootInterpolator 反向加超越，先向相反方向改变，再加速播放，会超出目的值然后缓慢移动至目的值</p>
+<p>BounceInterpolator 跳跃，快到目的值时值会跳跃，如目的值100，后面的值可能依次为85，77，70，80，90，100</p>
+<p>CycleIinterpolator 循环，动画循环一定次数，值的改变为一正弦函数：Math.sin(2* mCycles* Math.PI* input)</p>
+<p>LinearInterpolator 线性，线性均匀改变</p>
+<p>OvershootInterpolator超越，最后超出目的值然后缓慢改变到目的值</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/Android%E5%8A%A8%E7%94%BB%E6%95%88%E6%9E%9C%E4%B9%8BFrame%20Animation%EF%BC%88%E9%80%90%E5%B8%A7%E5%8A%A8%E7%94%BB%EF%BC%89/" rel="prev" title="Android动画效果之Frame Animation（逐帧动画）">
+      <i class="fa fa-chevron-left"></i> Android动画效果之Frame Animation（逐帧动画）
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/Android%E5%8A%A8%E7%94%BB%E6%95%88%E6%9E%9C%E4%B9%8B%E5%88%9D%E8%AF%86Property%20Animation%EF%BC%88%E5%B1%9E%E6%80%A7%E5%8A%A8%E7%94%BB%EF%BC%89/" rel="next" title="Android动画效果之初识Property Animation（属性动画）">
+      Android动画效果之初识Property Animation（属性动画） <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Edward"
+      src="/uploads/avatar.gif">
+  <p class="site-author-name" itemprop="name">Edward</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">570</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Edward</span>
+</div>
+
+        
+
+
+
+
+
+
+<script>
+  (function() {
+    function leancloudSelector(url) {
+      url = encodeURI(url);
+      return document.getElementById(url).querySelector('.leancloud-visitors-count');
+    }
+
+    function addCount(Counter) {
+      var visitors = document.querySelector('.leancloud_visitors');
+      var url = decodeURI(visitors.id);
+      var title = visitors.dataset.flagTitle;
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          if (results.length > 0) {
+            var counter = results[0];
+            leancloudSelector(url).innerText = counter.time + 1;
+            Counter('put', '/classes/Counter/' + counter.objectId, { time: { '__op': 'Increment', 'amount': 1 } })
+              .catch(error => {
+                console.error('Failed to save visitor count', error);
+              });
+          } else {
+              Counter('post', '/classes/Counter', { title, url, time: 1 })
+                .then(response => response.json())
+                .then(() => {
+                  leancloudSelector(url).innerText = 1;
+                })
+                .catch(error => {
+                  console.error('Failed to create', error);
+                });
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    function showTime(Counter) {
+      var visitors = document.querySelectorAll('.leancloud_visitors');
+      var entries = [...visitors].map(element => {
+        return decodeURI(element.id);
+      });
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url: { '$in': entries } })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          for (let url of entries) {
+            let target = results.find(item => item.url === url);
+            leancloudSelector(url).innerText = target ? target.time : 0;
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    let { app_id, app_key, server_url } = {"enable":true,"app_id":"wxYx0BX9gaKA3XC4LuO2of0v-gzGzoHsz","app_key":"LQMcs6IDIE4YAm10vMsn9IYq","server_url":"https://wxyx0bx9.lc-cn-n1-shared.com","security":false};
+    function fetchData(api_server) {
+      var Counter = (method, url, data) => {
+        return fetch(`${api_server}/1.1${url}`, {
+          method,
+          headers: {
+            'X-LC-Id'     : app_id,
+            'X-LC-Key'    : app_key,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data)
+        });
+      };
+      if (CONFIG.page.isPost) {
+        if (CONFIG.hostname !== location.hostname) return;
+        addCount(Counter);
+      } else if (document.querySelectorAll('.post-title-link').length >= 1) {
+        showTime(Counter);
+      }
+    }
+
+    let api_server = app_id.slice(-9) !== '-MdYXbMMI' ? server_url : `https://${app_id.slice(0, 8).toLowerCase()}.api.lncldglobal.com`;
+
+    if (api_server) {
+      fetchData(api_server);
+    } else {
+      fetch('https://app-router.leancloud.cn/2/route?appId=' + app_id)
+        .then(response => response.json())
+        .then(({ api_server }) => {
+          fetchData('https://' + api_server);
+        });
+    }
+  })();
+</script>
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

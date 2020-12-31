@@ -1,0 +1,922 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"edward.org.cn","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="Android图片加载：采用二级缓存、异步加载网络图片 2015-06-11 10:12 博客园 字号：T | T Android应用中经常涉及从网络中加载大量图片，为提升加载速度和效率，减少网络流量都会采用二级缓存和异步加载机制，所谓二级缓存就是通过先从内存中获取、再从文件中获取，最后才会访问网络。 AD：51CTO网+ 首届中国APP创新评选大赛火热招募中…… 一、问题描述 Android应用">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android图片加载：采用二级缓存、异步加载网络图片">
+<meta property="og:url" content="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/Android%E5%9B%BE%E7%89%87%E5%8A%A0%E8%BD%BD%EF%BC%9A%E9%87%87%E7%94%A8%E4%BA%8C%E7%BA%A7%E7%BC%93%E5%AD%98%E3%80%81%E5%BC%82%E6%AD%A5%E5%8A%A0%E8%BD%BD%E7%BD%91%E7%BB%9C%E5%9B%BE%E7%89%87/index.html">
+<meta property="og:site_name" content="点点滴滴">
+<meta property="og:description" content="Android图片加载：采用二级缓存、异步加载网络图片 2015-06-11 10:12 博客园 字号：T | T Android应用中经常涉及从网络中加载大量图片，为提升加载速度和效率，减少网络流量都会采用二级缓存和异步加载机制，所谓二级缓存就是通过先从内存中获取、再从文件中获取，最后才会访问网络。 AD：51CTO网+ 首届中国APP创新评选大赛火热招募中…… 一、问题描述 Android应用">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-12-31T06:48:00.970Z">
+<meta property="article:modified_time" content="2020-01-16T04:37:33.706Z">
+<meta property="article:author" content="Edward">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/Android%E5%9B%BE%E7%89%87%E5%8A%A0%E8%BD%BD%EF%BC%9A%E9%87%87%E7%94%A8%E4%BA%8C%E7%BA%A7%E7%BC%93%E5%AD%98%E3%80%81%E5%BC%82%E6%AD%A5%E5%8A%A0%E8%BD%BD%E7%BD%91%E7%BB%9C%E5%9B%BE%E7%89%87/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>Android图片加载：采用二级缓存、异步加载网络图片 | 点点滴滴</title>
+  
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?a92ed22eafce466e7a7b17546bb0dc6f";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">点点滴滴</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/Android%E5%9B%BE%E7%89%87%E5%8A%A0%E8%BD%BD%EF%BC%9A%E9%87%87%E7%94%A8%E4%BA%8C%E7%BA%A7%E7%BC%93%E5%AD%98%E3%80%81%E5%BC%82%E6%AD%A5%E5%8A%A0%E8%BD%BD%E7%BD%91%E7%BB%9C%E5%9B%BE%E7%89%87/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/avatar.gif">
+      <meta itemprop="name" content="Edward">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="点点滴滴">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Android图片加载：采用二级缓存、异步加载网络图片
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-12-31 14:48:00" itemprop="dateCreated datePublished" datetime="2020-12-31T14:48:00+08:00">2020-12-31</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-01-16 12:37:33" itemprop="dateModified" datetime="2020-01-16T12:37:33+08:00">2020-01-16</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%83%82%E7%AC%94%E5%A4%B4/" itemprop="url" rel="index"><span itemprop="name">烂笔头</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/Android%E5%9B%BE%E7%89%87%E5%8A%A0%E8%BD%BD%EF%BC%9A%E9%87%87%E7%94%A8%E4%BA%8C%E7%BA%A7%E7%BC%93%E5%AD%98%E3%80%81%E5%BC%82%E6%AD%A5%E5%8A%A0%E8%BD%BD%E7%BD%91%E7%BB%9C%E5%9B%BE%E7%89%87/" class="post-meta-item leancloud_visitors" data-flag-title="Android图片加载：采用二级缓存、异步加载网络图片" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>Android图片加载：采用二级缓存、异步加载网络图片</p>
+<p>2015-06-11 10:12 博客园 字号：T | T</p>
+<p>Android应用中经常涉及从网络中加载大量图片，为提升加载速度和效率，减少网络流量都会采用二级缓存和异步加载机制，所谓二级缓存就是通过先从内存中获取、再从文件中获取，最后才会访问网络。</p>
+<p>AD：51CTO网+ 首届中国APP创新评选大赛火热招募中……</p>
+<p>一、问题描述</p>
+<p>Android应用中经常涉及从网络中加载大量图片，为提升加载速度和效率，减少网络流量都会采用二级缓存和异步加载机制，所谓二级缓存就是通过先从内存中获取、再从文件中获取，最后才会访问网络。内存缓存（一级）本质上是Map集合以key-value对的方式存储图片的url和Bitmap信息，由于内存缓存会造成堆内存泄露， 管理相对复杂一些，可采用第三方组件，对于有经验的可自己编写组件，而文件缓存比较简单通常自己封装一下即可。下面就通过案例看如何实现网络图片加载的优化。</p>
+<p>二、案例介绍</p>
+<p>案例新闻的列表图片</p>
+<p>三、主要核心组件</p>
+<p>下面先看看实现一级缓存（内存）、二级缓存（磁盘文件）所编写的组件</p>
+<p>1、MemoryCache</p>
+<p>在内存中存储图片（一级缓存）, 采用了1个map来缓存图片代码如下：</p>
+<p>public class MemoryCache { </p>
+<p>// 最大的缓存数 </p>
+<p>private static final int MAX_CACHE_CAPACITY = 30; </p>
+<p>//用Map软引用的Bitmap对象, 保证内存空间足够情况下不会被垃圾回收 </p>
+<p>private HashMap&lt;String, SoftReference&lt;Bitmap&gt;&gt; mCacheMap = </p>
+<p>new LinkedHashMap&lt;String, SoftReference&lt;Bitmap&gt;&gt;() { </p>
+<p>private static final long serialVersionUID = 1L; </p>
+<p>//当缓存数量超过规定大小（返回true）会清除最早放入缓存的 </p>
+<p>protected boolean removeEldestEntry( </p>
+<p>Map.Entry&lt;String,SoftReference&lt;Bitmap&gt;&gt; eldest){ </p>
+<p>return size() &gt; MAX_CACHE_CAPACITY;}; </p>
+<p>}; </p>
+<p>/** </p>
+<p>* 从缓存里取出图片 </p>
+<p>* @param id </p>
+<p>* @return 如果缓存有，并且该图片没被释放，则返回该图片，否则返回null </p>
+<p>*/ </p>
+<p>public Bitmap get(String id){ </p>
+<p>if(!mCacheMap.containsKey(id)) return null; </p>
+<p>SoftReference&lt;Bitmap&gt; ref = mCacheMap.get(id); </p>
+<p>return ref.get(); </p>
+<p>} </p>
+<p>/** </p>
+<p>* 将图片加入缓存 </p>
+<p>* @param id </p>
+<p>* @param bitmap </p>
+<p>*/ </p>
+<p>public void put(String id, Bitmap bitmap){ </p>
+<p>mCacheMap.put(id, new SoftReference&lt;Bitmap&gt;(bitmap)); </p>
+<p>} </p>
+<p>/** </p>
+<p>* 清除所有缓存 </p>
+<p>*/ </p>
+<p>public void clear() { </p>
+<p>try { </p>
+<p>for(Map.Entry&lt;String,SoftReference&lt;Bitmap&gt;&gt;entry :mCacheMap.entrySet()) </p>
+<p>{ SoftReference&lt;Bitmap&gt; sr = entry.getValue(); </p>
+<p>if(null != sr) { </p>
+<p>Bitmap bmp = sr.get(); </p>
+<p>if(null != bmp) bmp.recycle(); </p>
+<p>} </p>
+<p>} </p>
+<p>mCacheMap.clear(); </p>
+<p>} catch (Exception e) { </p>
+<p>e.printStackTrace();} </p>
+<p>} </p>
+<p>} </p>
+<p>2、FileCache</p>
+<p>在磁盘中缓存图片(二级缓存)，代码如下</p>
+<p>public class FileCache { </p>
+<p>//缓存文件目录 </p>
+<p>private File mCacheDir; </p>
+<p>/** </p>
+<p>* 创建缓存文件目录，如果有SD卡，则使用SD，如果没有则使用系统自带缓存目录 </p>
+<p>* @param context </p>
+<p>* @param cacheDir 图片缓存的一级目录 </p>
+<p>*/ </p>
+<p>public FileCache(Context context, File cacheDir, String dir){ </p>
+<p>if(android.os.Environment.getExternalStorageState().equals、(android.os.Environment.MEDIA_MOUNTED)) </p>
+<p>mCacheDir = new File(cacheDir, dir); </p>
+<p>else </p>
+<p>mCacheDir = context.getCacheDir();// 如何获取系统内置的缓存存储路径 </p>
+<p>if(!mCacheDir.exists()) mCacheDir.mkdirs(); </p>
+<p>} </p>
+<p>public File getFile(String url){ </p>
+<p>File f=null; </p>
+<p>try { </p>
+<p>//对url进行编辑，解决中文路径问题 </p>
+<p>String filename = URLEncoder.encode(url,&quot;utf-8&quot;); </p>
+<p>f = new File(mCacheDir, filename); </p>
+<p>} catch (UnsupportedEncodingException e) { </p>
+<p>e.printStackTrace(); </p>
+<p>} </p>
+<p>return f; </p>
+<p>} </p>
+<p>public void clear(){//清除缓存文件 </p>
+<p>File[] files = mCacheDir.listFiles(); </p>
+<p>for(File f:files)f.delete(); </p>
+<p>} </p>
+<p>} </p>
+<p>3、编写异步加载组件AsyncImageLoader</p>
+<p>android中采用单线程模型即应用运行在UI主线程中，且Android又是实时操作系统要求及时响应否则出现ANR错误，因此对于耗时操作要求不能阻塞UI主线程，需要开启一个线程处理（如本应用中的图片加载）并将线程放入队列中，当运行完成后再通知UI主线程进行更改，同时移除任务——这就是异步任务，在android中实现异步可通过本系列一中所用到的AsyncTask或者使用thread+handler机制，在这里是完全是通过代码编写实现的，这样我们可以更清晰的看到异步通信的实现的本质，代码如下</p>
+<p>public class AsyncImageLoader{ </p>
+<p>private MemoryCache mMemoryCache;//内存缓存 </p>
+<p>private FileCache mFileCache;//文件缓存 </p>
+<p>private ExecutorService mExecutorService;//线程池 </p>
+<p>//记录已经加载图片的ImageView </p>
+<p>private Map&lt;ImageView, String&gt; mImageViews = Collections </p>
+<p>.synchronizedMap(new WeakHashMap&lt;ImageView, String&gt;()); </p>
+<p>//保存正在加载图片的url </p>
+<p>private List&lt;LoadPhotoTask&gt; mTaskQueue = new ArrayList&lt;LoadPhotoTask&gt;(); </p>
+<p>/** </p>
+<p>* 默认采用一个大小为5的线程池 </p>
+<p>* @param context </p>
+<p>* @param memoryCache 所采用的高速缓存 </p>
+<p>* @param fileCache 所采用的文件缓存 </p>
+<p>*/ </p>
+<p>public AsyncImageLoader(Context context, MemoryCache memoryCache, FileCache fileCache) { </p>
+<p>mMemoryCache = memoryCache; </p>
+<p>mFileCache = fileCache; </p>
+<p>mExecutorService = Executors.newFixedThreadPool(5);//建立一个容量为5的固定尺寸的线程池（最大正在运行的线程数量） </p>
+<p>} </p>
+<p>/** </p>
+<p>* 根据url加载相应的图片 </p>
+<p>* @param url </p>
+<p>* @return 先从一级缓存中取图片有则直接返回，如果没有则异步从文件（二级缓存）中取，如果没有再从网络端获取 </p>
+<p>*/ </p>
+<p>public Bitmap loadBitmap(ImageView imageView, String url) { </p>
+<p>//先将ImageView记录到Map中,表示该ui已经执行过图片加载了 </p>
+<p>mImageViews.put(imageView, url); </p>
+<p>Bitmap bitmap = mMemoryCache.get(url);//先从一级缓存中获取图片 </p>
+<p>if(bitmap == null) { </p>
+<p>enquequeLoadPhoto(url, imageView);//再从二级缓存和网络中获取 </p>
+<p>} </p>
+<p>return bitmap; </p>
+<p>} </p>
+<p>/** </p>
+<p>* 加入图片下载队列 </p>
+<p>* @param url </p>
+<p>*/ </p>
+<p>private void enquequeLoadPhoto(String url, ImageView imageView) { </p>
+<p>//如果任务已经存在，则不重新添加 </p>
+<p>if(isTaskExisted(url)) </p>
+<p>return; </p>
+<p>LoadPhotoTask task = new LoadPhotoTask(url, imageView); </p>
+<p>synchronized (mTaskQueue) { </p>
+<p>mTaskQueue.add(task);//将任务添加到队列中 </p>
+<p>} </p>
+<p>mExecutorService.execute(task);//向线程池中提交任务，如果没有达到上限(5),则运行否则被阻塞 </p>
+<p>} </p>
+<p>/** </p>
+<p>* 判断下载队列中是否已经存在该任务 </p>
+<p>* @param url </p>
+<p>* @return </p>
+<p>*/ </p>
+<p>private boolean isTaskExisted(String url) { </p>
+<p>if(url == null) </p>
+<p>return false; </p>
+<p>synchronized (mTaskQueue) { </p>
+<p>int size = mTaskQueue.size(); </p>
+<p>for(int i=0; i&lt;size; i++) { </p>
+<p>LoadPhotoTask task = mTaskQueue.get(i); </p>
+<p>if(task != null &amp;&amp; task.getUrl().equals(url)) </p>
+<p>return true; </p>
+<p>} </p>
+<p>} </p>
+<p>return false; </p>
+<p>} </p>
+<p>/** </p>
+<p>* 从缓存文件或者网络端获取图片 </p>
+<p>* @param url </p>
+<p>*/ </p>
+<p>private Bitmap getBitmapByUrl(String url) { </p>
+<p>File f = mFileCache.getFile(url);//获得缓存图片路径 </p>
+<p>Bitmap b = ImageUtil.decodeFile(f);//获得文件的Bitmap信息 </p>
+<p>if (b != null)//不为空表示获得了缓存的文件 </p>
+<p>return b; </p>
+<p>return ImageUtil.loadBitmapFromWeb(url, f);//同网络获得图片 </p>
+<p>} </p>
+<p>/** </p>
+<p>* 判断该ImageView是否已经加载过图片了（可用于判断是否需要进行加载图片） </p>
+<p>* @param imageView </p>
+<p>* @param url </p>
+<p>* @return </p>
+<p>*/ </p>
+<p>private boolean imageViewReused(ImageView imageView, String url) { </p>
+<p>String tag = mImageViews.get(imageView); </p>
+<p>if (tag == null || !tag.equals(url)) </p>
+<p>return true; </p>
+<p>return false; </p>
+<p>} </p>
+<p>private void removeTask(LoadPhotoTask task) { </p>
+<p>synchronized (mTaskQueue) { </p>
+<p>mTaskQueue.remove(task); </p>
+<p>} </p>
+<p>} </p>
+<p>class LoadPhotoTask implements Runnable { </p>
+<p>private String url; </p>
+<p>private ImageView imageView; </p>
+<p>LoadPhotoTask(String url, ImageView imageView) { </p>
+<p>this.url = url; </p>
+<p>this.imageView = imageView; </p>
+<p>} </p>
+<p>@Override </p>
+<p>public void run() { </p>
+<p>if (imageViewReused(imageView, url)) {//判断ImageView是否已经被复用 </p>
+<p>removeTask(this);//如果已经被复用则删除任务 </p>
+<p>return; </p>
+<p>} </p>
+<p>Bitmap bmp = getBitmapByUrl(url);//从缓存文件或者网络端获取图片 </p>
+<p>mMemoryCache.put(url, bmp);// 将图片放入到一级缓存中 </p>
+<p>if (!imageViewReused(imageView, url)) {//若ImageView未加图片则在ui线程中显示图片 </p>
+<p>BitmapDisplayer bd = new BitmapDisplayer(bmp, imageView, url); Activity a = (Activity) imageView.getContext(); </p>
+<p>a.runOnUiThread(bd);//在UI线程调用bd组件的run方法，实现为ImageView控件加载图片 </p>
+<p>} </p>
+<p>removeTask(this);//从队列中移除任务 </p>
+<p>} </p>
+<p>public String getUrl() { </p>
+<p>return url; </p>
+<p>} </p>
+<p>} </p>
+<p>/** </p>
+<p>* </p>
+<p>*由UI线程中执行该组件的run方法 </p>
+<p>*/ </p>
+<p>class BitmapDisplayer implements Runnable { </p>
+<p>private Bitmap bitmap; </p>
+<p>private ImageView imageView; </p>
+<p>private String url; </p>
+<p>public BitmapDisplayer(Bitmap b, ImageView imageView, String url) { </p>
+<p>bitmap = b; </p>
+<p>this.imageView = imageView; </p>
+<p>this.url = url; </p>
+<p>} </p>
+<p>public void run() { </p>
+<p>if (imageViewReused(imageView, url)) </p>
+<p>return; </p>
+<p>if (bitmap != null) </p>
+<p>imageView.setImageBitmap(bitmap); </p>
+<p>} </p>
+<p>} </p>
+<p>/** </p>
+<p>* 释放资源 </p>
+<p>*/ </p>
+<p>public void destroy() { </p>
+<p>mMemoryCache.clear(); </p>
+<p>mMemoryCache = null; </p>
+<p>mImageViews.clear(); </p>
+<p>mImageViews = null; </p>
+<p>mTaskQueue.clear(); </p>
+<p>mTaskQueue = null; </p>
+<p>mExecutorService.shutdown(); </p>
+<p>mExecutorService = null; </p>
+<p>} </p>
+<p>} </p>
+<p>编写完成之后，对于异步任务的执行只需调用AsyncImageLoader中的loadBitmap()方法即可非常方便，对于AsyncImageLoader组件的代码最好结合注释好好理解一下，这样对于Android中线程之间的异步通信就会有深刻的认识。</p>
+<p>4、工具类ImageUtil</p>
+<p>public class ImageUtil { </p>
+<p>/** </p>
+<p>* 从网络获取图片，并缓存在指定的文件中 </p>
+<p>* @param url 图片url </p>
+<p>* @param file 缓存文件 </p>
+<p>* @return </p>
+<p>*/ </p>
+<p>public static Bitmap loadBitmapFromWeb(String url, File file) { </p>
+<p>HttpURLConnection conn = null; </p>
+<p>InputStream is = null; </p>
+<p>OutputStream os = null; </p>
+<p>try { </p>
+<p>Bitmap bitmap = null; </p>
+<p>URL imageUrl = new URL(url); </p>
+<p>conn = (HttpURLConnection) imageUrl.openConnection(); </p>
+<p>conn.setConnectTimeout(30000); </p>
+<p>conn.setReadTimeout(30000); </p>
+<p>conn.setInstanceFollowRedirects(true); </p>
+<p>is = conn.getInputStream(); </p>
+<p>os = new FileOutputStream(file); </p>
+<p>copyStream(is, os);//将图片缓存到磁盘中 </p>
+<p>bitmap = decodeFile(file); </p>
+<p>return bitmap; </p>
+<p>} catch (Exception ex) { </p>
+<p>ex.printStackTrace(); </p>
+<p>return null; </p>
+<p>} finally { </p>
+<p>try { </p>
+<p>if(os != null) os.close(); </p>
+<p>if(is != null) is.close(); </p>
+<p>if(conn != null) conn.disconnect(); </p>
+<p>} catch (IOException e) { } </p>
+<p>} </p>
+<p>} </p>
+<p>public static Bitmap decodeFile(File f) { </p>
+<p>try { </p>
+<p>return BitmapFactory.decodeStream(new FileInputStream(f), null, null); </p>
+<p>} catch (Exception e) { } </p>
+<p>return null; </p>
+<p>} </p>
+<p>private static void copyStream(InputStream is, OutputStream os) { </p>
+<p>final int buffer_size = 1024; </p>
+<p>try { </p>
+<p>byte[] bytes = new byte[buffer_size]; </p>
+<p>for (;;) { </p>
+<p>int count = is.read(bytes, 0, buffer_size); </p>
+<p>if (count == -1) </p>
+<p>break; </p>
+<p>os.write(bytes, 0, count); </p>
+<p>} </p>
+<p>} catch (Exception ex) { </p>
+<p>ex.printStackTrace(); </p>
+<p>} </p>
+<p>} </p>
+<p>} </p>
+<p>四、测试应用</p>
+<p>组件之间的时序图：</p>
+<p>1、编写MainActivity</p>
+<p>public class MainActivity extends Activity { </p>
+<p>ListView list; </p>
+<p>ListViewAdapter adapter; </p>
+<p>@Override </p>
+<p>public void onCreate(Bundle savedInstanceState) { </p>
+<p>super.onCreate(savedInstanceState); </p>
+<p>setContentView(R.layout.main); </p>
+<p>list=(ListView)findViewById(R.id.list); </p>
+<p>adapter=new ListViewAdapter(this, mStrings); </p>
+<p>list.setAdapter(adapter); </p>
+<p>} </p>
+<p>public void onDestroy(){ </p>
+<p>list.setAdapter(null); </p>
+<p>super.onDestroy(); </p>
+<p>adapter.destroy(); </p>
+<p>} </p>
+<p>private String[] mStrings={ </p>
+<p>&quot;<a target="_blank" rel="noopener" href="http://news.21-sun.com/UserFiles/x_Image/x_20150606083511_0.jpg">http://news.21-sun.com/UserFiles/x_Image/x_20150606083511_0.jpg</a>&quot;, </p>
+<p>&quot;<a target="_blank" rel="noopener" href="http://news.21-sun.com/UserFiles/x_Image/x_20150606082847_0.jpg">http://news.21-sun.com/UserFiles/x_Image/x_20150606082847_0.jpg</a>&quot;, </p>
+<p>…..}; </p>
+<p>} </p>
+<p>2、编写适配器</p>
+<p>public class ListViewAdapter extends BaseAdapter { </p>
+<p>private Activity mActivity; </p>
+<p>private String[] data; </p>
+<p>private static LayoutInflater inflater=null; </p>
+<p>private AsyncImageLoader imageLoader;//异步组件 </p>
+<p>public ListViewAdapter(Activity mActivity, String[] d) { </p>
+<p>this.mActivity=mActivity; </p>
+<p>data=d; </p>
+<p>inflater = (LayoutInflater)mActivity.getSystemService( </p>
+<p>Context.LAYOUT_INFLATER_SERVICE); </p>
+<p>MemoryCache mcache=new MemoryCache();//内存缓存 </p>
+<p>File sdCard = android.os.Environment.getExternalStorageDirectory();//获得SD卡 </p>
+<p>File cacheDir = new File(sdCard, &quot;jereh_cache&quot; );//缓存根目录 </p>
+<p>FileCache fcache=new FileCache(mActivity, cacheDir, &quot;news_img&quot;);//文件缓存 </p>
+<p>imageLoader = new AsyncImageLoader(mActivity, mcache,fcache); </p>
+<p>} </p>
+<p>public int getCount() { </p>
+<p>return data.length; </p>
+<p>} </p>
+<p>public Object getItem(int position) { </p>
+<p>return position; </p>
+<p>} </p>
+<p>public long getItemId(int position) { </p>
+<p>return position; </p>
+<p>} </p>
+<p>public View getView(int position, View convertView, ViewGroup parent) { </p>
+<p>ViewHolder vh=null; </p>
+<p>if(convertView==null){ </p>
+<p>convertView = inflater.inflate(R.layout.item, null); </p>
+<p>vh=new ViewHolder(); </p>
+<p>vh.tvTitle=(TextView)convertView.findViewById(R.id.text); </p>
+<p>vh.ivImg=(ImageView)convertView.findViewById(R.id.image); </p>
+<p>convertView.setTag(vh); </p>
+<p>}else{ </p>
+<p>vh=(ViewHolder)convertView.getTag(); </p>
+<p>} </p>
+<p>vh.tvTitle.setText(&quot;标题信息测试———— &quot;+position); </p>
+<p>vh.ivImg.setTag(data[position]); </p>
+<p>//异步加载图片，先从一级缓存、再二级缓存、最后网络获取图片 </p>
+<p>Bitmap bmp = imageLoader.loadBitmap(vh.ivImg, data[position]); </p>
+<p>if(bmp == null) { </p>
+<p>vh.ivImg.setImageResource(R.drawable.default_big); </p>
+<p>} else { </p>
+<p>vh.ivImg.setImageBitmap(bmp); </p>
+<p>} </p>
+<p>return convertView; </p>
+<p>} </p>
+<p>private class ViewHolder{ </p>
+<p>TextView tvTitle; </p>
+<p>ImageView ivImg; </p>
+<p>} </p>
+<p>public void destroy() { </p>
+<p>imageLoader.destroy(); </p>
+<p>} </p>
+<p>} </p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/android%E8%B0%83%E8%AF%95%E5%B7%A5%E5%85%B7/" rel="prev" title="android调试工具">
+      <i class="fa fa-chevron-left"></i> android调试工具
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/Android%E7%B3%BB%E7%BB%9F%20%E5%90%AF%E5%8A%A8%E4%B8%89%E7%A7%8D%E6%A8%A1%E5%BC%8F%20%E5%8F%8AOTA%E5%8C%85%E5%8D%87%E7%BA%A7%E6%B5%81%E7%A8%8B/" rel="next" title="Android系统 启动三种模式 及OTA包升级流程">
+      Android系统 启动三种模式 及OTA包升级流程 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Edward"
+      src="/uploads/avatar.gif">
+  <p class="site-author-name" itemprop="name">Edward</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">570</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Edward</span>
+</div>
+
+        
+
+
+
+
+
+
+<script>
+  (function() {
+    function leancloudSelector(url) {
+      url = encodeURI(url);
+      return document.getElementById(url).querySelector('.leancloud-visitors-count');
+    }
+
+    function addCount(Counter) {
+      var visitors = document.querySelector('.leancloud_visitors');
+      var url = decodeURI(visitors.id);
+      var title = visitors.dataset.flagTitle;
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          if (results.length > 0) {
+            var counter = results[0];
+            leancloudSelector(url).innerText = counter.time + 1;
+            Counter('put', '/classes/Counter/' + counter.objectId, { time: { '__op': 'Increment', 'amount': 1 } })
+              .catch(error => {
+                console.error('Failed to save visitor count', error);
+              });
+          } else {
+              Counter('post', '/classes/Counter', { title, url, time: 1 })
+                .then(response => response.json())
+                .then(() => {
+                  leancloudSelector(url).innerText = 1;
+                })
+                .catch(error => {
+                  console.error('Failed to create', error);
+                });
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    function showTime(Counter) {
+      var visitors = document.querySelectorAll('.leancloud_visitors');
+      var entries = [...visitors].map(element => {
+        return decodeURI(element.id);
+      });
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url: { '$in': entries } })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          for (let url of entries) {
+            let target = results.find(item => item.url === url);
+            leancloudSelector(url).innerText = target ? target.time : 0;
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    let { app_id, app_key, server_url } = {"enable":true,"app_id":"wxYx0BX9gaKA3XC4LuO2of0v-gzGzoHsz","app_key":"LQMcs6IDIE4YAm10vMsn9IYq","server_url":"https://wxyx0bx9.lc-cn-n1-shared.com","security":false};
+    function fetchData(api_server) {
+      var Counter = (method, url, data) => {
+        return fetch(`${api_server}/1.1${url}`, {
+          method,
+          headers: {
+            'X-LC-Id'     : app_id,
+            'X-LC-Key'    : app_key,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data)
+        });
+      };
+      if (CONFIG.page.isPost) {
+        if (CONFIG.hostname !== location.hostname) return;
+        addCount(Counter);
+      } else if (document.querySelectorAll('.post-title-link').length >= 1) {
+        showTime(Counter);
+      }
+    }
+
+    let api_server = app_id.slice(-9) !== '-MdYXbMMI' ? server_url : `https://${app_id.slice(0, 8).toLowerCase()}.api.lncldglobal.com`;
+
+    if (api_server) {
+      fetchData(api_server);
+    } else {
+      fetch('https://app-router.leancloud.cn/2/route?appId=' + app_id)
+        .then(response => response.json())
+        .then(({ api_server }) => {
+          fetchData('https://' + api_server);
+        });
+    }
+  })();
+</script>
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

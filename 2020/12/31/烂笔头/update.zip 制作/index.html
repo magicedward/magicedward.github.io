@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"edward.org.cn","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="├── META-INF │   ├── CERT.RSA │   ├── CERT.SF │   ├── com │   │   ├── android │   │   │   └── otacert │   │   └── google │   │   └── android │   │   ├── update-binary │   │   └── updater-script">
+<meta property="og:type" content="article">
+<meta property="og:title" content="update">
+<meta property="og:url" content="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/update.zip%20%E5%88%B6%E4%BD%9C/index.html">
+<meta property="og:site_name" content="点点滴滴">
+<meta property="og:description" content="├── META-INF │   ├── CERT.RSA │   ├── CERT.SF │   ├── com │   │   ├── android │   │   │   └── otacert │   │   └── google │   │   └── android │   │   ├── update-binary │   │   └── updater-script">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-12-31T06:48:01.727Z">
+<meta property="article:modified_time" content="2020-01-16T04:37:33.191Z">
+<meta property="article:author" content="Edward">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/update.zip%20%E5%88%B6%E4%BD%9C/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>update | 点点滴滴</title>
+  
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?a92ed22eafce466e7a7b17546bb0dc6f";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">点点滴滴</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/update.zip%20%E5%88%B6%E4%BD%9C/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/avatar.gif">
+      <meta itemprop="name" content="Edward">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="点点滴滴">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          update
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-12-31 14:48:01" itemprop="dateCreated datePublished" datetime="2020-12-31T14:48:01+08:00">2020-12-31</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-01-16 12:37:33" itemprop="dateModified" datetime="2020-01-16T12:37:33+08:00">2020-01-16</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%83%82%E7%AC%94%E5%A4%B4/" itemprop="url" rel="index"><span itemprop="name">烂笔头</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/update.zip%20%E5%88%B6%E4%BD%9C/" class="post-meta-item leancloud_visitors" data-flag-title="update" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>├── META-INF</p>
+<p>│   ├── CERT.RSA</p>
+<p>│   ├── CERT.SF</p>
+<p>│   ├── com</p>
+<p>│   │   ├── android</p>
+<p>│   │   │   └── otacert</p>
+<p>│   │   └── google</p>
+<p>│   │   └── android</p>
+<p>│   │   ├── update-binary</p>
+<p>│   │   └── updater-script</p>
+<p>│   └── MANIFEST.MF</p>
+<p>├── system</p>
+<p>│   ├── app</p>
+<p>│   └── build.prop</p>
+<p>├── boot.img</p>
+<p> 通过脚本updater-script 将 system  boot.img 等 替换到系统中，再修改权限。</p>
+<p>将这些文件以存储方式打包为update.zip , 再用 signapk.jar 来签名。</p>
+<p>#!/bin/bash</p>
+<p>rm -rvf update_raw.zip</p>
+<p>rm -rvf update.zip</p>
+<p>cp -rvf updater-script META-INF/com/google/android/</p>
+<p>zip -r -Z store update_raw.zip META-INF/* system/* boot.img</p>
+<p>#zip -r -Z store update_raw.zip META-INF/* system/*</p>
+<p>echo &quot;signed update.zip …&quot;</p>
+<p>java -jar signapk.jar -w testkey.x509.pem testkey.pk8 update_raw.zip update.zip   </p>
+<p>echo &quot;done&quot;</p>
+<p>signapk.jar </p>
+<p>out/host/linux-x86/framework/signapk.jar</p>
+<p>testkey.x509.pem    testkey.pk8   或 platform.pk8  platform.x509.pem</p>
+<p>build/target/product/security/testkey.pk8</p>
+<p>build/target/product/security/testkey.x509.pem</p>
+<p>build/target/product/security/platform.pk8</p>
+<p>build/target/product/security/platform.x509.pem</p>
+<p>================================================================================</p>
+<p>update.zip包的目录结构<br>          |—-boot.img<br>          |—-system/<br>          |—-recovery/<br>                <code>|----recovery-from-boot.p                 </code>|—-etc/<br>                        <code>|----install-recovery.sh           |---META-INF/               </code>|CERT.RSA<br>              <code>|CERT.SF               </code>|MANIFEST.MF<br>              <code>|----com/                      </code>|—-google/<br>                             <code>|----android/                                     </code>|—-update-binary<br>                                    <code>|----updater-script                              </code>|—-android/<br>                                    `|—-metadata </p>
+<p>二、 update.zip包目录结构详解<br>         以上是我们用命令make otapackage 制作的update.zip包的标准目录结构。<br>1、boot.img是更新boot分区所需要的文件。这个boot.img主要包括kernel+ramdisk。</p>
+<p>2、system/目录的内容在升级后会放在系统的system分区。主要用来更新系统的一些应用或则应用会用到的一些库等等。可以将Android源码编译out/target/product/tcc8800/system/中的所有文件拷贝到这个目录来代替。</p>
+<p>3、recovery/目录中的recovery-from-boot.p是boot.img和recovery.img的补丁(patch),主要用来更新recovery分区，其中etc/目录下的install-recovery.sh是更新脚本。<br>4、update-binary是一个二进制文件，相当于一个脚本解释器，能够识别updater-script中描述的操作。该文件在Android源码编译后out/target/product/tcc8800/system bin/updater生成，可将updater重命名为update-binary得到。<br>               该文件在具体的更新包中的名字由源码中bootable/recovery/install.c中的宏ASSUMED_UPDATE_BINARY_NAME的值而定。<br>5、updater-script：此文件是一个脚本文件，具体描述了更新过程。我们可以根据具体情况编写该脚本来适应我们的具体需求。该文件的命名由源码中bootable/recovery/updater/updater.c文件中的宏SCRIPT_NAME的值而定。<br>6、 metadata文件是描述设备信息及环境变量的元数据。主要包括一些编译选项，签名公钥，时间戳以及设备型号等。<br>7、我们还可以在包中添加userdata目录，来更新系统中的用户数据部分。这部分内容在更新后会存放在系统的/data目录下。</p>
+<p>8、update.zip包的签名：update.zip更新包在制作完成后需要对其签名，否则在升级时会出现认证失败的错误提示。而且签名要使用和目标板一致的加密公钥。加密公钥及加密需要的三个文件在Android源码编译后生成的具体路径为：</p>
+<p>               out/host/linux-x86/framework/signapk.jar </p>
+<p>               build/target/product/security/testkey.x509.pem         </p>
+<p>               build/target/product/security/testkey.pk8 。</p>
+<p>              我们用命令make otapackage制作生成的update.zip包是已签过名的，如果自己做update.zip包时必须手动对其签名。</p>
+<p>              具体的加密方法：$ java –jar gingerbread/out/host/linux/framework/signapk.jar –w gingerbread/build/target/product/security/testkey.x509.pem                                      gingerbread/build/target/product/security/testkey.pk8 update.zip update_signed.zip<br>              以上命令在update.zip包所在的路径下执行，其中signapk.jar testkey.x509.pem以及testkey.pk8文件的引用使用绝对路径。update.zip 是我们已经打好的包，update_signed.zip包是命令执行完生成的已经签过名的包。<br>9、MANIFEST.MF：这个manifest文件定义了与包的组成结构相关的数据。类似Android应用的mainfest.xml文件。<br>10、CERT.RSA：与签名文件相关联的签名程序块文件，它存储了用于签名JAR文件的公共签名。<br>11、CERT.SF：这是JAR文件的签名文件，其中前缀CERT代表签名者。<br>        另外，在具体升级时，对update.zip包检查时大致会分三步：①检验SF文件与RSA文件是否匹配。②检验MANIFEST.MF与签名文件中的digest是否一致。③检验包中的文件与MANIFEST中所描述的是否一致。 </p>
+<p>三、 Android升级包update.zip的生成过程分析</p>
+<p>         1) 对于update.zip包的制作有两种方式，即手动制作和命令生成。</p>
+<p>第一种手动制作：即按照update.zip的目录结构手动创建我们需要的目录。然后将对应的文件拷贝到相应的目录下，比如我们向系统中新加一个应用程序。可以将新增的应用拷贝到我们新建的update/system/app/下（system目录是事先拷贝编译源码后生成的system目录），打包并签名后，拷贝到SD卡就可以使用了。这种方式在实际的tcc8800开发板中未测试成功。签名部分未通过，可能与具体的开发板相关。</p>
+<p>第二种制作方式：命令制作。Android源码系统中为我们提供了制作update.zip刷机包的命令，即make otapackage。该命令在编译源码完成后并在源码根目录下执行。 具体操作方式：在源码根目录下执行</p>
+<p>                ①$ . build/envsetup.sh。 </p>
+<p>                ②$ lunch 然后选择你需要的配置(如17)。</p>
+<p>                ③$ make otapackage。</p>
+<p>          在编译完源码后最好再执行一遍上面的①、②步防止执行③时出现未找到对应规则的错误提示。命令执行完成后生成的升级包所在位置在out/target/product/full_tcc8800_evm_target_files-eng.mumu.20120309.111059.zip将这个包重新命名为update.zip，并拷贝到SD卡中即可使用。</p>
+<p>           这种方式(即完全升级)在tcc8800开发板中已测试成功。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/ubuntu%20%E9%BB%98%E8%AE%A4%E7%B3%BB%E7%BB%9F%E8%AF%AD%E8%A8%80/" rel="prev" title="ubuntu 默认系统语言">
+      <i class="fa fa-chevron-left"></i> ubuntu 默认系统语言
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/updater-script%20only%20rk%203168%208723/" rel="next" title="updater-script only rk 3168 8723">
+      updater-script only rk 3168 8723 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Edward"
+      src="/uploads/avatar.gif">
+  <p class="site-author-name" itemprop="name">Edward</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">570</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Edward</span>
+</div>
+
+        
+
+
+
+
+
+
+<script>
+  (function() {
+    function leancloudSelector(url) {
+      url = encodeURI(url);
+      return document.getElementById(url).querySelector('.leancloud-visitors-count');
+    }
+
+    function addCount(Counter) {
+      var visitors = document.querySelector('.leancloud_visitors');
+      var url = decodeURI(visitors.id);
+      var title = visitors.dataset.flagTitle;
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          if (results.length > 0) {
+            var counter = results[0];
+            leancloudSelector(url).innerText = counter.time + 1;
+            Counter('put', '/classes/Counter/' + counter.objectId, { time: { '__op': 'Increment', 'amount': 1 } })
+              .catch(error => {
+                console.error('Failed to save visitor count', error);
+              });
+          } else {
+              Counter('post', '/classes/Counter', { title, url, time: 1 })
+                .then(response => response.json())
+                .then(() => {
+                  leancloudSelector(url).innerText = 1;
+                })
+                .catch(error => {
+                  console.error('Failed to create', error);
+                });
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    function showTime(Counter) {
+      var visitors = document.querySelectorAll('.leancloud_visitors');
+      var entries = [...visitors].map(element => {
+        return decodeURI(element.id);
+      });
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url: { '$in': entries } })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          for (let url of entries) {
+            let target = results.find(item => item.url === url);
+            leancloudSelector(url).innerText = target ? target.time : 0;
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    let { app_id, app_key, server_url } = {"enable":true,"app_id":"wxYx0BX9gaKA3XC4LuO2of0v-gzGzoHsz","app_key":"LQMcs6IDIE4YAm10vMsn9IYq","server_url":"https://wxyx0bx9.lc-cn-n1-shared.com","security":false};
+    function fetchData(api_server) {
+      var Counter = (method, url, data) => {
+        return fetch(`${api_server}/1.1${url}`, {
+          method,
+          headers: {
+            'X-LC-Id'     : app_id,
+            'X-LC-Key'    : app_key,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data)
+        });
+      };
+      if (CONFIG.page.isPost) {
+        if (CONFIG.hostname !== location.hostname) return;
+        addCount(Counter);
+      } else if (document.querySelectorAll('.post-title-link').length >= 1) {
+        showTime(Counter);
+      }
+    }
+
+    let api_server = app_id.slice(-9) !== '-MdYXbMMI' ? server_url : `https://${app_id.slice(0, 8).toLowerCase()}.api.lncldglobal.com`;
+
+    if (api_server) {
+      fetchData(api_server);
+    } else {
+      fetch('https://app-router.leancloud.cn/2/route?appId=' + app_id)
+        .then(response => response.json())
+        .then(({ api_server }) => {
+          fetchData('https://' + api_server);
+        });
+    }
+  })();
+</script>
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

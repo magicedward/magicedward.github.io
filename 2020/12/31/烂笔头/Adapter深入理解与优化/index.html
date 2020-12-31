@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"edward.org.cn","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="Android高手进阶：Adapter深入理解与优化 2014-07-15 17:17 佚名 eoeandroid 字号：T | T 一般是针对包含多个元素的View，如ListView，GridView，ExpandableListview，的时候我们是给其设置一个Adapter。Adapter是与View之间提供数据的桥梁，也是提供每个Item的视图桥梁。 AD：51CTO网+ 首届中国APP">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Adapter深入理解与优化">
+<meta property="og:url" content="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/Adapter%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E4%B8%8E%E4%BC%98%E5%8C%96/index.html">
+<meta property="og:site_name" content="点点滴滴">
+<meta property="og:description" content="Android高手进阶：Adapter深入理解与优化 2014-07-15 17:17 佚名 eoeandroid 字号：T | T 一般是针对包含多个元素的View，如ListView，GridView，ExpandableListview，的时候我们是给其设置一个Adapter。Adapter是与View之间提供数据的桥梁，也是提供每个Item的视图桥梁。 AD：51CTO网+ 首届中国APP">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-12-31T06:48:00.828Z">
+<meta property="article:modified_time" content="2020-01-16T04:37:33.700Z">
+<meta property="article:author" content="Edward">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/Adapter%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E4%B8%8E%E4%BC%98%E5%8C%96/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>Adapter深入理解与优化 | 点点滴滴</title>
+  
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?a92ed22eafce466e7a7b17546bb0dc6f";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">点点滴滴</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/Adapter%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E4%B8%8E%E4%BC%98%E5%8C%96/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/avatar.gif">
+      <meta itemprop="name" content="Edward">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="点点滴滴">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Adapter深入理解与优化
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-12-31 14:48:00" itemprop="dateCreated datePublished" datetime="2020-12-31T14:48:00+08:00">2020-12-31</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-01-16 12:37:33" itemprop="dateModified" datetime="2020-01-16T12:37:33+08:00">2020-01-16</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%83%82%E7%AC%94%E5%A4%B4/" itemprop="url" rel="index"><span itemprop="name">烂笔头</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/Adapter%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E4%B8%8E%E4%BC%98%E5%8C%96/" class="post-meta-item leancloud_visitors" data-flag-title="Adapter深入理解与优化" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>Android高手进阶：Adapter深入理解与优化</p>
+<p>2014-07-15 17:17 佚名 eoeandroid 字号：T | T</p>
+<p>一般是针对包含多个元素的View，如ListView，GridView，ExpandableListview，的时候我们是给其设置一个Adapter。Adapter是与View之间提供数据的桥梁，也是提供每个Item的视图桥梁。</p>
+<p>AD：51CTO网+ 首届中国APP创新评选大赛火热招募中……</p>
+<p>一般是针对包含多个元素的View，如ListView，GridView，ExpandableListview，的时候我们是给其设置一个Adapter。Adapter是与View之间提供数据的桥梁，也是提供每个Item的视图桥梁。</p>
+<p>以ListView为例，其工作原理为:</p>
+<p>● ListView针对List中每个item， adapter都会调用一个getView的方法获得布局视图</p>
+<p>●我们一般会Inflate一个新的View，填充数据并返回显示</p>
+<p>当然如果我们的Item很多话（比如上万个），都会新建一个View吗？很明显这样内存是接受不了的，Google也不会这么做，Android中有个叫做Recycler的构件，下图是他的工作原理：</p>
+<p>很明显，无论数据中是多少个item，在显示上Recycler只存储其中可见的View在内存中。当向下滑动时，顶部不可见Item直接回移动到下方再次填充数据变为新增项。这样就不用每次都新建一个View了。</p>
+<p>这个也就是我们在Adapter中常见的getView方法的调用，对应此方法我们就能看出，convertView就是每一Item在Recyler之前的布局视图。</p>
+<p>public View getView(int position, View convertView, ViewGrouppare</p>
+<p>所以，Android已经给我们提供了Recycler机制了，我们就应该利用此机制，而不是每次都去inflate一个View。</p>
+<p>Example</p>
+<p>Don’t</p>
+<p>public View getView(int position, View convertView, ViewGroupparent){   </p>
+<p>    convertView = LayoutInflater.from(mContext).inflate(R.layout.item_view,null);   </p>
+<p>//dosomething…   </p>
+<p>return converView;   </p>
+<p>}   </p>
+<p>Do</p>
+<p>public View getView(int position, View convertView, ViewGroupparent){   </p>
+<p>if (convertView ==null) {   </p>
+<p>           convertView =LayoutInflater.from(mContext).inflate(R.layout.item_view, null);   </p>
+<p>     }   </p>
+<p>//dosomething…   </p>
+<p>return converView;   </p>
+<p>}   </p>
+<p>ViewHolder的作用</p>
+<p>之前所说的Recycler模式是为了解决重复inflate时候造成的View资源浪费，还哪有什么方法何可再次优化我们的性能吗？答案是Yes。</p>
+<p>我们还是从getView中的每一个方法调用去查看，发现其实我们拿到convertView的时候，每次都会根据这个布局去findViewById。如下，使我们通常的写法：</p>
+<p>findViewById是在解析layout.xml布局那种其中的子View，解析xml是一个力气活，所以Google也建议我们将这个费力不讨好的活优化起来，所以提出了ViewHolder的概念。</p>
+<p>即，使用一个静态类，保存xml中的各个子View的引用关系，这样就不必要每次都去解析xml了。如下：就是针对上面代码写的一个ViewHolder</p>
+<p>if (convertView == null) {                </p>
+<p>   convertView = mInflater.inflate(R.layout.item_view, null);             </p>
+<p>}    </p>
+<p>TextView titleTextView = (TextView) convertView.findViewById(R.id.text));            </p>
+<p>ImageView iconImageView = (ImageView)convertView.findViewButId( R.id.icon));    </p>
+<p>//DoSomething…   </p>
+<p>findViewById是在解析layout.xml布局那种其中的子View，解析xml是一个力气活，所以Google也建议我们将这个费力不讨好的活优化起来，所以提出了ViewHolder的概念。</p>
+<p>即，使用一个静态类，保存xml中的各个子View的引用关系，这样就不必要每次都去解析xml了。如下：就是针对上面代码写的一个ViewHolder</p>
+<p>static class ViewHolder {    </p>
+<p>    TextView titleTextView;    </p>
+<p>    ImageView iconImageView;    </p>
+<p>}    </p>
+<p>但是，在getView方法中我们只能拿到三个参数，position、convertView、viewGroup是拿不到我们自定义的ViewHolder的。所以，我们希望通过convertView拿到ViewHolder只能将其放在tag里。</p>
+<p>下面是一个完整的ViewHolder使用exmaple:</p>
+<p>public View getView(int position, View convertView, ViewGroup parent) {   </p>
+<p>    ViewHolder holder;   </p>
+<p>if (convertView == null) {   </p>
+<p>        convertView = mInflater.inflate(R.layout.item_view, null);   </p>
+<p>        holder = new ViewHolder();   </p>
+<p>        holder.titleTextView = (TextView) convertView.findViewById(R.id.text);   </p>
+<p>        holder.iconImageView = (ImageView) convertView.findViewById(R.id.icon);   </p>
+<p>        convertView.setTag(holder);   </p>
+<p>    } else {   </p>
+<p>        holder = (ViewHolder) convertView.getTag();   </p>
+<p>    }   </p>
+<p>    holder.titleTextView.setText(DATA[pos].title);   </p>
+<p>    holder.iconImageView.setImageBitmap(DATA[pos].bitmap);   </p>
+<p>return convertView;   </p>
+<p>}   </p>
+<p>static class ViewHolder {   </p>
+<p>    TextView titleTextView;   </p>
+<p>    ImageView iconImageView;   </p>
+<p>}   </p>
+<p>Tips. Support.v7中的RecyclerView 就是采用了此思想来制作的。</p>
+<p>多个类型的ViewType</p>
+<p>当我们在Adapter中调用方法getView的时候，如果整个列表中的Item View如果有多种类型布局，如：</p>
+<p>我们继续使用convertView来将数据从新填充貌似不可行了，因为每次返回的convertView类型都不一样，无法重用。</p>
+<p>Android在设计上的时候，也想到了这点。所以，在adapter中预留的两个方法。</p>
+<p>public int getItemViewType(int position) ; </p>
+<p>public int getViewTypeCount();</p>
+<p>只需要重新这两个方法，设置一下ItemViewType的个数和判断方法，Recycler就能有选择性的给出不同的convertView了。 </p>
+<p>       Example：</p>
+<p>@Override   </p>
+<p>public intgetItemViewType(int position) {   </p>
+<p>if (DATA[pos].type == 0) {   </p>
+<p>return 0;   </p>
+<p>    } else {   </p>
+<p>return 1;   </p>
+<p>    }   </p>
+<p>}   </p>
+<p>@Override   </p>
+<p>public int getViewTypeCount() {   </p>
+<p>return 2;   </p>
+<p>}   </p>
+<p>@Override   </p>
+<p>public View getView(int position, View convertView, ViewGroup arg2) {   </p>
+<p>    TitleViewHolder titleHolder;   </p>
+<p>    InfoViewHolder infoHolder;   </p>
+<p>int type = getItemViewType(position);   </p>
+<p>if (convertView == null) {   </p>
+<p>switch (type) {   </p>
+<p>case 0:   </p>
+<p>            convertView = mInflater.inflate(R.layout.item_view, null);   </p>
+<p>            titleHolder = new TitleViewHolder();   </p>
+<p>            titleHolder.titleTextView = (TextView) convertView.findViewById(R.id.text);   </p>
+<p>            titleHolder.iconImageView = (ImageView) convertView.findViewById(R.id.icon);   </p>
+<p>            convertView.setTag(titleHolder);   </p>
+<p>break;   </p>
+<p>case 1:   </p>
+<p>            convertView = mInflater.inflate(R.layout.item_view2, null);   </p>
+<p>            infoHolder = new InfoViewHolder();   </p>
+<p>            infoHolder.titleTextView = (TextView) convertView.findViewById(R.id.text);   </p>
+<p>            convertView.setTag(infoHolder);   </p>
+<p>break;   </p>
+<p>        }   </p>
+<p>    } else {   </p>
+<p>switch (type) {   </p>
+<p>case 0:   </p>
+<p>            titleHolder = (TitleViewHolder) convertView.getTag();   </p>
+<p>break;   </p>
+<p>case 1:   </p>
+<p>            infoHolder = (InfoViewHolder) convertView.getTag();   </p>
+<p>break;   </p>
+<p>        }   </p>
+<p>    }   </p>
+<p>switch (type) {   </p>
+<p>case 0:   </p>
+<p>        titleHolder.titleTextView.setText(DATA[pos].title);   </p>
+<p>break;   </p>
+<p>case 1:   </p>
+<p>        infoHolder.titleTextView.setText(DATA[pos].title);   </p>
+<p>        infoHolder.iconImageView.setImageBitmap(DATA[pos].bitmap);   </p>
+<p>break;   </p>
+<p>    }   </p>
+<p>return convertView;   </p>
+<p>}   </p>
+<p>static class TitleViewHolder {   </p>
+<p>public ImageView iconImageView;   </p>
+<p>public TextView titleTextView;   </p>
+<p>}   </p>
+<p>static class InfoViewHolder {   </p>
+<p>    TextView titleTextView;   </p>
+<p>    ImageView iconImageView;   </p>
+<p>}   </p>
+<p>NotifyDataSetChanged刷新机制</p>
+<p>当ListView中的数据发生了改变，我们希望刷新ListView中的View时，我们一般会调用NotifyDataSetChanged来刷新ListView。看一下它的源码：</p>
+<p>public void notifyChanged() {   </p>
+<p>synchronized (mObservers) {   </p>
+<p>// 向每一个子View发送onChanged   </p>
+<p>for (int i = mObservers.size() - 1; i &gt;= 0; i–) {   </p>
+<p>            mObservers.get(i).onChanged();   </p>
+<p>        }   </p>
+<p>    }   </p>
+<p>}   </p>
+<p>发 现它针对每一个子View都做了刷新，当然，如果我们的数据都变量还可以理解。但是，一般条件下，我们需要更新的View不多。频繁的调用 NotifyDataSetChanged方法，刷新整个界面不合适。这样会把界面上显示的所有item都全部重绘一次，即使只有一个view的内容发生 了变化。</p>
+<p>所以，我们可以写一个update的方法，来单独刷新一个View</p>
+<p>private void updateView(int itemIndex){   </p>
+<p>    intvisiblePosition = yourListView.getFirstVisiblePosition();   </p>
+<p>    Viewv = yourListView.getChildAt(itemIndex - visiblePosition);   </p>
+<p>         ViewHolder viewHolder =(ViewHolder)v.getTag();   </p>
+<p>if(viewHolder!= null){   </p>
+<p>               viewHolder.titleTextView.setText(&quot;我更新了&quot;);   </p>
+<p>         }      </p>
+<p>}   </p>
+<p>Adapter中的网络图片优化</p>
+<p>ListView中的每一项Item基本都会带着网络图片，当item比较多的时候，过多的网络请求和过多的图片存储都会是ListView变慢变卡。</p>
+<p>所以针对其做一下优化：</p>
+<p>  ●  采用线程池进行网络图片请求，网络图片请求获取后使用本地缓存处理（LRUCache），内存+本地文件缓存。当然，为了防止内存溢出与回收不及时，需要使用弱引用（WeakReference）来存储内存中的图片。</p>
+<p>  ●  对网络中取到的图片进行按比例缩放，以减少内存消耗。</p>
+<p>  ●  滑动的时候不需要对网络图片进行请求。因为，网络请求一般比较耗时，某Item的图片，在请求来的时候如果被Recycler换掉，图片就会对应不上该Item。 </p>
+<p>Tips.网络请求的工具类比较多不方便举例子，但是使用比较频繁的网络图片请求工具类就是Volley了，Volley提供了一个ImageLoader的工具类和NetworkImageView的网络图片请求View</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/Activity%E5%B1%8F%E5%B9%95%E7%9A%84%E6%96%B9%E5%90%91/" rel="prev" title="Activity屏幕的方向">
+      <i class="fa fa-chevron-left"></i> Activity屏幕的方向
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/ADB%20%20(Android%20Debug%20Bridge)/" rel="next" title="ADB  (Android Debug Bridge)">
+      ADB  (Android Debug Bridge) <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Edward"
+      src="/uploads/avatar.gif">
+  <p class="site-author-name" itemprop="name">Edward</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">570</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Edward</span>
+</div>
+
+        
+
+
+
+
+
+
+<script>
+  (function() {
+    function leancloudSelector(url) {
+      url = encodeURI(url);
+      return document.getElementById(url).querySelector('.leancloud-visitors-count');
+    }
+
+    function addCount(Counter) {
+      var visitors = document.querySelector('.leancloud_visitors');
+      var url = decodeURI(visitors.id);
+      var title = visitors.dataset.flagTitle;
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          if (results.length > 0) {
+            var counter = results[0];
+            leancloudSelector(url).innerText = counter.time + 1;
+            Counter('put', '/classes/Counter/' + counter.objectId, { time: { '__op': 'Increment', 'amount': 1 } })
+              .catch(error => {
+                console.error('Failed to save visitor count', error);
+              });
+          } else {
+              Counter('post', '/classes/Counter', { title, url, time: 1 })
+                .then(response => response.json())
+                .then(() => {
+                  leancloudSelector(url).innerText = 1;
+                })
+                .catch(error => {
+                  console.error('Failed to create', error);
+                });
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    function showTime(Counter) {
+      var visitors = document.querySelectorAll('.leancloud_visitors');
+      var entries = [...visitors].map(element => {
+        return decodeURI(element.id);
+      });
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url: { '$in': entries } })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          for (let url of entries) {
+            let target = results.find(item => item.url === url);
+            leancloudSelector(url).innerText = target ? target.time : 0;
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    let { app_id, app_key, server_url } = {"enable":true,"app_id":"wxYx0BX9gaKA3XC4LuO2of0v-gzGzoHsz","app_key":"LQMcs6IDIE4YAm10vMsn9IYq","server_url":"https://wxyx0bx9.lc-cn-n1-shared.com","security":false};
+    function fetchData(api_server) {
+      var Counter = (method, url, data) => {
+        return fetch(`${api_server}/1.1${url}`, {
+          method,
+          headers: {
+            'X-LC-Id'     : app_id,
+            'X-LC-Key'    : app_key,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data)
+        });
+      };
+      if (CONFIG.page.isPost) {
+        if (CONFIG.hostname !== location.hostname) return;
+        addCount(Counter);
+      } else if (document.querySelectorAll('.post-title-link').length >= 1) {
+        showTime(Counter);
+      }
+    }
+
+    let api_server = app_id.slice(-9) !== '-MdYXbMMI' ? server_url : `https://${app_id.slice(0, 8).toLowerCase()}.api.lncldglobal.com`;
+
+    if (api_server) {
+      fetchData(api_server);
+    } else {
+      fetch('https://app-router.leancloud.cn/2/route?appId=' + app_id)
+        .then(response => response.json())
+        .then(({ api_server }) => {
+          fetchData('https://' + api_server);
+        });
+    }
+  })();
+</script>
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

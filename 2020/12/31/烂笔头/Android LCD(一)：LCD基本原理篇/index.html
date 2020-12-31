@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"edward.org.cn","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="LCD的种类分类标准比多，按驱动方式可以分为：被动矩阵式、主动矩阵式两种被动矩阵式：被动矩阵式LCD又可分为TN-LCD(TwistedNematic-LCD，扭曲向列LCD)、STN—LCD(SuperTN-LCD，超扭曲向列LCD)和DSTN-LCD(Doublelayer STN-LCD，双层超扭曲向列LCD)。这部分内容就不详细解释， 我们重点讲TFT-LCD。主动矩阵式:目前应用比较广泛">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android LCD(一)：LCD基本原理篇">
+<meta property="og:url" content="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/Android%20LCD(%E4%B8%80)%EF%BC%9ALCD%E5%9F%BA%E6%9C%AC%E5%8E%9F%E7%90%86%E7%AF%87/index.html">
+<meta property="og:site_name" content="点点滴滴">
+<meta property="og:description" content="LCD的种类分类标准比多，按驱动方式可以分为：被动矩阵式、主动矩阵式两种被动矩阵式：被动矩阵式LCD又可分为TN-LCD(TwistedNematic-LCD，扭曲向列LCD)、STN—LCD(SuperTN-LCD，超扭曲向列LCD)和DSTN-LCD(Doublelayer STN-LCD，双层超扭曲向列LCD)。这部分内容就不详细解释， 我们重点讲TFT-LCD。主动矩阵式:目前应用比较广泛">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-12-31T06:48:00.879Z">
+<meta property="article:modified_time" content="2020-01-16T04:37:32.371Z">
+<meta property="article:author" content="Edward">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/Android%20LCD(%E4%B8%80)%EF%BC%9ALCD%E5%9F%BA%E6%9C%AC%E5%8E%9F%E7%90%86%E7%AF%87/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>Android LCD(一)：LCD基本原理篇 | 点点滴滴</title>
+  
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?a92ed22eafce466e7a7b17546bb0dc6f";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">点点滴滴</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/Android%20LCD(%E4%B8%80)%EF%BC%9ALCD%E5%9F%BA%E6%9C%AC%E5%8E%9F%E7%90%86%E7%AF%87/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/avatar.gif">
+      <meta itemprop="name" content="Edward">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="点点滴滴">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Android LCD(一)：LCD基本原理篇
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-12-31 14:48:00" itemprop="dateCreated datePublished" datetime="2020-12-31T14:48:00+08:00">2020-12-31</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-01-16 12:37:32" itemprop="dateModified" datetime="2020-01-16T12:37:32+08:00">2020-01-16</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%83%82%E7%AC%94%E5%A4%B4/" itemprop="url" rel="index"><span itemprop="name">烂笔头</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/Android%20LCD(%E4%B8%80)%EF%BC%9ALCD%E5%9F%BA%E6%9C%AC%E5%8E%9F%E7%90%86%E7%AF%87/" class="post-meta-item leancloud_visitors" data-flag-title="Android LCD(一)：LCD基本原理篇" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>LCD的种类分类标准比多，按驱动方式可以分为：被动矩阵式、主动矩阵式两种<br>被动矩阵式：被动矩阵式LCD又可分为TN-LCD(TwistedNematic-LCD，扭曲向列LCD)、STN—LCD(SuperTN-LCD，超扭曲向列LCD)和DSTN-LCD(Doublelayer STN-LCD，双层超扭曲向列LCD)。这部分内容就不详细解释， 我们重点讲TFT-LCD。<br>主动矩阵式:目前应用比较广泛的主动矩阵式LCD，也称TFT-LCD。TFT-LCD 即是Thin-FilmTransistor Liquid-Crystal Display的缩写(薄膜电晶体液晶显示器)TFT-LCD如何点亮?TFT-LCD现在比较广泛的应用，我们从TFT-LCD说起。<br>TFT-Thin Film Transistor  薄膜电晶体<br>LCD-Liquid Crystal Display液晶显示器<br>TFT-LCD Transistor Liquid-CrystalDisplay的缩写(薄膜电晶体液晶显示器)<br>由于TFT-LCD具有体积小，重量轻，低辐射，低耗电量，全彩化等优点，因此在各类显示器材上得到了广泛的应用。<br>一、TFT-lCD 的结构<br>1、TFT-LCD 的结构如下图所示</p>
+<p>Reflector:反光板</p>
+<p>CCF lamps：冷光灯管</p>
+<p>Ligh pipe：导光片</p>
+<p>Extraction pattern：</p>
+<p>Diffuser：散光板，起散光作用，使光线散布较为均匀</p>
+<p>这部分主要是光源部分，CCFL或者LED背光光源，其他反光板、散光板，作用是这些光分布的更均匀</p>
+<p>Rear polarizer：后部偏光片</p>
+<p>Front Polarizer：前端偏光片</p>
+<p>偏光片的作用把自然光变成偏极光</p>
+<p>Selected Subpixels：子像素</p>
+<p>TFT：</p>
+<p>Liquid crystal：液晶</p>
+<p>Color filters：彩色滤色片</p>
+<p>这部分是LCD的核心部分，选择光源的导通、阻断，彩色在这部分控制。</p>
+<p>Back glass：背部玻璃基板</p>
+<p>Front glass：前部玻璃基板</p>
+<p>起保护作用</p>
+<p>TFT-LCD各结构的功能<br>（1）、背光板模组:提供光的来源;<br>（2）、上下偏光板，TFT Glass Substrate，液晶：形成偏振光，控制光线的通过与否;<br>（3）、彩色滤光片：提供TFT LCD红、绿、蓝(光的三原色)的来源;<br>（4）、ITO透明导电层：提供透明的导电通路;<br>（5）、Photo Spacer：提供一固定高度給彩色滤光片和TFT Glass Substrate。作为灌入液晶时的空间.及作为上下两层Glass的支撑。<br>2、TFT-LCD 结构侧视图   </p>
+<p>一、TFT-LCD显示原理<br>1、 液晶的背光<br>背光也就是显示器的光源，LCD的背光常用有两种：CCFL背光、LED背光<br>（1）、CCFL Cold Cathode Fluorescent Lamp简称CCFL，中文译名为冷阴极光灯管，具有高功率、高亮度、低能耗等优点，广泛应用于显示器、照明等领域。</p>
+<p>（2）、LED背光<br>相对于CCFL,LED有功耗低、光源均匀、寿命长、体积小的优势，价格方面会贵点，不过现在平板上用的TFT-lCD好像都是LED背光的，上次搞破了一片顺便拆开看了下。</p>
+<p>（3）、LED与LED背光<br>市面上所谓LED显示器，其实是“LED背光液晶显示器”；现在流行的液晶显示器，属于“CCFL背光液晶显示器”。所以此二者仍是液晶显示器，只是背光源不一样而已。不要看到LED显示器就误以为是下一代技术显示器，其实技术最新的是叫OLED。所以在买电视的时候不要被忽悠了。<br>2、液晶简介<br>（1）、液晶晶体的形状<br>TFT-LCD使用的液晶为TN（Twist Nematic）型液晶，液晶分子呈椭圆状。</p>
+<p>（2）、液晶的特性<br>TN型液晶一般是顺着长轴方向串接，长轴间彼此平行方式排列。当接触到槽装表面时，液晶分子就会顺着槽的方向排列于槽中。</p>
+<p>（3）、液晶垂直分布<br>当液晶被包含在两个槽状表面中间，且槽的方向互相垂直，则液晶分子的排列为：<br>上表面分子：沿着a方向；<br>下表面分子：沿着b方向；<br>介于上下表面中间的分子：产生旋转的效应。因此液晶分子在两槽状表面间产生90度的旋转。</p>
+<p>（4）光与液晶分子产生偏转效果</p>
+<p>（5）、液晶在电压做用下均匀分布<br>当在上下表面之间加电压时，液晶分子会顺着电场方向排列，形成直立排列的现象。此时入射光线不受液晶分子影响，直线射出下表面。</p>
+<p>3、偏光板的特性<br>作用：将非偏极光（一般光线）过滤成偏极光。当非偏极光通过a方向的偏光片时，光线被过滤成与a方向平行的线性偏极光。<br>上图：线性偏极光继续前进，通过第二片偏光片时，光线通过。<br>下图：通过第二片时，光线被完全阻挡。</p>
+<p>偏光板、槽状表面、液晶组合后产生的光学效果，如下图所示</p>
+<p>（1）、当上下偏光片相互垂直时，若未施加电压，光线可通过</p>
+<p>（2）、当施加电压时，光线被完全阻挡</p>
+<p>当电流通过电晶体产生电场变化，造成液晶分子偏转，借以改变光线的偏极性，再利用偏光片决定画素(Pixel)的明暗状态。这样就可以实现对光线亮暗的控制，如果要显示彩色，我们后面在讲彩色滤光片。</p>
+<p>4、彩色滤光片原理 color fliters<br>（1）、C/F 的结构<br>像之前像素低的显示器仔细都能看得到这些方格。比较简单的方法，在显示器上放一个水滴，你就可以看到红、绿、蓝、三色的点。</p>
+<p>（2）、C/F Pixel Array的常见排列方式<br>如下图所示分别是马赛克、直条式、三角形式、四画素。</p>
+<p>（3）、不同颜色的显示<br>我们再看下我们要显示相应颜色时，控制相应的pixel electrode就可以。如下图所示：</p>
+<p>C/F彩色单元，对应到TFT的控制单元，就可以完成我们像素点颜色的控制。TFT Array 等效电路如下图所示：</p>
+<p>三、TFT-LCD显像原理<br>我们前面解释了液晶透光原理、偏光片透光原理、彩色滤光片工作原理，这些把他理解成一个像素控制单元，然后我们来整理下TFT-LCD整体的显示原理。<br>（1）、SCAN IC传输信号；<br>完成图像信号输入；<br>（2）、DRIVER IC传输显像控制信号；<br>完成TFT单元控制；<br>（3）、当某一Sub-Pixel导通时，该Sub-Pixel因无法透光呈现黑色；<br>这部分完成像素点是亮还是暗。<br>（4）、若该Sub-Pixel未导通，则因光通过CF而显示颜色。经过光的合成效果，显示器即可产生彩色效果。如下图所示：</p>
+<p>现在回头看我们开始那张结构图是不是清晰一点了：光源部分先把自然光通过偏光片转成偏极光–&gt;TFT subpixels单元控制液晶单元是否导光、色彩–&gt;通过前置偏光片把色彩图像显示。其实图像也就是不同色彩的光，我们看到的光其实也是偏极光。</p>
+<p>这张图好像跟清晰的描述：</p>
+<p>四、LCD常用到的知识点<br>1、残影<br>残影是指画面切换之后前一个画面不会立刻消失而是慢慢不见的现象，残影与反应时间不算同一件事，残影可能要两三秒后才会完全消失，而液晶的反应时间是十几到几十毫秒。一个设计得好的液晶显示器，就算反应时间是 15+35ms，也不可能让使用者看到残影。<br>残影发生机制有些复杂，通常是同一画面显示太久的情况下液晶内的带电离子吸附在上下玻璃两端形成内建电场，画面切换之后这些离子没有立刻释放出来，使得液晶分子没有立刻转到应转的角度所造成。另外一种可能情况则是因为画素电极设计不良，使得液晶分子在状态切换时排列错乱，这种情况之下也有可能看到残影。</p>
+<p>2、坏点(dot defect)<br>所谓坏点, 是指液晶显示器上无法控制的恒亮或恒暗的点，坏点的造成是液晶面板生产时因各种因素造成的瑕疵可能是颗粒物落在面板里面，可能是静电伤害破坏面板，可能是制程控制不良等等等。坏点分为两种:亮点与暗点。一般来说，亮点会比暗点更令人无法接受，所以很多厂商会保证无亮点，但好象比较少保证无暗点的，有些面板厂商会在出货前把亮点修成暗点。<br>面板厂商会把有坏点的面板降价卖出，通常是无坏点算A grade，三点以内算B grade，六点以内算C grade。<br>市场上现在好多公司做平板，用IPAD2、IPAD3、MINIPAD的屏，然后在宣传产品时拿苹果说事，跟苹果比较，国内这些公司真实搞笑。其实他们用的屏就是生产过程中苹果检验通不过的屏，比如苹果只用A+的屏，A-包括A-以下等级的屏，都流入市场，国内的平板都是垃圾，虽然我也一直做这些东西，环境不好。</p>
+<p>3、mura<br>mura本来是一个日本字，意思不均匀，有斑点，随着日本的液晶显示器在世界各地发扬光大。mura是指显示器亮度不均匀造成各种痕迹的现象，最简单的判断方法就是在暗室中切换到黑色画面以及其它低灰阶画面，然后从各种不同的角度用力去看，有问题的显示器比较容易看出。</p>
+<p>4、色饱和度 (color gamut)<br>色饱和度是指显示器色彩鲜艳的程度，显示器是由红色绿色蓝色三种颜色光来组合成任意颜色光，如果RGB三原色越鲜艳, 则该显示器可以表示的颜色范围就更广。</p>
+<p>5、亮度<br>亮度是指显示器在白色画面之下明亮的程度，单位是cd/m^2, 或是nit。亮度是直接影响画面品质的重要因素。在实验室里面我们常讲一句话:“一亮遮三丑”。一个明亮的显示器即使色饱和度比较差或颜色偏黄等其它不利因素，还是有可能看起来画面会比较漂亮。<br>亮度跟灯光有关了，灯管有寿命的，尤其是比较早的CCFL背光的，时间久了会发黄，这个如果家里有比较老的显示器就能明显的感受到。</p>
+<p>6、视角<br>液晶显示器由于天生的物理特性, 使得使用者从不同角度去看时画面品质会 有所变化. 与正看时相比, 斜看的时候, 转到当画面品质已经变化到无法接受的临界角度时, 称之为该显示器之视角.</p>
+<p>7、色温(color temperature):<br>色温是用来形容显示器的白色的颜色，不限于LCD, 所有的显示器都通用，当显示器的颜色与黑体的温度高到某一绝对温度时所发出来的光一样时，称为该显示器的色温等于该温度。比如说，当显示器的白色设计成接近，黑体在温度6500K的时候所发出来的光颜色(接近晴天时上午的太阳光)，称为该显示器的色温为6500K。<br>色温越低颜色会越偏黄色，色温越高颜色会越偏蓝色，一个色温偏高的显示器在秀图片的时候整个画面看起来色调就会偏蓝。</p>
+<p>8、Gamma Curve:<br>Gamma curve是指不同灰阶与亮度的关系曲线。把零到二五五灰阶当x轴, 亮度当y轴, 画出来的曲线就叫做gamma curve. Gamma curve通常不会是一条直线,因为人眼对不同亮度有不同辨识的效果, 比如说低亮度的辨识能力较高(一点点亮度变化就有感觉)。<br>五、LCD调试过程常用到的图片下载<br>下载链接：LCD常用测试图片，这里面有色阶、彩条之类的图片。调试效果时用到的。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/Android%20LCD(%E5%9B%9B)%EF%BC%9ALCD%E9%A9%B1%E5%8A%A8%E8%B0%83%E8%AF%95%E7%AF%87/" rel="prev" title="Android LCD(四)：LCD驱动调试篇">
+      <i class="fa fa-chevron-left"></i> Android LCD(四)：LCD驱动调试篇
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/android%20note/" rel="next" title="android note">
+      android note <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Edward"
+      src="/uploads/avatar.gif">
+  <p class="site-author-name" itemprop="name">Edward</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">570</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Edward</span>
+</div>
+
+        
+
+
+
+
+
+
+<script>
+  (function() {
+    function leancloudSelector(url) {
+      url = encodeURI(url);
+      return document.getElementById(url).querySelector('.leancloud-visitors-count');
+    }
+
+    function addCount(Counter) {
+      var visitors = document.querySelector('.leancloud_visitors');
+      var url = decodeURI(visitors.id);
+      var title = visitors.dataset.flagTitle;
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          if (results.length > 0) {
+            var counter = results[0];
+            leancloudSelector(url).innerText = counter.time + 1;
+            Counter('put', '/classes/Counter/' + counter.objectId, { time: { '__op': 'Increment', 'amount': 1 } })
+              .catch(error => {
+                console.error('Failed to save visitor count', error);
+              });
+          } else {
+              Counter('post', '/classes/Counter', { title, url, time: 1 })
+                .then(response => response.json())
+                .then(() => {
+                  leancloudSelector(url).innerText = 1;
+                })
+                .catch(error => {
+                  console.error('Failed to create', error);
+                });
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    function showTime(Counter) {
+      var visitors = document.querySelectorAll('.leancloud_visitors');
+      var entries = [...visitors].map(element => {
+        return decodeURI(element.id);
+      });
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url: { '$in': entries } })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          for (let url of entries) {
+            let target = results.find(item => item.url === url);
+            leancloudSelector(url).innerText = target ? target.time : 0;
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    let { app_id, app_key, server_url } = {"enable":true,"app_id":"wxYx0BX9gaKA3XC4LuO2of0v-gzGzoHsz","app_key":"LQMcs6IDIE4YAm10vMsn9IYq","server_url":"https://wxyx0bx9.lc-cn-n1-shared.com","security":false};
+    function fetchData(api_server) {
+      var Counter = (method, url, data) => {
+        return fetch(`${api_server}/1.1${url}`, {
+          method,
+          headers: {
+            'X-LC-Id'     : app_id,
+            'X-LC-Key'    : app_key,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data)
+        });
+      };
+      if (CONFIG.page.isPost) {
+        if (CONFIG.hostname !== location.hostname) return;
+        addCount(Counter);
+      } else if (document.querySelectorAll('.post-title-link').length >= 1) {
+        showTime(Counter);
+      }
+    }
+
+    let api_server = app_id.slice(-9) !== '-MdYXbMMI' ? server_url : `https://${app_id.slice(0, 8).toLowerCase()}.api.lncldglobal.com`;
+
+    if (api_server) {
+      fetchData(api_server);
+    } else {
+      fetch('https://app-router.leancloud.cn/2/route?appId=' + app_id)
+        .then(response => response.json())
+        .then(({ api_server }) => {
+          fetchData('https://' + api_server);
+        });
+    }
+  })();
+</script>
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

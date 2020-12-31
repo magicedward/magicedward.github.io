@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"edward.org.cn","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="iOS 中横竖屏切换的功能，在开发iOS app中总能遇到。以前看过几次，感觉简单，但是没有敲过代码实现，最近又碰到了，demo尝试了几种情况，这里就做下总结。注意 横屏两种情况是反的你知道吗？ UIInterfaceOrientationLandscapeRight与UIInterfaceOrientationMaskLandscapeRight都代表横屏，Home键在右侧的情况；UIDevic">
+<meta property="og:type" content="article">
+<meta property="og:title" content="IOS 横竖屏切换">
+<meta property="og:url" content="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/IOS%20%E6%A8%AA%E7%AB%96%E5%B1%8F%E5%88%87%E6%8D%A2/index.html">
+<meta property="og:site_name" content="点点滴滴">
+<meta property="og:description" content="iOS 中横竖屏切换的功能，在开发iOS app中总能遇到。以前看过几次，感觉简单，但是没有敲过代码实现，最近又碰到了，demo尝试了几种情况，这里就做下总结。注意 横屏两种情况是反的你知道吗？ UIInterfaceOrientationLandscapeRight与UIInterfaceOrientationMaskLandscapeRight都代表横屏，Home键在右侧的情况；UIDevic">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-12-31T06:48:01.208Z">
+<meta property="article:modified_time" content="2020-01-16T04:37:33.917Z">
+<meta property="article:author" content="Edward">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/IOS%20%E6%A8%AA%E7%AB%96%E5%B1%8F%E5%88%87%E6%8D%A2/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>IOS 横竖屏切换 | 点点滴滴</title>
+  
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?a92ed22eafce466e7a7b17546bb0dc6f";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">点点滴滴</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/IOS%20%E6%A8%AA%E7%AB%96%E5%B1%8F%E5%88%87%E6%8D%A2/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/avatar.gif">
+      <meta itemprop="name" content="Edward">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="点点滴滴">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          IOS 横竖屏切换
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-12-31 14:48:01" itemprop="dateCreated datePublished" datetime="2020-12-31T14:48:01+08:00">2020-12-31</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-01-16 12:37:33" itemprop="dateModified" datetime="2020-01-16T12:37:33+08:00">2020-01-16</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%83%82%E7%AC%94%E5%A4%B4/" itemprop="url" rel="index"><span itemprop="name">烂笔头</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/IOS%20%E6%A8%AA%E7%AB%96%E5%B1%8F%E5%88%87%E6%8D%A2/" class="post-meta-item leancloud_visitors" data-flag-title="IOS 横竖屏切换" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>iOS 中横竖屏切换的功能，在开发iOS app中总能遇到。以前看过几次，感觉简单，但是没有敲过代码实现，最近又碰到了，demo尝试了几种情况，这里就做下总结。<br>注意</p>
+<p>横屏两种情况是反的你知道吗？</p>
+<p>UIInterfaceOrientationLandscapeRight与UIInterfaceOrientationMaskLandscapeRight都代表横屏，Home键在右侧的情况；UIDeviceOrientationLandscapeLeft则是Home键在左侧。</p>
+<p>一般情形</p>
+<p>所有界面都支持横竖屏切换<br>如果App的所有切面都要支持横竖屏的切换，那只需要勾选【General】 中的【Device Orientation】，选择希望支持的方向即可。</p>
+<p>图中支持竖屏和Home在右侧</p>
+<p>如上设置完之后，当设备竖屏的时候，所有的界面都是竖屏显示的；而当设备横屏Home在右侧时，所有的界面会横屏显示。其他方向不支持，界面不会改变。</p>
+<p>这里有个坑：<br>在iOS 9 之后横屏时，状态栏会消失。<br>解决方法：确保plist 中的【View controller-based status bar appearance】为YES，然后重写ViewController的 - (BOOL)prefersStatusBarHidden ，返回值是NO。</p>
+<p>- (BOOL)prefersStatusBarHidden<br>{<br>    return NO;<br>}</p>
+<p>特殊情形</p>
+<p>个别界面固定方向，其他所有界面都支持横竖屏切换<br>这种情况，在【General】–&gt;【Device Orientation】中设置好支持的方向后，只需要在这些特殊的视图控制器中重写两个方法：</p>
+<p>// 支持设备自动旋转<br>- (BOOL)shouldAutorotate<br>{<br>    return YES;<br>}</p>
+<p>/** <br>*  设置特殊的界面支持的方向,这里特殊界面只支持Home在右侧的情况<br>*/<br>- (UIInterfaceOrientationMask)supportedInterfaceOrientations <br>{<br>    return UIInterfaceOrientationMaskLandscapeRight;<br>}</p>
+<p>个别界面支持横竖屏切换，其他所有界面都固定方向</p>
+<p>可能大多数App会是这种需求，某些特殊界面只能横屏，如视频播放类App。<br>这里有两种处理方式：<br>方式一<br>在【General】–&gt;【Device Orientation】中设置好需要支持的所有方向。然后使用一个基类控制器，在基类控制器中重写两个控制横竖屏的方法：</p>
+<p>// 支持设备自动旋转<br>- (BOOL)shouldAutorotate<br>{<br>    return YES;<br>}</p>
+<p>// 支持竖屏显示<br>- (UIInterfaceOrientationMask)supportedInterfaceOrientations<br>{<br>    return UIInterfaceOrientationMaskPortrait;<br>}</p>
+<p>再然后，特殊的界面上再重写这俩方法，让其可以自动切换方向。</p>
+<p>// 如果需要横屏的时候，一定要重写这个方法并返回NO<br>- (BOOL)prefersStatusBarHidden<br>{<br>    return NO;<br>}</p>
+<p>// 支持设备自动旋转<br>- (BOOL)shouldAutorotate<br>{<br>    return YES;<br>}</p>
+<p>// 支持横屏显示<br>- (UIInterfaceOrientationMask)supportedInterfaceOrientations<br>{<br>    // 如果该界面需要支持横竖屏切换<br>    return UIInterfaceOrientationMaskLandscapeRight | UIInterfaceOrientationMaskPortrait;<br>    // 如果该界面仅支持横屏<br>   // return UIInterfaceOrientationMaskLandscapeRight；<br>}</p>
+<p>方式二<br>用方式一的方法，还需要借助一个基类，所有的控制器都要继承这个基类，太麻烦？<br>另一种方式，是借助通知来控制界面的横竖屏切换。<br>还是整个App中大部分界面都是竖屏，某个界面可以横竖屏切换的情况。</p>
+<p>首先，在【General】–&gt;【Device Orientation】设置仅支持竖屏，like this:</p>
+<p>Device Orientation</p>
+<p>然后在特殊的视图控制器里的ViewDidLoad中注册通知：</p>
+<p>    [[UIDevice currentDevice] beginGeneratingDeviceOrientationNotifications];<br>    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(deviceOrientationDidChange) name:UIDeviceOrientationDidChangeNotification object:nil];</p>
+<p>通知方法的实现过程：</p>
+<p>- (void)deviceOrientationDidChange<br>{<br>    NSLog(@&quot;deviceOrientationDidChange:%ld&quot;,(long)[UIDevice currentDevice].orientation);<br>    if([UIDevice currentDevice].orientation == UIDeviceOrientationPortrait) {<br>        [[UIApplication sharedApplication] setStatusBarOrientation:UIInterfaceOrientationPortrait];<br>        [self orientationChange:NO];<br>        //注意： UIDeviceOrientationLandscapeLeft 与 UIInterfaceOrientationLandscapeRight<br>    } else if ([UIDevice currentDevice].orientation == UIDeviceOrientationLandscapeLeft) {<br>        [[UIApplication sharedApplication] setStatusBarOrientation:UIInterfaceOrientationLandscapeRight];<br>        [self orientationChange:YES];<br>    }<br>}</p>
+<p>- (void)orientationChange:(BOOL)landscapeRight<br>{<br>    if (landscapeRight) {<br>        [UIView animateWithDuration:0.2f animations:^{<br>            self.view.transform = CGAffineTransformMakeRotation(M_PI_2);<br>            self.view.bounds = CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);<br>        }];<br>    } else {<br>        [UIView animateWithDuration:0.2f animations:^{<br>            self.view.transform = CGAffineTransformMakeRotation(0);<br>            self.view.bounds = CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);<br>        }];<br>    }<br>}<br>// 用到的两个宏：<br>    #define SCREEN_WIDTH ([UIScreen mainScreen].bounds.size.width)<br>    #define SCREEN_HEIGHT ([UIScreen mainScreen].bounds.size.height)</p>
+<p>最重要的一点:<br>需要重写如下方法，并且返回NO。</p>
+<p>- (BOOL)shouldAutorotate<br>{<br>    return NO;<br>}</p>
+<p>这样，在设备出于横屏时，界面就会变成横屏，设备处于竖屏时，界面就会变成竖屏。</p>
+<p>填坑</p>
+<p>上面方式二，因为【General】–&gt;【Device Orientation】因为只设置了竖屏，所以当横屏时，如果有键盘弹出，键盘是竖屏时的样式。<br>解决办法：在【General】–&gt;【Device Orientation】中加上横屏时的方向。</p>
+<p>如果VieController 是放在UINavigationController或者UITabBarController中，需要重写它们的方向控制方法。</p>
+<p>// UINavigationController：<br>- (BOOL)shouldAutorotate<br>{<br>    return [self.topViewController shouldAutorotate];<br>}</p>
+<p>- (UIInterfaceOrientationMask)supportedInterfaceOrientations<br>{<br>    return [self.topViewController supportedInterfaceOrientations];<br>}</p>
+<p>// UITabBarController:<br>- (BOOL)shouldAutorotate<br>{<br>    return [self.selectedViewController shouldAutorotate];<br>}</p>
+<p>- (UIInterfaceOrientationMask)supportedInterfaceOrientations<br>{<br>    return [self.selectedViewController supportedInterfaceOrientations];<br>}</p>
+<p>如果想要点击某个按钮之后，强制将竖屏显示的界面变成横屏呢？<br>有人可能会想到这样写:</p>
+<p>// 横屏<br>- (IBAction)landscapAction:(id)sender {<br>    [[UIApplication sharedApplication] setStatusBarOrientation:UIInterfaceOrientationLandscapeRight];<br>    [self orientationChange:YES];<br>}</p>
+<p>但是按照上面的写法，会导致返回到之前的界面时，视图方向错误，即使返回前执行如下代码：</p>
+<p>[[UIApplication sharedApplication] setStatusBarOrientation:UIInterfaceOrientationPortrait];<br>[self orientationChange:NO];</p>
+<p>也没有作用，下面是在开源工程中无意看到的写法：</p>
+<p>// 横屏<br>- (IBAction)landscapAction:(id)sender {<br>    [self interfaceOrientation:UIInterfaceOrientationLandscapeRight];<br>}</p>
+<p>// 竖屏<br>- (IBAction)portraitAction:(id)sender {<br>    [self interfaceOrientation:UIInterfaceOrientationPortrait];<br>}</p>
+<p>- (void)interfaceOrientation:(UIInterfaceOrientation)orientation<br>{<br>    if ([[UIDevice currentDevice] respondsToSelector:@selector(setOrientation:)]) {<br>        SEL selector             = NSSelectorFromString(@&quot;setOrientation:&quot;);<br>        NSInvocation *invocation = [NSInvocation invocationWithMethodSignature:[UIDevice instanceMethodSignatureForSelector:selector]];<br>        [invocation setSelector:selector];<br>        [invocation setTarget:[UIDevice currentDevice]];<br>        int val                  = orientation;<br>        [invocation setArgument:&amp;val atIndex:2];<br>        [invocation invoke];<br>    }<br>}</p>
+<p>上面的方法会将设备的方向强制设置为某个方向，然后再监控设备方向改变的通知，即可实现横竖屏切换。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/IOS%20Ramdisk%20drivedata/" rel="prev" title="IOS Ramdisk drivedata">
+      <i class="fa fa-chevron-left"></i> IOS Ramdisk drivedata
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/iPhone%E5%90%84%E7%A7%8D%E6%9C%BA%E5%9E%8B%E5%B0%BA%E5%AF%B8%E3%80%81%E5%B1%8F%E5%B9%95%E5%88%86%E8%BE%A8%E7%8E%87/" rel="next" title="iPhone各种机型尺寸、屏幕分辨率">
+      iPhone各种机型尺寸、屏幕分辨率 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Edward"
+      src="/uploads/avatar.gif">
+  <p class="site-author-name" itemprop="name">Edward</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">570</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Edward</span>
+</div>
+
+        
+
+
+
+
+
+
+<script>
+  (function() {
+    function leancloudSelector(url) {
+      url = encodeURI(url);
+      return document.getElementById(url).querySelector('.leancloud-visitors-count');
+    }
+
+    function addCount(Counter) {
+      var visitors = document.querySelector('.leancloud_visitors');
+      var url = decodeURI(visitors.id);
+      var title = visitors.dataset.flagTitle;
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          if (results.length > 0) {
+            var counter = results[0];
+            leancloudSelector(url).innerText = counter.time + 1;
+            Counter('put', '/classes/Counter/' + counter.objectId, { time: { '__op': 'Increment', 'amount': 1 } })
+              .catch(error => {
+                console.error('Failed to save visitor count', error);
+              });
+          } else {
+              Counter('post', '/classes/Counter', { title, url, time: 1 })
+                .then(response => response.json())
+                .then(() => {
+                  leancloudSelector(url).innerText = 1;
+                })
+                .catch(error => {
+                  console.error('Failed to create', error);
+                });
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    function showTime(Counter) {
+      var visitors = document.querySelectorAll('.leancloud_visitors');
+      var entries = [...visitors].map(element => {
+        return decodeURI(element.id);
+      });
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url: { '$in': entries } })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          for (let url of entries) {
+            let target = results.find(item => item.url === url);
+            leancloudSelector(url).innerText = target ? target.time : 0;
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    let { app_id, app_key, server_url } = {"enable":true,"app_id":"wxYx0BX9gaKA3XC4LuO2of0v-gzGzoHsz","app_key":"LQMcs6IDIE4YAm10vMsn9IYq","server_url":"https://wxyx0bx9.lc-cn-n1-shared.com","security":false};
+    function fetchData(api_server) {
+      var Counter = (method, url, data) => {
+        return fetch(`${api_server}/1.1${url}`, {
+          method,
+          headers: {
+            'X-LC-Id'     : app_id,
+            'X-LC-Key'    : app_key,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data)
+        });
+      };
+      if (CONFIG.page.isPost) {
+        if (CONFIG.hostname !== location.hostname) return;
+        addCount(Counter);
+      } else if (document.querySelectorAll('.post-title-link').length >= 1) {
+        showTime(Counter);
+      }
+    }
+
+    let api_server = app_id.slice(-9) !== '-MdYXbMMI' ? server_url : `https://${app_id.slice(0, 8).toLowerCase()}.api.lncldglobal.com`;
+
+    if (api_server) {
+      fetchData(api_server);
+    } else {
+      fetch('https://app-router.leancloud.cn/2/route?appId=' + app_id)
+        .then(response => response.json())
+        .then(({ api_server }) => {
+          fetchData('https://' + api_server);
+        });
+    }
+  })();
+</script>
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

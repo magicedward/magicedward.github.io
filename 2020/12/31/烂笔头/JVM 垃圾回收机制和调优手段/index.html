@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"edward.org.cn","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="引言： 我们都知道JVM内存由几个部分组成：堆、方法区、栈、程序计数器、本地方法栈 JVM垃圾回收仅仅针对公共内存区域即：堆和方法区进行。 本文主要讨论两点，一是垃圾回收策略，二是调优的方法。 一、垃圾回收机制 1.1 分代管理 将堆和方法区按照对象不同年龄进行分代： u  堆中会频繁创建对象，基于一种分代的思想，按照对象存活时间将堆划分为新生代和旧生代两部分，我们不能一次垃圾回收新生代存活的对象">
+<meta property="og:type" content="article">
+<meta property="og:title" content="JVM 垃圾回收机制和调优手段">
+<meta property="og:url" content="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/JVM%20%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E6%9C%BA%E5%88%B6%E5%92%8C%E8%B0%83%E4%BC%98%E6%89%8B%E6%AE%B5/index.html">
+<meta property="og:site_name" content="点点滴滴">
+<meta property="og:description" content="引言： 我们都知道JVM内存由几个部分组成：堆、方法区、栈、程序计数器、本地方法栈 JVM垃圾回收仅仅针对公共内存区域即：堆和方法区进行。 本文主要讨论两点，一是垃圾回收策略，二是调优的方法。 一、垃圾回收机制 1.1 分代管理 将堆和方法区按照对象不同年龄进行分代： u  堆中会频繁创建对象，基于一种分代的思想，按照对象存活时间将堆划分为新生代和旧生代两部分，我们不能一次垃圾回收新生代存活的对象">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-12-31T06:48:01.243Z">
+<meta property="article:modified_time" content="2020-01-16T04:37:33.861Z">
+<meta property="article:author" content="Edward">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/JVM%20%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E6%9C%BA%E5%88%B6%E5%92%8C%E8%B0%83%E4%BC%98%E6%89%8B%E6%AE%B5/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>JVM 垃圾回收机制和调优手段 | 点点滴滴</title>
+  
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?a92ed22eafce466e7a7b17546bb0dc6f";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">点点滴滴</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/JVM%20%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E6%9C%BA%E5%88%B6%E5%92%8C%E8%B0%83%E4%BC%98%E6%89%8B%E6%AE%B5/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/avatar.gif">
+      <meta itemprop="name" content="Edward">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="点点滴滴">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          JVM 垃圾回收机制和调优手段
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-12-31 14:48:01" itemprop="dateCreated datePublished" datetime="2020-12-31T14:48:01+08:00">2020-12-31</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-01-16 12:37:33" itemprop="dateModified" datetime="2020-01-16T12:37:33+08:00">2020-01-16</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%83%82%E7%AC%94%E5%A4%B4/" itemprop="url" rel="index"><span itemprop="name">烂笔头</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/JVM%20%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E6%9C%BA%E5%88%B6%E5%92%8C%E8%B0%83%E4%BC%98%E6%89%8B%E6%AE%B5/" class="post-meta-item leancloud_visitors" data-flag-title="JVM 垃圾回收机制和调优手段" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>引言：</p>
+<p>我们都知道JVM内存由几个部分组成：堆、方法区、栈、程序计数器、本地方法栈</p>
+<p>JVM垃圾回收仅仅针对公共内存区域即：堆和方法区进行。</p>
+<p>本文主要讨论两点，一是垃圾回收策略，二是调优的方法。</p>
+<p>一、垃圾回收机制</p>
+<p>1.1 分代管理</p>
+<p>将堆和方法区按照对象不同年龄进行分代：</p>
+<p>u  堆中会频繁创建对象，基于一种分代的思想，按照对象存活时间将堆划分为新生代和旧生代两部分，我们不能一次垃圾回收新生代存活的对象就放入旧生代，而是要经过几次GC后还存活的对象，我们才放入旧生代，所以我们又把新生代再次划分为Eden区和两个Survivor区，让对象创建在Eden区，然后在两个Survivor之间反复复制，最后仍然存活的对象才复制到旧生代中。</p>
+<p>u  方法区存放的是常量、加载的字节码文件信息等，信息相对稳定。因为不会频繁创建对象，所以不需要分代，直接GC即可。</p>
+<p>由此我们JVM垃圾回收要扫描的范围是：</p>
+<p>新生代：</p>
+<p>1.      所有新对象创建发生在Eden区，Eden区满后触发新生代上的minor GC，将Eden区和非空闲Survivor区存活对象复制到另一个空闲的Survivor区中。</p>
+<p>2.      永远保证一个Survivor是空的，新生代minor GC就是在两个Survivor区之间相互复制存活对象，直到Survivor区满为止。</p>
+<p>旧生代：</p>
+<p>1.      Eden区满后触发minor GC将存活对象复制到Survivor区，Survivor区满后触发minor GC将存活对象复制到旧生代。</p>
+<p>2.      经过新生代的两个Survivor之间多次复制，仍然存活下来的对象就是年龄相对比较老的，就可以放入到旧生代了，随着时间推移，如果旧生代也满了，将触发Full GC，针对整个堆（包括新生代、旧生代和持久代）进行垃圾回收。</p>
+<p>持久代：</p>
+<p>持久代如果满，将触发Full GC</p>
+<p>1.2 垃圾回收</p>
+<p>要执行gc关键在于两点，一是检测出垃圾对象，二是释放垃圾对象所占用的空间。</p>
+<p>1.2.1 检测垃圾对象</p>
+<p>检测出垃圾对象一般有两种算法：</p>
+<p>1、 引用计数法</p>
+<p>2、 可达性分析</p>
+<p>引用计数法因为无法检测对象之间相互循环引用的问题，基本没有被采用。现在主流的语言的垃圾收集中检测垃圾对象主要还是“可达性分析”方法，下面也主要介绍JVM可达性分析方法检测垃圾对象。</p>
+<p>“可达性分析”算法描述？</p>
+<p>通过一系列的名为“GC Root”的对象作为起点，从这些节点向下搜索，搜索所走过的路径称为引用链(Reference Chain)，当一个对象到GC Root没有任何引用链相连时，则该对象不可达，该对象是不可使用的，垃圾收集器将回收其所占的内存。所以JVM判断对象需要存活的原则是：能够被一个根对象到达的对象。</p>
+<p>什么是能够到达呢？</p>
+<p>就是对象A中引用了对象B，那么就称A到B可达。</p>
+<p>GCRoot对象集合？</p>
+<p>a. java虚拟机栈(栈帧中的本地变量表)中的引用的对象。</p>
+<p>b.方法区中的类静态属性引用的对象。</p>
+<p>c.方法区中的常量引用的对象。</p>
+<p>d.本地方法栈中JNI本地方法的引用对象。</p>
+<p>1.2.2 释放空间</p>
+<p>1、垃圾回收算法</p>
+<p>前面已经介绍了如何检测出垃圾对象，在检测出垃圾对象之后，需要按照特定的垃圾回收算法进行内存回收，常见的垃圾回收算法包括：</p>
+<p>u  复制(Copying)</p>
+<p>u  标记-清除(Mark-Sweep)</p>
+<p>u  标记-整理(Mark-Compact)</p>
+<p>u  分代(Generational Collection)，借助前面三种算法实现</p>
+<p>这里就不一一详述，感兴趣可以自行百度。</p>
+<p>2、垃圾收集器实现</p>
+<p>上面算法都是理论性的东西，Java虚拟机规范没有规定垃圾收集器具体如何实现，因此不同厂商、不同版本虚拟机提供的垃圾收集器可能有所差异。下面列举HotSpot(Sun JDK和Open JDK自带)虚拟机提供的六种垃圾收集器实现：</p>
+<p>收集器名称</p>
+<p>应用目标</p>
+<p>采用算法</p>
+<p>引入版本</p>
+<p>运行方式</p>
+<p>Serial</p>
+<p>新生代</p>
+<p>复制算法</p>
+<p>Jdk1.3.1前</p>
+<p>串行，单线程</p>
+<p>ParNew</p>
+<p>新生代</p>
+<p>复制算法</p>
+<p>并行，多线程</p>
+<p>Parallel Scavenge</p>
+<p>新生代</p>
+<p>复制算法</p>
+<p>Jdk1.4</p>
+<p>并行，多线程</p>
+<p>Serial Old</p>
+<p>旧生代</p>
+<p>标记-整理</p>
+<p>串行，单线程</p>
+<p>Parallel Old</p>
+<p>旧生代</p>
+<p>标记-整理</p>
+<p>Jdk1.6</p>
+<p>并行，多线程</p>
+<p>CMS</p>
+<p>旧生代</p>
+<p>标记-清除</p>
+<p>Jdk1.5</p>
+<p>并发，多线程</p>
+<p>并行(Parallel)：多条垃圾收集线程并行工作，而用户线程仍处于等待状态</p>
+<p>并发(Concurrent)：垃圾收集线程与用户线程一段时间内同时工作(不是并行，而是交替执行)</p>
+<p>总结：</p>
+<p>1、  两个串行收集器、三个并行收集器、一个并发收集器。</p>
+<p>2、  ParNew收集器是Serial的多线程版本，Parallel Scavenge收集器与ParNew的主要区别是目标不同，前者是注重尽可能缩短回收新生代垃圾时用户线程的停顿时间，后者以吞吐量为目标，适合在后台运算而不需要太多交互的任务。</p>
+<p>3、  Serial Old收集器是Serial收集器的旧生代版本。</p>
+<p>4、  Parallel Old收集器是Parallel Scavenge的旧生代版本。</p>
+<p>5、  除CMS外，其他收集器工作时都需要暂停其他所有线程，CMS是第一款真正意义上的并发(Concurrent)收集器，第一次实现了让垃圾收集器线程与用户线程同时工作。</p>
+<p>6、  Parallel Scavenge收集器和Parallel Old收集器是名副其实的“吞吐量优先”组合。</p>
+<p>7、  新生代因为回收留下的对象少，所以采用标记-复制法。</p>
+<p>8、  旧生代因为回收留下的对象多，所以采用标记-清除/标记-整理算法。</p>
+<p>3、选择所需垃圾收集器</p>
+<p>虚拟机提供了参数，以便用户根据自己的需求设置所需的垃圾收集器：</p>
+<p>JVM运行参数</p>
+<p>新生代</p>
+<p>旧生代</p>
+<p>-XX:+UseSerialGC（Client模式默认值）</p>
+<p>Serial</p>
+<p>Serial Old</p>
+<p>-XX:+UseParNewGC</p>
+<p>ParNew</p>
+<p>Serial Old</p>
+<p>-XX:+UseConcMarkSweepGC</p>
+<p>ParNew</p>
+<p>CMS(Serial Old备用)</p>
+<p>-XX:+UseParallelGC（Server模式默认值）</p>
+<p>Parallel Scavenge</p>
+<p>Serial Old</p>
+<p>-XX:+UseParallelOldGC</p>
+<p>Parallel Scavenge</p>
+<p>Parallel Old</p>
+<p>二、性能调优</p>
+<p>2.1 性能调优的目的</p>
+<p>减少minor gc的频率、以及full gc的次数</p>
+<p>2.2 性能调优的手段</p>
+<p>1.使用JDK提供的内存查看工具，如JConsole和Java VisualVM</p>
+<p>2.控制堆内存各个部分所占的比例</p>
+<p>3.采用合适的垃圾收集器</p>
+<p>手段1：内存查看工具和GC日志分析</p>
+<p>n  -verbose.gc：显示GC的操作内容。打开它，可以显示最忙和最空闲收集行为发生的时间、收集前后的内存大小、收集需要的时间等。</p>
+<p>n  -xx:+printGCdetails：详细了解GC中的变化。</p>
+<p>n  -XX:+PrintGCTimeStamps：了解这些垃圾收集发生的时间，自JVM启动以后以秒计量。</p>
+<p>n  -xx:+PrintHeapAtGC：了解堆的更详细的信息。</p>
+<p>手段2：针对新生代和旧生代的比例</p>
+<p>如果新生代太小，会导致频繁GC，而且大对象对直接进入旧生代引发full gc</p>
+<p>如果新生代太大，会诱发旧生代full gc，而且新生代的gc耗时会延长</p>
+<p>建议新生代占整个堆1/3合适，相关JVM参数如下：</p>
+<p>n  -Xms:初始堆大小</p>
+<p>n  -Xmx:最大堆大小</p>
+<p>n  - Xmn:新生代大小</p>
+<p>n  -XX:PermSize=n:持久代最大值</p>
+<p>n  -XX:MaxPermSize=n:持久代最大值</p>
+<p>n  -XX:NewRatio=n:设置新生代和旧生代的比值。如:为3，表示新生代与旧生代比值为1：3，新生代占整个新生代旧生代和的1/4</p>
+<p>手段3：针对Eden和Survivor的比例</p>
+<p>如果Eden太小，会导致频繁GC</p>
+<p>如果Eden太大，会导致大对象直接进入旧生代，降低对象在新生代存活时间</p>
+<p>n  -XX:SurvivorRatio=n:新生代中Eden区与两个Survivor区的比值。注意Survivor区有两个。如：3，表示Eden：Survivor=3：2，一个Survivor区占整个年轻代的1/5</p>
+<p>n  -XX:PretenureSizeThreshold：直接进入旧生代中的对象大小，设置此值后，大于这个参数的对象将直接在旧生代中进行内存分配。</p>
+<p>n  -XX:MaxTenuringThreshold：对象转移到旧生代中的年龄，每个对象经历过一次新生代GC（Minor GC）后，年龄就加1，到超过设置的值后，对象转移到旧生代。</p>
+<p>手段4：采用正确的垃圾收集器</p>
+<p>通过JVM参数设置所使用的垃圾收集器参考前面的介绍，这里关注其他一些设置。</p>
+<p>并行收集器设置</p>
+<p>n  -XX:ParallelGCThreads=n:设置并行收集器收集时并行收集线程数</p>
+<p>n  -XX:MaxGCPauseMillis=n:设置并行收集最大暂停时间，仅对ParallelScavenge生效</p>
+<p>n  -XX:GCTimeRatio=n:设置垃圾回收时间占程序运行时间的百分比，仅对Parallel Scavenge生效</p>
+<p>并发收集器设置</p>
+<p>n  -XX:CMSInitiatingOccupancyFraction：默认设置下，CMS收集器在旧生代使用了68%的空间后就会被激活。此参数就是设置旧生代空间被使用多少后触发垃圾收集。注意要是CMS运行期间预留的内存无法满足程序需要，就会出现concurrent mode failure，这时候就会启用Serial Old收集器作为备用进行旧生代的垃圾收集。</p>
+<p>n  -XX:+UseCMSCompactAtFullCollection：空间碎片过多是标记-清除算法的弊端，此参数设置在FULL GC后再进行一个碎片整理过程</p>
+<p>n  -XX:CMSFullGCsBeforeCompaction：设置在若干次垃圾收集之后再启动一次内存碎片整理</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/Java%E8%A7%A3%E6%9E%90xml%E3%80%81%E8%A7%A3%E6%9E%90xml%E5%9B%9B%E7%A7%8D%E6%96%B9%E6%B3%95%E3%80%81DOM%E3%80%81SAX%E3%80%81JDOM%E3%80%81DOM4j%E3%80%81XPath/" rel="prev" title="Java解析xml、解析xml四种方法、DOM、SAX、JDOM、DOM4j、XPath">
+      <i class="fa fa-chevron-left"></i> Java解析xml、解析xml四种方法、DOM、SAX、JDOM、DOM4j、XPath
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/kernel%20version%20%E5%86%85%E6%A0%B8%E7%89%88%E6%9C%AC%E5%8F%B7/" rel="next" title="kernel version 内核版本号">
+      kernel version 内核版本号 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Edward"
+      src="/uploads/avatar.gif">
+  <p class="site-author-name" itemprop="name">Edward</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">570</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Edward</span>
+</div>
+
+        
+
+
+
+
+
+
+<script>
+  (function() {
+    function leancloudSelector(url) {
+      url = encodeURI(url);
+      return document.getElementById(url).querySelector('.leancloud-visitors-count');
+    }
+
+    function addCount(Counter) {
+      var visitors = document.querySelector('.leancloud_visitors');
+      var url = decodeURI(visitors.id);
+      var title = visitors.dataset.flagTitle;
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          if (results.length > 0) {
+            var counter = results[0];
+            leancloudSelector(url).innerText = counter.time + 1;
+            Counter('put', '/classes/Counter/' + counter.objectId, { time: { '__op': 'Increment', 'amount': 1 } })
+              .catch(error => {
+                console.error('Failed to save visitor count', error);
+              });
+          } else {
+              Counter('post', '/classes/Counter', { title, url, time: 1 })
+                .then(response => response.json())
+                .then(() => {
+                  leancloudSelector(url).innerText = 1;
+                })
+                .catch(error => {
+                  console.error('Failed to create', error);
+                });
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    function showTime(Counter) {
+      var visitors = document.querySelectorAll('.leancloud_visitors');
+      var entries = [...visitors].map(element => {
+        return decodeURI(element.id);
+      });
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url: { '$in': entries } })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          for (let url of entries) {
+            let target = results.find(item => item.url === url);
+            leancloudSelector(url).innerText = target ? target.time : 0;
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    let { app_id, app_key, server_url } = {"enable":true,"app_id":"wxYx0BX9gaKA3XC4LuO2of0v-gzGzoHsz","app_key":"LQMcs6IDIE4YAm10vMsn9IYq","server_url":"https://wxyx0bx9.lc-cn-n1-shared.com","security":false};
+    function fetchData(api_server) {
+      var Counter = (method, url, data) => {
+        return fetch(`${api_server}/1.1${url}`, {
+          method,
+          headers: {
+            'X-LC-Id'     : app_id,
+            'X-LC-Key'    : app_key,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data)
+        });
+      };
+      if (CONFIG.page.isPost) {
+        if (CONFIG.hostname !== location.hostname) return;
+        addCount(Counter);
+      } else if (document.querySelectorAll('.post-title-link').length >= 1) {
+        showTime(Counter);
+      }
+    }
+
+    let api_server = app_id.slice(-9) !== '-MdYXbMMI' ? server_url : `https://${app_id.slice(0, 8).toLowerCase()}.api.lncldglobal.com`;
+
+    if (api_server) {
+      fetchData(api_server);
+    } else {
+      fetch('https://app-router.leancloud.cn/2/route?appId=' + app_id)
+        .then(response => response.json())
+        .then(({ api_server }) => {
+          fetchData('https://' + api_server);
+        });
+    }
+  })();
+</script>
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

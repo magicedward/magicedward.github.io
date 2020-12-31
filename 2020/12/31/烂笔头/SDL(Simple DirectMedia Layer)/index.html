@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"edward.org.cn","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="SDL官网  http:&#x2F;&#x2F;www.libsdl.org&#x2F;index.php SDL教程  http:&#x2F;&#x2F;lazyfoo.net&#x2F;tutorials&#x2F;SDL&#x2F;index.php Game rogramming v2.0 pdated 2&#x2F;15&#x2F;16 Greetings everyone, welcome the ground up recoding of Beginning Game Progra">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SDL(Simple DirectMedia Layer)">
+<meta property="og:url" content="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/SDL(Simple%20DirectMedia%20Layer)/index.html">
+<meta property="og:site_name" content="点点滴滴">
+<meta property="og:description" content="SDL官网  http:&#x2F;&#x2F;www.libsdl.org&#x2F;index.php SDL教程  http:&#x2F;&#x2F;lazyfoo.net&#x2F;tutorials&#x2F;SDL&#x2F;index.php Game rogramming v2.0 pdated 2&#x2F;15&#x2F;16 Greetings everyone, welcome the ground up recoding of Beginning Game Progra">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-12-31T06:48:01.607Z">
+<meta property="article:modified_time" content="2020-01-16T04:37:33.713Z">
+<meta property="article:author" content="Edward">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/SDL(Simple%20DirectMedia%20Layer)/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>SDL(Simple DirectMedia Layer) | 点点滴滴</title>
+  
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?a92ed22eafce466e7a7b17546bb0dc6f";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">点点滴滴</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/SDL(Simple%20DirectMedia%20Layer)/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/avatar.gif">
+      <meta itemprop="name" content="Edward">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="点点滴滴">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          SDL(Simple DirectMedia Layer)
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-12-31 14:48:01" itemprop="dateCreated datePublished" datetime="2020-12-31T14:48:01+08:00">2020-12-31</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-01-16 12:37:33" itemprop="dateModified" datetime="2020-01-16T12:37:33+08:00">2020-01-16</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%83%82%E7%AC%94%E5%A4%B4/" itemprop="url" rel="index"><span itemprop="name">烂笔头</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/SDL(Simple%20DirectMedia%20Layer)/" class="post-meta-item leancloud_visitors" data-flag-title="SDL(Simple DirectMedia Layer)" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>SDL官网 </p>
+<p><a target="_blank" rel="noopener" href="http://www.libsdl.org/index.php">http://www.libsdl.org/index.php</a></p>
+<p>SDL教程 </p>
+<p><a target="_blank" rel="noopener" href="http://lazyfoo.net/tutorials/SDL/index.php">http://lazyfoo.net/tutorials/SDL/index.php</a> Game rogramming v2.0</p>
+<p>pdated 2/15/16</p>
+<p>Greetings everyone, welcome the ground up recoding of Beginning Game Programming with SDL. This time we will be coding with SDL 2 which has been released on the SDL website.<br>These tutorials were designed for C++ programmers who want to move from text based games to real time games with graphics. By the end of these tutorials, you’ll know the basics to make your first real video game!</p>
+<p>Like Lazy Foo’ Productions on Facebook:<br>Follow Lazy Foo’ Productions on Twitter:<br>Follow @lazyfoo_net</p>
+<p>Table of Contents</p>
+<p>Lesson 01<br>Hello SDL<br>In this tutorial we will be setting up the SDL library and creating our first window.</p>
+<p>Lesson 02<br>Getting an Image on the Screen<br>Now that we can get a window to appear, lets blit an image onto it.</p>
+<p>Lesson 03<br>Event Driven Programming<br>Here we’ll start handling user input by allow the user to X out the window.</p>
+<p>Lesson 04<br>Key Presses<br>Here we’ll learn to handle keyboard input.</p>
+<p>Lesson 05<br>Optimized Surface Loading and Soft Stretching<br>Now that we know how to load and blit surfaces, it’s time to make our blits faster. We’ll also take a smaller image and stretch it to fit the screen.</p>
+<p>Lesson 06<br>Extension Libraries and Loading Other Image Formats<br>Here we’ll be using the SDL_image extension library to load png images.</p>
+<p>Lesson 07<br>Texture Loading and Rendering<br>A big new feature in SDL 2.0 is hardware accelerated texture based 2D rendering. Here we’ll be loading an image to render it using textures.</p>
+<p>Lesson 08<br>Geometry Rendering<br>Another new feature in SDL 2.0 is hardware accelerated primitive rendering. Here we’ll be using it to render some common shapes.</p>
+<p>Lesson 09<br>The Viewport<br>SDL 2.0 also lets you control where you render on the screen you using the viewport. We’ll be using the viewport to create subscreens.</p>
+<p>Lesson 10<br>Color Keying<br>Here we’ll use color keying to give texture transparent backgrounds.</p>
+<p>Lesson 11<br>Clip Rendering and Sprite Sheets<br>Using clip rendering, you can keep multiple images on one texture and render the part you need. We’ll be using this to render individual sprites from a sprite sheet.</p>
+<p>Lesson 12<br>Color Modulation<br>We’ll be altering the color of rendered textures using color modulation.</p>
+<p>Lesson 13<br>Alpha Blending<br>Here we’ll be using SDL 2.0 new hardware accelerated alpha blending.</p>
+<p>Lesson 14<br>Animated Sprites and Vsync<br>Here we’ll be using a sequence of sprites to animate them.</p>
+<p>Lesson 15<br>Rotation and Flipping<br>Here we’ll be using SDL 2.0’s new texture rotation and flipping.</p>
+<p>Lesson 16<br>True Type Fonts<br>Here we’ll be rendering text from true type fonts using SDL_ttf.</p>
+<p>Lesson 17<br>Mouse Events<br>Here we’ll learn to read mouse input using mouse events.</p>
+<p>Lesson 18<br>Key States<br>There’s other ways to read the keys besides event polling. Here will get the current states of the keyboard using get states.</p>
+<p>Lesson 19<br>Gamepads and Joysticks<br>Here we’ll learn to read input from a game controller.</p>
+<p>Lesson 20<br>Force Feedback<br>Another new feature for SDL 2.0 is rumble support using the SDL haptics. We’ll make our controller rumble when a button is pressed.</p>
+<p>Lesson 21<br>Sound Effects and Music<br>Here we’ll be using SDL_mixer to add music and sound to our SDL App.</p>
+<p>Lesson 22<br>Timing<br>Here we’ll be using SDL’s time capabilites.</p>
+<p>Lesson 23<br>Advanced Timers<br>Here we’ll extend SDL time capabilities to make our own custom timer.</p>
+<p>Lesson 24<br>Calculating Frame Rate<br>Here we’ll use the timers we built to measure frame rate.</p>
+<p>Lesson 25<br>Capping Frame Rate<br>If you need a constant frame rate when vsync isn’t available, frame rate capping can be used as a fall back.</p>
+<p>Lesson 26<br>Motion<br>Here we’ll be taking what we learned about render and handling input to make a dot move around the screen.</p>
+<p>Lesson 27<br>Collision Detection<br>Here we’ll have two objects interact with each other using bounding box collision detection.</p>
+<p>Lesson 28<br>Per-pixel Collision Detection<br>Here we’ll have two object collide using per-pixel collision detection.</p>
+<p>Lesson 29<br>Circular Collision Detection<br>Here we’ll learn to detect collisions with circles and boxes.</p>
+<p>Lesson 30<br>Scrolling<br>Here we’ll be implement a camera to scroll levels larger than the screen.</p>
+<p>Lesson 31<br>Scrolling Backgrounds<br>Here we’ll using a scrolling background to give the illusion of an infinite level.</p>
+<p>Lesson 32<br>Text Input and Clipboard Handling<br>Here we’ll using SDL 2.0’s new way of handling text input and its new clip board handling feature.</p>
+<p>Lesson 33<br>File Reading and Writing<br>Here we’ll using SDL’s RWOps API to do binary file IO.</p>
+<p>Lesson 34<br>Audio Recording<br>SDL 2 is planned to have an audio recording feature. As of SDL 2.0.0, it is not yet implemented. This here is just a place holder until it is ready to go. Please do not e-mail me saying this link is broken. You’ll just look silly.</p>
+<p>Lesson 35<br>Window Events<br>Here we’ll be handling events from a resizable window.</p>
+<p>Lesson 36<br>Multiple Windows<br>A new feature in SDL is the ability to support more than one window. Here we’ll make an application that has 3 windows.</p>
+<p>Lesson 37<br>Multiple Displays<br>Another new feature of SDL 2.0 is the ability to handle more than one physical display. Here we’ll make our window jump from display to display.</p>
+<p>Lesson 38<br>Particle Engines<br>Here we’ll use a simple particle effect to create a simple trail effect.</p>
+<p>Lesson 39<br>Tiling<br>Here we’ll make a simple level using a tiling engine.</p>
+<p>Lesson 40<br>Texture Manipulation<br>Here we’ll be directly accessing and manipulating a texture’s pixels.</p>
+<p>Lesson 41<br>Bitmap Fonts<br>Here we’ll be using a texture as a font using bitmap font techniques.</p>
+<p>Lesson 42<br>Texture Streaming<br>Here we’ll be rendering from a streaming data source using texture streaming.</p>
+<p>Lesson 43<br>Render to Texture<br>Here we’ll be taking a scene and rendering it to a texture.</p>
+<p>Lesson 44<br>Frame Independent Movement<br>Here we’ll be making the dot move independent of the current frame rate.</p>
+<p>Lesson 45<br>Timer Callbacks<br>SDL has another timing mechanism called timer callbacks. Here we’ll be setting a function to be called back after a certain amount of time.</p>
+<p>Lesson 46<br>Multithreading<br>Multithreading allows your program to do things simultaneously. Here we’ll make things print to the console from outside our main thread.</p>
+<p>Lesson 47<br>Semaphores<br>A major issue in multithreaded applications is that you need to make sure that they don’t try to access the same data at the same time. Semaphores are a way to make sure only a certain amount of threads are performing an action at the same time.</p>
+<p>Lesson 48<br>Atomic Operations<br>Atomic operations are another way to synchronize threads. Here we’ll be redoing the previous tutorial with atomic counters.</p>
+<p>Lesson 49<br>Mutexes and Conditions<br>Mutexes and conditions are yet another way to synchronize threads. Here we’ll be using the added benefit that they allow threads to communicate with each other.</p>
+<p>Lesson 50<br>SDL and OpenGL 2<br>SDL is a powerful tool when combined with OpenGL. If you’re just starting out with OpenGL or want to maximize compatibility, you can use SDL with OpenGL 2.1. In this tutorial we will make a minimalist OpenGL 2.1 program.</p>
+<p>Lesson 51<br>SDL and Modern OpenGL<br>SDL 2.0 now has support for OpenGL 3.0+ with context controls. Here we’ll be making a minimalist OpenGL 3+ core program.</p>
+<p>Lesson 52<br>Hello Mobile<br>Here we’ll be loading and displaying an image in our first mobile app!</p>
+<p>Lesson 53<br>Extensions and Changing Orientation<br>Here we’ll be using SDL extension libraries and handling changing orientation.</p>
+<p>Lesson 54<br>Touches<br>Here we’ll be handling single touch input.</p>
+<p>Lesson 55<br>Multitouch<br>Here we’ll be handling multitouch events like pinches and rotation.</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/scp%20%E8%BF%9C%E7%A8%8B%E6%8B%B7%E8%B4%9D/" rel="prev" title="scp 远程拷贝">
+      <i class="fa fa-chevron-left"></i> scp 远程拷贝
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/SDP%E5%8D%8F%E8%AE%AE%E4%BB%8B%E7%BB%8D/" rel="next" title="SDP协议介绍">
+      SDP协议介绍 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Edward"
+      src="/uploads/avatar.gif">
+  <p class="site-author-name" itemprop="name">Edward</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">570</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Edward</span>
+</div>
+
+        
+
+
+
+
+
+
+<script>
+  (function() {
+    function leancloudSelector(url) {
+      url = encodeURI(url);
+      return document.getElementById(url).querySelector('.leancloud-visitors-count');
+    }
+
+    function addCount(Counter) {
+      var visitors = document.querySelector('.leancloud_visitors');
+      var url = decodeURI(visitors.id);
+      var title = visitors.dataset.flagTitle;
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          if (results.length > 0) {
+            var counter = results[0];
+            leancloudSelector(url).innerText = counter.time + 1;
+            Counter('put', '/classes/Counter/' + counter.objectId, { time: { '__op': 'Increment', 'amount': 1 } })
+              .catch(error => {
+                console.error('Failed to save visitor count', error);
+              });
+          } else {
+              Counter('post', '/classes/Counter', { title, url, time: 1 })
+                .then(response => response.json())
+                .then(() => {
+                  leancloudSelector(url).innerText = 1;
+                })
+                .catch(error => {
+                  console.error('Failed to create', error);
+                });
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    function showTime(Counter) {
+      var visitors = document.querySelectorAll('.leancloud_visitors');
+      var entries = [...visitors].map(element => {
+        return decodeURI(element.id);
+      });
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url: { '$in': entries } })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          for (let url of entries) {
+            let target = results.find(item => item.url === url);
+            leancloudSelector(url).innerText = target ? target.time : 0;
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    let { app_id, app_key, server_url } = {"enable":true,"app_id":"wxYx0BX9gaKA3XC4LuO2of0v-gzGzoHsz","app_key":"LQMcs6IDIE4YAm10vMsn9IYq","server_url":"https://wxyx0bx9.lc-cn-n1-shared.com","security":false};
+    function fetchData(api_server) {
+      var Counter = (method, url, data) => {
+        return fetch(`${api_server}/1.1${url}`, {
+          method,
+          headers: {
+            'X-LC-Id'     : app_id,
+            'X-LC-Key'    : app_key,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data)
+        });
+      };
+      if (CONFIG.page.isPost) {
+        if (CONFIG.hostname !== location.hostname) return;
+        addCount(Counter);
+      } else if (document.querySelectorAll('.post-title-link').length >= 1) {
+        showTime(Counter);
+      }
+    }
+
+    let api_server = app_id.slice(-9) !== '-MdYXbMMI' ? server_url : `https://${app_id.slice(0, 8).toLowerCase()}.api.lncldglobal.com`;
+
+    if (api_server) {
+      fetchData(api_server);
+    } else {
+      fetch('https://app-router.leancloud.cn/2/route?appId=' + app_id)
+        .then(response => response.json())
+        .then(({ api_server }) => {
+          fetchData('https://' + api_server);
+        });
+    }
+  })();
+</script>
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

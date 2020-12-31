@@ -1,0 +1,741 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"edward.org.cn","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="http:&#x2F;&#x2F;developer.android.com&#x2F;guide&#x2F;topics&#x2F;manifest&#x2F;activity-element.html &lt;activity android:allowTaskReparenting&#x3D;[&quot;true&quot; | &quot;false&quot;]android:alwaysRetainTaskState&#x3D;[&quot;true&amp;quot">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Activity-element AndroidManifest">
+<meta property="og:url" content="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/Activity-element%20AndroidManifest/index.html">
+<meta property="og:site_name" content="点点滴滴">
+<meta property="og:description" content="http:&#x2F;&#x2F;developer.android.com&#x2F;guide&#x2F;topics&#x2F;manifest&#x2F;activity-element.html &lt;activity android:allowTaskReparenting&#x3D;[&quot;true&quot; | &quot;false&quot;]android:alwaysRetainTaskState&#x3D;[&quot;true&amp;quot">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-12-31T06:48:00.818Z">
+<meta property="article:modified_time" content="2020-01-16T04:37:32.729Z">
+<meta property="article:author" content="Edward">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/Activity-element%20AndroidManifest/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>Activity-element AndroidManifest | 点点滴滴</title>
+  
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?a92ed22eafce466e7a7b17546bb0dc6f";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">点点滴滴</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/Activity-element%20AndroidManifest/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/avatar.gif">
+      <meta itemprop="name" content="Edward">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="点点滴滴">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Activity-element AndroidManifest
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-12-31 14:48:00" itemprop="dateCreated datePublished" datetime="2020-12-31T14:48:00+08:00">2020-12-31</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-01-16 12:37:32" itemprop="dateModified" datetime="2020-01-16T12:37:32+08:00">2020-01-16</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%83%82%E7%AC%94%E5%A4%B4/" itemprop="url" rel="index"><span itemprop="name">烂笔头</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/Activity-element%20AndroidManifest/" class="post-meta-item leancloud_visitors" data-flag-title="Activity-element AndroidManifest" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p> <a target="_blank" rel="noopener" href="http://developer.android.com/guide/topics/manifest/activity-element.html">http://developer.android.com/guide/topics/manifest/activity-element.html</a></p>
+<p>&lt;activity android:allowTaskReparenting=[&quot;true&quot; | &quot;false&quot;]<br>android:alwaysRetainTaskState=[&quot;true&quot; | &quot;false&quot;]<br>android:clearTaskOnLaunch=[&quot;true&quot; | &quot;false&quot;]<br>android:configChanges=[&quot;mcc&quot;, &quot;mnc&quot;, &quot;locale&quot;,<br>&quot;touchscreen&quot;, &quot;keyboard&quot;, &quot;keyboardHidden&quot;,<br>&quot;navigation&quot;, &quot;screenLayout&quot;, &quot;fontScale&quot;, &quot;uiMode&quot;,<br>&quot;orientation&quot;, &quot;screenSize&quot;, &quot;smallestScreenSize&quot;]<br>android:enabled=[&quot;true&quot; | &quot;false&quot;]<br>android:excludeFromRecents=[&quot;true&quot; | &quot;false&quot;]<br>android:exported=[&quot;true&quot; | &quot;false&quot;]<br>android:finishOnTaskLaunch=[&quot;true&quot; | &quot;false&quot;]<br>android:hardwareAccelerated=[&quot;true&quot; | &quot;false&quot;]<br>android:icon=&quot;drawable resource&quot;<br>android:label=&quot;string resource&quot;<br>android:launchMode=[&quot;multiple&quot; | &quot;singleTop&quot; |<br>&quot;singleTask&quot; | &quot;singleInstance&quot;]<br>android:multiprocess=[&quot;true&quot; | &quot;false&quot;]<br>android:name=&quot;string&quot;<br>android:noHistory=[&quot;true&quot; | &quot;false&quot;]<br>android:parentActivityName=&quot;string&quot;<br>android:permission=&quot;string&quot;<br>android:process=&quot;string&quot;<br>android:screenOrientation=[&quot;unspecified&quot; | &quot;behind&quot; |<br>&quot;landscape&quot; | &quot;portrait&quot; |<br>&quot;reverseLandscape&quot; | &quot;reversePortrait&quot; |<br>&quot;sensorLandscape&quot; | &quot;sensorPortrait&quot; |<br>&quot;userLandscape&quot; | &quot;userPortrait&quot; |<br>&quot;sensor&quot; | &quot;fullSensor&quot; | &quot;nosensor&quot; |<br>&quot;user&quot; | &quot;fullUser&quot; | &quot;locked&quot;]<br>android:stateNotNeeded=[&quot;true&quot; | &quot;false&quot;]<br>android:taskAffinity=&quot;string&quot;<br>android:theme=&quot;resource or theme&quot;<br>android:uiOptions=[&quot;none&quot; | &quot;splitActionBarWhenNarrow&quot;]<br>android:windowSoftInputMode=[&quot;stateUnspecified&quot;,<br>&quot;stateUnchanged&quot;, &quot;stateHidden&quot;,<br>&quot;stateAlwaysHidden&quot;, &quot;stateVisible&quot;,<br>&quot;stateAlwaysVisible&quot;, &quot;adjustUnspecified&quot;,<br>&quot;adjustResize&quot;, &quot;adjustPan&quot;] &gt;<br>    . . .<br>&lt;/activity&gt;</p>
+<p>ATTRIBUTES:</p>
+<p>android:allowTaskReparenting<br>Whether or not the activity<br>can move from the task that started it to the task it has an<br>affinity for when that task is next brought to the front —<br>&quot;true&quot;<br>if it can move, and &quot;false&quot;<br>if it must remain with the task where it started.</p>
+<p>If this attribute is not set, the<br>value set by the corresponding allowTaskReparenting attribute<br>of the&lt;application&gt; element<br>applies to the activity. The default value is &quot;false&quot;.</p>
+<p>Normally when an activity is<br>started, it’s associated with the task of the activity that<br>started it and it stays there for its entire lifetime. You can use<br>this attribute to force it to be re-parented to the task it has an<br>affinity for when its current task is no longer displayed.<br>Typically, it’s used to cause the activities of an application<br>to move to the main task associated with that application.</p>
+<p>For example, if an e-mail message<br>contains a link to a web page, clicking the link brings up an<br>activity that can display the page. That activity is defined by the<br>browser application, but is launched as part of the e-mail task. If<br>it’s reparented to the browser task, it will be shown when the<br>browser next comes to the front, and will be absent when the e-mail<br>task again comes forward.</p>
+<p>The affinity of an activity is<br>defined by the taskAffinity attribute.<br>The affinity of a task is determined by reading the affinity of its<br>root activity. Therefore, by definition, a root activity is always<br>in a task with the same affinity. Since activities with<br>&quot;singleTask&quot;<br>or &quot;singleInstance&quot;<br>launch modes can only be at the root of a task, re-parenting is<br>limited to the &quot;standard&quot;<br>and &quot;singleTop&quot;<br>modes. (See also thelaunchMode attribute.)</p>
+<p>android:alwaysRetainTaskState<br>Whether or not the state of<br>the task that the activity is in will always be maintained by the<br>system — &quot;true&quot;<br>if it will be, and &quot;false&quot;<br>if the system is allowed to reset the task to its initial state in<br>certain situations. The default value is &quot;false&quot;.<br>This attribute is meaningful only for the root activity of a task;<br>it’s ignored for all other activities.</p>
+<p>Normally, the system clears a<br>task (removes all activities from the stack above the root<br>activity) in certain situations when the user re-selects that task<br>from the home screen. Typically, this is done if the user<br>hasn’t visited the task for a certain amount of time, such as<br>30 minutes.</p>
+<p>However, when this attribute is<br>&quot;true&quot;,<br>users will always return to the task in its last state, regardless<br>of how they get there. This is useful, for example, in an<br>application like the web browser where there is a lot of state<br>(such as multiple open tabs) that users would not like to lose.</p>
+<p>android:clearTaskOnLaunch<br>Whether or not all<br>activities will be removed from the task, except for the root<br>activity, whenever it is re-launched from the home screen —<br>&quot;true&quot;<br>if the task is always stripped down to its root activity, and<br>&quot;false&quot;<br>if not. The default value is &quot;false&quot;.<br>This attribute is meaningful only for activities that start a new<br>task (the root activity); it’s ignored for all other activities<br>in the task.</p>
+<p>When the value is<br>&quot;true&quot;,<br>every time users start the task again, they are brought to its root<br>activity regardless of what they were last doing in the task and<br>regardless of whether they used<br>the Back orHome button to leave<br>it. When the value is &quot;false&quot;,<br>the task may be cleared of activities in some situations (see<br>the alwaysRetainTaskState attribute),<br>but not always.</p>
+<p>Suppose, for example, that<br>someone launches activity P from the home screen, and from there<br>goes to activity Q. The user next presses Home, and<br>then returns to activity P. Normally, the user would see activity<br>Q, since that is what they were last doing in P’s task.<br>However, if P set this flag to &quot;true&quot;,<br>all of the activities on top of it (Q in this case) were removed<br>when the user pressed Home and the task went to<br>the background. So the user sees only P when returning to the<br>task.</p>
+<p>If this attribute<br>and allowTaskReparenting are<br>both &quot;true&quot;,<br>any activities that can be re-parented are moved to the task they<br>share an affinity with; the remaining activities are then dropped,<br>as described above.</p>
+<p>android:configChanges<br>Lists configuration changes<br>that the activity will handle itself. When a configuration change<br>occurs at runtime, the activity is shut down and restarted by<br>default, but declaring a configuration with this attribute will<br>prevent the activity from being restarted. Instead, the activity<br>remains running and itsonConfigurationChanged() method<br>is called.</p>
+<p>Note: Using this<br>attribute should be avoided and used only as a last resort. Please<br>read Handling<br>Runtime Changes for more information about how to properly<br>handle a restart due to a configuration change.</p>
+<p>Any or all of the following<br>strings are valid values for this attribute. Multiple values are<br>separated by ‘|’<br>— for example, &quot;locale|navigation|orientation&quot;.</p>
+<p>Value</p>
+<p>Description</p>
+<p>&quot;mcc&quot;</p>
+<p>The IMSI mobile country code (MCC) has changed — a SIM has been<br>detected and updated the MCC.</p>
+<p>&quot;mnc&quot;</p>
+<p>The IMSI mobile network code (MNC) has changed — a SIM has been<br>detected and updated the MNC.</p>
+<p>&quot;locale&quot;</p>
+<p>The locale has changed — the user has selected a new language that<br>text should be displayed in.</p>
+<p>&quot;touchscreen&quot;</p>
+<p>The touchscreen has changed. (This should never normally<br>happen.)</p>
+<p>&quot;keyboard&quot;</p>
+<p>The keyboard type has changed — for example, the user has plugged<br>in an external keyboard.</p>
+<p>&quot;keyboardHidden&quot;</p>
+<p>The keyboard accessibility has changed — for example, the user has<br>revealed the hardware keyboard.</p>
+<p>&quot;navigation&quot;</p>
+<p>The navigation type (trackball/dpad) has changed. (This should<br>never normally happen.)</p>
+<p>&quot;screenLayout&quot;</p>
+<p>The screen layout has changed — this might be caused by a different<br>display being activated.</p>
+<p>&quot;fontScale&quot;</p>
+<p>The font scaling factor has changed — the user has selected a new<br>global font size.</p>
+<p>&quot;uiMode&quot;</p>
+<p>The user interface mode has changed — this can be caused when the<br>user places the device into a desk/car dock or when the night mode<br>changes. See UiModeManager. Added<br>in API level 8.</p>
+<p>&quot;orientation&quot;</p>
+<p>The screen orientation has changed — the user has rotated the<br>device.</p>
+<p>Note: If<br>your application targets API level 13 or higher (as declared by<br>the minSdkVersion and targetSdkVersion attributes),<br>then you should also declare the &quot;screenSize&quot; configuration,<br>because it also changes when a device switches between portrait and<br>landscape orientations.</p>
+<p>&quot;screenSize&quot;</p>
+<p>The current available screen size has changed. This represents a<br>change in the currently available size, relative to the current<br>aspect ratio, so will change when the user switches between<br>landscape and portrait. However, if your application targets API<br>level 12 or lower, then your activity always handles this<br>configuration change itself (this configuration change does not<br>restart your activity, even when running on an Android 3.2 or<br>higher device).</p>
+<p>Added in API level 13.</p>
+<p>&quot;smallestScreenSize&quot;</p>
+<p>The physical screen size has changed. This represents a change in<br>size regardless of orientation, so will only change when the actual<br>physical screen size has changed such as switching to an external<br>display. A change to this configuration corresponds to a change in<br>thesmallestWidth<br>configuration. However, if your application targets API level<br>12 or lower, then your activity always handles this configuration<br>change itself (this configuration change does not restart your<br>activity, even when running on an Android 3.2 or higher device).</p>
+<p>Added in API level 13.</p>
+<p>&quot;layoutDirection&quot;</p>
+<p>The layout direction has changed. For example, changing from<br>left-to-right (LTR) to right-to-left (RTL). Added in API level 17.</p>
+<p>All of these configuration<br>changes can impact the resource values seen by the application.<br>Therefore, when onConfigurationChanged() is<br>called, it will generally be necessary to again retrieve all<br>resources (including view layouts, drawables, and so on) to<br>correctly handle the change.</p>
+<p>android:enabled<br>Whether or not the activity<br>can be instantiated by the system — &quot;true&quot;<br>if it can be, and &quot;false&quot;<br>if not. The default value is &quot;true&quot;.</p>
+<p>The &lt;application&gt; element<br>has its own enabled attribute<br>that applies to all application components, including activities.<br>The &lt;application&gt; and &lt;activity&gt; attributes<br>must both be &quot;true&quot;<br>(as they both are by default) for the system to be able to<br>instantiate the activity. If either is &quot;false&quot;,<br>it cannot be instantiated.</p>
+<p>android:excludeFromRecents<br>Whether or not the task<br>initiated by this activity should be excluded from the list of<br>recently used applications (&quot;recent apps&quot;). That is, when<br>this activity is the root activity of a new task, this attribute<br>determines whether the task should not appear in the list of recent<br>apps. Set &quot;true&quot;<br>if the task should be excluded from the list;<br>set &quot;false&quot;<br>if it should be included. The default value is<br>&quot;false&quot;.</p>
+<p>android:exported<br>Whether or not the activity<br>can be launched by components of other applications —<br>&quot;true&quot;<br>if it can be, and &quot;false&quot;<br>if not. If &quot;false&quot;,<br>the activity can be launched only by components of the same<br>application or applications with the same user ID.</p>
+<p>The default value depends on<br>whether the activity contains intent filters. The absence of any<br>filters means that the activity can be invoked only by specifying<br>its exact class name. This implies that the activity is intended<br>only for application-internal use (since others would not know the<br>class name). So in this case, the default value is<br>&quot;false&quot;.<br>On the other hand, the presence of at least one filter implies that<br>the activity is intended for external use, so the default value is<br>&quot;true&quot;.</p>
+<p>This attribute is not the only<br>way to limit an activity’s exposure to other applications. You<br>can also use a permission to limit the external entities that can<br>invoke the activity (see the permission attribute).</p>
+<p>android:finishOnTaskLaunch<br>Whether or not an existing<br>instance of the activity should be shut down (finished) whenever<br>the user again launches its task (chooses the task on the home<br>screen) — &quot;true&quot;<br>if it should be shut down, and &quot;false&quot;<br>if not. The default value is &quot;false&quot;.</p>
+<p>If this attribute<br>and allowTaskReparenting are<br>both &quot;true&quot;,<br>this attribute trumps the other. The affinity of the activity is<br>ignored. The activity is not re-parented, but destroyed.</p>
+<p>android:hardwareAccelerated<br>Whether or not<br>hardware-accelerated rendering should be enabled for this Activity<br>— &quot;true&quot;<br>if it should be enabled, and &quot;false&quot;<br>if not. The default value is &quot;false&quot;.</p>
+<p>Starting from Android 3.0, a<br>hardware-accelerated OpenGL renderer is available to applications,<br>to improve performance for many common 2D graphics operations. When<br>the hardware-accelerated renderer is enabled, most operations in<br>Canvas, Paint, Xfermode, ColorFilter, Shader, and Camera are<br>accelerated. This results in smoother animations, smoother<br>scrolling, and improved responsiveness overall, even for<br>applications that do not explicitly make use the framework’s<br>OpenGL libraries. Because of the increased resources required to<br>enable hardware acceleration, your app will consume more RAM.</p>
+<p>Note that not all of the OpenGL<br>2D operations are accelerated. If you enable the<br>hardware-accelerated renderer, test your application to ensure that<br>it can make use of the renderer without errors.</p>
+<p>android:icon<br>An icon representing the<br>activity. The icon is displayed to users when a representation of<br>the activity is required on-screen. For example, icons for<br>activities that initiate tasks are displayed in the launcher<br>window. The icon is often accompanied by a label (see<br>the android:label attribute).</p>
+<p>This attribute must be set as a<br>reference to a drawable resource containing the image definition.<br>If it is not set, the icon specified for the application as a whole<br>is used instead (see the &lt;application&gt;element’s icon attribute).</p>
+<p>The activity’s icon — whether<br>set here or by the &lt;application&gt; element<br>— is also the default icon for all the activity’s intent<br>filters (see the &lt;intent-filter&gt; element’s icon attribute).</p>
+<p>android:label<br>A user-readable label for<br>the activity. The label is displayed on-screen when the activity<br>must be represented to the user. It’s often displayed along<br>with the activity icon.</p>
+<p>If this attribute is not set, the<br>label set for the application as a whole is used instead (see<br>the&lt;application&gt; element’s label attribute).</p>
+<p>The activity’s label —<br>whether set here or by the &lt;application&gt; element<br>— is also the default label for all the activity’s intent<br>filters (see the &lt;intent-filter&gt; element’s label attribute).</p>
+<p>The label should be set as a<br>reference to a string resource, so that it can be localized like<br>other strings in the user interface. However, as a convenience<br>while you’re developing the application, it can also be set as<br>a raw string.</p>
+<p>android:launchMode<br>An instruction on how the<br>activity should be launched. There are four modes that work in<br>conjunction with activity flags (FLAG_ACTIVITY_* constants)<br>in Intent objects<br>to determine what should happen when the activity is called upon to<br>handle an intent. They are:</p>
+<p>&quot;standard&quot; </p>
+<p>&quot;singleTop&quot; </p>
+<p>&quot;singleTask&quot; </p>
+<p>&quot;singleInstance&quot;</p>
+<p>The default mode is<br>&quot;standard&quot;.</p>
+<p>As shown in the table below, the<br>modes fall into two main groups, with &quot;standard&quot;<br>and &quot;singleTop&quot;<br>activities on one side, and &quot;singleTask&quot;<br>and &quot;singleInstance&quot;<br>activities on the other. An activity with the &quot;standard&quot;<br>or &quot;singleTop&quot;<br>launch mode can be instantiated multiple times. The instances can<br>belong to any task and can be located anywhere in the activity<br>stack. Typically, they’re launched into the task that<br>called startActivity() (unless<br>the Intent object contains a FLAG_ACTIVITY_NEW_TASK instruction,<br>in which case a different task is chosen — see the taskAffinity attribute).</p>
+<p>In contrast, &quot;singleTask&quot;<br>and &quot;singleInstance&quot;<br>activities can only begin a task. They are always at the root of<br>the activity stack. Moreover, the device can hold only one instance<br>of the activity at a time — only one such task.</p>
+<p>The &quot;standard&quot;<br>and &quot;singleTop&quot;<br>modes differ from each other in just one respect: Every time<br>there’s a new intent for a &quot;standard&quot;<br>activity, a new instance of the class is created to respond to that<br>intent. Each instance handles a single intent. Similarly, a new<br>instance of a &quot;singleTop&quot;<br>activity may also be created to handle a new intent. However, if<br>the target task already has an existing instance of the activity at<br>the top of its stack, that instance will receive the new intent (in<br>an onNewIntent() call);<br>a new instance is not created. In other circumstances — for<br>example, if an existing instance of the &quot;singleTop&quot;<br>activity is in the target task, but not at the top of the stack, or<br>if it’s at the top of a stack, but not in the target task — a<br>new instance would be created and pushed on the stack.</p>
+<p>The &quot;singleTask&quot;<br>and &quot;singleInstance&quot;<br>modes also differ from each other in only one respect: A<br>&quot;singleTask&quot;<br>activity allows other activities to be part of its task. It’s<br>always at the root of its task, but other activities (necessarily<br>&quot;standard&quot;<br>and &quot;singleTop&quot;<br>activities) can be launched into that task. A &quot;singleInstance&quot;<br>activity, on the other hand, permits no other activities to be part<br>of its task. It’s the only activity in the task. If it starts<br>another activity, that activity is assigned to a different task —<br>as ifFLAG_ACTIVITY_NEW_TASK was<br>in the intent.</p>
+<p>Use Cases</p>
+<p>Launch Mode</p>
+<p>Multiple Instances?</p>
+<p>Comments</p>
+<p>Normal launches for most activities</p>
+<p>&quot;standard&quot;</p>
+<p>Yes</p>
+<p>Default. The system always creates a new instance of the activity<br>in the target task and routes the intent to it.</p>
+<p>&quot;singleTop&quot;</p>
+<p>Conditionally</p>
+<p>If an instance of the activity already exists at the top of the<br>target task, the system routes the intent to that instance through<br>a call to its onNewIntent()method,<br>rather than creating a new instance of the activity.</p>
+<p>Specialized launches<br>(not recommended for general<br>use)</p>
+<p>&quot;singleTask&quot;</p>
+<p>No</p>
+<p>The system creates the activity at the root of a new task and<br>routes the intent to it. However, if an instance of the activity<br>already exists, the system routes the intent to existing instance<br>through a call to its onNewIntent() method,<br>rather than creating a new one.</p>
+<p>&quot;singleInstance&quot;</p>
+<p>No</p>
+<p>Same as &quot;singleTask&quot;,<br>except that the system doesn’t launch any other activities into<br>the task holding the instance. The activity is always the single<br>and only member of its task.</p>
+<p>As shown in the table<br>above, standard is<br>the default mode and is appropriate for most types of<br>activities. SingleTop is<br>also a common and useful launch mode for many types of activities.<br>The other modes — singleTask and singleInstance —<br>are not appropriate for most<br>applications, since they result in an interaction model that<br>is likely to be unfamiliar to users and is very different from most<br>other applications.</p>
+<p>Regardless of the launch mode<br>that you choose, make sure to test the usability of the activity<br>during launch and when navigating back to it from other activities<br>and tasks using the Back button.</p>
+<p>For more information on launch<br>modes and their interaction with Intent flags, see<br>the Tasks and<br>Back Stack document.</p>
+<p>android:multiprocess<br>Whether an instance of the<br>activity can be launched into the process of the component that<br>started it — &quot;true&quot;<br>if it can be, and &quot;false&quot;<br>if not. The default value is &quot;false&quot;.</p>
+<p>Normally, a new instance of an<br>activity is launched into the process of the application that<br>defined it, so all instances of the activity run in the same<br>process. However, if this flag is set to &quot;true&quot;,<br>instances of the activity can run in multiple processes, allowing<br>the system to create instances wherever they are used (provided<br>permissions allow it), something that is almost never necessary or<br>desirable.</p>
+<p>android:name<br>The name of the class that<br>implements the activity, a subclass of Activity.<br>The attribute value should be a fully qualified class name (such<br>as, &quot;com.example.project.ExtracurricularActivity&quot;).<br>However, as a shorthand, if the first character of the name is a<br>period (for example, &quot;.ExtracurricularActivity&quot;),<br>it is appended to the package name specified in<br>the &lt;manifest&gt; element.</p>
+<p>Once you publish your<br>application, you should not<br>change this name (unless you’ve setandroid:exported=&quot;false&quot;).</p>
+<p>There is no default. The name<br>must be specified.</p>
+<p>android:noHistory<br>Whether or not the activity<br>should be removed from the activity stack and finished<br>(its finish()method<br>called) when the user navigates away from it and it’s no longer<br>visible on screen — &quot;true&quot;<br>if it should be finished, and &quot;false&quot;<br>if not. The default value is &quot;false&quot;.</p>
+<p>A value of &quot;true&quot;<br>means that the activity will not leave a historical trace. It will<br>not remain in the activity stack for the task, so the user will not<br>be able to return to it.</p>
+<p>This attribute was introduced in<br>API Level 3.</p>
+<p>android:parentActivityName<br>The class name of the<br>logical parent of the activity. The name here must match the class<br>name given to the corresponding &lt;activity&gt; element’s android:name attribute.</p>
+<p>The system reads this attribute<br>to determine which activity should be started when the use presses<br>the Up button in the action bar. The system can also use this<br>information to synthesize a back stack of activities<br>with TaskStackBuilder.</p>
+<p>To support API levels 4 - 16, you<br>can also declare the parent activity with a &lt;meta-data&gt; element<br>that specifies a value for &quot;android.support.PARENT_ACTIVITY&quot;.<br>For example:</p>
+<p>&lt;activity<br>android:name=&quot;com.example.app.ChildActivity&quot;<br>android:label=&quot;@string/title_child_activity&quot;<br>android:parentActivityName=&quot;com.example.myfirstapp.MainActivity&quot; &gt;<br>&lt;!– Parent activity meta-data to support API level 4+ –&gt;<br>&lt;meta-data<br>android:name=&quot;android.support.PARENT_ACTIVITY&quot;<br>android:value=&quot;com.example.app.MainActivity&quot; /&gt;<br>&lt;/activity&gt;</p>
+<p>For more information about<br>declaring the parent activity to support Up navigation,<br>read Providing<br>Up Navigation.</p>
+<p>This attribute was introduced in<br>API Level 16.</p>
+<p>android:permission<br>The name of a permission<br>that clients must have to launch the activity or otherwise get it<br>to respond to an intent. If a caller of startActivity() or startActivityForResult() has<br>not been granted the specified permission, its intent will not be<br>delivered to the activity.</p>
+<p>If this attribute is not set, the<br>permission set by the &lt;application&gt; element’s permission attribute<br>applies to the activity. If neither attribute is set, the activity<br>is not protected by a permission.</p>
+<p>For more information on<br>permissions, see the Permissions section<br>in the introduction and another document, Security<br>and Permissions.</p>
+<p>android:process<br>The name of the process in<br>which the activity should run. Normally, all components of an<br>application run in a default process name created for the<br>application and you do not need to use this attribute. But if<br>necessary, you can override the default process name with this<br>attribute, allowing you to spread your app components across<br>multiple processes.</p>
+<p>If the name assigned to this<br>attribute begins with a colon (‘:’), a new process, private<br>to the application, is created when it’s needed and the<br>activity runs in that process. If the process name begins with a<br>lowercase character, the activity will run in a global process of<br>that name, provided that it has permission to do so. This allows<br>components in different applications to share a process, reducing<br>resource usage.</p>
+<p>The &lt;application&gt; element’s process attribute<br>can set a different default process name for all components.</p>
+<p>android:screenOrientation<br>The orientation of the<br>activity’s display on the device.</p>
+<p>The value can be any one of the<br>following strings:</p>
+<p>&quot;unspecified&quot;</p>
+<p>The default value. The system chooses the orientation. The policy<br>it uses, and therefore the choices made in specific contexts, may<br>differ from device to device.</p>
+<p>&quot;behind&quot;</p>
+<p>The same orientation as the activity that’s immediately beneath<br>it in the activity stack.</p>
+<p>&quot;landscape&quot;</p>
+<p>Landscape orientation (the display is wider than it is tall).</p>
+<p>&quot;portrait&quot;</p>
+<p>Portrait orientation (the display is taller than it is wide).</p>
+<p>&quot;reverseLandscape&quot;</p>
+<p>Landscape orientation in the opposite direction from normal<br>landscape.Added in API level<br>9.</p>
+<p>&quot;reversePortrait&quot;</p>
+<p>Portrait orientation in the opposite direction from normal<br>portrait. Added in API level<br>9.</p>
+<p>&quot;sensorLandscape&quot;</p>
+<p>Landscape orientation, but can be either normal or reverse<br>landscape based on the device sensor. Added in API level 9.</p>
+<p>&quot;sensorPortrait&quot;</p>
+<p>Portrait orientation, but can be either normal or reverse portrait<br>based on the device sensor. Added in API level 9.</p>
+<p>&quot;userLandscape&quot;</p>
+<p>Landscape orientation, but can be either normal or reverse<br>landscape based on the device sensor and the user’s sensor<br>preference. If the user has locked sensor-based rotation, this<br>behaves the same as landscape,<br>otherwise it behaves the same as sensorLandscape. Added<br>in API level 18.</p>
+<p>&quot;userPortrait&quot;</p>
+<p>Portrait orientation, but can be either normal or reverse portrait<br>based on the device sensor and the user’s sensor preference. If<br>the user has locked sensor-based rotation, this behaves the same<br>as portrait,<br>otherwise it behaves the same as sensorPortrait. Added<br>in API level 18.</p>
+<p>&quot;sensor&quot;</p>
+<p>The orientation is determined by the device orientation sensor. The<br>orientation of the display depends on how the user is holding the<br>device; it changes when the user rotates the device. Some devices,<br>though, will not rotate to all four possible orientations, by<br>default. To allow all four orientations, use &quot;fullSensor&quot;.</p>
+<p>&quot;fullSensor&quot;</p>
+<p>The orientation is determined by the device orientation sensor for<br>any of the 4 orientations. This is similar to &quot;sensor&quot; except<br>this allows any of the 4 possible screen orientations, regardless<br>of what the device will normally do (for example, some devices<br>won’t normally use reverse portrait or reverse landscape, but<br>this enables those). Added in<br>API level 9.</p>
+<p>&quot;nosensor&quot;</p>
+<p>The orientation is determined without reference to a physical<br>orientation sensor. The sensor is ignored, so the display will not<br>rotate based on how the user moves the device. Except for this<br>distinction, the system chooses the orientation using the same<br>policy as for the &quot;unspecified&quot;<br>setting.</p>
+<p>&quot;user&quot;</p>
+<p>The user’s current preferred orientation.</p>
+<p>&quot;fullUser&quot;</p>
+<p>If the user has locked sensor-based rotation, this behaves the same<br>as user,<br>otherwise it behaves the same as fullSensor and<br>allows any of the 4 possible screen orientations. Added in API level 18.</p>
+<p>&quot;locked&quot;</p>
+<p>Locks the orientation to its current rotation, whatever that<br>is. Added in API level<br>18.</p>
+<p>Note: When you<br>declare one of the landscape or portrait values, it is considered a<br>hard requirement for the orientation in which the activity runs. As<br>such, the value you declare enables filtering by services such as<br>Google Play so your application is available only to devices that<br>support the orientation required by your activities. For example,<br>if you declare either &quot;landscape&quot;,&quot;reverseLandscape&quot;,<br>or &quot;sensorLandscape&quot;,<br>then your application will be available only to devices that<br>support landscape orientation. However, you should also explicitly<br>declare that your application requires either portrait or landscape<br>orientation with the &lt;uses-feature&gt; element.<br>For example, &lt;uses-feature<br>android:name=&quot;android.hardware.screen.portrait&quot;/&gt;.<br>This is purely a filtering behavior provided by Google Play (and<br>other services that support it) and the platform itself does not<br>control whether your app can be installed when a device supports<br>only certain orientations.</p>
+<p>android:stateNotNeeded<br>Whether or not the activity<br>can be killed and successfully restarted without having saved its<br>state — &quot;true&quot;<br>if it can be restarted without reference to its previous state, and<br>&quot;false&quot;<br>if its previous state is required. The default value is<br>&quot;false&quot;.</p>
+<p>Normally, before an activity is<br>temporarily shut down to save resources, its onSaveInstanceState()method<br>is called. This method stores the current state of the activity in<br>a Bundle object,<br>which is then passed to onCreate() when<br>the activity is restarted. If this attribute is set to<br>&quot;true&quot;,onSaveInstanceState() may<br>not be called and onCreate() will<br>be passed null instead<br>of the Bundle — just as it was when the activity started for the<br>first time.</p>
+<p>A &quot;true&quot;<br>setting ensures that the activity can be restarted in the absence<br>of retained state. For example, the activity that displays the home<br>screen uses this setting to make sure that it does not get removed<br>if it crashes for some reason.</p>
+<p>android:taskAffinity<br>The task that the activity<br>has an affinity for. Activities with the same affinity conceptually<br>belong to the same task (to the same &quot;application&quot; from<br>the user’s perspective). The affinity of a task is determined<br>by the affinity of its root activity.</p>
+<p>The affinity determines two<br>things — the task that the activity is re-parented to (see<br>theallowTaskReparenting attribute)<br>and the task that will house the activity when it is launched with<br>theFLAG_ACTIVITY_NEW_TASK flag.</p>
+<p>By default, all activities in an<br>application have the same affinity. You can set this attribute to<br>group them differently, and even place activities defined in<br>different applications within the same task. To specify that the<br>activity does not have an affinity for any task, set it to an empty<br>string.</p>
+<p>If this attribute is not set, the<br>activity inherits the affinity set for the application (see<br>the &lt;application&gt;element’s taskAffinity attribute).<br>The name of the default affinity for an application is the package<br>name set by the &lt;manifest&gt; element.</p>
+<p>android:theme<br>A reference to a style<br>resource defining an overall theme for the activity. This<br>automatically sets the activity’s context to use this theme<br>(see setTheme(),<br>and may also cause &quot;starting&quot; animations prior to the<br>activity being launched (to better match what the activity actually<br>looks like).</p>
+<p>If this attribute is not set, the<br>activity inherits the theme set for the application as a whole —<br>from the&lt;application&gt; element’s theme attribute.<br>If that attribute is also not set, the default system theme is<br>used. For more information, see the Styles and<br>Themes developer guide.</p>
+<p>android:uiOptions<br>Extra options for an<br>activity’s UI.</p>
+<p>Must be one of the following<br>values.</p>
+<p>Value</p>
+<p>Description</p>
+<p>&quot;none&quot;</p>
+<p>No extra UI options. This is the default.</p>
+<p>&quot;splitActionBarWhenNarrow&quot;</p>
+<p>Add a bar at the bottom of the screen to display action items in<br>theActionBar,<br>when constrained for horizontal space (such as when in portrait<br>mode on a handset). Instead of a small number of action items<br>appearing in the action bar at the top of the screen, the action<br>bar is split into the top navigation section and the bottom bar for<br>action items. This ensures a reasonable amount of space is made<br>available not only for the action items, but also for navigation<br>and title elements at the top. Menu items are not split across the<br>two bars; they always appear together.</p>
+<p>For more information about the<br>action bar, see the Action<br>Bar developer guide.</p>
+<p>This attribute was added in API<br>level 14.</p>
+<p>android:windowSoftInputMode<br>How the main window of the<br>activity interacts with the window containing the on-screen soft<br>keyboard. The setting for this attribute affects two things:</p>
+<p>The state of the soft keyboard —<br>whether it is hidden or visible — when the activity becomes the<br>focus of user attention.<br>The adjustment made to the<br>activity’s main window — whether it is resized smaller to make<br>room for the soft keyboard or whether its contents pan to make the<br>current focus visible when part of the window is covered by the<br>soft keyboard.</p>
+<p>The setting must be one of the<br>values listed in the following table, or a combination of one<br>&quot;state…&quot;<br>value plus one &quot;adjust…&quot;<br>value. Setting multiple values in either group — multiple<br>&quot;state…&quot;<br>values, for example — has undefined results. Individual values are<br>separated by a vertical bar (|).<br>For example:</p>
+<p>&lt;activity android:windowSoftInputMode=&quot;stateVisible|adjustResize&quot; . . . &gt;</p>
+<p>Values set here (other than<br>&quot;stateUnspecified&quot;<br>and &quot;adjustUnspecified&quot;)<br>override values set in the theme.</p>
+<p>Value</p>
+<p>Description</p>
+<p>&quot;stateUnspecified&quot;</p>
+<p>The state of the soft keyboard (whether it is hidden or visible) is<br>not specified. The system will choose an appropriate state or rely<br>on the setting in the theme.</p>
+<p>This is the default setting for<br>the behavior of the soft keyboard.</p>
+<p>&quot;stateUnchanged&quot;</p>
+<p>The soft keyboard is kept in whatever state it was last in, whether<br>visible or hidden, when the activity comes to the fore.</p>
+<p>&quot;stateHidden&quot;</p>
+<p>The soft keyboard is hidden when the user chooses the activity —<br>that is, when the user affirmatively navigates forward to the<br>activity, rather than backs into it because of leaving another<br>activity.</p>
+<p>&quot;stateAlwaysHidden&quot;</p>
+<p>The soft keyboard is always hidden when the activity’s main<br>window has input focus.</p>
+<p>&quot;stateVisible&quot;</p>
+<p>The soft keyboard is visible when that’s normally appropriate<br>(when the user is navigating forward to the activity’s main<br>window).</p>
+<p>&quot;stateAlwaysVisible&quot;</p>
+<p>The soft keyboard is made visible when the user chooses the<br>activity — that is, when the user affirmatively navigates forward<br>to the activity, rather than backs into it because of leaving<br>another activity.</p>
+<p>&quot;adjustUnspecified&quot;</p>
+<p>It is unspecified whether the activity’s main window resizes to<br>make room for the soft keyboard, or whether the contents of the<br>window pan to make the current focus visible on-screen. The system<br>will automatically select one of these modes depending on whether<br>the content of the window has any layout views that can scroll<br>their contents. If there is such a view, the window will be<br>resized, on the assumption that scrolling can make all of the<br>window’s contents visible within a smaller area.</p>
+<p>This is the default setting for<br>the behavior of the main window.</p>
+<p>&quot;adjustResize&quot;</p>
+<p>The activity’s main window is always resized to make room for<br>the soft keyboard on screen.</p>
+<p>&quot;adjustPan&quot;</p>
+<p>The activity’s main window is not resized to make room for the<br>soft keyboard. Rather, the contents of the window are automatically<br>panned so that the current focus is never obscured by the keyboard<br>and users can always see what they are typing. This is generally<br>less desirable than resizing, because the user may need to close<br>the soft keyboard to get at and interact with obscured parts of the<br>window.</p>
+<p>This attribute was introduced in<br>API Level 3.</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/ACCELEROMETER_ROTATION/" rel="prev" title="ACCELEROMETER_ROTATION">
+      <i class="fa fa-chevron-left"></i> ACCELEROMETER_ROTATION
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/ActivityManager%E8%B0%83%E8%AF%95/" rel="next" title="ActivityManager调试">
+      ActivityManager调试 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Edward"
+      src="/uploads/avatar.gif">
+  <p class="site-author-name" itemprop="name">Edward</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">570</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Edward</span>
+</div>
+
+        
+
+
+
+
+
+
+<script>
+  (function() {
+    function leancloudSelector(url) {
+      url = encodeURI(url);
+      return document.getElementById(url).querySelector('.leancloud-visitors-count');
+    }
+
+    function addCount(Counter) {
+      var visitors = document.querySelector('.leancloud_visitors');
+      var url = decodeURI(visitors.id);
+      var title = visitors.dataset.flagTitle;
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          if (results.length > 0) {
+            var counter = results[0];
+            leancloudSelector(url).innerText = counter.time + 1;
+            Counter('put', '/classes/Counter/' + counter.objectId, { time: { '__op': 'Increment', 'amount': 1 } })
+              .catch(error => {
+                console.error('Failed to save visitor count', error);
+              });
+          } else {
+              Counter('post', '/classes/Counter', { title, url, time: 1 })
+                .then(response => response.json())
+                .then(() => {
+                  leancloudSelector(url).innerText = 1;
+                })
+                .catch(error => {
+                  console.error('Failed to create', error);
+                });
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    function showTime(Counter) {
+      var visitors = document.querySelectorAll('.leancloud_visitors');
+      var entries = [...visitors].map(element => {
+        return decodeURI(element.id);
+      });
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url: { '$in': entries } })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          for (let url of entries) {
+            let target = results.find(item => item.url === url);
+            leancloudSelector(url).innerText = target ? target.time : 0;
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    let { app_id, app_key, server_url } = {"enable":true,"app_id":"wxYx0BX9gaKA3XC4LuO2of0v-gzGzoHsz","app_key":"LQMcs6IDIE4YAm10vMsn9IYq","server_url":"https://wxyx0bx9.lc-cn-n1-shared.com","security":false};
+    function fetchData(api_server) {
+      var Counter = (method, url, data) => {
+        return fetch(`${api_server}/1.1${url}`, {
+          method,
+          headers: {
+            'X-LC-Id'     : app_id,
+            'X-LC-Key'    : app_key,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data)
+        });
+      };
+      if (CONFIG.page.isPost) {
+        if (CONFIG.hostname !== location.hostname) return;
+        addCount(Counter);
+      } else if (document.querySelectorAll('.post-title-link').length >= 1) {
+        showTime(Counter);
+      }
+    }
+
+    let api_server = app_id.slice(-9) !== '-MdYXbMMI' ? server_url : `https://${app_id.slice(0, 8).toLowerCase()}.api.lncldglobal.com`;
+
+    if (api_server) {
+      fetchData(api_server);
+    } else {
+      fetch('https://app-router.leancloud.cn/2/route?appId=' + app_id)
+        .then(response => response.json())
+        .then(({ api_server }) => {
+          fetchData('https://' + api_server);
+        });
+    }
+  })();
+</script>
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

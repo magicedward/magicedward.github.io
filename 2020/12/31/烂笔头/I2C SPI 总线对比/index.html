@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"edward.org.cn","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="一 IIC总线 I2C–INTER-IC串行总线的缩写，是PHILIPS公司推出的芯片间串行传输总线。它以1根串行数据线（SDA）和1根串行时钟线（SCL）实 现了双向的同步数据传输。具有接口线少，控制方式简化，器件封装形式小，通信速率较高等优点。在主从通信中，可以有多个I2C总线器件同时接到I2C总线 上，通过地址来识别通信对象。 IIC 接口的协议里面包括设备地址信息，可以同一总线上连接多个从">
+<meta property="og:type" content="article">
+<meta property="og:title" content="I2C SPI 总线对比">
+<meta property="og:url" content="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/I2C%20SPI%20%E6%80%BB%E7%BA%BF%E5%AF%B9%E6%AF%94/index.html">
+<meta property="og:site_name" content="点点滴滴">
+<meta property="og:description" content="一 IIC总线 I2C–INTER-IC串行总线的缩写，是PHILIPS公司推出的芯片间串行传输总线。它以1根串行数据线（SDA）和1根串行时钟线（SCL）实 现了双向的同步数据传输。具有接口线少，控制方式简化，器件封装形式小，通信速率较高等优点。在主从通信中，可以有多个I2C总线器件同时接到I2C总线 上，通过地址来识别通信对象。 IIC 接口的协议里面包括设备地址信息，可以同一总线上连接多个从">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-12-31T06:48:01.186Z">
+<meta property="article:modified_time" content="2020-01-16T04:37:32.325Z">
+<meta property="article:author" content="Edward">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/I2C%20SPI%20%E6%80%BB%E7%BA%BF%E5%AF%B9%E6%AF%94/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>I2C SPI 总线对比 | 点点滴滴</title>
+  
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?a92ed22eafce466e7a7b17546bb0dc6f";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">点点滴滴</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/I2C%20SPI%20%E6%80%BB%E7%BA%BF%E5%AF%B9%E6%AF%94/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/avatar.gif">
+      <meta itemprop="name" content="Edward">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="点点滴滴">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          I2C SPI 总线对比
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-12-31 14:48:01" itemprop="dateCreated datePublished" datetime="2020-12-31T14:48:01+08:00">2020-12-31</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-01-16 12:37:32" itemprop="dateModified" datetime="2020-01-16T12:37:32+08:00">2020-01-16</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%83%82%E7%AC%94%E5%A4%B4/" itemprop="url" rel="index"><span itemprop="name">烂笔头</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/I2C%20SPI%20%E6%80%BB%E7%BA%BF%E5%AF%B9%E6%AF%94/" class="post-meta-item leancloud_visitors" data-flag-title="I2C SPI 总线对比" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>一 IIC总线</p>
+<p>I2C–INTER-IC串行总线的缩写，是PHILIPS公司推出的芯片间串行传输总线。它以1根串行数据线（SDA）和1根串行时钟线（SCL）实 现了双向的同步数据传输。具有接口线少，控制方式简化，器件封装形式小，通信速率较高等优点。在主从通信中，可以有多个I2C总线器件同时接到I2C总线 上，通过地址来识别通信对象。</p>
+<p>IIC 接口的协议里面包括设备地址信息，可以同一总线上连接多个从设备，通过应答来互通数据及命令。但是传输速率有限，标准模式下可达到100Kbps，快速模式下可达到400Kbps（我们开发板一般在130Kbps），高速模式下达到4Mbps，不能实现全双工，不适合传输很多的数据。</p>
+<p>IIC总线是一个真正的多主机总线，总线上多个主机初始化传输，可以通过传输检测和仲裁来防止数据被破坏 。</p>
+<p>下来详细了解IIC总线时序：</p>
+<p>1.1 总线数据有效性</p>
+<p>IIC总线是单工，因此同一时刻数据只有一个流向，因此采样有效时钟也是单一的，是在SCL时钟的高电平采样数据。</p>
+<p>IIC总线上SDA数据在SCL时钟低电平是可以发生变化，但是在时钟高电平时必须稳定，以便主从设备根据时钟采样数据，如下图：</p>
+<p>1.2 总线空闲条件</p>
+<p>IIC总线上设备都释放总线（发出传输停止）后，IIC总线根据上拉电阻变成高电平，SDA SCL都是高电平。</p>
+<p>1.3 总线数据传输起始和结束条件</p>
+<p>IIC总线SCL高电平时SDA出现由高到低的跳变，标志总线上数据传输的开始条件</p>
+<p>IIC总线SCL高电平时SDA出现由低到高的跳变，标志总线上数据传输的结束条件</p>
+<p>1.4 总线数据传输顺序以及ACK应答</p>
+<p>IIC总线上数据传输室MSB在前，LSB在后，从示波器上看，从左向右依次读出数据即可</p>
+<p>IIC总线传输的数据不收限制，但是每次发到SDA上的必须是8位，并且主机发送8位后释放总线，从机收到数据后必须拉低SDA一个时钟，回应ACK表示数据接收成功，我们如果示波器上看到的波形就是每次9位数据，8bit+1bit ack。如下：</p>
+<p>从机收到一字节数据后，如果需要一些时间处理，则会拉低SCL，让传输进入等待状态，处理完成，释放SCL，继续传输，如下：</p>
+<p>1.5 总线读写时序</p>
+<p>数据的传输在起始条件之后，发送一个7位的从机地址，紧接着第8位是数据方向（R/ W），0-表示发送数据（写），1-表示接收数据（读）。数据传输一般由主机产生的停止位（P）终止。但是如果主机仍希望在总线上通讯，它可以产生重复起始条件（Sr），和寻址另一个从机，而不是首先产生一个停止条件。在这种传输中，可能有不同的读/写格式结合。</p>
+<p>IIC总线主设备读写从设备，一般都是与从设备的寄存器打交道，这个可以通过阅读从设备的datasheet获取。总线写时序如下：</p>
+<p>master start + master addr|w + slave ack + master reg|w + slave ack + master data + slave ack + master restart。。master data + slave nack + master stop</p>
+<p>总线读时序如下：</p>
+<p>master start + master addr|w + slave ack + master reg|w + slave ack + master restart + master addr|r + slave ack + slave data + master nack + master stop</p>
+<p>总线读时序与写的不同之处在于读需要2次传输才能完成一次读取，首先要写寄存器地址到从设备，其实是写到了从设备的控制寄存器或者命令寄存器，从设备内部会根据这个地址来寻址所要操作的寄存器。</p>
+<p>我在读我们的bios和内核时发现，2者在总线读时序上的实现不太一样，在于第一次寄存器地址写入后，一个发的是restart，一个发的是stop，然后再start开始读取数据，示波器抓波形发现读取数据都正确，说明这2种时序都是正确的。</p>
+<p>IIC总线的读写时序比较固定，设备通信严格遵循协议，因此iIC总线设备驱动程序的编写也就相对简单一些。</p>
+<p>主要应用的iIc总线设备有touchscreen rtc 外扩io等</p>
+<p>二 SPI总线</p>
+<p>SPI–Serial Peripheral Interface，串行外围设备接口，是Motorola公司推出的一种同步串行通讯方式，是一种三线同步总线，因其硬件功能很强，与SPI有关的软件就相当简单，使CPU有更多的时间处理其他事务。<br> SPI通常有SCK时钟，STB片选，DATA数据信号三个信号。 I2C通常有 SDA数据和SCL时钟两个信号。</p>
+<p>SPI总线真正实现了全双工数据传输，SPI 有3线跟4线两种，4线的话，就是多了一条叫SDC的线，用来告知从设备现在传输的是数据还是指令。这个接口较快，可以传输较连续的数据。SPI要想连接多个从设备，就需要给每个从设备配备一根片选信号。如果要可以实现全双工，也是需要多加一根数据线（MOSI MISO）。</p>
+<p>也就是说SPI总线是通过片选来选择从设备。</p>
+<p>spi总线速度要比iic要快，我们开发板最快能达到30MHZ。</p>
+<p>spi总线特点：</p>
+<ol>
+<li>采用主-从模式(Master-Slave) 的控制方式<br>       SPI 规定了两个 SPI 设备之间通信必须由主设备 (Master) 来控制次设备 (Slave). 一个 Master 设备可以通过提供 Clock 以及对 Slave 设备进行片选 (Slave Select) 来控制多个 Slave 设备, SPI 协议还规定 Slave 设备的 Clock 由 Master 设备通过 SCK 管脚提供给 Slave 设备, Slave 设备本身不能产生或控制 Clock, 没有 Clock 则 Slave 设备不能正常工作.</li>
+<li>采用同步方式(Synchronous)传输数据<br>       Master 设备会根据将要交换的数据来产生相应的时钟脉冲(Clock Pulse), 时钟脉冲组成了时钟信号(Clock Signal) , 时钟信号通过时钟极性 (CPOL) 和 时钟相位 (CPHA) 控制着两个 SPI 设备间何时数据交换以及何时对接收到的数据进行采样, 来保证数据在两个设备之间是同步传输的.</li>
+<li>数据交换(Data Exchanges)<br>       SPI 设备间的数据传输之所以又被称为数据交换, 是因为 SPI 协议规定一个 SPI 设备不能在数据通信过程中仅仅只充当一个 &quot;发送者(Transmitter)&quot; 或者 &quot;接收者(Receiver)&quot;. 也就是说是全双工的，在每个 Clock 周期内, SPI 设备都会发送并接收一个 bit 大小的数据, 相当于该设备有一个 bit 大小的数据被交换了.<br>       一个 Slave 设备要想能够接收到 Master 发过来的控制信号, 必须在此之前能够被 Master 设备进行访问 (Access). 所以, Master 设备必须首先通过 SS/CS pin 对 Slave 设备进行片选, 把想要访问的 Slave 设备选上.<br>       在数据传输的过程中,  每次接收到的数据必须在下一次数据传输之前被采样. 如果之前接收到的数据没有被读取, 那么这些已经接收完成的数据将有可能会被丢弃,  导致 SPI 物理模块最终失效. 因此, 在程序中一般都会在 SPI 传输完数据后, 去读取 SPI 设备里的数据, 即使这些数据(Dummy Data)在我们的程序里是无用的.</li>
+</ol>
+<p>具体spi工作原理可以看博客另外一篇文章</p>
+<p>SPI和IIC是2种不同的通信协议，现在已经广泛的应用在IC之间的通信中。并且不少单片机已经整和了SPI和IIC的借口。但像51这种不支持SPI和IIC的单片机，也可以用模拟时钟的工作方式进行SPI和IIC的通信的。</p>
+<p>下面主要总结一下2种总线的异同点：</p>
+<p>1 iic总线不是全双工，2根线SCL SDA。spi总线实现全双工，4根线SCK CS MOSI MISO</p>
+<p>2 iic总线是多主机总线，通过SDA上的地址信息来锁定从设备。spi总线只有一个主设备，主设备通过CS片选来确定从设备</p>
+<p>3 iic总线传输速度在100kbps-4Mbps。spi总线传输速度更快，可以达到30MHZ以上。</p>
+<p>4 iic总线空闲状态下SDA SCL都是高电平。spi总线空闲状态MOSI MISO也都是 SCK是有CPOL决定的</p>
+<p>5 iic总线scl高电平时sda下降沿标志传输开始，上升沿标志传输结束。spi总线cs拉低标志传输开始，cs拉高标志传输结束</p>
+<p>6 iic总线是SCL高电平采样。spi总线因为是全双工，因此是沿采样，具体要根据CPHA决定。一般情况下master device是SCK的上升沿发送，下降沿采集</p>
+<p>7 iic总线和spi总线数据传输都是MSB在前，LSB在后（串口是LSB在前）</p>
+<p>8 iic总线和spi总线时钟都是由主设备产生，并且只在数据传输时发出时钟</p>
+<p>9 iic总线读写时序比较固定统一，设备驱动编写方便。spi总线不同从设备读写时序差别比较大，因此必须根据具体的设备datasheet来实现读写，相对复杂一些。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/I%C2%A0don't%C2%A0even%C2%A0know%C2%A0where%C2%A0to%C2%A0start./" rel="prev" title="I don't even know where to start">
+      <i class="fa fa-chevron-left"></i> I don't even know where to start
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/I2C%E6%80%BB%E7%BA%BF%E7%9F%A5%E8%AF%86/" rel="next" title="I2C总线知识">
+      I2C总线知识 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Edward"
+      src="/uploads/avatar.gif">
+  <p class="site-author-name" itemprop="name">Edward</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">570</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Edward</span>
+</div>
+
+        
+
+
+
+
+
+
+<script>
+  (function() {
+    function leancloudSelector(url) {
+      url = encodeURI(url);
+      return document.getElementById(url).querySelector('.leancloud-visitors-count');
+    }
+
+    function addCount(Counter) {
+      var visitors = document.querySelector('.leancloud_visitors');
+      var url = decodeURI(visitors.id);
+      var title = visitors.dataset.flagTitle;
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          if (results.length > 0) {
+            var counter = results[0];
+            leancloudSelector(url).innerText = counter.time + 1;
+            Counter('put', '/classes/Counter/' + counter.objectId, { time: { '__op': 'Increment', 'amount': 1 } })
+              .catch(error => {
+                console.error('Failed to save visitor count', error);
+              });
+          } else {
+              Counter('post', '/classes/Counter', { title, url, time: 1 })
+                .then(response => response.json())
+                .then(() => {
+                  leancloudSelector(url).innerText = 1;
+                })
+                .catch(error => {
+                  console.error('Failed to create', error);
+                });
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    function showTime(Counter) {
+      var visitors = document.querySelectorAll('.leancloud_visitors');
+      var entries = [...visitors].map(element => {
+        return decodeURI(element.id);
+      });
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url: { '$in': entries } })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          for (let url of entries) {
+            let target = results.find(item => item.url === url);
+            leancloudSelector(url).innerText = target ? target.time : 0;
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    let { app_id, app_key, server_url } = {"enable":true,"app_id":"wxYx0BX9gaKA3XC4LuO2of0v-gzGzoHsz","app_key":"LQMcs6IDIE4YAm10vMsn9IYq","server_url":"https://wxyx0bx9.lc-cn-n1-shared.com","security":false};
+    function fetchData(api_server) {
+      var Counter = (method, url, data) => {
+        return fetch(`${api_server}/1.1${url}`, {
+          method,
+          headers: {
+            'X-LC-Id'     : app_id,
+            'X-LC-Key'    : app_key,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data)
+        });
+      };
+      if (CONFIG.page.isPost) {
+        if (CONFIG.hostname !== location.hostname) return;
+        addCount(Counter);
+      } else if (document.querySelectorAll('.post-title-link').length >= 1) {
+        showTime(Counter);
+      }
+    }
+
+    let api_server = app_id.slice(-9) !== '-MdYXbMMI' ? server_url : `https://${app_id.slice(0, 8).toLowerCase()}.api.lncldglobal.com`;
+
+    if (api_server) {
+      fetchData(api_server);
+    } else {
+      fetch('https://app-router.leancloud.cn/2/route?appId=' + app_id)
+        .then(response => response.json())
+        .then(({ api_server }) => {
+          fetchData('https://' + api_server);
+        });
+    }
+  })();
+</script>
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

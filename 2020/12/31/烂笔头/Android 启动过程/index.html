@@ -1,0 +1,1041 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"edward.org.cn","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="Android 启动过程 1.1 Android 启动介绍 众所周知，Android是一款基于linux基础的开放源代码的手机操作系统，是以linux内核为操作系统的内核。那Android的启动也是在linux内核加载之后进行的。Linux内核由bootloader加载后，经自解压、初始化、顺序载入内核模块(其中包含驱动程序)等。在内核加载完成之后，会根据内核的传递参数寻找android的第一个用">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android 启动过程">
+<meta property="og:url" content="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/Android%20%E5%90%AF%E5%8A%A8%E8%BF%87%E7%A8%8B/index.html">
+<meta property="og:site_name" content="点点滴滴">
+<meta property="og:description" content="Android 启动过程 1.1 Android 启动介绍 众所周知，Android是一款基于linux基础的开放源代码的手机操作系统，是以linux内核为操作系统的内核。那Android的启动也是在linux内核加载之后进行的。Linux内核由bootloader加载后，经自解压、初始化、顺序载入内核模块(其中包含驱动程序)等。在内核加载完成之后，会根据内核的传递参数寻找android的第一个用">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-12-31T06:48:00.908Z">
+<meta property="article:modified_time" content="2020-01-16T04:37:32.744Z">
+<meta property="article:author" content="Edward">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/Android%20%E5%90%AF%E5%8A%A8%E8%BF%87%E7%A8%8B/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>Android 启动过程 | 点点滴滴</title>
+  
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?a92ed22eafce466e7a7b17546bb0dc6f";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">点点滴滴</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/Android%20%E5%90%AF%E5%8A%A8%E8%BF%87%E7%A8%8B/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/avatar.gif">
+      <meta itemprop="name" content="Edward">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="点点滴滴">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Android 启动过程
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-12-31 14:48:00" itemprop="dateCreated datePublished" datetime="2020-12-31T14:48:00+08:00">2020-12-31</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-01-16 12:37:32" itemprop="dateModified" datetime="2020-01-16T12:37:32+08:00">2020-01-16</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%83%82%E7%AC%94%E5%A4%B4/" itemprop="url" rel="index"><span itemprop="name">烂笔头</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/Android%20%E5%90%AF%E5%8A%A8%E8%BF%87%E7%A8%8B/" class="post-meta-item leancloud_visitors" data-flag-title="Android 启动过程" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>Android 启动过程</p>
+<p>1.1 Android 启动介绍</p>
+<p>众所周知，Android是一款基于linux基础的开放源代码的手机操作系统，是以linux内核为操作系统的内核。那Android的启动也是在linux内核加载之后进行的。Linux内核由bootloader加载后，经自解压、初始化、顺序载入内核模块(其中包含驱动程序)等。在内核加载完成之后，会根据内核的传递参数寻找android的第一个用户态进程，即init进程。Init进程根据init.rc以及init.$(hardware).rc脚本文件来启动android的必要的服务。直到完成android的HOME的启动。</p>
+<p>1.1.2 Linux Kernel启动</p>
+<p>Start_kernel(/init/main.c),是内核启动的入口函数，它所做的事情很多，比如：中断和内存的初始化，以及内核模块的加载等。在start_kernel函数的最后调用了rest_init。</p>
+<p>static noinline void __init_refok rest_init(void)</p>
+<p>{</p>
+<p>int pid;</p>
+<p>……</p>
+<p>kernel_thread(kernel_init, NULL, CLONE_FS | CLONE_SIGHAND);</p>
+<p>……</p>
+<p>}</p>
+<p>注意到在rest_init函数中开启了一个kernel_init的内核线程。继续看kernel_init。</p>
+<p>static int __init kernel_init(void * unused)</p>
+<p>{</p>
+<p>……</p>
+<p>init_post();</p>
+<p>return 0;</p>
+<p>}</p>
+<p>static noinline int init_post(void)</p>
+<p>{</p>
+<p>……</p>
+<p>     run_init_process(&quot;/sbin/init&quot;);</p>
+<p>     run_init_process(&quot;/etc/init&quot;);</p>
+<p>     run_init_process(&quot;/bin/init&quot;);</p>
+<p>     run_init_process(&quot;/bin/sh&quot;);</p>
+<p>   panic(&quot;No init found.  Try passing init= option to kernel. &quot;&quot;See Linux Documentation/init.txt for guidance.&quot;);</p>
+<p>}</p>
+<p>1.1.3 Android Init进程</p>
+<p>Android是基于linux内核的，在内核引导和加载完毕，从上面的代码可以看出init进程</p>
+<p>是从内核态转换到到用户态的第一个应用程序。由/system/core/init/Android.mk可以出init进程是从/system/core/init/目录下文件编译成的可执行文件。既然是应用程序，在执行的时候当然是从main函数开始。</p>
+<p>l         创建文件系统目录并挂载相关的文件系统</p>
+<p>mkdir(&quot;/dev&quot;, 0755);</p>
+<p>    mkdir(&quot;/proc&quot;, 0755);</p>
+<p>    mkdir(&quot;/sys&quot;, 0755);</p>
+<p>mount(&quot;tmpfs&quot;, &quot;/dev&quot;, &quot;tmpfs&quot;, MS_NOSUID, &quot;mode=0755&quot;);</p>
+<p>    mkdir(&quot;/dev/pts&quot;, 0755);</p>
+<p>    mkdir(&quot;/dev/socket&quot;, 0755);</p>
+<p>    mount(&quot;devpts&quot;, &quot;/dev/pts&quot;, &quot;devpts&quot;, 0, NULL);</p>
+<p>    mount(&quot;proc&quot;, &quot;/proc&quot;, &quot;proc&quot;, 0, NULL);</p>
+<p>    mount(&quot;sysfs&quot;, &quot;/sys&quot;, &quot;sysfs&quot;, 0, NULL)</p>
+<p>这些文件系统是android中根文件系统下所需要的目录，所以在init阶段先创建好。</p>
+<p>l         重定向标准输入，输出和标准错误到/dev/null设备中</p>
+<p>void open_devnull_stdio(void)</p>
+<p>{</p>
+<p>   int fd;</p>
+<p> static const char *name = &quot;/dev/<strong>null</strong>&quot;;</p>
+<p>if (mknod(name, S_IFCHR | 0600, (1 &lt;&lt; 8) | 3) == 0) {</p>
+<p>fd = open(name, O_RDWR);</p>
+<p>unlink(name);</p>
+<p>if (fd &gt;= 0) {</p>
+<p>dup2(fd, 0);</p>
+<p>dup2(fd, 1);</p>
+<p>dup2(fd, 2);</p>
+<p>if (fd &gt; 2) {</p>
+<p>       close(fd);</p>
+<p>         }</p>
+<p>     return;}</p>
+<p>}</p>
+<p>    exit(1);</p>
+<p>}</p>
+<p>函数首先为/dev/__null__设备创建设备节点，/dev/null就像一个黑洞。非常类似我们电脑上面的垃圾回收站。dup2为linux系统调用，0代表与系统进程相关的标准输入，1代表标准输出，2是标准错误。通过dup系统调用将这些标准输入，输出，错误都重新定向到/dev/null中。</p>
+<p>l         初始化内核log系统(kmesg)</p>
+<p>void klog_init(void)</p>
+<p>{</p>
+<p> static const char *name = &quot;/dev/<strong>kmsg</strong>&quot;;</p>
+<p>if (mknod(name, S_IFCHR | 0600, (1 &lt;&lt; 8) | 11) == 0) {</p>
+<p>   fcntl(klog_fd, F_SETFD, FD_CLOEXEC)；</p>
+<p>   unlink(name);</p>
+<p>   }</p>
+<p>}</p>
+<p>当进程在执行exec系统调用时，要确保klog_fd是关闭的。</p>
+<p>l         解析init.rc脚本文件</p>
+<p>在解析init.rc时候通常会有两个init脚本文件，一个是init.rc，另外一个是和具体的硬件</p>
+<p>平台相关的init.$hardware.rc。</p>
+<p>init_parse_config_file(&quot;/init.rc&quot;);</p>
+<p>snprintf(tmp, sizeof(tmp), &quot;/init.%s.rc&quot;, hardware);</p>
+<p>init_parse_config_file(tmp)；</p>
+<p>那么这个hardware是怎么过来的，我们就以这个ux31e为例。首先读取内核启动参数，import_kernel_cmdline(0, import_kernel_nv)；我们的内核参数从/proc/cmdline中读取为：</p>
+<p>root=/dev/ram0 androidboot.hardware=asus_ux31e acpi_sleep=s3_bios,s3_mode；很明显我们的</p>
+<p>hardware就是asus_ux31e，所以我们需要解析的硬件相关的脚本文件就是init.asua_ux31e.rc。</p>
+<p>int  init_parse_config_file(const char *fn)</p>
+<p>{</p>
+<p>    char *data;</p>
+<p>    data = read_file(fn, 0);</p>
+<p>    if (!data) return -1;</p>
+<p>  parse_config(fn, data);</p>
+<p>    DUMP();</p>
+<p>    return 0;</p>
+<p>}</p>
+<p>static  void  parse_config(const char *fn, char *s)</p>
+<p>{</p>
+<p>……</p>
+<p>case T_NEWLINE:</p>
+<p>            state.line++;</p>
+<p>            if (nargs) {</p>
+<p>                int kw = lookup_keyword(args[0]);</p>
+<p>                if (kw_is(kw, SECTION)) {</p>
+<p>                    state.parse_line(&amp;state, 0, 0);</p>
+<p>                    parse_new_section(&amp;state, kw, nargs, args);</p>
+<p>                } else {</p>
+<p>                    state.parse_line(&amp;state, nargs, args);</p>
+<p>                }</p>
+<p>                nargs = 0;</p>
+<p>            }</p>
+<p>            break;</p>
+<p>……</p>
+<p>}</p>
+<p>Parse_config会对脚本逐行进行解析，先调用lookup_keyword函数来查找脚本中的关键字。先来看脚本中可能出现的关键字。</p>
+<p>Symbol</p>
+<p>Flags</p>
+<p>Nargs</p>
+<p>Func</p>
+<p>capability</p>
+<p>OPTION</p>
+<p>0</p>
+<p>0</p>
+<p>chdir</p>
+<p>COMMAND</p>
+<p>1</p>
+<p>do_chdir</p>
+<p>chroot</p>
+<p>COMMAND</p>
+<p>1</p>
+<p>do_chroot</p>
+<p>class</p>
+<p>OPTION</p>
+<p>0</p>
+<p>0</p>
+<p>class_start</p>
+<p>COMMAND</p>
+<p>1</p>
+<p>do_class_start</p>
+<p>class_stop</p>
+<p>COMMAND</p>
+<p>1</p>
+<p>do_class_stop</p>
+<p>class_reset</p>
+<p>COMMAND</p>
+<p>1</p>
+<p>do_class_reset</p>
+<p>console</p>
+<p>OPTION</p>
+<p>0</p>
+<p>0</p>
+<p>critical</p>
+<p>OPTION</p>
+<p>0</p>
+<p>0</p>
+<p>disabled</p>
+<p>OPTION</p>
+<p>0</p>
+<p>0</p>
+<p>domainname</p>
+<p>COMMAND</p>
+<p>1</p>
+<p>do_doinname</p>
+<p>exec</p>
+<p>COMMAND</p>
+<p>1</p>
+<p>do_exec</p>
+<p>export</p>
+<p>COMMAND</p>
+<p>2</p>
+<p>do_export</p>
+<p>group</p>
+<p>OPTION</p>
+<p>0</p>
+<p>0</p>
+<p>hostname</p>
+<p>COMMAND</p>
+<p>1</p>
+<p>do_hostname</p>
+<p>ifup</p>
+<p>COMMAND</p>
+<p>1</p>
+<p>do_ifup</p>
+<p>insmod</p>
+<p>COMMAND</p>
+<p>1</p>
+<p>do_insmod</p>
+<p>import</p>
+<p>SECTION</p>
+<p>1</p>
+<p>0</p>
+<p>keycodes</p>
+<p>OPTION</p>
+<p>0</p>
+<p>0</p>
+<p>mkdir</p>
+<p>COMMAND</p>
+<p>1</p>
+<p>do_mkdir</p>
+<p>mount</p>
+<p>COMMAND</p>
+<p>3</p>
+<p>do_mount</p>
+<p>on</p>
+<p>SECTION</p>
+<p>0</p>
+<p>0</p>
+<p>oneshot</p>
+<p>OPTION</p>
+<p>0</p>
+<p>0</p>
+<p>onrestart</p>
+<p>OPTION</p>
+<p>0</p>
+<p>0</p>
+<p>restart</p>
+<p>COMMAND</p>
+<p>1</p>
+<p>do_restart</p>
+<p>rm</p>
+<p>COMMAND</p>
+<p>1</p>
+<p>do_rm</p>
+<p>rmdir</p>
+<p>COMMAND</p>
+<p>1</p>
+<p>do_rmdir</p>
+<p>service</p>
+<p>SECTION</p>
+<p>0</p>
+<p>0</p>
+<p>setenv</p>
+<p>OPTION</p>
+<p>0</p>
+<p>0</p>
+<p>setkey</p>
+<p>COMMAND</p>
+<p>0</p>
+<p>do_setkey</p>
+<p>setprop</p>
+<p>COMMAND</p>
+<p>2</p>
+<p>do_setprop</p>
+<p>setrlimit</p>
+<p>COMMAND</p>
+<p>3</p>
+<p>do_setrlimit</p>
+<p>socket</p>
+<p>OPTION</p>
+<p>0</p>
+<p>0</p>
+<p>start</p>
+<p>COMMAND</p>
+<p>1</p>
+<p>do_start</p>
+<p>stop</p>
+<p>COMMAND</p>
+<p>1</p>
+<p>do_stop</p>
+<p>triggler</p>
+<p>COMMAND</p>
+<p>1</p>
+<p>do_triggler</p>
+<p>symlink</p>
+<p>COMMAND</p>
+<p>1</p>
+<p>do_symlink</p>
+<p>sysclktz</p>
+<p>COMMAND</p>
+<p>1</p>
+<p>do_sysclktz</p>
+<p>user</p>
+<p>OPTION</p>
+<p>0</p>
+<p>0</p>
+<p>wait</p>
+<p>COMMAND</p>
+<p>1</p>
+<p>do_wait</p>
+<p>write</p>
+<p>COMMAND</p>
+<p>2</p>
+<p>do_write</p>
+<p>copy</p>
+<p>COMMAND</p>
+<p>2</p>
+<p>do_copy</p>
+<p>chown</p>
+<p>COMMAND</p>
+<p>2</p>
+<p>do_chown</p>
+<p>chmod</p>
+<p>COMMAND</p>
+<p>2</p>
+<p>do_chmod</p>
+<p>loglevel</p>
+<p>COMMAND</p>
+<p>2</p>
+<p>do_loglevel</p>
+<p>load_persist_props</p>
+<p>COMMAND</p>
+<p>1</p>
+<p>do_load_persit_props</p>
+<p>ioprio</p>
+<p>OPTION</p>
+<p>0</p>
+<p>0</p>
+<p>从上面这张表可以看出第一栏表示在init.rc脚本中可能出现的关键字，第二栏是描述第一栏关键字的类型：有OPTION、COMMAND、SECTION这三类。如果关键字是命令类的(COMMAND)</p>
+<p>就会调用的第4栏的函数去处理这个命令。</p>
+<p>从解析脚本文件的函数parse_config来看，会将关键字类型是SECTION的关键字行调用</p>
+<p>parse_new_section()；从上表的第二栏中可以看出为SECTION类型的关键字有三个：on，service,</p>
+<p>import。</p>
+<p>void  parse_new_section(struct parse_state *state, int kw,</p>
+<p>                       int nargs, char **args)</p>
+<p>{</p>
+<p>    printf(&quot;[ %s %s ]\n&quot;, args[0],</p>
+<p>           nargs &gt; 1 ? args[1] : &quot;&quot;);</p>
+<p>    switch(kw) {</p>
+<p>    case K_service:</p>
+<p>        state-&gt;context = parse_service(state, nargs, args);</p>
+<p>        if (state-&gt;context) {</p>
+<p>            state-&gt;parse_line = parse_line_service;</p>
+<p>            return;</p>
+<p>        }</p>
+<p>        break;</p>
+<p>    case K_on:</p>
+<p>        state-&gt;context = parse_action(state, nargs, args);</p>
+<p>        if (state-&gt;context) {</p>
+<p>            state-&gt;parse_line = parse_line_action;</p>
+<p>            return;</p>
+<p>        }</p>
+<p>        break;</p>
+<p>    case K_import:</p>
+<p>        if (nargs != 2) {</p>
+<p>            ERROR(&quot;single argument needed for import\n&quot;);</p>
+<p>        } else {</p>
+<p>            int ret = init_parse_config_file(args[1]);</p>
+<p>            if (ret)</p>
+<p>                ERROR(&quot;could not import file %s\n&quot;, args[1]);</p>
+<p>        }</p>
+<p>    }</p>
+<p>    state-&gt;parse_line = parse_line_no_op;</p>
+<p>}</p>
+<p>先看init.rc中以service和以on开头行解析的过程。</p>
+<p>static void <em>parse_service(struct parse_state *state, int nargs, char *</em>args)</p>
+<p>{</p>
+<p>………………</p>
+<p>list_add_tail(&amp;service_list, &amp;svc-&gt;slist);</p>
+<p>}</p>
+<p>static void <em>parse_action(struct parse_state *state, int nargs, char *</em>args)</p>
+<p>{</p>
+<p>………………</p>
+<p> list_add_tail(&amp;action_list, &amp;act-&gt;alist);</p>
+<p>}</p>
+<p>到这里我们就可以知道init.rc解析出来的service存放在server_list的双向循环链表中，action存放在action_list的双向循环链表中。</p>
+<p>l         执行和触发init.rc事件</p>
+<p>action_for_each_trigger(&quot;early-init&quot;, action_add_queue_tail);</p>
+<p>action_for_each_trigger(&quot;init&quot;, action_add_queue_tail);</p>
+<p>action_for_each_trigger(&quot;early-fs&quot;, action_add_queue_tail);</p>
+<p>action_for_each_trigger(&quot;fs&quot;, action_add_queue_tail);</p>
+<p>action_for_each_trigger(&quot;post-fs&quot;, action_add_queue_tail);</p>
+<p>action_for_each_trigger(&quot;post-fs-data&quot;, action_add_queue_tail);</p>
+<p>action_for_each_trigger(&quot;early-boot&quot;, action_add_queue_tail);</p>
+<p>action_for_each_trigger(&quot;boot&quot;, action_add_queue_tail);</p>
+<p>在最后执行以on boot开头行时候，我们从init.rc中可以看到最后命令是class_start。我们从上面的表格中可以看出命令class_start对应的命令是do_class_start。</p>
+<p>int  do_class_start(int nargs, char **args)</p>
+<p>{</p>
+<p>    service_for_each_class(args[1], service_start_if_not_disabled);</p>
+<p>    return 0;</p>
+<p>}</p>
+<p>这个函数就会遍历service_list链表，service_list就是上面从init.rc中解析出来的以service开头的行。对所有的service都调用service_start_if_not_disabled。</p>
+<p>void service_for_each_class(const char *classname, void (*func)(struct service *svc))</p>
+<p>{</p>
+<p>    struct listnode *node;</p>
+<p>    struct service *svc;</p>
+<p>    list_for_each(node, &amp;service_list) {</p>
+<p>        svc = node_to_item(node, struct service, slist);</p>
+<p>        if (!strcmp(svc-&gt;classname, classname)) {</p>
+<p>            func(svc);</p>
+<p>        }  </p>
+<p>    }  </p>
+<p>}</p>
+<p>static void service_start_if_not_disabled(struct service *svc)</p>
+<p>{</p>
+<p>    if (!(svc-&gt;flags &amp; SVC_DISABLED)) {</p>
+<p>        service_start(svc, NULL);</p>
+<p>    }</p>
+<p>}</p>
+<p>这样就将service中的标志不是disabled的service在系统初始化的时候开启后台运行。具体service的启动是以可执行文件的方式启动的。代码在/framework/base/cmds/文件下。</p>
+<p>1.1.4 Android Zygote服务</p>
+<p>　在Android系统中，所有的应用程序进程以及系统服务进程SystemServer都是由Zygote</p>
+<p>进程孕育(fork)出来的，这也许就是为什么要把它称为Zygote(受精卵)的原因吧。</p>
+<p>service zygote /system/bin/app_process -Xzygote /system/bin –zygote –start-system-server</p>
+<p>    class main</p>
+<p>    socket zygote stream 666</p>
+<p>    onrestart write /sys/android_power/request_state wake</p>
+<p>    onrestart write /sys/power/state on</p>
+<p>    onrestart restart media</p>
+<p>    onrestart restart netd</p>
+<p>上面是从系统启动脚本文件init.rc中截取的关于zygote的部分，可以看到zygote进程要执行的是/system/bin/app_process命令。下面还有socket关键字，表示zygote进程还需要一个名为zygote的socket资源。有了这句脚本，我们在系统开机后，在/dev/socket/下面就能看到zygote的设备节点。了解了这些后，我们就知道Zygote进程要执行程序就是/system/bin/app_process了。源代码位于：/framework/base/cmds/app_process/app_main.cpp。</p>
+<p>int main(int argc, const char* const argv[])</p>
+<p>{</p>
+<p>……</p>
+<p>AppRuntime runtime;</p>
+<p>……</p>
+<p>if (zygote) {</p>
+<p>runtime.start(&quot;com.android.internal.os.ZygoteInit&quot;,startSystemServer ? &quot;start-system-server&quot; : &quot;&quot;);</p>
+<p>……<br>} </p>
+<p>在zygote的main函数中首先构建了一个AppRuntime类，然后调用AppRuntime的start方法。</p>
+<p>void AndroidRuntime::start(const char* className, const char* options)</p>
+<p>{</p>
+<p>    LOGD(&quot;\n&gt;&gt;&gt;&gt;&gt;&gt; AndroidRuntime START %s &lt;&lt;&lt;&lt;&lt;&lt;\n&quot;,className != NULL ? className : &quot;(unknown)&quot;);</p>
+<p>blockSigpipe();</p>
+<p>……</p>
+<p>JNIEnv* env;</p>
+<p>    if (startVm(&amp;mJavaVM, &amp;env) != 0) {</p>
+<p>        return;</p>
+<p>}</p>
+<p>……</p>
+<p>char* slashClassName = toSlashClassName(className);</p>
+<p>    jclass startClass = env-&gt;FindClass(slashClassName);</p>
+<p>    if (startClass == NULL) {</p>
+<p>        LOGE(&quot;JavaVM unable to locate class ‘%s’\n&quot;, slashClassName);</p>
+<p>        /* keep going */</p>
+<p>    } else {</p>
+<p>        jmethodID startMeth = env-&gt;GetStaticMethodID(startClass, &quot;main&quot;,</p>
+<p>            &quot;([Ljava/lang/String;)V&quot;);</p>
+<p>        if (startMeth == NULL) {</p>
+<p>            LOGE(&quot;JavaVM unable to find main() in ‘%s’\n&quot;, className);</p>
+<p>            /* keep going */</p>
+<p>        } else {</p>
+<p>            env-&gt;CallStaticVoidMethod(startClass, startMeth, strArray);</p>
+<p>……</p>
+<p>}       </p>
+<p>　这个函数的作用是启动Android系统运行时库，它主要做了三件事情，一是调用函数startVM启动虚拟机，二是调用函数startReg注册JNI方法，三是调用com.android.internal.os.ZygoteInit类的main函数。我们知道android上层的应用程序是java代码，要开启java世界就必须要开始java虚拟机，而java代码要和linux内核设备或者驱动通信。而java代码和底层的c代码是不可能直接调用的。所以需要注册JNI方法，java代码通过JNI代码就可以和native的c代码沟通了。</p>
+<p>l         ZygoteInit(/framework/base/core/java/com/android/internal/os/ZygoteInit.java)</p>
+<p>view  plainpublic class ZygoteInit {</p>
+<p>　　……</p>
+<p>　　public static void main(String argv[]) {</p>
+<p>　　try {</p>
+<p>　　……</p>
+<p>　　registerZygoteSocket();</p>
+<p>　　……</p>
+<p>　　……</p>
+<p>　　if (argv[1].equals(&quot;true&quot;)) {</p>
+<p>　　startSystemServer();</p>
+<p>　　} else if (!argv[1].equals(&quot;false&quot;)) {</p>
+<p>　　……</p>
+<p>　　}</p>
+<p>　　……</p>
+<p>　　if (ZYGOTE_FORK_MODE) {</p>
+<p>　　……</p>
+<p>　　} else {</p>
+<p>　　runSelectLoopMode();</p>
+<p>　　}</p>
+<p>　　……</p>
+<p>　　} catch (MethodAndArgsCaller caller) {</p>
+<p>　　……</p>
+<p>　}</p>
+<p>在main函数中首先调用了registerZygoteSocket来创建一个socket套接字接口，用来和Activity</p>
+<p>ManagerService通信。然后通过startSystemServer函数来启动SystemServer。我们重点关注SystemServer的启动。</p>
+<p>private static boolean startSystemServer()</p>
+<p> throws MethodAndArgsCaller, RuntimeException {</p>
+<p>        /* Hardcoded command line to start the system server */</p>
+<p>        String args[] = {</p>
+<p>            &quot;–setuid=1000&quot;,</p>
+<p>            &quot;–setgid=1000&quot;,</p>
+<p>     &quot;–setgroups=1001,1002,1003,1004,1005,1006,1007,1008,1009,1010,1018,3001,3002,3003,3006,3007&quot;,</p>
+<p>            &quot;–capabilities=130104352,130104352&quot;,</p>
+<p>            &quot;–runtime-init&quot;,</p>
+<p>            &quot;–nice-name=system_server&quot;,</p>
+<p>            &quot;com.android.server.SystemServer&quot;,</p>
+<p>……</p>
+<p>  pid = Zygote.forkSystemServer(</p>
+<p>                    parsedArgs.uid, parsedArgs.gid,</p>
+<p>                    parsedArgs.gids,</p>
+<p>                    parsedArgs.debugFlags,</p>
+<p>                    null,</p>
+<p>                    parsedArgs.permittedCapabilities,</p>
+<p>                    parsedArgs.effectiveCapabilities);</p>
+<p>……</p>
+<p>if (pid == 0) {</p>
+<p>            handleSystemServerProcess(parsedArgs);</p>
+<p>        }</p>
+<p> }; </p>
+<p>最后在handleSystemServerProcess中，需要继续调用RuntimeInit.zygoteInit函数来进一步执行启动SystemServer组件的操作。然后通过RuntimeInit中的zygoteInit继续zygoteInitNative函数来执行一个binder的进程间的通信。通过android中的binder机制就可以执行SystemServer的代码了。在SystemServer中启动一系列android在init阶段需要启动的服务，比如：surfacefilnger，PowerManagerService，ActivityManagerService，LightsService，BatteryService</p>
+<p>…等服务。</p>
+<p>1.2 Android中常见的服务介绍</p>
+<p>service zygote /system/bin/app_process </p>
+<p>     Zygote进程用于产生其他进程。由init.rc对zygote的描述service Zygote /system/bin/app_</p>
+<p>Process可知zygote进程从/framework/base/cmds/app_process/中代码启动。</p>
+<p>service servicemanager /system/bin/servicemanager</p>
+<p>ServiceMananger是android中比较重要的一个进程，它是在init进程启动之后启动，从名字上就可以看出来它是用来管理系统中的service。系统service需要向servicemanager进行注册，才可以使用。</p>
+<p>service media /system/bin/mediaserver</p>
+<p>         MediaServer是整个android中media部分的核心和灵魂。几乎所有与多媒体播放相关的内容都放在这里。包括了音视频的编解码以及显示输出。</p>
+<p>service surfaceflinger /system/bin/surfaceflinger</p>
+<p>         android开机显示系统服务，提供系统范围内的surface composer功能，它能够将各种应用程序的2D、3D surface进行组合。</p>
+<p>service dbus /system/bin/dbus-daemon</p>
+<p>         dbus服务是android使用的一种特殊的进程间通讯系统。它具有面向对象接口的协议，以及应用程序之间互相发现和监视的守护进程。dbus设计用来作为用户与系统服务之间的分隔以及系统服务之间的通讯。因此，dbus通讯安全，但效率有点差。</p>
+<p>service installd /system/bin/installd</p>
+<p>         installd服务是提供安装dex文件的服务，Android平台上可执行的类型。</p>
+<p>service ril-daemon /system/bin/rild</p>
+<p>这个服务是android手机上的电话部分或者3G卡用到的服务。</p>
+<p>service vold /system/bin/vold</p>
+<p>负责完成系统的CDROM, USB大容量存储，MMC卡等扩展存储的挂载任务自动完成的守护进程。</p>
+<p>service bootanim /system/bin/bootanimation</p>
+<p>         android开机显示动画服务。</p>
+<p>service console /system/bin/sh  </p>
+<p>         andriod的控制台启用。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/android%20%E5%88%A9%E7%94%A8socket%20%E5%8F%91%E9%80%81Json%E6%95%B0%E6%8D%AEdemo/" rel="prev" title="android 利用socket 发送Json数据demo">
+      <i class="fa fa-chevron-left"></i> android 利用socket 发送Json数据demo
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/Android%20%E6%B7%BB%E5%8A%A0%E6%96%B0%E7%9A%84%E8%87%AA%E5%AE%9A%E4%B9%89%E6%8C%89%E9%94%AE/" rel="next" title="Android 添加新的自定义按键">
+      Android 添加新的自定义按键 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Edward"
+      src="/uploads/avatar.gif">
+  <p class="site-author-name" itemprop="name">Edward</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">570</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Edward</span>
+</div>
+
+        
+
+
+
+
+
+
+<script>
+  (function() {
+    function leancloudSelector(url) {
+      url = encodeURI(url);
+      return document.getElementById(url).querySelector('.leancloud-visitors-count');
+    }
+
+    function addCount(Counter) {
+      var visitors = document.querySelector('.leancloud_visitors');
+      var url = decodeURI(visitors.id);
+      var title = visitors.dataset.flagTitle;
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          if (results.length > 0) {
+            var counter = results[0];
+            leancloudSelector(url).innerText = counter.time + 1;
+            Counter('put', '/classes/Counter/' + counter.objectId, { time: { '__op': 'Increment', 'amount': 1 } })
+              .catch(error => {
+                console.error('Failed to save visitor count', error);
+              });
+          } else {
+              Counter('post', '/classes/Counter', { title, url, time: 1 })
+                .then(response => response.json())
+                .then(() => {
+                  leancloudSelector(url).innerText = 1;
+                })
+                .catch(error => {
+                  console.error('Failed to create', error);
+                });
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    function showTime(Counter) {
+      var visitors = document.querySelectorAll('.leancloud_visitors');
+      var entries = [...visitors].map(element => {
+        return decodeURI(element.id);
+      });
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url: { '$in': entries } })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          for (let url of entries) {
+            let target = results.find(item => item.url === url);
+            leancloudSelector(url).innerText = target ? target.time : 0;
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    let { app_id, app_key, server_url } = {"enable":true,"app_id":"wxYx0BX9gaKA3XC4LuO2of0v-gzGzoHsz","app_key":"LQMcs6IDIE4YAm10vMsn9IYq","server_url":"https://wxyx0bx9.lc-cn-n1-shared.com","security":false};
+    function fetchData(api_server) {
+      var Counter = (method, url, data) => {
+        return fetch(`${api_server}/1.1${url}`, {
+          method,
+          headers: {
+            'X-LC-Id'     : app_id,
+            'X-LC-Key'    : app_key,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data)
+        });
+      };
+      if (CONFIG.page.isPost) {
+        if (CONFIG.hostname !== location.hostname) return;
+        addCount(Counter);
+      } else if (document.querySelectorAll('.post-title-link').length >= 1) {
+        showTime(Counter);
+      }
+    }
+
+    let api_server = app_id.slice(-9) !== '-MdYXbMMI' ? server_url : `https://${app_id.slice(0, 8).toLowerCase()}.api.lncldglobal.com`;
+
+    if (api_server) {
+      fetchData(api_server);
+    } else {
+      fetch('https://app-router.leancloud.cn/2/route?appId=' + app_id)
+        .then(response => response.json())
+        .then(({ api_server }) => {
+          fetchData('https://' + api_server);
+        });
+    }
+  })();
+</script>
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

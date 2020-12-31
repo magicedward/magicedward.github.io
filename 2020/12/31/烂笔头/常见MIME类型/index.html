@@ -1,0 +1,924 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"edward.org.cn","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="常见MIME类型 按照字母顺序排列的MIME_type扩展名 扩展名  类型&#x2F;子类型    application&#x2F;octet-stream   323  text&#x2F;h323  acx  application&#x2F;internet-property-stream  ai  application&#x2F;postscript  aif  audio&#x2F;x-aiff  aifc  audio&#x2F;x-aiff  a">
+<meta property="og:type" content="article">
+<meta property="og:title" content="常见MIME类型">
+<meta property="og:url" content="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/%E5%B8%B8%E8%A7%81MIME%E7%B1%BB%E5%9E%8B/index.html">
+<meta property="og:site_name" content="点点滴滴">
+<meta property="og:description" content="常见MIME类型 按照字母顺序排列的MIME_type扩展名 扩展名  类型&#x2F;子类型    application&#x2F;octet-stream   323  text&#x2F;h323  acx  application&#x2F;internet-property-stream  ai  application&#x2F;postscript  aif  audio&#x2F;x-aiff  aifc  audio&#x2F;x-aiff  a">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-12-31T06:48:01.807Z">
+<meta property="article:modified_time" content="2020-01-16T04:37:33.438Z">
+<meta property="article:author" content="Edward">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/%E5%B8%B8%E8%A7%81MIME%E7%B1%BB%E5%9E%8B/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>常见MIME类型 | 点点滴滴</title>
+  
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?a92ed22eafce466e7a7b17546bb0dc6f";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">点点滴滴</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/%E5%B8%B8%E8%A7%81MIME%E7%B1%BB%E5%9E%8B/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/avatar.gif">
+      <meta itemprop="name" content="Edward">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="点点滴滴">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          常见MIME类型
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-12-31 14:48:01" itemprop="dateCreated datePublished" datetime="2020-12-31T14:48:01+08:00">2020-12-31</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-01-16 12:37:33" itemprop="dateModified" datetime="2020-01-16T12:37:33+08:00">2020-01-16</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%83%82%E7%AC%94%E5%A4%B4/" itemprop="url" rel="index"><span itemprop="name">烂笔头</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/%E5%B8%B8%E8%A7%81MIME%E7%B1%BB%E5%9E%8B/" class="post-meta-item leancloud_visitors" data-flag-title="常见MIME类型" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>常见MIME类型</p>
+<p>按照字母顺序排列的MIME_type扩展名</p>
+<p>扩展名  类型/子类型 </p>
+<ul>
+<li> application/octet-stream </li>
+</ul>
+<p>323  text/h323 </p>
+<p>acx  application/internet-property-stream </p>
+<p>ai  application/postscript </p>
+<p>aif  audio/x-aiff </p>
+<p>aifc  audio/x-aiff </p>
+<p>aiff  audio/x-aiff </p>
+<p>asf  video/x-ms-asf </p>
+<p>asr  video/x-ms-asf </p>
+<p>asx  video/x-ms-asf </p>
+<p>au  audio/basic </p>
+<p>avi  video/x-msvideo </p>
+<p>axs  application/olescript </p>
+<p>bas  text/plain </p>
+<p>bcpio  application/x-bcpio </p>
+<p>bin  application/octet-stream </p>
+<p>bmp  image/bmp </p>
+<p>c  text/plain </p>
+<p>cat  application/vnd.ms-pkiseccat </p>
+<p>cdf  application/x-cdf </p>
+<p>cer  application/x-x509-ca-cert </p>
+<p>class  application/octet-stream </p>
+<p>clp  application/x-msclip </p>
+<p>cmx  image/x-cmx </p>
+<p>cod  image/cis-cod </p>
+<p>cpio  application/x-cpio </p>
+<p>crd  application/x-mscardfile </p>
+<p>crl  application/pkix-crl </p>
+<p>crt  application/x-x509-ca-cert </p>
+<p>csh  application/x-csh </p>
+<p>css  text/css </p>
+<p>dcr  application/x-director </p>
+<p>der  application/x-x509-ca-cert </p>
+<p>dir  application/x-director </p>
+<p>dll  application/x-msdownload </p>
+<p>dms  application/octet-stream </p>
+<p>doc  application/msword </p>
+<p>dot  application/msword </p>
+<p>dvi  application/x-dvi </p>
+<p>dxr  application/x-director </p>
+<p>eps  application/postscript </p>
+<p>etx  text/x-setext </p>
+<p>evy  application/envoy </p>
+<p>exe  application/octet-stream </p>
+<p>fif  application/fractals </p>
+<p>flr  x-world/x-vrml </p>
+<p>gif  image/gif </p>
+<p>gtar  application/x-gtar </p>
+<p>gz  application/x-gzip </p>
+<p>h  text/plain </p>
+<p>hdf  application/x-hdf </p>
+<p>hlp  application/winhlp </p>
+<p>hqx  application/mac-binhex40 </p>
+<p>hta  application/hta </p>
+<p>htc  text/x-component </p>
+<p>htm  text/html </p>
+<p>html  text/html </p>
+<p>htt  text/webviewhtml </p>
+<p>ico  image/x-icon </p>
+<p>ief  image/ief </p>
+<p>iii  application/x-iphone </p>
+<p>ins  application/x-internet-signup </p>
+<p>isp  application/x-internet-signup </p>
+<p>jfif  image/pipeg </p>
+<p>jpe  image/jpeg </p>
+<p>jpeg  image/jpeg </p>
+<p>jpg  image/jpeg </p>
+<p>js  application/x-javascript </p>
+<p>latex  application/x-latex </p>
+<p>lha  application/octet-stream </p>
+<p>lsf  video/x-la-asf </p>
+<p>lsx  video/x-la-asf </p>
+<p>lzh  application/octet-stream </p>
+<p>m13  application/x-msmediaview </p>
+<p>m14  application/x-msmediaview </p>
+<p>m3u  audio/x-mpegurl </p>
+<p>man  application/x-troff-man </p>
+<p>mdb  application/x-msaccess </p>
+<p>me  application/x-troff-me </p>
+<p>mht  message/rfc822 </p>
+<p>mhtml  message/rfc822 </p>
+<p>mid  audio/mid </p>
+<p>mny  application/x-msmoney </p>
+<p>mov  video/quicktime </p>
+<p>movie  video/x-sgi-movie </p>
+<p>mp2  video/mpeg </p>
+<p>mp3  audio/mpeg </p>
+<p>mpa  video/mpeg </p>
+<p>mpe  video/mpeg </p>
+<p>mpeg  video/mpeg </p>
+<p>mpg  video/mpeg </p>
+<p>mpp  application/vnd.ms-project </p>
+<p>mpv2  video/mpeg </p>
+<p>ms  application/x-troff-ms </p>
+<p>mvb  application/x-msmediaview </p>
+<p>nws  message/rfc822 </p>
+<p>oda  application/oda </p>
+<p>p10  application/pkcs10 </p>
+<p>p12  application/x-pkcs12 </p>
+<p>p7b  application/x-pkcs7-certificates </p>
+<p>p7c  application/x-pkcs7-mime </p>
+<p>p7m  application/x-pkcs7-mime </p>
+<p>p7r  application/x-pkcs7-certreqresp </p>
+<p>p7s  application/x-pkcs7-signature </p>
+<p>pbm  image/x-portable-bitmap </p>
+<p>pdf  application/pdf </p>
+<p>pfx  application/x-pkcs12 </p>
+<p>pgm  image/x-portable-graymap </p>
+<p>pko  application/ynd.ms-pkipko </p>
+<p>pma  application/x-perfmon </p>
+<p>pmc  application/x-perfmon </p>
+<p>pml  application/x-perfmon </p>
+<p>pmr  application/x-perfmon </p>
+<p>pmw  application/x-perfmon </p>
+<p>pnm  image/x-portable-anymap </p>
+<p>pot,  application/vnd.ms-powerpoint </p>
+<p>ppm  image/x-portable-pixmap </p>
+<p>pps  application/vnd.ms-powerpoint </p>
+<p>ppt  application/vnd.ms-powerpoint </p>
+<p>prf  application/pics-rules </p>
+<p>ps  application/postscript </p>
+<p>pub  application/x-mspublisher </p>
+<p>qt  video/quicktime </p>
+<p>ra  audio/x-pn-realaudio </p>
+<p>ram  audio/x-pn-realaudio </p>
+<p>ras  image/x-cmu-raster </p>
+<p>rgb  image/x-rgb </p>
+<p>rmi  audio/mid <a target="_blank" rel="noopener" href="http://www.dreamdu.com/">http://www.dreamdu.com</a> </p>
+<p>roff  application/x-troff </p>
+<p>rtf  application/rtf </p>
+<p>rtx  text/richtext </p>
+<p>scd  application/x-msschedule </p>
+<p>sct  text/scriptlet </p>
+<p>setpay  application/set-payment-initiation </p>
+<p>setreg  application/set-registration-initiation </p>
+<p>sh  application/x-sh </p>
+<p>shar  application/x-shar </p>
+<p>sit  application/x-stuffit </p>
+<p>snd  audio/basic </p>
+<p>spc  application/x-pkcs7-certificates </p>
+<p>spl  application/futuresplash </p>
+<p>src  application/x-wais-source </p>
+<p>sst  application/vnd.ms-pkicertstore </p>
+<p>stl  application/vnd.ms-pkistl </p>
+<p>stm  text/html </p>
+<p>svg  image/svg+xml </p>
+<p>sv4cpio  application/x-sv4cpio </p>
+<p>sv4crc  application/x-sv4crc </p>
+<p>swf  application/x-shockwave-flash </p>
+<p>t  application/x-troff </p>
+<p>tar  application/x-tar </p>
+<p>tcl  application/x-tcl </p>
+<p>tex  application/x-tex </p>
+<p>texi  application/x-texinfo </p>
+<p>texinfo  application/x-texinfo </p>
+<p>tgz  application/x-compressed </p>
+<p>tif  image/tiff </p>
+<p>tiff  image/tiff </p>
+<p>tr  application/x-troff </p>
+<p>trm  application/x-msterminal </p>
+<p>tsv  text/tab-separated-values </p>
+<p>txt  text/plain </p>
+<p>uls  text/iuls </p>
+<p>ustar  application/x-ustar </p>
+<p>vcf  text/x-vcard </p>
+<p>vrml  x-world/x-vrml </p>
+<p>wav  audio/x-wav </p>
+<p>wcm  application/vnd.ms-works </p>
+<p>wdb  application/vnd.ms-works </p>
+<p>wks  application/vnd.ms-works </p>
+<p>wmf  application/x-msmetafile </p>
+<p>wps  application/vnd.ms-works </p>
+<p>wri  application/x-mswrite </p>
+<p>wrl  x-world/x-vrml </p>
+<p>wrz  x-world/x-vrml </p>
+<p>xaf  x-world/x-vrml </p>
+<p>xbm  image/x-xbitmap </p>
+<p>xla  application/vnd.ms-excel </p>
+<p>xlc  application/vnd.ms-excel </p>
+<p>xlm  application/vnd.ms-excel </p>
+<p>xls  application/vnd.ms-excel </p>
+<p>xlt  application/vnd.ms-excel </p>
+<p>xlw  application/vnd.ms-excel </p>
+<p>xof  x-world/x-vrml </p>
+<p>xpm  image/x-xpixmap </p>
+<p>xwd  image/x-xwindowdump </p>
+<p>z  application/x-compress </p>
+<p>zip  application/zip </p>
+<p>按照功能排列的MIME_type类型</p>
+<p>类型/子类型  扩展名 </p>
+<p>application/envoy  evy </p>
+<p>application/fractals  fif </p>
+<p>application/futuresplash  spl </p>
+<p>application/hta  hta </p>
+<p>application/internet-property-stream  acx </p>
+<p>application/mac-binhex40  hqx </p>
+<p>application/msword  doc </p>
+<p>application/msword  dot </p>
+<p>application/octet-stream  * </p>
+<p>application/octet-stream  bin </p>
+<p>application/octet-stream  class </p>
+<p>application/octet-stream  dms </p>
+<p>application/octet-stream  exe </p>
+<p>application/octet-stream  lha </p>
+<p>application/octet-stream  lzh </p>
+<p>application/oda  oda </p>
+<p>application/olescript  axs </p>
+<p>application/pdf  pdf </p>
+<p>application/pics-rules  prf </p>
+<p>application/pkcs10  p10 </p>
+<p>application/pkix-crl  crl </p>
+<p>application/postscript  ai </p>
+<p>application/postscript  eps </p>
+<p>application/postscript  ps </p>
+<p>application/rtf  rtf </p>
+<p>application/set-payment-initiation  setpay </p>
+<p>application/set-registration-initiation  setreg </p>
+<p>application/vnd.ms-excel  xla </p>
+<p>application/vnd.ms-excel  xlc </p>
+<p>application/vnd.ms-excel  xlm </p>
+<p>application/vnd.ms-excel  xls </p>
+<p>application/vnd.ms-excel  xlt </p>
+<p>application/vnd.ms-excel  xlw </p>
+<p>application/vnd.ms-outlook  msg </p>
+<p>application/vnd.ms-pkicertstore  sst </p>
+<p>application/vnd.ms-pkiseccat  cat </p>
+<p>application/vnd.ms-pkistl  stl </p>
+<p>application/vnd.ms-powerpoint  pot </p>
+<p>application/vnd.ms-powerpoint  pps </p>
+<p>application/vnd.ms-powerpoint  ppt </p>
+<p>application/vnd.ms-project  mpp </p>
+<p>application/vnd.ms-works  wcm </p>
+<p>application/vnd.ms-works  wdb </p>
+<p>application/vnd.ms-works  wks </p>
+<p>application/vnd.ms-works  wps </p>
+<p>application/winhlp  hlp </p>
+<p>application/x-bcpio  bcpio </p>
+<p>application/x-cdf  cdf </p>
+<p>application/x-compress  z </p>
+<p>application/x-compressed  tgz </p>
+<p>application/x-cpio  cpio </p>
+<p>application/x-csh  csh </p>
+<p>application/x-director  dcr </p>
+<p>application/x-director  dir </p>
+<p>application/x-director  dxr </p>
+<p>application/x-dvi  dvi </p>
+<p>application/x-gtar  gtar </p>
+<p>application/x-gzip  gz </p>
+<p>application/x-hdf  hdf </p>
+<p>application/x-internet-signup  ins </p>
+<p>application/x-internet-signup  isp </p>
+<p>application/x-iphone  iii </p>
+<p>application/x-javascript  js </p>
+<p>application/x-latex  latex </p>
+<p>application/x-msaccess  mdb </p>
+<p>application/x-mscardfile  crd </p>
+<p>application/x-msclip  clp </p>
+<p>application/x-msdownload  dll </p>
+<p>application/x-msmediaview  m13 </p>
+<p>application/x-msmediaview  m14 </p>
+<p>application/x-msmediaview  mvb </p>
+<p>application/x-msmetafile  wmf </p>
+<p>application/x-msmoney  mny </p>
+<p>application/x-mspublisher  pub </p>
+<p>application/x-msschedule  scd </p>
+<p>application/x-msterminal  trm </p>
+<p>application/x-mswrite  wri </p>
+<p>application/x-netcdf  cdf </p>
+<p>application/x-netcdf  nc </p>
+<p>application/x-perfmon  pma </p>
+<p>application/x-perfmon  pmc </p>
+<p>application/x-perfmon  pml </p>
+<p>application/x-perfmon  pmr </p>
+<p>application/x-perfmon  pmw </p>
+<p>application/x-pkcs12  p12 </p>
+<p>application/x-pkcs12  pfx </p>
+<p>application/x-pkcs7-certificates  p7b </p>
+<p>application/x-pkcs7-certificates  spc </p>
+<p>application/x-pkcs7-certreqresp  p7r </p>
+<p>application/x-pkcs7-mime  p7c </p>
+<p>application/x-pkcs7-mime  p7m </p>
+<p>application/x-pkcs7-signature  p7s </p>
+<p>application/x-sh  sh </p>
+<p>application/x-shar  shar </p>
+<p>application/x-shockwave-flash  swf </p>
+<p>application/x-stuffit  sit </p>
+<p>application/x-sv4cpio  sv4cpio </p>
+<p>application/x-sv4crc  sv4crc </p>
+<p>application/x-tar  tar </p>
+<p>application/x-tcl  tcl </p>
+<p>application/x-tex  tex </p>
+<p>application/x-texinfo  texi </p>
+<p>application/x-texinfo  texinfo </p>
+<p>application/x-troff  roff </p>
+<p>application/x-troff  t </p>
+<p>application/x-troff  tr </p>
+<p>application/x-troff-man  man </p>
+<p>application/x-troff-me  me </p>
+<p>application/x-troff-ms  ms </p>
+<p>application/x-ustar  ustar </p>
+<p>application/x-wais-source  src </p>
+<p>application/x-x509-ca-cert  cer </p>
+<p>application/x-x509-ca-cert  crt </p>
+<p>application/x-x509-ca-cert  der </p>
+<p>application/ynd.ms-pkipko  pko </p>
+<p>application/zip  zip </p>
+<p>audio/basic  au </p>
+<p>audio/basic  snd </p>
+<p>audio/mid  mid </p>
+<p>audio/mid  rmi </p>
+<p>audio/mpeg  mp3 </p>
+<p>audio/x-aiff  aif </p>
+<p>audio/x-aiff  aifc </p>
+<p>audio/x-aiff  aiff </p>
+<p>audio/x-mpegurl  m3u </p>
+<p>audio/x-pn-realaudio  ra </p>
+<p>audio/x-pn-realaudio  ram </p>
+<p>audio/x-wav  wav </p>
+<p>image/bmp  bmp </p>
+<p>image/cis-cod  cod </p>
+<p>image/gif  gif </p>
+<p>image/ief  ief </p>
+<p>image/jpeg  jpe </p>
+<p>image/jpeg  jpeg </p>
+<p>image/jpeg  jpg </p>
+<p>image/pipeg  jfif </p>
+<p>image/svg+xml  svg </p>
+<p>image/tiff  tif </p>
+<p>image/tiff  tiff </p>
+<p>image/x-cmu-raster  ras </p>
+<p>image/x-cmx  cmx </p>
+<p>image/x-icon  ico </p>
+<p>image/x-portable-anymap  pnm </p>
+<p>image/x-portable-bitmap  pbm </p>
+<p>image/x-portable-graymap  pgm </p>
+<p>image/x-portable-pixmap  ppm </p>
+<p>image/x-rgb  rgb </p>
+<p>image/x-xbitmap  xbm </p>
+<p>image/x-xpixmap  xpm </p>
+<p>image/x-xwindowdump  xwd </p>
+<p>message/rfc822  mht </p>
+<p>message/rfc822  mhtml </p>
+<p>message/rfc822  nws </p>
+<p>text/css <a target="_blank" rel="noopener" href="http://www.dreamdu.com/">http://www.dreamdu.com</a>  css </p>
+<p>text/h323  323 </p>
+<p>text/html  htm </p>
+<p>text/html  html </p>
+<p>text/html  stm </p>
+<p>text/iuls  uls </p>
+<p>text/plain  bas </p>
+<p>text/plain  c </p>
+<p>text/plain  h </p>
+<p>text/plain  txt </p>
+<p>text/richtext  rtx </p>
+<p>text/scriptlet  sct </p>
+<p>text/tab-separated-values  tsv </p>
+<p>text/webviewhtml  htt </p>
+<p>text/x-component  htc </p>
+<p>text/x-setext  etx </p>
+<p>text/x-vcard  vcf </p>
+<p>video/mpeg  mp2 </p>
+<p>video/mpeg  mpa </p>
+<p>video/mpeg  mpe </p>
+<p>video/mpeg  mpeg </p>
+<p>video/mpeg  mpg </p>
+<p>video/mpeg  mpv2 </p>
+<p>video/quicktime  mov </p>
+<p>video/quicktime  qt </p>
+<p>video/x-la-asf  lsf </p>
+<p>video/x-la-asf  lsx </p>
+<p>video/x-ms-asf  asf </p>
+<p>video/x-ms-asf  asr </p>
+<p>video/x-ms-asf  asx </p>
+<p>video/x-msvideo  avi </p>
+<p>video/x-sgi-movie  movie </p>
+<p>x-world/x-vrml  flr </p>
+<p>x-world/x-vrml  vrml </p>
+<p>x-world/x-vrml  wrl </p>
+<p>x-world/x-vrml  wrz </p>
+<p>x-world/x-vrml  xaf </p>
+<p>x-world/x-vrml  xof </p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/%E6%9F%A5%E7%9C%8B%E7%AD%BE%E5%90%8D%E4%BF%A1%E6%81%AF/" rel="prev" title="查看签名信息">
+      <i class="fa fa-chevron-left"></i> 查看签名信息
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/%E5%B8%B8%E8%A7%81%E7%9A%84%E5%87%A0%E7%A7%8D%E6%8E%92%E5%BA%8F/" rel="next" title="常见的几种排序">
+      常见的几种排序 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Edward"
+      src="/uploads/avatar.gif">
+  <p class="site-author-name" itemprop="name">Edward</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">570</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Edward</span>
+</div>
+
+        
+
+
+
+
+
+
+<script>
+  (function() {
+    function leancloudSelector(url) {
+      url = encodeURI(url);
+      return document.getElementById(url).querySelector('.leancloud-visitors-count');
+    }
+
+    function addCount(Counter) {
+      var visitors = document.querySelector('.leancloud_visitors');
+      var url = decodeURI(visitors.id);
+      var title = visitors.dataset.flagTitle;
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          if (results.length > 0) {
+            var counter = results[0];
+            leancloudSelector(url).innerText = counter.time + 1;
+            Counter('put', '/classes/Counter/' + counter.objectId, { time: { '__op': 'Increment', 'amount': 1 } })
+              .catch(error => {
+                console.error('Failed to save visitor count', error);
+              });
+          } else {
+              Counter('post', '/classes/Counter', { title, url, time: 1 })
+                .then(response => response.json())
+                .then(() => {
+                  leancloudSelector(url).innerText = 1;
+                })
+                .catch(error => {
+                  console.error('Failed to create', error);
+                });
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    function showTime(Counter) {
+      var visitors = document.querySelectorAll('.leancloud_visitors');
+      var entries = [...visitors].map(element => {
+        return decodeURI(element.id);
+      });
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url: { '$in': entries } })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          for (let url of entries) {
+            let target = results.find(item => item.url === url);
+            leancloudSelector(url).innerText = target ? target.time : 0;
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    let { app_id, app_key, server_url } = {"enable":true,"app_id":"wxYx0BX9gaKA3XC4LuO2of0v-gzGzoHsz","app_key":"LQMcs6IDIE4YAm10vMsn9IYq","server_url":"https://wxyx0bx9.lc-cn-n1-shared.com","security":false};
+    function fetchData(api_server) {
+      var Counter = (method, url, data) => {
+        return fetch(`${api_server}/1.1${url}`, {
+          method,
+          headers: {
+            'X-LC-Id'     : app_id,
+            'X-LC-Key'    : app_key,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data)
+        });
+      };
+      if (CONFIG.page.isPost) {
+        if (CONFIG.hostname !== location.hostname) return;
+        addCount(Counter);
+      } else if (document.querySelectorAll('.post-title-link').length >= 1) {
+        showTime(Counter);
+      }
+    }
+
+    let api_server = app_id.slice(-9) !== '-MdYXbMMI' ? server_url : `https://${app_id.slice(0, 8).toLowerCase()}.api.lncldglobal.com`;
+
+    if (api_server) {
+      fetchData(api_server);
+    } else {
+      fetch('https://app-router.leancloud.cn/2/route?appId=' + app_id)
+        .then(response => response.json())
+        .then(({ api_server }) => {
+          fetchData('https://' + api_server);
+        });
+    }
+  })();
+</script>
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

@@ -1,0 +1,1065 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"edward.org.cn","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="diff –git a&#x2F;packages&#x2F;SystemUI&#x2F;res&#x2F;layout-sw600dp&#x2F;navigation_bar.xml b&#x2F;packages&#x2F;SystemUI&#x2F;res&#x2F;layout-sw600dp&#x2F;navigation_bar.xml index f9a61b0..363e21f 100644 — a&#x2F;packages&#x2F;SystemUI&#x2F;res&#x2F;layout-sw600dp&#x2F;nav">
+<meta property="og:type" content="article">
+<meta property="og:title" content="动态去掉导航栏">
+<meta property="og:url" content="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/%E5%8A%A8%E6%80%81%E5%8E%BB%E6%8E%89%E5%AF%BC%E8%88%AA%E6%A0%8F/index.html">
+<meta property="og:site_name" content="点点滴滴">
+<meta property="og:description" content="diff –git a&#x2F;packages&#x2F;SystemUI&#x2F;res&#x2F;layout-sw600dp&#x2F;navigation_bar.xml b&#x2F;packages&#x2F;SystemUI&#x2F;res&#x2F;layout-sw600dp&#x2F;navigation_bar.xml index f9a61b0..363e21f 100644 — a&#x2F;packages&#x2F;SystemUI&#x2F;res&#x2F;layout-sw600dp&#x2F;nav">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-12-31T06:48:01.832Z">
+<meta property="article:modified_time" content="2020-01-16T04:37:33.669Z">
+<meta property="article:author" content="Edward">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/%E5%8A%A8%E6%80%81%E5%8E%BB%E6%8E%89%E5%AF%BC%E8%88%AA%E6%A0%8F/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>动态去掉导航栏 | 点点滴滴</title>
+  
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?a92ed22eafce466e7a7b17546bb0dc6f";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">点点滴滴</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/%E5%8A%A8%E6%80%81%E5%8E%BB%E6%8E%89%E5%AF%BC%E8%88%AA%E6%A0%8F/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/avatar.gif">
+      <meta itemprop="name" content="Edward">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="点点滴滴">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          动态去掉导航栏
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-12-31 14:48:01" itemprop="dateCreated datePublished" datetime="2020-12-31T14:48:01+08:00">2020-12-31</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-01-16 12:37:33" itemprop="dateModified" datetime="2020-01-16T12:37:33+08:00">2020-01-16</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%83%82%E7%AC%94%E5%A4%B4/" itemprop="url" rel="index"><span itemprop="name">烂笔头</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/%E5%8A%A8%E6%80%81%E5%8E%BB%E6%8E%89%E5%AF%BC%E8%88%AA%E6%A0%8F/" class="post-meta-item leancloud_visitors" data-flag-title="动态去掉导航栏" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>diff –git a/packages/SystemUI/res/layout-sw600dp/navigation_bar.xml b/packages/SystemUI/res/layout-sw600dp/navigation_bar.xml</p>
+<p>index f9a61b0..363e21f 100644</p>
+<p>— a/packages/SystemUI/res/layout-sw600dp/navigation_bar.xml</p>
+<p>+++ b/packages/SystemUI/res/layout-sw600dp/navigation_bar.xml</p>
+<p>@@ -119,6 +119,17 @@</p>
+<p>                android:visibility=&quot;invisible&quot;</p>
+<p>                systemui:glowBackground=&quot;@drawable/ic_sysbar_highlight&quot;</p>
+<p>                systemui:keyCode=&quot;24&quot; /&gt;</p>
+<ul>
+<li><p>      &lt;com.android.systemui.statusbar.policy.KeyButtonView </p>
+</li>
+<li><p>              android:id=&quot;@+id/hidennevi&quot;</p>
+</li>
+<li><p>               android:layout_width=&quot;wrap_content&quot;</p>
+</li>
+<li><p>               android:layout_height=&quot;match_parent&quot;</p>
+</li>
+<li><p>               android:src=&quot;@drawable/hidennevi&quot;</p>
+</li>
+<li><p>               android:paddingLeft=&quot;24dp&quot;</p>
+</li>
+<li><p>              android:paddingRight=&quot;24dp&quot;</p>
+</li>
+<li><p>              android:layout_weight=&quot;0&quot;</p>
+</li>
+<li><p>              android:contentDescription=&quot;@string/accessibility_recent&quot;</p>
+</li>
+<li><p>              systemui:glowBackground=&quot;@drawable/ic_sysbar_highlight&quot;</p>
+</li>
+<li><p>              /&gt;</p>
+</li>
+</ul>
+<p>             &lt;com.android.systemui.statusbar.policy.KeyButtonView android:id=&quot;@+id/menu&quot;</p>
+<p>                 android:layout_width=&quot;84dp&quot;</p>
+<p>                 android:layout_height=&quot;match_parent&quot;</p>
+<p>@@ -301,6 +312,17 @@</p>
+<p>                  android:visibility=&quot;invisible&quot;</p>
+<p>                  systemui:glowBackground=&quot;@drawable/ic_sysbar_highlight&quot;</p>
+<p>                  systemui:keyCode=&quot;24&quot; /&gt;  </p>
+<ul>
+<li><p>              &lt;com.android.systemui.statusbar.policy.KeyButtonView </p>
+</li>
+<li><p>              android:id=&quot;@+id/hidennevi&quot;</p>
+</li>
+<li><p>               android:layout_width=&quot;wrap_content&quot;</p>
+</li>
+<li><p>               android:layout_height=&quot;match_parent&quot;</p>
+</li>
+<li><p>               android:src=&quot;@drawable/hidennevi&quot;</p>
+</li>
+<li><p>               android:paddingLeft=&quot;24dp&quot;</p>
+</li>
+<li><p>              android:paddingRight=&quot;24dp&quot;</p>
+</li>
+<li><p>              android:layout_weight=&quot;0&quot;</p>
+</li>
+<li><p>              android:contentDescription=&quot;@string/accessibility_recent&quot;</p>
+</li>
+<li><p>              systemui:glowBackground=&quot;@drawable/ic_sysbar_highlight&quot;</p>
+</li>
+<li><p>              /&gt;</p>
+</li>
+</ul>
+<p>             &lt;com.android.systemui.statusbar.policy.KeyButtonView android:id=&quot;@+id/menu&quot;</p>
+<p>                 android:layout_width=&quot;84dp&quot;</p>
+<p>                 android:layout_height=&quot;match_parent&quot;</p>
+<p>diff –git a/packages/SystemUI/src/com/android/systemui/statusbar/phone/NavigationBarView.java b/packages/SystemUI/src/com/android</p>
+<p>index 4809c08..33dd254 100644</p>
+<p>— a/packages/SystemUI/src/com/android/systemui/statusbar/phone/NavigationBarView.java</p>
+<p>+++ b/packages/SystemUI/src/com/android/systemui/statusbar/phone/NavigationBarView.java</p>
+<p>@@ -282,6 +282,9 @@ public class NavigationBarView extends LinearLayout {</p>
+<p>     public View getHomeButton() {</p>
+<p>         return mCurrentView.findViewById(R.id.home);</p>
+<p>     }</p>
+<ul>
+<li><p>      public View getHidenButton(){</p>
+</li>
+<li><p>       return mCurrentView.findViewById(R.id.hidennevi);</p>
+</li>
+<li><p>   }</p>
+</li>
+</ul>
+<p>     public View getScreenshotButton(){</p>
+<p>         return mCurrentView.findViewById(R.id.screenshot);</p>
+<p>     }</p>
+<p>diff –git a/packages/SystemUI/src/com/android/systemui/statusbar/phone/PhoneStatusBar.java b/packages/SystemUI/src/com/android/sy</p>
+<p>index b880080..937500a 100644</p>
+<p>— a/packages/SystemUI/src/com/android/systemui/statusbar/phone/PhoneStatusBar.java</p>
+<p>+++ b/packages/SystemUI/src/com/android/systemui/statusbar/phone/PhoneStatusBar.java</p>
+<p>@@ -129,6 +129,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode {</p>
+<p>     public static final boolean SPEW = false;</p>
+<p>     public static final boolean DUMPTRUCK = true; // extra dumpsys info</p>
+<p>     public static final boolean DEBUG_GESTURES = false;</p>
+<ul>
+<li>      public static boolean isDisplayNavBar = true;</li>
+</ul>
+<p>     public static final boolean DEBUG_WINDOW_STATE = false;</p>
+<p>@@ -489,6 +490,35 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode {</p>
+<p>                                                                                                        };                      </p>
+<ul>
+<li><p>       private BroadcastReceiver mBroadcastReceiver1=new BroadcastReceiver() {</p>
+</li>
+<li><p>              </p>
+</li>
+<li><p>                              @Override</p>
+</li>
+<li><p>                              public void onReceive(Context context, Intent intent) {</p>
+</li>
+<li><p>                                                      // TODO Auto-generated method stub</p>
+</li>
+<li><p>                                              String action=intent.getAction();</p>
+</li>
+<li><p>                                                      if (isOrderedBroadcast()) { </p>
+</li>
+<li><p>                                              Log.d(&quot;hidennevi&quot;,action);</p>
+</li>
+<li><p>                                              if(action.equals(&quot;hidennevigationbar&quot;)){</p>
+</li>
+<li><p>                                                      String cmd = intent.getStringExtra(&quot;cmd&quot;);  </p>
+</li>
+<li><p>                                                                              Log.d(&quot;hidennevi&quot;, &quot;before isDisplayNavBar = &quot; + i</p>
+</li>
+<li><p>                                                       if(cmd.equals(&quot;hide&quot;)&amp;&amp;isDisplayNavBar){</p>
+</li>
+<li><p>                                                                                      isDisplayNavBar=false;  </p>
+</li>
+<li><p>                                                                              removeNavigationBar(); </p>
+</li>
+<li><p>                                                                                      Log.d(&quot;hidennevi&quot;, &quot;removeNavigationBar—</p>
+</li>
+<li><p>                                                               }else if(cmd.equals(&quot;show&quot;)&amp;&amp;!isDisplayNavBar){</p>
+</li>
+<li><p>                                                                      addNavigationBar();  </p>
+</li>
+<li><p>                                                                              isDisplayNavBar=true;  </p>
+</li>
+<li><p>                                                                                      Log.d(&quot;hidennevi&quot;, &quot;addNavigationBar——</p>
+</li>
+<li><p>                                                                       }</p>
+</li>
+<li><p>                                                                               Log.d(&quot;hidennevi&quot;, &quot;after isDisplayNavBar = &quot; + i</p>
+</li>
+<li><p>                                                                              </p>
+</li>
+<li><p>                                                              }else{</p>
+</li>
+<li><p>                                                                                      //takeScreenshot();</p>
+</li>
+<li><p>                                                              }</p>
+</li>
+<li><p>                                                      }</p>
+</li>
+<li><p>                                              }</p>
+</li>
+<li><p>              };      </p>
+</li>
+</ul>
+<p>+</p>
+<p>        private boolean hasBattery(){</p>
+<p>              File hasBattery = new File(&quot;/sys/class/power_supply/battery/voltage_now&quot;);           </p>
+<p>@@ -507,7 +537,11 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode {</p>
+<p>         IntentFilter intentfilter=new IntentFilter();</p>
+<p>         intentfilter.addAction(&quot;rk.android.screenshot.SHOW&quot;);</p>
+<p>         intentfilter.addAction(&quot;rk.android.screenshot.ACTION&quot;);</p>
+<ul>
+<li>       context.registerReceiver(receiver, intentfilter);              </li>
+</ul>
+<ul>
+<li><p>       context.registerReceiver(receiver, intentfilter);</p>
+</li>
+<li><p>              </p>
+</li>
+<li><p>              IntentFilter filter1 = new IntentFilter();  </p>
+</li>
+<li><p>              filter1.addAction(&quot;hidennevigationbar&quot;);  </p>
+</li>
+<li><p>              context.registerReceiver(mBroadcastReceiver1, filter1);                 </p>
+</li>
+</ul>
+<p>         Resources res = context.getResources();</p>
+<p>@@ -568,7 +602,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode {</p>
+<p>         }</p>
+<p>         updateShowSearchHoldoff();</p>
+<p>-</p>
+<p>+if(mNavigationBarView == null){</p>
+<p>         try {</p>
+<p>             boolean showNav = mWindowManagerService.hasNavigationBar();</p>
+<p>             if (DEBUG) Log.v(TAG, &quot;hasNavigationBar=&quot; + showNav);</p>
+<p>@@ -588,7 +622,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode {</p>
+<p>         } catch (RemoteException ex) {</p>
+<p>             // no window manager? good luck with that</p>
+<p>         }</p>
+<p>-</p>
+<p>+}</p>
+<p>         // figure out which pixel-format to use for the status bar.</p>
+<p>         mPixelFormat = PixelFormat.OPAQUE;</p>
+<p>@@ -936,17 +970,46 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode {</p>
+<p>         mNavigationBarView.getRecentsButton().setOnClickListener(mRecentsClickListener);</p>
+<p>         boolean show=Settings.System.getInt(mContext.getContentResolver(),</p>
+<p>                         Settings.System.SCREENSHOT_BUTTON_SHOW, 0)==1;</p>
+<ul>
+<li><p>              boolean showNevi=Settings.System.getInt(mContext.getContentResolver(),</p>
+</li>
+<li><p>                       &quot;hidennevi_button_show&quot;, 1)==1;</p>
+</li>
+</ul>
+<p>         if(show){</p>
+<p>                                     mNavigationBarView.getScreenshotButton().setVisibility(View.VISIBLE);</p>
+<p>                                }else{</p>
+<p>                                                     mNavigationBarView.getScreenshotButton().setVisibility(View.GONE);</p>
+<ul>
+<li>                                              }                                                               </li>
+</ul>
+<ul>
+<li><p>                                              }       </p>
+</li>
+<li><p>              if(showNevi &amp;&amp; null !=mNavigationBarView){</p>
+</li>
+<li><p>                                   mNavigationBarView.getHidenButton().setVisibility(View.VISIBLE);</p>
+</li>
+<li><p>                              }else{</p>
+</li>
+<li><p>                                                   mNavigationBarView.getHidenButton().setVisibility(View.GONE);</p>
+</li>
+<li><p>                                              }       </p>
+</li>
+<li><p>              mNavigationBarView.getHidenButton().setOnTouchListener(mHidenNeviTouchListener);                                </p>
+</li>
+</ul>
+<p>            mNavigationBarView.getScreenshotButton().setOnTouchListener(mScreenshotPreloadOnTouchListener);     </p>
+<p>            mNavigationBarView.getRecentsButton().setOnTouchListener(mRecentsPreloadOnTouchListener);</p>
+<p>         mNavigationBarView.getHomeButton().setOnTouchListener(mHomeSearchActionListener);</p>
+<p>         mNavigationBarView.getSearchLight().setOnTouchListener(mHomeSearchActionListener);</p>
+<p>         updateSearchPanel();</p>
+<p>     }</p>
+<ul>
+<li><p>      </p>
+</li>
+<li><p>      private View.OnTouchListener mHidenNeviTouchListener = new View.OnTouchListener() {</p>
+</li>
+<li><p>                      // additional optimization when we have software system buttons - start loading the recent</p>
+</li>
+<li><p>                      // tasks on touch down</p>
+</li>
+<li><p>                      @Override</p>
+</li>
+<li><p>                      public boolean onTouch(View v, MotionEvent event) {</p>
+</li>
+<li><p>                                          int action = event.getAction() &amp; MotionEvent.ACTION_MASK;</p>
+</li>
+<li><p>                                          if (action == MotionEvent.ACTION_DOWN) {</p>
+</li>
+<li><p>                                                      Log.d(&quot;dzy&quot;,&quot;onTouch hidennevibtn &quot;);</p>
+</li>
+<li><p>                                                      //   takeScreenshot();</p>
+</li>
+<li><p>                              //removeNavigationBar();</p>
+</li>
+<li><p>                                                              hidenNevi();</p>
+</li>
+<li><p>                                                    } else if (action == MotionEvent.ACTION_CANCEL) {</p>
+</li>
+<li><p>                                                        </p>
+</li>
+<li><p>                                                        } else if (action == MotionEvent.ACTION_UP) {</p>
+</li>
+<li><p>                                                        </p>
+</li>
+<li><p>                                        }</p>
+</li>
+<li><p>            return false;</p>
+</li>
+<li><p>        }</p>
+</li>
+<li><p>    };                                </p>
+</li>
+<li><p>      </p>
+</li>
+</ul>
+<p>     private View.OnTouchListener mScreenshotPreloadOnTouchListener = new View.OnTouchListener() {</p>
+<p>                        // additional optimization when we have software system buttons - start loading the recent</p>
+<p>                        // tasks on touch down</p>
+<p>@@ -970,13 +1033,47 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode {</p>
+<p>     // For small-screen devices (read: phones) that lack hardware navigation buttons</p>
+<p>     private void addNavigationBar() {</p>
+<p>         if (DEBUG) Log.v(TAG, &quot;addNavigationBar: about to add &quot; + mNavigationBarView);</p>
+<ul>
+<li>       if (mNavigationBarView == null) return;</li>
+</ul>
+<p>-</p>
+<ul>
+<li><p>     //mNavigationBarView = null;</p>
+</li>
+<li><p>       if (mNavigationBarView == null) {//return;</p>
+</li>
+<li><p>                      try {</p>
+</li>
+<li><p>                  boolean showNav = mWindowManagerService.hasNavigationBar();</p>
+</li>
+<li><p>                  if (DEBUG) Log.v(TAG, &quot;hasNavigationBar=&quot; + showNav);</p>
+</li>
+<li><p>                  if (showNav) {</p>
+</li>
+<li><p>                      mNavigationBarView =</p>
+</li>
+<li><p>                          (NavigationBarView) View.inflate(mContext, R.layout.navigation_bar, null);</p>
+</li>
+</ul>
+<p>+</p>
+<ul>
+<li><p>                      mNavigationBarView.setDisabledFlags(mDisabled);</p>
+</li>
+<li><p>                      mNavigationBarView.setBar(this);</p>
+</li>
+<li><p>                                      mNavigationBarView.setBackground(mContext.getResources().getDrawable(R.drawable.system_bar</p>
+</li>
+<li><p>                      mNavigationBarView.setOnTouchListener(new View.OnTouchListener() {</p>
+</li>
+<li><p>                          @Override</p>
+</li>
+<li><p>                          public boolean onTouch(View v, MotionEvent event) {</p>
+</li>
+<li><p>                              checkUserAutohide(v, event);</p>
+</li>
+<li><p>                              return false;</p>
+</li>
+<li><p>                          }});</p>
+</li>
+<li><p>                  }</p>
+</li>
+<li><p>              } catch (RemoteException ex) {</p>
+</li>
+<li><p>                  // no window manager? good luck with that</p>
+</li>
+<li><p>              }</p>
+</li>
+<li><p>              }</p>
+</li>
+</ul>
+<p>         prepareNavigationBarView();</p>
+<p>         mWindowManager.addView(mNavigationBarView, getNavigationBarLayoutParams());</p>
+<p>     }</p>
+<ul>
+<li><p>      private void removeNavigationBar() {</p>
+</li>
+<li><p>              if (mNavigationBarView == null) return; </p>
+</li>
+<li><p>              mWindowManager.removeView(mNavigationBarView);</p>
+</li>
+<li><p>              mNavigationBarView = null;</p>
+</li>
+<li><p>      }</p>
+</li>
+</ul>
+<p>+</p>
+<ul>
+<li><p>      public void hidenNevi() {</p>
+</li>
+<li><p>              Intent intent = new Intent();</p>
+</li>
+<li><p>              intent.setAction(&quot;hidennevigationbar&quot;);</p>
+</li>
+<li><p>              intent.putExtra(&quot;cmd&quot;, &quot;hide&quot;);</p>
+</li>
+<li><p>              mContext.sendOrderedBroadcast(intent, null);</p>
+</li>
+<li><p>      }</p>
+</li>
+</ul>
+<p>+</p>
+<p>     private void repositionNavigationBar() {</p>
+<p>         if (mNavigationBarView == null || !mNavigationBarView.isAttachedToWindow()) return;</p>
+<p>diff –git a/policy/src/com/android/internal/policy/impl/PhoneWindowManager.java b/policy/src/com/android/internal/policy/impl/Pho</p>
+<p>index 7a0e1d5..4ca46f0 100755</p>
+<p>— a/policy/src/com/android/internal/policy/impl/PhoneWindowManager.java</p>
+<p>+++ b/policy/src/com/android/internal/policy/impl/PhoneWindowManager.java</p>
+<p>@@ -955,13 +955,21 @@ public class PhoneWindowManager implements WindowManagerPolicy {</p>
+<p>                     public void onSwipeFromBottom() {</p>
+<p>                         if (mNavigationBar != null &amp;&amp; mNavigationBarOnBottom) {</p>
+<p>                             requestTransientBars(mNavigationBar);</p>
+<ul>
+<li>                       }</li>
+</ul>
+<ul>
+<li><p>                                                      Log.i(&quot;PhoneWindowManager&quot;, &quot;enter IF run fun requestTransientBars()&quot;);</p>
+</li>
+<li><p>                       }else{</p>
+</li>
+<li><p>                                                      showNevi();</p>
+</li>
+<li><p>                                                      Log.i(&quot;PhoneWindowManager&quot;, &quot;enter onSwipeFromBottom() ELSE run fun showNe</p>
+</li>
+<li><p>                                              }</p>
+</li>
+</ul>
+<p>                     }</p>
+<p>                     @Override</p>
+<p>                     public void onSwipeFromRight() {</p>
+<p>                         if (mNavigationBar != null &amp;&amp; !mNavigationBarOnBottom) {</p>
+<p>                             requestTransientBars(mNavigationBar);</p>
+<ul>
+<li>                       }</li>
+</ul>
+<ul>
+<li><p>                                                      Log.i(&quot;PhoneWindowManager&quot;, &quot;enter IF run fun requestTransientBars()&quot;);</p>
+</li>
+<li><p>                       }else{</p>
+</li>
+<li><p>                                                      showNevi();</p>
+</li>
+<li><p>                                                      Log.i(&quot;PhoneWindowManager&quot;, &quot;enter onSwipeFromRight() ELSE run fun showNev</p>
+</li>
+<li><p>                                              }</p>
+</li>
+</ul>
+<p>                     }</p>
+<p>                     @Override</p>
+<p>                     public void onDebug() {</p>
+<p>@@ -1004,6 +1012,14 @@ public class PhoneWindowManager implements WindowManagerPolicy {</p>
+<p>                }                       </p>
+<p>     }</p>
+<ul>
+<li><p>      public void showNevi() {</p>
+</li>
+<li><p>              Intent intent = new Intent();</p>
+</li>
+<li><p>              intent.setAction(&quot;hidennevigationbar&quot;);</p>
+</li>
+<li><p>              intent.putExtra(&quot;cmd&quot;, &quot;show&quot;);</p>
+</li>
+<li><p>              mContext.sendOrderedBroadcast(intent, null);</p>
+</li>
+<li><p>              Log.i(&quot;showNevi&quot;, &quot;enter showNevi…………………..s&quot;);</p>
+</li>
+<li><p>      }</p>
+</li>
+</ul>
+<p>+</p>
+<p>//在lancher3发广播，在主界面才显示</p>
+<p>edward@bx-Desktop:/media/disk1/RK3288_ANDROID4.4.2-SDK_V1.0_140618/src/a3/packages/apps/Launcher3$ git diff </p>
+<p>diff –git a/src/com/android/launcher3/Launcher.java b/src/com/android/launcher3/Launcher.java</p>
+<p>index 407fbb7..f189d71 100755</p>
+<p>— a/src/com/android/launcher3/Launcher.java</p>
+<p>+++ b/src/com/android/launcher3/Launcher.java</p>
+<p>@@ -907,10 +907,19 @@ public class Launcher extends Activity</p>
+<p>             onCompleteRunnable.run();</p>
+<p>         }</p>
+<p>     }</p>
+<p>-</p>
+<ul>
+<li><p>      private void isShowNevigationBar(boolean isShow) {</p>
+</li>
+<li><p>              Intent intent = new Intent();</p>
+</li>
+<li><p>              intent.setAction(&quot;hidennevigationbar&quot;);</p>
+</li>
+<li><p>                         if(isShow)</p>
+</li>
+<li><p>                         intent.putExtra(&quot;cmd&quot;, &quot;show&quot;);</p>
+</li>
+<li><p>                         else</p>
+</li>
+<li><p>              intent.putExtra(&quot;cmd&quot;, &quot;hide&quot;);</p>
+</li>
+<li><p>              sendOrderedBroadcast(intent, null);</p>
+</li>
+<li><p>      }</p>
+</li>
+</ul>
+<p>     @Override</p>
+<p>     protected void onStop() {</p>
+<p>         super.onStop();</p>
+<ul>
+<li>              isShowNevigationBar(false);     </li>
+</ul>
+<p>         FirstFrameAnimatorHelper.setIsVisible(false);</p>
+<p>     }</p>
+<p>@@ -928,7 +937,9 @@ public class Launcher extends Activity</p>
+<p>             Log.v(TAG, &quot;Launcher.onResume()&quot;);</p>
+<p>         }</p>
+<p>         super.onResume();</p>
+<p>-</p>
+<ul>
+<li><p>              </p>
+</li>
+<li><p>              isAllAppsVisible();</p>
+</li>
+<li><p>              //isShowNevigationBar(true);    </p>
+</li>
+</ul>
+<p>         // Restore the previous launcher state</p>
+<p>         if (mOnResumeState == State.WORKSPACE) {</p>
+<p>             showWorkspace(false);</p>
+<p>@@ -1029,6 +1040,7 @@ public class Launcher extends Activity</p>
+<p>         InstallShortcutReceiver.enableInstallQueue();</p>
+<p>         super.onPause();</p>
+<ul>
+<li>      </li>
+</ul>
+<p>         mPaused = true;</p>
+<p>         mDragController.cancelDrag();</p>
+<p>         mDragController.resetLastGestureUpTime();</p>
+<p>@@ -2481,6 +2493,7 @@ public class Launcher extends Activity</p>
+<p>      * @param v The view that was clicked.</p>
+<p>      */</p>
+<p>     public void onClickAllAppsButton(View v) {</p>
+<ul>
+<li>       isShowNevigationBar(false);</li>
+</ul>
+<p>         showAllApps(true, AppsCustomizePagedView.ContentType.Applications, false);</p>
+<p>     }</p>
+<p>@@ -2887,7 +2900,9 @@ public class Launcher extends Activity</p>
+<p>     }</p>
+<p>     public boolean isAllAppsVisible() {</p>
+<ul>
+<li>       return (mState == State.APPS_CUSTOMIZE) || (mOnResumeState == State.APPS_CUSTOMIZE);</li>
+</ul>
+<ul>
+<li><p>              boolean isVisible = (mState == State.APPS_CUSTOMIZE) || (mOnResumeState == State.APPS_CUSTOMIZE);</p>
+</li>
+<li><p>              if(!isVisible)  isShowNevigationBar(true);</p>
+</li>
+<li><p>       return isVisible ;</p>
+</li>
+</ul>
+<p>     }</p>
+<p>     /**</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/%E5%AE%9A%E6%97%B6%E5%BC%80%E5%85%B3%E6%9C%BA/" rel="prev" title="定时开关机">
+      <i class="fa fa-chevron-left"></i> 定时开关机
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/%E8%AF%BB%E6%96%87%E4%BB%B6%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%98%BE%E7%A4%BA%E4%BA%8EsystemUI/" rel="next" title="读文件字符串显示于systemUI">
+      读文件字符串显示于systemUI <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Edward"
+      src="/uploads/avatar.gif">
+  <p class="site-author-name" itemprop="name">Edward</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">570</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Edward</span>
+</div>
+
+        
+
+
+
+
+
+
+<script>
+  (function() {
+    function leancloudSelector(url) {
+      url = encodeURI(url);
+      return document.getElementById(url).querySelector('.leancloud-visitors-count');
+    }
+
+    function addCount(Counter) {
+      var visitors = document.querySelector('.leancloud_visitors');
+      var url = decodeURI(visitors.id);
+      var title = visitors.dataset.flagTitle;
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          if (results.length > 0) {
+            var counter = results[0];
+            leancloudSelector(url).innerText = counter.time + 1;
+            Counter('put', '/classes/Counter/' + counter.objectId, { time: { '__op': 'Increment', 'amount': 1 } })
+              .catch(error => {
+                console.error('Failed to save visitor count', error);
+              });
+          } else {
+              Counter('post', '/classes/Counter', { title, url, time: 1 })
+                .then(response => response.json())
+                .then(() => {
+                  leancloudSelector(url).innerText = 1;
+                })
+                .catch(error => {
+                  console.error('Failed to create', error);
+                });
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    function showTime(Counter) {
+      var visitors = document.querySelectorAll('.leancloud_visitors');
+      var entries = [...visitors].map(element => {
+        return decodeURI(element.id);
+      });
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url: { '$in': entries } })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          for (let url of entries) {
+            let target = results.find(item => item.url === url);
+            leancloudSelector(url).innerText = target ? target.time : 0;
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    let { app_id, app_key, server_url } = {"enable":true,"app_id":"wxYx0BX9gaKA3XC4LuO2of0v-gzGzoHsz","app_key":"LQMcs6IDIE4YAm10vMsn9IYq","server_url":"https://wxyx0bx9.lc-cn-n1-shared.com","security":false};
+    function fetchData(api_server) {
+      var Counter = (method, url, data) => {
+        return fetch(`${api_server}/1.1${url}`, {
+          method,
+          headers: {
+            'X-LC-Id'     : app_id,
+            'X-LC-Key'    : app_key,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data)
+        });
+      };
+      if (CONFIG.page.isPost) {
+        if (CONFIG.hostname !== location.hostname) return;
+        addCount(Counter);
+      } else if (document.querySelectorAll('.post-title-link').length >= 1) {
+        showTime(Counter);
+      }
+    }
+
+    let api_server = app_id.slice(-9) !== '-MdYXbMMI' ? server_url : `https://${app_id.slice(0, 8).toLowerCase()}.api.lncldglobal.com`;
+
+    if (api_server) {
+      fetchData(api_server);
+    } else {
+      fetch('https://app-router.leancloud.cn/2/route?appId=' + app_id)
+        .then(response => response.json())
+        .then(({ api_server }) => {
+          fetchData('https://' + api_server);
+        });
+    }
+  })();
+</script>
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

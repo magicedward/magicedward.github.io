@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"edward.org.cn","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="android kernel version 显示dirty (2012-03-15 13:09:39)  转载▼ 标签：   杂谈 分类： linux  １.cat &#x2F;proc&#x2F;version的实现: 平时的时候我们都在用cat &#x2F;proc&#x2F;version来获得我们内核的版本号，代码在:kernel&#x2F;fs&#x2F;proc&#x2F;version.c。 [cpp] view plaincopy static i">
+<meta property="og:type" content="article">
+<meta property="og:title" content="android kernel version">
+<meta property="og:url" content="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/android%20kernel%20version/index.html">
+<meta property="og:site_name" content="点点滴滴">
+<meta property="og:description" content="android kernel version 显示dirty (2012-03-15 13:09:39)  转载▼ 标签：   杂谈 分类： linux  １.cat &#x2F;proc&#x2F;version的实现: 平时的时候我们都在用cat &#x2F;proc&#x2F;version来获得我们内核的版本号，代码在:kernel&#x2F;fs&#x2F;proc&#x2F;version.c。 [cpp] view plaincopy static i">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-12-31T06:48:00.867Z">
+<meta property="article:modified_time" content="2020-01-16T04:37:32.931Z">
+<meta property="article:author" content="Edward">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/android%20kernel%20version/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>android kernel version | 点点滴滴</title>
+  
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?a92ed22eafce466e7a7b17546bb0dc6f";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">点点滴滴</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/android%20kernel%20version/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/avatar.gif">
+      <meta itemprop="name" content="Edward">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="点点滴滴">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          android kernel version
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-12-31 14:48:00" itemprop="dateCreated datePublished" datetime="2020-12-31T14:48:00+08:00">2020-12-31</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-01-16 12:37:32" itemprop="dateModified" datetime="2020-01-16T12:37:32+08:00">2020-01-16</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%83%82%E7%AC%94%E5%A4%B4/" itemprop="url" rel="index"><span itemprop="name">烂笔头</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/android%20kernel%20version/" class="post-meta-item leancloud_visitors" data-flag-title="android kernel version" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>android kernel version 显示dirty</p>
+<p>(2012-03-15 13:09:39) </p>
+<p>转载▼</p>
+<p>标签：  </p>
+<p>杂谈</p>
+<p>分类： linux </p>
+<p>１.cat /proc/version的实现:</p>
+<p>平时的时候我们都在用cat /proc/version来获得我们内核的版本号，代码在:kernel/fs/proc/version.c。</p>
+<p>[cpp] view plaincopy</p>
+<p>static int version_proc_show(struct seq_file *m, void *v)    {        seq_printf(m, linux_proc_banner,            utsname()-&gt;sysname,            utsname()-&gt;release,            utsname()-&gt;version);        return 0;    }            static int version_proc_open(struct inode *inode, struct file *file)    {        return single_open(file, version_proc_show, NULL);    }            static const struct file_operations version_proc_fops = {        .open       = version_proc_open,        .read       = seq_read,        .llseek     = seq_lseek,        .release    = single_release,    };            static int __init proc_version_init(void)    {        proc_create(&quot;version&quot;, 0, NULL, &amp;version_proc_fops);        return 0;    }    module_init(proc_version_init);     </p>
+<p>这里看到show，是不是紧张了，现在就看看这些值是哪里赋值的。来看include/linux/utsname.h</p>
+<p>[cpp] view plaincopy</p>
+<p>static inline struct new_utsname *utsname(void)    {        return ¤t-&gt;nsproxy-&gt;uts_ns-&gt;name;    }     </p>
+<p>在utsname中有一个nsproxy。这个在kernel/nsproxy中定义了uts_ns</p>
+<p>[cpp] view plaincopy</p>
+<p>struct nsproxy init_nsproxy = {        .count  = ATOMIC_INIT(1),        .uts_ns = &amp;init_uts_ns,    #if defined(CONFIG_POSIX_MQUEUE) || defined(CONFIG_SYSVIPC)        .ipc_ns = &amp;init_ipc_ns,    #endif        .mnt_ns = NULL,        .pid_ns = &amp;init_pid_ns,    #ifdef CONFIG_NET        .net_ns = &amp;init_net,    #endif    };     </p>
+<p>看到了所使用的uts_ns了吧，在init/version.c中</p>
+<p>[cpp] view plaincopy</p>
+<p>struct uts_namespace init_uts_ns = {        .kref = {            .refcount   = ATOMIC_INIT(2),        },        .name = {            .sysname    = UTS_SYSNAME,            .nodename   = UTS_NODENAME,            .release    = UTS_RELEASE,            .version    = UTS_VERSION,            .machine    = UTS_MACHINE,            .domainname = UTS_DOMAINNAME,        },    }; </p>
+<p>EXPORT_SYMBOL_GPL(init_uts_ns);<br>const char linux_banner[] =<br> &quot;Linux version &quot; UTS_RELEASE &quot; (&quot; LINUX_COMPILE_BY &quot;@&quot;<br> LINUX_COMPILE_HOST &quot;) (&quot; LINUX_COMPILER &quot;) &quot; UTS_VERSION &quot;\n&quot;;<br>const char linux_proc_banner[] =<br> &quot;%s version %s\n&quot;;<br> &quot; (&quot; LINUX_COMPILE_BY &quot;@&quot; LINUX_COMPILE_HOST &quot;)&quot;<br> &quot; (&quot; LINUX_COMPILER &quot;) %s\n&quot;;<br>所以我们在version_proc_show中看到的utsname中使用了version等等。<br>言归正传，看看init_uts_ns中的UTS_VERSION的定义，where？<br>在kernel/include/generated/compile.h中，看到这里去找文件，( ⊙ o ⊙ )啊！，怎么没有你说的？？稍等，继续往下看。<br>在kernel/scripts/mkcompile_h文件中呢，这里都是用脚本来生成的compile.h这个文件。<br>等编译完后会成/out/debug/target/product/qaj30/obj/KERNEL/include/linux下生成<br>autoconf.h  bounds.h  compile.h  utsrelease.h  version.h<br>cat utstrelease.h :<br>#define UTS_RELEASE &quot;2.6.32.9-g571ece4-dirty&quot;<br>2. utstrelease.h的生成:<br>　kernel/Makefile:<br>uts_len := 64<br>define filechk_utsrelease.h<br> if [ <code>echo -n &amp;quot;$(KERNELRELEASE)&amp;quot; | wc -c </code> -gt $(uts_len) ]; then <br> echo ‘&quot;$(KERNELRELEASE)&quot; exceeds $(uts_len) characters’ &gt;&amp;2;    <br> exit 1;                                                         <br> fi;                                                               <br> (echo #define UTS_RELEASE &amp;quot;$(KERNELRELEASE)&amp;quot;;)<br>endef<br>define filechk_version.h<br> (echo #define LINUX_VERSION_CODE $(shell                             <br> expr $(VERSION) * 65536 + $(PATCHLEVEL) * 256 + $(SUBLEVEL));     <br> echo ‘#define KERNEL_VERSION(a,b,c) (((a) &lt;&lt; 16) + ((b) &lt;&lt; 8) + (c))’;)<br>endef<br>include/linux/version.h: $(srctree)/Makefile FORCE　　　　　　　　//version.h的生成<br> $(call filechk,version.h)<br>include/linux/utsrelease.h: include/config/kernel.release FORCE          //utstrelease.h的生成<br> $(call filechk,utsrelease.h)<br>可以看出UTS_RELEASE 是由KERNELRELEASE生成:</p>
+<h1 id="Read-KERNELRELEASE-from-include-config-kernel-release-if-it-exists"><a href="#Read-KERNELRELEASE-from-include-config-kernel-release-if-it-exists" class="headerlink" title="Read KERNELRELEASE from include/config/kernel.release (if it exists)"></a>Read KERNELRELEASE from include/config/kernel.release (if it exists)</h1><p>KERNELRELEASE = $(shell cat include/config/kernel.release 2&gt; /dev/null)<br>KERNELVERSION = $(VERSION).$(PATCHLEVEL).$(SUBLEVEL)$(EXTRAVERSION)<br>３.kernel.release 的生成:</p>
+<h1 id="Build-the-kernel-release-string"><a href="#Build-the-kernel-release-string" class="headerlink" title="Build the kernel release string"></a>Build the kernel release string</h1><h1 id=""><a href="#" class="headerlink" title=""></a></h1><h1 id="The-KERNELRELEASE-value-built-here-is-stored-in-the-file"><a href="#The-KERNELRELEASE-value-built-here-is-stored-in-the-file" class="headerlink" title="The KERNELRELEASE value built here is stored in the file"></a>The KERNELRELEASE value built here is stored in the file</h1><h1 id="include-config-kernel-release-and-is-used-when-executing-several"><a href="#include-config-kernel-release-and-is-used-when-executing-several" class="headerlink" title="include/config/kernel.release, and is used when executing several"></a>include/config/kernel.release, and is used when executing several</h1><h1 id="make-targets-such-as-quot-make-install-quot-or-quot-make-modules-install-quot"><a href="#make-targets-such-as-quot-make-install-quot-or-quot-make-modules-install-quot" class="headerlink" title="make targets, such as &quot;make install&quot; or &quot;make modules_install.&quot;"></a>make targets, such as &quot;make install&quot; or &quot;make modules_install.&quot;</h1><h1 id="-1"><a href="#-1" class="headerlink" title=""></a></h1><h1 id="The-eventual-kernel-release-string-consists-of-the-following-fields"><a href="#The-eventual-kernel-release-string-consists-of-the-following-fields" class="headerlink" title="The eventual kernel release string consists of the following fields,"></a>The eventual kernel release string consists of the following fields,</h1><h1 id="shown-in-a-hierarchical-format-to-show-how-smaller-parts-are-concatenated"><a href="#shown-in-a-hierarchical-format-to-show-how-smaller-parts-are-concatenated" class="headerlink" title="shown in a hierarchical format to show how smaller parts are concatenated"></a>shown in a hierarchical format to show how smaller parts are concatenated</h1><h1 id="to-form-the-larger-and-final-value-with-values-coming-from-places-like"><a href="#to-form-the-larger-and-final-value-with-values-coming-from-places-like" class="headerlink" title="to form the larger and final value, with values coming from places like"></a>to form the larger and final value, with values coming from places like</h1><h1 id="the-Makefile-kernel-config-options-make-command-line-options-and-or"><a href="#the-Makefile-kernel-config-options-make-command-line-options-and-or" class="headerlink" title="the Makefile, kernel config options, make command line options and/or"></a>the Makefile, kernel config options, make command line options and/or</h1><h1 id="SCM-tag-information"><a href="#SCM-tag-information" class="headerlink" title="SCM tag information."></a>SCM tag information.</h1><h1 id="-2"><a href="#-2" class="headerlink" title=""></a></h1><h1 id="KERNELVERSION"><a href="#KERNELVERSION" class="headerlink" title="$(KERNELVERSION)"></a>$(KERNELVERSION)</h1><h1 id="VERSION-eg-2"><a href="#VERSION-eg-2" class="headerlink" title="$(VERSION)                    eg, 2"></a>$(VERSION)                    eg, 2</h1><h1 id="PATCHLEVEL-eg-6"><a href="#PATCHLEVEL-eg-6" class="headerlink" title="$(PATCHLEVEL)                 eg, 6"></a>$(PATCHLEVEL)                 eg, 6</h1><h1 id="SUBLEVEL-eg-18"><a href="#SUBLEVEL-eg-18" class="headerlink" title="$(SUBLEVEL)                   eg, 18"></a>$(SUBLEVEL)                   eg, 18</h1><h1 id="EXTRAVERSION-eg-rc6"><a href="#EXTRAVERSION-eg-rc6" class="headerlink" title="$(EXTRAVERSION)               eg, -rc6"></a>$(EXTRAVERSION)               eg, -rc6</h1><h1 id="localver-full"><a href="#localver-full" class="headerlink" title="$(localver-full)"></a>$(localver-full)</h1><h1 id="localver"><a href="#localver" class="headerlink" title="$(localver)"></a>$(localver)</h1><h1 id="localversion-files-without-backups-containing-‘-’"><a href="#localversion-files-without-backups-containing-‘-’" class="headerlink" title="localversion*               (files without backups, containing ‘~’)"></a>localversion*               (files without backups, containing ‘~’)</h1><h1 id="CONFIG-LOCALVERSION-from-kernel-config-setting"><a href="#CONFIG-LOCALVERSION-from-kernel-config-setting" class="headerlink" title="$(CONFIG_LOCALVERSION)      (from kernel config setting)"></a>$(CONFIG_LOCALVERSION)      (from kernel config setting)</h1><h1 id="localver-auto-only-if-CONFIG-LOCALVERSION-AUTO-is-set"><a href="#localver-auto-only-if-CONFIG-LOCALVERSION-AUTO-is-set" class="headerlink" title="$(localver-auto)              (only if CONFIG_LOCALVERSION_AUTO is set)"></a>$(localver-auto)              (only if CONFIG_LOCALVERSION_AUTO is set)</h1><h1 id="scripts-setlocalversion-SCM-tag-if-one-exists"><a href="#scripts-setlocalversion-SCM-tag-if-one-exists" class="headerlink" title="./scripts/setlocalversion   (SCM tag, if one exists)"></a>./scripts/setlocalversion   (SCM tag, if one exists)</h1><h1 id="LOCALVERSION-from-make-command-line-if-provided"><a href="#LOCALVERSION-from-make-command-line-if-provided" class="headerlink" title="$(LOCALVERSION)             (from make command line if provided)"></a>$(LOCALVERSION)             (from make command line if provided)</h1><h1 id="-3"><a href="#-3" class="headerlink" title=""></a></h1><h1 id="Note-how-the-final-localver-auto-string-is-included-only-if-the"><a href="#Note-how-the-final-localver-auto-string-is-included-only-if-the" class="headerlink" title="Note how the final $(localver-auto) string is included only if the"></a>Note how the final $(localver-auto) string is included <em>only</em> if the</h1><h1 id="kernel-config-option-CONFIG-LOCALVERSION-AUTO-is-selected-Also-at-the"><a href="#kernel-config-option-CONFIG-LOCALVERSION-AUTO-is-selected-Also-at-the" class="headerlink" title="kernel config option CONFIG_LOCALVERSION_AUTO is selected.  Also, at the"></a>kernel config option CONFIG_LOCALVERSION_AUTO is selected.  Also, at the</h1><h1 id="moment-only-git-is-supported-but-other-SCMs-can-edit-the-script"><a href="#moment-only-git-is-supported-but-other-SCMs-can-edit-the-script" class="headerlink" title="moment, only git is supported but other SCMs can edit the script"></a>moment, only git is supported but other SCMs can edit the script</h1><h1 id="scripts-setlocalversion-and-add-the-appropriate-checks-as-needed"><a href="#scripts-setlocalversion-and-add-the-appropriate-checks-as-needed" class="headerlink" title="scripts/setlocalversion and add the appropriate checks as needed."></a>scripts/setlocalversion and add the appropriate checks as needed.</h1><p>pattern = &quot;.<em>/localversion[^~]</em>&quot;<br>string  = $(shell cat /dev/null <br> <code>find $(objtree) $(srctree) -maxdepth 1 -regex $(pattern) | sort -u</code>)<br>localver = $(subst $(space),, $(string) <br> $(patsubst &quot;%&quot;,%,$(CONFIG_LOCALVERSION)))</p>
+<h1 id="If-CONFIG-LOCALVERSION-AUTO-is-set-scripts-setlocalversion-is-called"><a href="#If-CONFIG-LOCALVERSION-AUTO-is-set-scripts-setlocalversion-is-called" class="headerlink" title="If CONFIG_LOCALVERSION_AUTO is set scripts/setlocalversion is called"></a>If CONFIG_LOCALVERSION_AUTO is set scripts/setlocalversion is called</h1><h1 id="and-if-the-SCM-is-know-a-tag-from-the-SCM-is-appended"><a href="#and-if-the-SCM-is-know-a-tag-from-the-SCM-is-appended" class="headerlink" title="and if the SCM is know a tag from the SCM is appended."></a>and if the SCM is know a tag from the SCM is appended.</h1><h1 id="The-appended-tag-is-determined-by-the-SCM-used"><a href="#The-appended-tag-is-determined-by-the-SCM-used" class="headerlink" title="The appended tag is determined by the SCM used."></a>The appended tag is determined by the SCM used.</h1><h1 id="-4"><a href="#-4" class="headerlink" title=""></a></h1><h1 id="scmversion-is-used-when-generating-rpm-packages-so-we-do-not-loose"><a href="#scmversion-is-used-when-generating-rpm-packages-so-we-do-not-loose" class="headerlink" title=".scmversion is used when generating rpm packages so we do not loose"></a>.scmversion is used when generating rpm packages so we do not loose</h1><h1 id="the-version-information-from-the-SCM-when-we-do-the-build-of-the-kernel"><a href="#the-version-information-from-the-SCM-when-we-do-the-build-of-the-kernel" class="headerlink" title="the version information from the SCM when we do the build of the kernel"></a>the version information from the SCM when we do the build of the kernel</h1><h1 id="from-the-copied-source"><a href="#from-the-copied-source" class="headerlink" title="from the copied source"></a>from the copied source</h1><p>ifdef CONFIG_LOCALVERSION_AUTO       //yes<br>ifeq ($(wildcard .scmversion),)                 //don,t have .scmversion<br> _localver-auto = $(shell $(CONFIG_SHELL) <br> $(srctree)/scripts/setlocalversion $(srctree))   //如果带–save-scmversion参数就会生成.scmversion,但是脚本没有带,所以不会有.scmversion<br>else<br> _localver-auto = $(shell cat .scmversion 2&gt; /dev/null)<br>endif<br> localver-auto  = $(LOCALVERSION)$(_localver-auto)<br>endif<br>localver-full = $(localver)$(localver-auto)</p>
+<h1 id="Store-new-KERNELRELASE-string-in-include-config-kernel-release"><a href="#Store-new-KERNELRELASE-string-in-include-config-kernel-release" class="headerlink" title="Store (new) KERNELRELASE string in include/config/kernel.release"></a>Store (new) KERNELRELASE string in include/config/kernel.release</h1><p>kernelrelease = $(KERNELVERSION)$(localver-full)<br>include/config/kernel.release: include/config/auto.conf FORCE<br> $(Q)rm -f $@<br> $(Q)echo $(kernelrelease) &gt; $@<br>/kernel/scripts/setlocalversion:<br>#!/bin/sh<br>#</p>
+<h1 id="This-scripts-adds-local-version-information-from-the-version"><a href="#This-scripts-adds-local-version-information-from-the-version" class="headerlink" title="This scripts adds local version information from the version"></a>This scripts adds local version information from the version</h1><h1 id="control-systems-git-mercurial-hg-and-subversion-svn"><a href="#control-systems-git-mercurial-hg-and-subversion-svn" class="headerlink" title="control systems git, mercurial (hg) and subversion (svn)."></a>control systems git, mercurial (hg) and subversion (svn).</h1><h1 id="-5"><a href="#-5" class="headerlink" title=""></a></h1><h1 id="If-something-goes-wrong-send-a-mail-the-kernel-build-mailinglist"><a href="#If-something-goes-wrong-send-a-mail-the-kernel-build-mailinglist" class="headerlink" title="If something goes wrong, send a mail the kernel build mailinglist"></a>If something goes wrong, send a mail the kernel build mailinglist</h1><h1 id="see-MAINTAINERS-and-CC-Nico-Schottelius"><a href="#see-MAINTAINERS-and-CC-Nico-Schottelius" class="headerlink" title="(see MAINTAINERS) and CC Nico Schottelius"></a>(see MAINTAINERS) and CC Nico Schottelius</h1><h1 id="lt-nico-linuxsetlocalversion-at-schottelius-org-gt"><a href="#lt-nico-linuxsetlocalversion-at-schottelius-org-gt" class="headerlink" title="&lt;nico-linuxsetlocalversion -at- schottelius.org&gt;."></a>&lt;nico-linuxsetlocalversion -at- schottelius.org&gt;.</h1><h1 id="-6"><a href="#-6" class="headerlink" title=""></a></h1><h1 id="-7"><a href="#-7" class="headerlink" title=""></a></h1><p>usage() {<br> echo &quot;Usage: $0 [–save-scmversion] [srctree]&quot; &gt;&amp;2<br> exit 1<br>}<br>scm_only=false<br>srctree=.<br>if test &quot;$1&quot; = &quot;–save-scmversion&quot;; then<br> scm_only=true<br> shift<br>fi<br>if test $# -gt 0; then<br> srctree=$1<br> shift<br>fi<br>if test $# -gt 0 -o ! -d &quot;$srctree&quot;; then<br> usage<br>fi</p>
+<h1 id="Check-for-git-and-a-git-repo"><a href="#Check-for-git-and-a-git-repo" class="headerlink" title="Check for git and a git repo."></a>Check for git and a git repo.</h1><p>if head=<code>git rev-parse --verify --short HEAD 2&amp;gt;/dev/null</code>; then<br> # If we are at a tagged commit (like &quot;v2.6.30-rc6&quot;), we ignore it,<br> # because this version is defined in the top level Makefile.<br> if [ -z &quot;<code>git describe --exact-match 2&amp;gt;/dev/null</code>&quot; ]; then<br> # If we are past a tagged commit (like &quot;v2.6.30-rc5-302-g72357d5&quot;),<br> # we pretty print it.<br> if atag=&quot;<code>git describe 2&amp;gt;/dev/null</code>&quot;; then<br> echo &quot;$atag&quot; | awk -F- ‘{printf(&quot;-d-%s&quot;, $(NF-1),$(NF))}’<br> # If we don’t have a tag at all we print -g{commitish}.<br> else<br> printf ‘%s%s’ -g $head<br> fi<br> fi<br> # Is this git on svn?<br> if git config –get svn-remote.svn.url &gt;/dev/null; then<br> printf – ‘-svn%s’ &quot;<code>git svn find-rev $head</code>&quot;<br> fi<br> # Update index only on r/w media<br> [ -w . ] &amp;&amp; git update-index –refresh –unmerged &gt; /dev/null<br> # Check for uncommitted changes　//如果kernel code有修改并且没有git commit,就会生成-dirty<br>if git diff-index –name-only HEAD | grep -v &quot;^scripts/package&quot; <br> | read dummy; then<br> printf ‘%s’ -dirty<br>fi<br> # All done with git<br> exit<br>fi</p>
+<h1 id="Check-for-mercurial-and-a-mercurial-repo"><a href="#Check-for-mercurial-and-a-mercurial-repo" class="headerlink" title="Check for mercurial and a mercurial repo."></a>Check for mercurial and a mercurial repo.</h1><p>if hgid=<code>hg id 2&amp;gt;/dev/null</code>; then<br> tag=<code>printf &#39;%s&#39; &amp;quot;$hgid&amp;quot; | cut -d&#39; &#39; -f2</code><br> # Do we have an untagged version?<br> if [ -z &quot;$tag&quot; -o &quot;$tag&quot; = tip ]; then<br> id=<code>printf &#39;%s&#39; &amp;quot;$hgid&amp;quot; | sed &#39;s/[+ ].*//&#39;</code><br> printf ‘%s%s’ -hg &quot;$id&quot;<br> fi<br> # Are there uncommitted changes?<br> # These are represented by + after the changeset id.<br> case &quot;$hgid&quot; in<br> <em>+|</em>+\ *) printf ‘%s’ -dirty ;;<br> esac<br> # All done with mercurial<br> exit<br>fi</p>
+<h1 id="Check-for-svn-and-a-svn-repo"><a href="#Check-for-svn-and-a-svn-repo" class="headerlink" title="Check for svn and a svn repo."></a>Check for svn and a svn repo.</h1><p>if rev=<code>svn info 2&amp;gt;/dev/null | grep &#39;^Last Changed Rev&#39;</code>; then<br> rev=<code>echo $rev | awk &#39;&#123;print $NF&#125;&#39;</code><br> printf – ‘-svn%s’ &quot;$rev&quot;<br> # All done with svn<br> exit<br>fi  </p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/Android%20Input%E5%AD%90%E7%B3%BB%E7%BB%9F%E6%9E%B6%E6%9E%84/" rel="prev" title="Android Input子系统架构">
+      <i class="fa fa-chevron-left"></i> Android Input子系统架构
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/android%20keyevent%20%E6%A8%A1%E6%8B%9F%E6%8C%89%E9%94%AE/" rel="next" title="android keyevent 模拟按键">
+      android keyevent 模拟按键 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Read-KERNELRELEASE-from-include-config-kernel-release-if-it-exists"><span class="nav-number">1.</span> <span class="nav-text">Read KERNELRELEASE from include&#x2F;config&#x2F;kernel.release (if it exists)</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Build-the-kernel-release-string"><span class="nav-number">2.</span> <span class="nav-text">Build the kernel release string</span></a></li><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">3.</span> <span class="nav-text"></span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#The-KERNELRELEASE-value-built-here-is-stored-in-the-file"><span class="nav-number">4.</span> <span class="nav-text">The KERNELRELEASE value built here is stored in the file</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#include-config-kernel-release-and-is-used-when-executing-several"><span class="nav-number">5.</span> <span class="nav-text">include&#x2F;config&#x2F;kernel.release, and is used when executing several</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#make-targets-such-as-quot-make-install-quot-or-quot-make-modules-install-quot"><span class="nav-number">6.</span> <span class="nav-text">make targets, such as &quot;make install&quot; or &quot;make modules_install.&quot;</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#-1"><span class="nav-number">7.</span> <span class="nav-text"></span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#The-eventual-kernel-release-string-consists-of-the-following-fields"><span class="nav-number">8.</span> <span class="nav-text">The eventual kernel release string consists of the following fields,</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#shown-in-a-hierarchical-format-to-show-how-smaller-parts-are-concatenated"><span class="nav-number">9.</span> <span class="nav-text">shown in a hierarchical format to show how smaller parts are concatenated</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#to-form-the-larger-and-final-value-with-values-coming-from-places-like"><span class="nav-number">10.</span> <span class="nav-text">to form the larger and final value, with values coming from places like</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#the-Makefile-kernel-config-options-make-command-line-options-and-or"><span class="nav-number">11.</span> <span class="nav-text">the Makefile, kernel config options, make command line options and&#x2F;or</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#SCM-tag-information"><span class="nav-number">12.</span> <span class="nav-text">SCM tag information.</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#-2"><span class="nav-number">13.</span> <span class="nav-text"></span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#KERNELVERSION"><span class="nav-number">14.</span> <span class="nav-text">$(KERNELVERSION)</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#VERSION-eg-2"><span class="nav-number">15.</span> <span class="nav-text">$(VERSION)                    eg, 2</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#PATCHLEVEL-eg-6"><span class="nav-number">16.</span> <span class="nav-text">$(PATCHLEVEL)                 eg, 6</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#SUBLEVEL-eg-18"><span class="nav-number">17.</span> <span class="nav-text">$(SUBLEVEL)                   eg, 18</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#EXTRAVERSION-eg-rc6"><span class="nav-number">18.</span> <span class="nav-text">$(EXTRAVERSION)               eg, -rc6</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#localver-full"><span class="nav-number">19.</span> <span class="nav-text">$(localver-full)</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#localver"><span class="nav-number">20.</span> <span class="nav-text">$(localver)</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#localversion-files-without-backups-containing-%E2%80%98-%E2%80%99"><span class="nav-number">21.</span> <span class="nav-text">localversion*               (files without backups, containing ‘~’)</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#CONFIG-LOCALVERSION-from-kernel-config-setting"><span class="nav-number">22.</span> <span class="nav-text">$(CONFIG_LOCALVERSION)      (from kernel config setting)</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#localver-auto-only-if-CONFIG-LOCALVERSION-AUTO-is-set"><span class="nav-number">23.</span> <span class="nav-text">$(localver-auto)              (only if CONFIG_LOCALVERSION_AUTO is set)</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#scripts-setlocalversion-SCM-tag-if-one-exists"><span class="nav-number">24.</span> <span class="nav-text">.&#x2F;scripts&#x2F;setlocalversion   (SCM tag, if one exists)</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#LOCALVERSION-from-make-command-line-if-provided"><span class="nav-number">25.</span> <span class="nav-text">$(LOCALVERSION)             (from make command line if provided)</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#-3"><span class="nav-number">26.</span> <span class="nav-text"></span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Note-how-the-final-localver-auto-string-is-included-only-if-the"><span class="nav-number">27.</span> <span class="nav-text">Note how the final $(localver-auto) string is included only if the</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#kernel-config-option-CONFIG-LOCALVERSION-AUTO-is-selected-Also-at-the"><span class="nav-number">28.</span> <span class="nav-text">kernel config option CONFIG_LOCALVERSION_AUTO is selected.  Also, at the</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#moment-only-git-is-supported-but-other-SCMs-can-edit-the-script"><span class="nav-number">29.</span> <span class="nav-text">moment, only git is supported but other SCMs can edit the script</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#scripts-setlocalversion-and-add-the-appropriate-checks-as-needed"><span class="nav-number">30.</span> <span class="nav-text">scripts&#x2F;setlocalversion and add the appropriate checks as needed.</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#If-CONFIG-LOCALVERSION-AUTO-is-set-scripts-setlocalversion-is-called"><span class="nav-number">31.</span> <span class="nav-text">If CONFIG_LOCALVERSION_AUTO is set scripts&#x2F;setlocalversion is called</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#and-if-the-SCM-is-know-a-tag-from-the-SCM-is-appended"><span class="nav-number">32.</span> <span class="nav-text">and if the SCM is know a tag from the SCM is appended.</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#The-appended-tag-is-determined-by-the-SCM-used"><span class="nav-number">33.</span> <span class="nav-text">The appended tag is determined by the SCM used.</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#-4"><span class="nav-number">34.</span> <span class="nav-text"></span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#scmversion-is-used-when-generating-rpm-packages-so-we-do-not-loose"><span class="nav-number">35.</span> <span class="nav-text">.scmversion is used when generating rpm packages so we do not loose</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#the-version-information-from-the-SCM-when-we-do-the-build-of-the-kernel"><span class="nav-number">36.</span> <span class="nav-text">the version information from the SCM when we do the build of the kernel</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#from-the-copied-source"><span class="nav-number">37.</span> <span class="nav-text">from the copied source</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Store-new-KERNELRELASE-string-in-include-config-kernel-release"><span class="nav-number">38.</span> <span class="nav-text">Store (new) KERNELRELASE string in include&#x2F;config&#x2F;kernel.release</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#This-scripts-adds-local-version-information-from-the-version"><span class="nav-number">39.</span> <span class="nav-text">This scripts adds local version information from the version</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#control-systems-git-mercurial-hg-and-subversion-svn"><span class="nav-number">40.</span> <span class="nav-text">control systems git, mercurial (hg) and subversion (svn).</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#-5"><span class="nav-number">41.</span> <span class="nav-text"></span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#If-something-goes-wrong-send-a-mail-the-kernel-build-mailinglist"><span class="nav-number">42.</span> <span class="nav-text">If something goes wrong, send a mail the kernel build mailinglist</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#see-MAINTAINERS-and-CC-Nico-Schottelius"><span class="nav-number">43.</span> <span class="nav-text">(see MAINTAINERS) and CC Nico Schottelius</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#lt-nico-linuxsetlocalversion-at-schottelius-org-gt"><span class="nav-number">44.</span> <span class="nav-text">&lt;nico-linuxsetlocalversion -at- schottelius.org&gt;.</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#-6"><span class="nav-number">45.</span> <span class="nav-text"></span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#-7"><span class="nav-number">46.</span> <span class="nav-text"></span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Check-for-git-and-a-git-repo"><span class="nav-number">47.</span> <span class="nav-text">Check for git and a git repo.</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Check-for-mercurial-and-a-mercurial-repo"><span class="nav-number">48.</span> <span class="nav-text">Check for mercurial and a mercurial repo.</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Check-for-svn-and-a-svn-repo"><span class="nav-number">49.</span> <span class="nav-text">Check for svn and a svn repo.</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Edward"
+      src="/uploads/avatar.gif">
+  <p class="site-author-name" itemprop="name">Edward</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">570</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Edward</span>
+</div>
+
+        
+
+
+
+
+
+
+<script>
+  (function() {
+    function leancloudSelector(url) {
+      url = encodeURI(url);
+      return document.getElementById(url).querySelector('.leancloud-visitors-count');
+    }
+
+    function addCount(Counter) {
+      var visitors = document.querySelector('.leancloud_visitors');
+      var url = decodeURI(visitors.id);
+      var title = visitors.dataset.flagTitle;
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          if (results.length > 0) {
+            var counter = results[0];
+            leancloudSelector(url).innerText = counter.time + 1;
+            Counter('put', '/classes/Counter/' + counter.objectId, { time: { '__op': 'Increment', 'amount': 1 } })
+              .catch(error => {
+                console.error('Failed to save visitor count', error);
+              });
+          } else {
+              Counter('post', '/classes/Counter', { title, url, time: 1 })
+                .then(response => response.json())
+                .then(() => {
+                  leancloudSelector(url).innerText = 1;
+                })
+                .catch(error => {
+                  console.error('Failed to create', error);
+                });
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    function showTime(Counter) {
+      var visitors = document.querySelectorAll('.leancloud_visitors');
+      var entries = [...visitors].map(element => {
+        return decodeURI(element.id);
+      });
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url: { '$in': entries } })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          for (let url of entries) {
+            let target = results.find(item => item.url === url);
+            leancloudSelector(url).innerText = target ? target.time : 0;
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    let { app_id, app_key, server_url } = {"enable":true,"app_id":"wxYx0BX9gaKA3XC4LuO2of0v-gzGzoHsz","app_key":"LQMcs6IDIE4YAm10vMsn9IYq","server_url":"https://wxyx0bx9.lc-cn-n1-shared.com","security":false};
+    function fetchData(api_server) {
+      var Counter = (method, url, data) => {
+        return fetch(`${api_server}/1.1${url}`, {
+          method,
+          headers: {
+            'X-LC-Id'     : app_id,
+            'X-LC-Key'    : app_key,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data)
+        });
+      };
+      if (CONFIG.page.isPost) {
+        if (CONFIG.hostname !== location.hostname) return;
+        addCount(Counter);
+      } else if (document.querySelectorAll('.post-title-link').length >= 1) {
+        showTime(Counter);
+      }
+    }
+
+    let api_server = app_id.slice(-9) !== '-MdYXbMMI' ? server_url : `https://${app_id.slice(0, 8).toLowerCase()}.api.lncldglobal.com`;
+
+    if (api_server) {
+      fetchData(api_server);
+    } else {
+      fetch('https://app-router.leancloud.cn/2/route?appId=' + app_id)
+        .then(response => response.json())
+        .then(({ api_server }) => {
+          fetchData('https://' + api_server);
+        });
+    }
+  })();
+</script>
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
