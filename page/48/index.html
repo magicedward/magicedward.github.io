@@ -187,103 +187,6 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/Android%E8%AE%BE%E5%A4%87%E8%8A%82%E7%82%B9%E7%9A%84%E5%88%9B%E5%BB%BA/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/uploads/avatar.gif">
-      <meta itemprop="name" content="Edward">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="点点滴滴">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/Android%E8%AE%BE%E5%A4%87%E8%8A%82%E7%82%B9%E7%9A%84%E5%88%9B%E5%BB%BA/" class="post-title-link" itemprop="url">Android设备节点的创建</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-12-31 14:48:00" itemprop="dateCreated datePublished" datetime="2020-12-31T14:48:00+08:00">2020-12-31</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-01-16 12:37:32" itemprop="dateModified" datetime="2020-01-16T12:37:32+08:00">2020-01-16</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E7%83%82%E7%AC%94%E5%A4%B4/" itemprop="url" rel="index"><span itemprop="name">烂笔头</span></a>
-                </span>
-            </span>
-
-          
-            <span id="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/Android%E8%AE%BE%E5%A4%87%E8%8A%82%E7%82%B9%E7%9A%84%E5%88%9B%E5%BB%BA/" class="post-meta-item leancloud_visitors" data-flag-title="Android设备节点的创建" title="阅读次数">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-eye"></i>
-              </span>
-              <span class="post-meta-item-text">阅读次数：</span>
-              <span class="leancloud-visitors-count"></span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>Android设备节点的创建</p>
-<p>在编写linux设备驱动程序的时候，很多时候都是利用mknod命令来手动创建设备节点的，带上名字和主次设备号就可以在/dev目录下生成设备节点。同样Android沿用了linux内核，很多设备驱动的节点是又是什么时候创建的呢？</p>
-<p>在kernel自解压模块加载完成之后，会去运行android第一个应用程序init。在init.c的main函数中。</p>
-<p>System/core/init/init.c</p>
-<p>int main(int argc, char **argv)</p>
-<p>{</p>
-<p>……</p>
-<p>action_for_each_trigger(&quot;boot&quot;, action_add_queue_tail);</p>
-<p>……</p>
-<p>}</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/Android%E8%AE%BE%E5%A4%87%E8%8A%82%E7%82%B9%E7%9A%84%E5%88%9B%E5%BB%BA/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/Android%E5%AA%92%E4%BD%93%E5%BA%93%E6%A1%86%E6%9E%B6Mediascanner/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1138,6 +1041,103 @@
   
   
 
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/Android%E7%BC%96%E8%AF%91/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/avatar.gif">
+      <meta itemprop="name" content="Edward">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="点点滴滴">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/Android%E7%BC%96%E8%AF%91/" class="post-title-link" itemprop="url">Android编译</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-12-31 14:48:00" itemprop="dateCreated datePublished" datetime="2020-12-31T14:48:00+08:00">2020-12-31</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-01-16 12:37:32" itemprop="dateModified" datetime="2020-01-16T12:37:32+08:00">2020-01-16</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%83%82%E7%AC%94%E5%A4%B4/" itemprop="url" rel="index"><span itemprop="name">烂笔头</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/Android%E7%BC%96%E8%AF%91/" class="post-meta-item leancloud_visitors" data-flag-title="Android编译" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>Android移植流程</p>
+<p>1.Seftup Develop Environment &amp;&amp; Get Android Source</p>
+<p>1)Host System –&gt; Git , Repo</p>
+<p>2)Getting Android Source Code</p>
+<p>2.Build Linux Kernel</p>
+<p>1)Configuration Option</p>
+<p>2)Code modification for Android</p>
+<p>3)Building Linux Kernel –&gt; uImage</p>
+<p>3.Build File System</p>
+<p>1)Produce file system</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/Android%E7%BC%96%E8%AF%91/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
 
   
   <nav class="pagination">
@@ -1209,7 +1209,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">554</span>
+          <span class="site-state-item-count">553</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
