@@ -187,6 +187,750 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/2.%E9%80%9A%E8%BF%87%E6%9F%A5%E7%9C%8BFFMPEG%E6%BA%90%E4%BB%A3%E7%A0%81%E6%88%91%E4%BB%AC%E5%8F%91%E7%8E%B0%EF%BC%8CAVPacket%E4%B8%AD%E7%9A%84/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/avatar.gif">
+      <meta itemprop="name" content="Edward">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="点点滴滴">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/2.%E9%80%9A%E8%BF%87%E6%9F%A5%E7%9C%8BFFMPEG%E6%BA%90%E4%BB%A3%E7%A0%81%E6%88%91%E4%BB%AC%E5%8F%91%E7%8E%B0%EF%BC%8CAVPacket%E4%B8%AD%E7%9A%84/" class="post-title-link" itemprop="url">2</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-12-31 14:48:02" itemprop="dateCreated datePublished" datetime="2020-12-31T14:48:02+08:00">2020-12-31</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-01-16 12:37:34" itemprop="dateModified" datetime="2020-01-16T12:37:34+08:00">2020-01-16</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%83%82%E7%AC%94%E5%A4%B4/" itemprop="url" rel="index"><span itemprop="name">烂笔头</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/2.%E9%80%9A%E8%BF%87%E6%9F%A5%E7%9C%8BFFMPEG%E6%BA%90%E4%BB%A3%E7%A0%81%E6%88%91%E4%BB%AC%E5%8F%91%E7%8E%B0%EF%BC%8CAVPacket%E4%B8%AD%E7%9A%84/" class="post-meta-item leancloud_visitors" data-flag-title="2" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>2.通过查看FFMPEG源代码我们发现，AVPacket中的数据起始处没有分隔符(0x00000001), 也不是0x65、0x67、0x68、0x41等字节，所以可以AVPacket肯定这不是标准的nalu。其实，AVPacket前4个字表示的是nalu的长度，从第5个字节开始才是nalu的数据。所以直接将AVPacket前4个字节替换为0x00000001即可得到标准的nalu数据。</p>
+<p>具体代码如下：</p>
+<p>copy</p>
+<p>char nal_start[]={0,0,0,1};  </p>
+<p>fwrite(nal_start,4,1,fp);  </p>
+<p>fwrite(pkt-&gt;data+4,pkt-&gt;size-4,1,fp);  </p>
+<p>fclose(fp);  </p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/1%E3%80%81%E7%A6%81%E6%AD%A2%E6%89%80%E6%9C%89%E9%80%9A%E8%AE%AF%20--%20%E6%AD%A3%E5%B8%B8%E5%B7%A5%E4%BD%9C/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/avatar.gif">
+      <meta itemprop="name" content="Edward">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="点点滴滴">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/1%E3%80%81%E7%A6%81%E6%AD%A2%E6%89%80%E6%9C%89%E9%80%9A%E8%AE%AF%20--%20%E6%AD%A3%E5%B8%B8%E5%B7%A5%E4%BD%9C/" class="post-title-link" itemprop="url">1、禁止所有通讯 -- 正常工作</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-12-31 14:48:02" itemprop="dateCreated datePublished" datetime="2020-12-31T14:48:02+08:00">2020-12-31</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-01-16 12:37:33" itemprop="dateModified" datetime="2020-01-16T12:37:33+08:00">2020-01-16</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%83%82%E7%AC%94%E5%A4%B4/" itemprop="url" rel="index"><span itemprop="name">烂笔头</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/1%E3%80%81%E7%A6%81%E6%AD%A2%E6%89%80%E6%9C%89%E9%80%9A%E8%AE%AF%20--%20%E6%AD%A3%E5%B8%B8%E5%B7%A5%E4%BD%9C/" class="post-meta-item leancloud_visitors" data-flag-title="1、禁止所有通讯 -- 正常工作" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>1、禁止所有通讯 – 正常工作 </p>
+<p>iptables -P INPUT ACCEPT      </p>
+<p>iptables -P OUTPUT DROP      </p>
+<p>iptables -P FORWARD DROP   </p>
+<p>2、允许所有通讯 – 正常工作</p>
+<p>iptables -P INPUT ACCEPT      </p>
+<p>iptables -P OUTPUT ACCEPT  </p>
+<p>iptables -P FORWARD ACCEPT  </p>
+<p>3、清空所有规则 – 貌似工作不正常，如果在禁止所有通讯后，清空规则后上网极不正常，只有在允许所有通讯后才正常 </p>
+<p>iptables -F  </p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/1%E3%80%81%E7%A6%81%E6%AD%A2%E6%89%80%E6%9C%89%E9%80%9A%E8%AE%AF%20--%20%E6%AD%A3%E5%B8%B8%E5%B7%A5%E4%BD%9C/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/===%20sendevent%20===/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/avatar.gif">
+      <meta itemprop="name" content="Edward">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="点点滴滴">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/===%20sendevent%20===/" class="post-title-link" itemprop="url">=== sendevent ===</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-12-31 14:48:02" itemprop="dateCreated datePublished" datetime="2020-12-31T14:48:02+08:00">2020-12-31</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-01-16 12:37:32" itemprop="dateModified" datetime="2020-01-16T12:37:32+08:00">2020-01-16</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%83%82%E7%AC%94%E5%A4%B4/" itemprop="url" rel="index"><span itemprop="name">烂笔头</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/===%20sendevent%20===/" class="post-meta-item leancloud_visitors" data-flag-title="=== sendevent ===" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>命令格式2：adb shell sendevent [device] [type] [code] [value]</p>
+<p>发送时间,格式和上面的一样,需要注意的是在get中code显示的是十六进制,而send中需要用十进制,例如</p>
+<h1 id="sendevent-dev-input-event0-1-5-1"><a href="#sendevent-dev-input-event0-1-5-1" class="headerlink" title="sendevent /dev/input/event0 1 5 1"></a>sendevent /dev/input/event0 1 5 1</h1><p>这个命令就是发送数字4的keydown消息,所以在屏幕上就会一直打印出很多个4(因为没有发送keyup) </p>
+<p>如： adb shell sendevent /dev/input/event0 1 229 1 代表按下按下menu键</p>
+<p>adb shell sendevent /dev/input/event0 1 229 0 代表按下松开menu键</p>
+<p>说明：上述的命令需组合使用</p>
+<p>另外所知道的命令如下：</p>
+<p>Key Name                        CODE</p>
+<p>MENU                                 229</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/===%20sendevent%20===/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/%E2%80%9C+%E2%80%9D%E5%8F%B7%E7%9A%84%E4%BC%98%E5%85%88%E7%BA%A7%20%20%E7%A7%BB%E4%BD%8D/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/avatar.gif">
+      <meta itemprop="name" content="Edward">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="点点滴滴">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/%E2%80%9C+%E2%80%9D%E5%8F%B7%E7%9A%84%E4%BC%98%E5%85%88%E7%BA%A7%20%20%E7%A7%BB%E4%BD%8D/" class="post-title-link" itemprop="url">“+”号的优先级  移位</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-12-31 14:48:02" itemprop="dateCreated datePublished" datetime="2020-12-31T14:48:02+08:00">2020-12-31</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-01-16 12:37:32" itemprop="dateModified" datetime="2020-01-16T12:37:32+08:00">2020-01-16</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%83%82%E7%AC%94%E5%A4%B4/" itemprop="url" rel="index"><span itemprop="name">烂笔头</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/%E2%80%9C+%E2%80%9D%E5%8F%B7%E7%9A%84%E4%BC%98%E5%85%88%E7%BA%A7%20%20%E7%A7%BB%E4%BD%8D/" class="post-meta-item leancloud_visitors" data-flag-title="“+”号的优先级  移位" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>0x01&lt;&lt;2+3  的值为多少</p>
+<p> 1）在位移运算符计算时应注意运算符的优先级</p>
+<p>         0x01&lt;&lt;2+3；<br>结果为7 吗？测试一下。结果为32？别惊讶，32 才是正确答案。因 </p>
+<p>为“+”号的优先级比移位运算符的优先级高</p>
+<p>     2）左移和右移的位数不能大于数据的长度，不能小于0</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/%E5%AD%97%E7%AC%A6%E8%AE%BE%E5%A4%87%E9%A9%B1%E5%8A%A8%E3%80%81%E5%B9%B3%E5%8F%B0%E8%AE%BE%E5%A4%87%E9%A9%B1%E5%8A%A8%E3%80%81%E8%AE%BE%E5%A4%87%E9%A9%B1%E5%8A%A8%E6%A8%A1%E5%9E%8B%E3%80%81sysfs%E7%9A%84%E5%85%B3%E7%B3%BB/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/avatar.gif">
+      <meta itemprop="name" content="Edward">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="点点滴滴">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/%E5%AD%97%E7%AC%A6%E8%AE%BE%E5%A4%87%E9%A9%B1%E5%8A%A8%E3%80%81%E5%B9%B3%E5%8F%B0%E8%AE%BE%E5%A4%87%E9%A9%B1%E5%8A%A8%E3%80%81%E8%AE%BE%E5%A4%87%E9%A9%B1%E5%8A%A8%E6%A8%A1%E5%9E%8B%E3%80%81sysfs%E7%9A%84%E5%85%B3%E7%B3%BB/" class="post-title-link" itemprop="url">字符设备驱动、平台设备驱动、设备驱动模型、sysfs的关系</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-12-31 14:48:02" itemprop="dateCreated datePublished" datetime="2020-12-31T14:48:02+08:00">2020-12-31</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-01-16 12:37:32" itemprop="dateModified" datetime="2020-01-16T12:37:32+08:00">2020-01-16</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%83%82%E7%AC%94%E5%A4%B4/" itemprop="url" rel="index"><span itemprop="name">烂笔头</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/%E5%AD%97%E7%AC%A6%E8%AE%BE%E5%A4%87%E9%A9%B1%E5%8A%A8%E3%80%81%E5%B9%B3%E5%8F%B0%E8%AE%BE%E5%A4%87%E9%A9%B1%E5%8A%A8%E3%80%81%E8%AE%BE%E5%A4%87%E9%A9%B1%E5%8A%A8%E6%A8%A1%E5%9E%8B%E3%80%81sysfs%E7%9A%84%E5%85%B3%E7%B3%BB/" class="post-meta-item leancloud_visitors" data-flag-title="字符设备驱动、平台设备驱动、设备驱动模型、sysfs的关系" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>学习Linux设备驱动开发的过程中自然会遇到字符设备驱动、平台设备驱动、设备驱动模型和sysfs等相关概念和技术。对于初学者来说会非常困惑，甚至对Linux有一定基础的工程师而言，能够较好理解这些相关技术也相对不错了。要深刻理解其中的原理需要非常熟悉设备驱动相关的框架和模型代码。网络上有关这些技术的文章不少，但多是对其中的某一点进行阐述，很难找到对这些技术进行比较和关联的分析。对于开发者而言，能够熟悉某一点并分享出来已很难得，但对于专注传授技术和经验给学习者而言，横向比较关联各个驱动相关的知识点和纵向剖析Linux整个驱动软件层次是非常有必要的，也非常有意义。</p>
+<p>本文依然是从需求的角度去理解以上知识点，存在即是合理，以上技术知识能够存在，即代表其有一定的作用。我们着重去理解每一个技术点的作用，并明确其在驱动开发中的角色。</p>
+<p>一、设备驱动</p>
+<p>Linux设备驱动分三种，包括字符设备驱动、块设备驱动和网络设备驱动。字符设备只能按字节流先后顺序访问设备内存，不能随机访问。鼠标、触摸屏、LCD等是字符设备的代表。块设备可以随机访问设备内存的任意地址，硬盘、SD卡、NAND FLASH是块设备的代表。网络设备指的是网卡一类使用socket套接字进行通信的设备。本文以字符设备为例讲述相关知识。</p>
+<p>二、字符设备驱动</p>
+<p>字符设备驱动框架请参考嵌入式企鹅圈的两篇文章：</p>
+<p> Linux字符设备驱动剖析</p>
+<p>Linux 设备文件的创建和mdev</p>
+<p>1.    字符设备驱动纵向关系</p>
+<p>从&lt; Linux字符设备驱动剖析&gt;可以看出，应用层访问设备驱动非常简单，即是通过open接口来最终获得设备驱动的操作接口集struct file_opertions.而open接口传入的参数是/dev目录下的设备名。而从&lt;Linux 设备文件的创建和mdev&gt;可以知道，设备名对应的设备文件节点inode会存储设备号，而驱动框架中的全局数组cdev_map则维护设备号和file_opertions的关系。即应用层到底层的关系主要是（忽略VFS这一层）：</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/%E5%AD%97%E7%AC%A6%E8%AE%BE%E5%A4%87%E9%A9%B1%E5%8A%A8%E3%80%81%E5%B9%B3%E5%8F%B0%E8%AE%BE%E5%A4%87%E9%A9%B1%E5%8A%A8%E3%80%81%E8%AE%BE%E5%A4%87%E9%A9%B1%E5%8A%A8%E6%A8%A1%E5%9E%8B%E3%80%81sysfs%E7%9A%84%E5%85%B3%E7%B3%BB/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%8B%B7%E8%B4%9D%E9%97%AE%E9%A2%98/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/avatar.gif">
+      <meta itemprop="name" content="Edward">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="点点滴滴">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%8B%B7%E8%B4%9D%E9%97%AE%E9%A2%98/" class="post-title-link" itemprop="url">字符串拷贝问题</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-12-31 14:48:02" itemprop="dateCreated datePublished" datetime="2020-12-31T14:48:02+08:00">2020-12-31</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-01-16 12:37:32" itemprop="dateModified" datetime="2020-01-16T12:37:32+08:00">2020-01-16</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%83%82%E7%AC%94%E5%A4%B4/" itemprop="url" rel="index"><span itemprop="name">烂笔头</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%8B%B7%E8%B4%9D%E9%97%AE%E9%A2%98/" class="post-meta-item leancloud_visitors" data-flag-title="字符串拷贝问题" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p> memmove 可以拷贝到自身某一段内容    </p>
+<p>由src所指内存区域复制count个字节到dest所指内存区域。</p>
+<p> strncpy 拷贝到自身随时会覆盖</p>
+<p>把src所指向的字符串中以src地址开始的前n个字节复制到dest所指的数组中，并返回dest。</p>
+<p>void *memcpy(void *dest, const void *src, size_t n);</p>
+<p> 从源src所指的内存地址的起始位置开始拷贝n个字节到目标dest所指的内存地址的起始位置中</p>
+<p>char <em>strcpy(char</em> dest, const char *src);</p>
+<p>功能：把从src地址开始且含有NULL结束符的字符串复制到以dest开始的地址空间</p>
+<p>说明：src和dest所指内存区域不可以重叠且dest必须有足够的空间来容纳src的字符串。</p>
+<p> 空字符问题   </p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%8B%B7%E8%B4%9D%E9%97%AE%E9%A2%98/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/%E8%87%AA%E5%8A%A8%E5%90%8C%E6%AD%A5GPS%E6%97%B6%E9%97%B4/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/avatar.gif">
+      <meta itemprop="name" content="Edward">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="点点滴滴">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/%E8%87%AA%E5%8A%A8%E5%90%8C%E6%AD%A5GPS%E6%97%B6%E9%97%B4/" class="post-title-link" itemprop="url">自动同步GPS时间</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-12-31 14:48:02" itemprop="dateCreated datePublished" datetime="2020-12-31T14:48:02+08:00">2020-12-31</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-01-16 12:37:33" itemprop="dateModified" datetime="2020-01-16T12:37:33+08:00">2020-01-16</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%83%82%E7%AC%94%E5%A4%B4/" itemprop="url" rel="index"><span itemprop="name">烂笔头</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/%E8%87%AA%E5%8A%A8%E5%90%8C%E6%AD%A5GPS%E6%97%B6%E9%97%B4/" class="post-meta-item leancloud_visitors" data-flag-title="自动同步GPS时间" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>settings put global auto_time_gps 1</p>
+<p>public void startUsingGpsWithTimeout(final int milliseconds, final String timeoutMsg) {</p>
+<p>        if(mIsGpsTimeSyncRunning == true) {</p>
+<p>            Log.d(TAG, &quot;WARNING: Gps Time Sync is already run&quot;);</p>
+<p>            return;</p>
+<p>        } else {</p>
+<p>            mIsGpsTimeSyncRunning = true;</p>
+<p>        }</p>
+<p>        Log.d(TAG, &quot;start using GPS for GPS time sync timeout=&quot; + milliseconds + &quot; timeoutMsg=&quot; + timeoutMsg);</p>
+<p>        mLocationManager = (LocationManager)mContext.getSystemService(mContext.LOCATION_SERVICE);</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/%E8%87%AA%E5%8A%A8%E5%90%8C%E6%AD%A5GPS%E6%97%B6%E9%97%B4/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/%E8%87%AA%E5%AE%9A%E4%B9%89%20Dialog/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/avatar.gif">
+      <meta itemprop="name" content="Edward">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="点点滴滴">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/%E8%87%AA%E5%AE%9A%E4%B9%89%20Dialog/" class="post-title-link" itemprop="url">自定义 Dialog</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-12-31 14:48:02" itemprop="dateCreated datePublished" datetime="2020-12-31T14:48:02+08:00">2020-12-31</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-01-16 12:37:33" itemprop="dateModified" datetime="2020-01-16T12:37:33+08:00">2020-01-16</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%83%82%E7%AC%94%E5%A4%B4/" itemprop="url" rel="index"><span itemprop="name">烂笔头</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/%E8%87%AA%E5%AE%9A%E4%B9%89%20Dialog/" class="post-meta-item leancloud_visitors" data-flag-title="自定义 Dialog" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>//继承主题 </p>
+<p>super(context, android.R.style.Theme_Holo_Light_Dialog);</p>
+<p>setCancelable(false);  </p>
+<p>//没有TITLE，背景变暗。</p>
+<p>requestWindowFeature(Window.FEATURE_NO_TITLE);</p>
+<p>setContentView(view); </p>
+<p>//自定义小</p>
+<p>Window dialogWindow = getWindow();<br>WindowManager.LayoutParams lp = dialogWindow.getAttributes();<br>DisplayMetrics d = mContext.getResources().getDisplayMetrics();  <br>lp.width = (int) (d.widthPixels * 0.8);<br>lp.height = (int) (d.heightPixels * 0.8);<br>dialogWindow.setAttributes(lp);</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/%E6%A1%8C%E9%9D%A2%E6%97%B6%E9%92%9F%E6%98%BE%E7%A4%BAAMPM%20%E5%8F%8A%E5%B8%83%E5%B1%80/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -366,810 +1110,10 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/%E7%8A%B6%E6%80%81%E6%A0%8F%E5%8A%A0%E6%96%87%E5%AD%97/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/uploads/avatar.gif">
-      <meta itemprop="name" content="Edward">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="点点滴滴">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/%E7%8A%B6%E6%80%81%E6%A0%8F%E5%8A%A0%E6%96%87%E5%AD%97/" class="post-title-link" itemprop="url">状态栏加文字</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-12-31 14:48:02" itemprop="dateCreated datePublished" datetime="2020-12-31T14:48:02+08:00">2020-12-31</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-01-16 12:37:33" itemprop="dateModified" datetime="2020-01-16T12:37:33+08:00">2020-01-16</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E7%83%82%E7%AC%94%E5%A4%B4/" itemprop="url" rel="index"><span itemprop="name">烂笔头</span></a>
-                </span>
-            </span>
-
-          
-            <span id="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/%E7%8A%B6%E6%80%81%E6%A0%8F%E5%8A%A0%E6%96%87%E5%AD%97/" class="post-meta-item leancloud_visitors" data-flag-title="状态栏加文字" title="阅读次数">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-eye"></i>
-              </span>
-              <span class="post-meta-item-text">阅读次数：</span>
-              <span class="leancloud-visitors-count"></span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>packages/SystemUI/res/layout/status_bar_expanded_header.xml</p>
-<p>&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;</p>
-<p>&lt;!–</p>
-<p>** Copyright 2012, The Android Open Source Project</p>
-<p>**</p>
-<p>** Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); </p>
-<p>** you may not use this file except in compliance with the License. </p>
-<p>** You may obtain a copy of the License at </p>
-<p>**</p>
-<p>**     <a target="_blank" rel="noopener" href="http://www.apache.org/licenses/LICENSE-2.0">http://www.apache.org/licenses/LICENSE-2.0</a> </p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/%E7%8A%B6%E6%80%81%E6%A0%8F%E5%8A%A0%E6%96%87%E5%AD%97/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/%E7%8A%B6%E6%80%81%E6%A0%8F%E4%B8%8D%E5%B1%95%E5%BC%80/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/uploads/avatar.gif">
-      <meta itemprop="name" content="Edward">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="点点滴滴">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/%E7%8A%B6%E6%80%81%E6%A0%8F%E4%B8%8D%E5%B1%95%E5%BC%80/" class="post-title-link" itemprop="url">状态栏不展开</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-12-31 14:48:02" itemprop="dateCreated datePublished" datetime="2020-12-31T14:48:02+08:00">2020-12-31</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-01-16 12:37:32" itemprop="dateModified" datetime="2020-01-16T12:37:32+08:00">2020-01-16</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E7%83%82%E7%AC%94%E5%A4%B4/" itemprop="url" rel="index"><span itemprop="name">烂笔头</span></a>
-                </span>
-            </span>
-
-          
-            <span id="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/%E7%8A%B6%E6%80%81%E6%A0%8F%E4%B8%8D%E5%B1%95%E5%BC%80/" class="post-meta-item leancloud_visitors" data-flag-title="状态栏不展开" title="阅读次数">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-eye"></i>
-              </span>
-              <span class="post-meta-item-text">阅读次数：</span>
-              <span class="leancloud-visitors-count"></span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>diff –git a/frameworks/base/packages/SystemUI/src/com/android/systemui/statusbar/table</p>
-<p>index d180ab9..4a12dd4 100644</p>
-<p>— a/frameworks/base/packages/SystemUI/src/com/android/systemui/statusbar/tablet/Notif</p>
-<p>+++ b/frameworks/base/packages/SystemUI/src/com/android/systemui/statusbar/tablet/Notif</p>
-<p>@@ -77,7 +77,7 @@ public class NotificationPanelTitle extends RelativeLayout implements</p>
-<p>             case MotionEvent.ACTION_UP:</p>
-<p>                 if (isPressed()) {</p>
-<p>                     playSoundEffect(SoundEffectConstants.CLICK);</p>
-<ul>
-<li>                   mPanel.swapPanels();</li>
-</ul>
-<ul>
-<li>                   //mPanel.swapPanels();</li>
-</ul>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/%E7%8A%B6%E6%80%81%E6%A0%8F%E4%B8%8D%E5%B1%95%E5%BC%80/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/%E7%8A%B6%E6%80%81%E6%A0%8Fstatusbar%E5%8A%A0%E5%AE%BD/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/uploads/avatar.gif">
-      <meta itemprop="name" content="Edward">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="点点滴滴">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/%E7%8A%B6%E6%80%81%E6%A0%8Fstatusbar%E5%8A%A0%E5%AE%BD/" class="post-title-link" itemprop="url">状态栏statusbar加宽</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-12-31 14:48:02" itemprop="dateCreated datePublished" datetime="2020-12-31T14:48:02+08:00">2020-12-31</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-01-16 12:37:32" itemprop="dateModified" datetime="2020-01-16T12:37:32+08:00">2020-01-16</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E7%83%82%E7%AC%94%E5%A4%B4/" itemprop="url" rel="index"><span itemprop="name">烂笔头</span></a>
-                </span>
-            </span>
-
-          
-            <span id="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/%E7%8A%B6%E6%80%81%E6%A0%8Fstatusbar%E5%8A%A0%E5%AE%BD/" class="post-meta-item leancloud_visitors" data-flag-title="状态栏statusbar加宽" title="阅读次数">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-eye"></i>
-              </span>
-              <span class="post-meta-item-text">阅读次数：</span>
-              <span class="leancloud-visitors-count"></span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>//widen the height of status bar</p>
-<p>— a/frameworks/base/core/res/res/values/dimens.xml</p>
-<p>+++ b/frameworks/base/core/res/res/values/dimens.xml</p>
-<p>@@ -31,7 +31,7 @@</p>
-<p>     &lt;integer name=&quot;max_action_buttons&quot;&gt;2&lt;/integer&gt;</p>
-<p>     &lt;dimen name=&quot;toast_y_offset&quot;&gt;64dip&lt;/dimen&gt;</p>
-<p>     &lt;!– Height of the status bar –&gt;</p>
-<ul>
-<li>   &lt;dimen name=&quot;status_bar_height&quot;&gt;25dip&lt;/dimen&gt;</li>
-</ul>
-<ul>
-<li>   &lt;dimen name=&quot;status_bar_height&quot;&gt;30dip&lt;/dimen&gt;</li>
-</ul>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/%E7%8A%B6%E6%80%81%E6%A0%8F%20%E7%A6%81%E6%AD%A2%E4%B8%8B%E6%8B%89%20%20%E6%97%A0recent%E9%94%AE/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/uploads/avatar.gif">
-      <meta itemprop="name" content="Edward">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="点点滴滴">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/%E7%8A%B6%E6%80%81%E6%A0%8F%20%E7%A6%81%E6%AD%A2%E4%B8%8B%E6%8B%89%20%20%E6%97%A0recent%E9%94%AE/" class="post-title-link" itemprop="url">状态栏 禁止下拉  无recent键</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-12-31 14:48:02" itemprop="dateCreated datePublished" datetime="2020-12-31T14:48:02+08:00">2020-12-31</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-01-16 12:37:33" itemprop="dateModified" datetime="2020-01-16T12:37:33+08:00">2020-01-16</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E7%83%82%E7%AC%94%E5%A4%B4/" itemprop="url" rel="index"><span itemprop="name">烂笔头</span></a>
-                </span>
-            </span>
-
-          
-            <span id="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/%E7%8A%B6%E6%80%81%E6%A0%8F%20%E7%A6%81%E6%AD%A2%E4%B8%8B%E6%8B%89%20%20%E6%97%A0recent%E9%94%AE/" class="post-meta-item leancloud_visitors" data-flag-title="状态栏 禁止下拉  无recent键" title="阅读次数">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-eye"></i>
-              </span>
-              <span class="post-meta-item-text">阅读次数：</span>
-              <span class="leancloud-visitors-count"></span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>diff –git a/packages/SystemUI/src/com/android/systemui/statusbar/phone/NavigationBarView.java b/packages/SystemUI/src/com/android/systemui/statusbar/phone/NavigationBarVi</p>
-<p>index bc6d1eb..3a75ca5 100644</p>
-<p>— a/packages/SystemUI/src/com/android/systemui/statusbar/phone/NavigationBarView.java</p>
-<p>+++ b/packages/SystemUI/src/com/android/systemui/statusbar/phone/NavigationBarView.java</p>
-<p>@@ -388,7 +388,7 @@ public class NavigationBarView extends LinearLayout {</p>
-<p>         getBackButton()   .setVisibility(disableBack       ? View.INVISIBLE : View.VISIBLE);</p>
-<p>         getHomeButton()   .setVisibility(disableHome       ? View.INVISIBLE : View.VISIBLE);</p>
-<ul>
-<li>       getRecentsButton().setVisibility(disableRecent     ? View.INVISIBLE : View.VISIBLE);</li>
-</ul>
-<ul>
-<li>       getRecentsButton().setVisibility(View.INVISIBLE);</li>
-</ul>
-<p>        //  getScreenshotButton().setVisibility(disableHome       ? View.INVISIBLE : View.VISIBLE);      </p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/%E7%8A%B6%E6%80%81%E6%A0%8F%20%E7%A6%81%E6%AD%A2%E4%B8%8B%E6%8B%89%20%20%E6%97%A0recent%E9%94%AE/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/%E9%80%90%E8%A1%8C%E8%AF%BB%E5%8F%96%E6%96%87%E4%BB%B6%E5%86%99%E5%88%B0%E6%95%B0%E6%8D%AE%E5%BA%93/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/uploads/avatar.gif">
-      <meta itemprop="name" content="Edward">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="点点滴滴">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/%E9%80%90%E8%A1%8C%E8%AF%BB%E5%8F%96%E6%96%87%E4%BB%B6%E5%86%99%E5%88%B0%E6%95%B0%E6%8D%AE%E5%BA%93/" class="post-title-link" itemprop="url">逐行读取文件写到数据库</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-12-31 14:48:02" itemprop="dateCreated datePublished" datetime="2020-12-31T14:48:02+08:00">2020-12-31</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-01-16 12:37:32" itemprop="dateModified" datetime="2020-01-16T12:37:32+08:00">2020-01-16</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E7%83%82%E7%AC%94%E5%A4%B4/" itemprop="url" rel="index"><span itemprop="name">烂笔头</span></a>
-                </span>
-            </span>
-
-          
-            <span id="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/%E9%80%90%E8%A1%8C%E8%AF%BB%E5%8F%96%E6%96%87%E4%BB%B6%E5%86%99%E5%88%B0%E6%95%B0%E6%8D%AE%E5%BA%93/" class="post-meta-item leancloud_visitors" data-flag-title="逐行读取文件写到数据库" title="阅读次数">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-eye"></i>
-              </span>
-              <span class="post-meta-item-text">阅读次数：</span>
-              <span class="leancloud-visitors-count"></span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>&lt;?</p>
-<p>require_once(‘config.php’); </p>
-<p>header(‘Content-Type: text/plain; charset=gb2312’); </p>
-<p>$db-&gt;Connect($dsn) || die(‘fail’);</p>
-<p>$lines = file(‘EnglishProverb.txt’, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);</p>
-<p>// Loop through our array, show HTML source as HTML source; and line numbers too.</p>
-<p> $en = &quot;&quot;;</p>
-<p> $zh = &quot;&quot;;</p>
-<p>foreach ($lines as $line_num =&gt; $line) {</p>
-<p>    if(($line_num+1)%2 == 0){</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/%E9%80%90%E8%A1%8C%E8%AF%BB%E5%8F%96%E6%96%87%E4%BB%B6%E5%86%99%E5%88%B0%E6%95%B0%E6%8D%AE%E5%BA%93/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/%E8%AF%B8%E8%91%9B%E4%BA%AE%E5%86%99%E7%BB%99%E5%84%BF%E5%AD%90%E7%9A%84%E4%B8%80%E5%B0%81%E4%BF%A1%EF%BC%8C%E4%BB%8586%E5%AD%97%EF%BC%81%E8%B6%B3%E4%BB%A5%E5%BD%B1%E5%93%8D%E4%BA%BA%E4%B8%80%E7%94%9F/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/uploads/avatar.gif">
-      <meta itemprop="name" content="Edward">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="点点滴滴">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/%E8%AF%B8%E8%91%9B%E4%BA%AE%E5%86%99%E7%BB%99%E5%84%BF%E5%AD%90%E7%9A%84%E4%B8%80%E5%B0%81%E4%BF%A1%EF%BC%8C%E4%BB%8586%E5%AD%97%EF%BC%81%E8%B6%B3%E4%BB%A5%E5%BD%B1%E5%93%8D%E4%BA%BA%E4%B8%80%E7%94%9F/" class="post-title-link" itemprop="url">诸葛亮写给儿子的一封信，仅86字！足以影响人一生</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-12-31 14:48:02" itemprop="dateCreated datePublished" datetime="2020-12-31T14:48:02+08:00">2020-12-31</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-01-16 12:37:31" itemprop="dateModified" datetime="2020-01-16T12:37:31+08:00">2020-01-16</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E7%83%82%E7%AC%94%E5%A4%B4/" itemprop="url" rel="index"><span itemprop="name">烂笔头</span></a>
-                </span>
-            </span>
-
-          
-            <span id="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/%E8%AF%B8%E8%91%9B%E4%BA%AE%E5%86%99%E7%BB%99%E5%84%BF%E5%AD%90%E7%9A%84%E4%B8%80%E5%B0%81%E4%BF%A1%EF%BC%8C%E4%BB%8586%E5%AD%97%EF%BC%81%E8%B6%B3%E4%BB%A5%E5%BD%B1%E5%93%8D%E4%BA%BA%E4%B8%80%E7%94%9F/" class="post-meta-item leancloud_visitors" data-flag-title="诸葛亮写给儿子的一封信，仅86字！足以影响人一生" title="阅读次数">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-eye"></i>
-              </span>
-              <span class="post-meta-item-text">阅读次数：</span>
-              <span class="leancloud-visitors-count"></span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>【新朋友】请戳标题下方蓝色字体“我的麦库”关注我们，享受最贴心的微信记事服务，一键收藏所有微信重要资讯</p>
-<p>【老朋友】点击右上角，转发或分享本页内容</p>
-<p>诸葛亮写给儿子的一封信，只用了短短八十六字，但是对于为学做人有精简而且具体的忠告。一千八百多年前的智慧，在今天的科技时代，仍然有其参考价值。</p>
-<p>诸葛亮诫子书</p>
-<p>夫君子之行，静以修身，俭以养德；</p>
-<p>非澹泊无以明志，非宁静无以致远。</p>
-<p>夫学须静也，才须学也；</p>
-<p>非学无以广才，非志无以成学。</p>
-<p>怠慢则不能励精，险躁则不能冶性。</p>
-<p>年与时驰，意与岁去，遂成枯落，多不接世。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/%E8%AF%B8%E8%91%9B%E4%BA%AE%E5%86%99%E7%BB%99%E5%84%BF%E5%AD%90%E7%9A%84%E4%B8%80%E5%B0%81%E4%BF%A1%EF%BC%8C%E4%BB%8586%E5%AD%97%EF%BC%81%E8%B6%B3%E4%BB%A5%E5%BD%B1%E5%93%8D%E4%BA%BA%E4%B8%80%E7%94%9F/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/%E4%B8%AD%E6%96%ADapt-get%20%20%E5%90%8E/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/uploads/avatar.gif">
-      <meta itemprop="name" content="Edward">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="点点滴滴">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/%E4%B8%AD%E6%96%ADapt-get%20%20%E5%90%8E/" class="post-title-link" itemprop="url">中断apt-get  后</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-12-31 14:48:02" itemprop="dateCreated datePublished" datetime="2020-12-31T14:48:02+08:00">2020-12-31</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-01-16 12:37:32" itemprop="dateModified" datetime="2020-01-16T12:37:32+08:00">2020-01-16</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E7%83%82%E7%AC%94%E5%A4%B4/" itemprop="url" rel="index"><span itemprop="name">烂笔头</span></a>
-                </span>
-            </span>
-
-          
-            <span id="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/%E4%B8%AD%E6%96%ADapt-get%20%20%E5%90%8E/" class="post-meta-item leancloud_visitors" data-flag-title="中断apt-get  后" title="阅读次数">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-eye"></i>
-              </span>
-              <span class="post-meta-item-text">阅读次数：</span>
-              <span class="leancloud-visitors-count"></span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>Could not get lock /var/lib/dpkg/lock</p>
-<p>关闭一切安装/卸载/更新软件的进程<br>sudo pkill dpkg<br>然后解锁<br>sudo rm  /var/lib/dpkg/lock</p>
-<p>以下为操作 deb 包的常用 Dpkg 指令表<br>命令和作用<br>dpkg -i package.deb 安装包<br>dpkg -r package 删除包<br>dpkg -P package 删除包（包括配置文件）<br>dpkg -L package 列出与该包关联的文件<br>dpkg -l package 显示该包的版本<br>dpkg –unpack package.deb 解开 deb 包的内容<br>dpkg -S keyword 搜索所属的包内容<br>dpkg -l 列出当前已安装的包<br>dpkg -c package.deb 列出 deb 包的内容<br>dpkg –configure package 配置包</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/%E9%95%BF%E6%8C%89%E8%BF%94%E5%9B%9E%E9%94%AE%20HOME/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/uploads/avatar.gif">
-      <meta itemprop="name" content="Edward">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="点点滴滴">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/%E9%95%BF%E6%8C%89%E8%BF%94%E5%9B%9E%E9%94%AE%20HOME/" class="post-title-link" itemprop="url">长按返回键 HOME</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-12-31 14:48:02" itemprop="dateCreated datePublished" datetime="2020-12-31T14:48:02+08:00">2020-12-31</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-01-16 12:37:33" itemprop="dateModified" datetime="2020-01-16T12:37:33+08:00">2020-01-16</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E7%83%82%E7%AC%94%E5%A4%B4/" itemprop="url" rel="index"><span itemprop="name">烂笔头</span></a>
-                </span>
-            </span>
-
-          
-            <span id="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/%E9%95%BF%E6%8C%89%E8%BF%94%E5%9B%9E%E9%94%AE%20HOME/" class="post-meta-item leancloud_visitors" data-flag-title="长按返回键 HOME" title="阅读次数">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-eye"></i>
-              </span>
-              <span class="post-meta-item-text">阅读次数：</span>
-              <span class="leancloud-visitors-count"></span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>— a/frameworks/base/policy/src/com/android/internal/policy/impl/PhoneWindowManager.java</p>
-<p>+++ b/frameworks/base/policy/src/com/android/internal/policy/impl/PhoneWindowManager.java</p>
-<p>@@ -1918,7 +1918,22 @@ public class PhoneWindowManager implements WindowManagerPolicy {</p>
-<p>                 }</p>
-<p>             }</p>
-<p>             return -1;</p>
-<ul>
-<li>       } else if (keyCode == KeyEvent.KEYCODE_MENU) {</li>
-</ul>
-<ul>
-<li><p>       }</p>
-</li>
-<li><p>              else if (keyCode == KeyEvent.KEYCODE_BACK) {</p>
-</li>
-</ul>
-<p>+</p>
-<ul>
-<li><p>                              if (down) {</p>
-</li>
-<li><p>               if (repeatCount == 0) {</p>
-</li>
-<li><p>                 //</p>
-</li>
-<li><p>               } else if ((event.getFlags() &amp; KeyEvent.FLAG_LONG_PRESS) != 0) {</p>
-</li>
-<li><p>                   if (!keyguardOn) {</p>
-</li>
-<li><p>                                              goHome();</p>
-</li>
-<li><p>                       Log.d(&quot;edward&quot;,&quot;——— isLongBACKPress ——-&quot;);</p>
-</li>
-<li><p>                                              return -1;</p>
-</li>
-<li><p>                   }</p>
-</li>
-<li><p>               }</p>
-</li>
-<li><p>           }</p>
-</li>
-<li><p>              }</p>
-</li>
-<li><p>              else if (keyCode == KeyEvent.KEYCODE_MENU) {</p>
-</li>
-</ul>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/%E9%95%BF%E6%8C%89%E8%BF%94%E5%9B%9E%E9%94%AE%20HOME/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/2/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><span class="space">&hellip;</span><a class="page-number" href="/page/57/">57</a><a class="extend next" rel="next" href="/page/4/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
+    <a class="extend prev" rel="prev" href="/page/2/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><span class="space">&hellip;</span><a class="page-number" href="/page/56/">56</a><a class="extend next" rel="next" href="/page/4/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
   </nav>
 
 
@@ -1237,14 +1181,14 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">570</span>
+          <span class="site-state-item-count">554</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-count">9</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
   </nav>
@@ -1271,7 +1215,7 @@
 <div class="copyright">
   
   &copy; 
-  <span itemprop="copyrightYear">2020</span>
+  <span itemprop="copyrightYear">2021</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>

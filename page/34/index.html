@@ -187,7 +187,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/Mac%20%E8%BF%9C%E7%A8%8B%E7%9B%AE%E5%BD%95/">
+    <link itemprop="mainEntityOfPage" href="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/Linux%20SPI%E6%A1%86%E6%9E%B6/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/uploads/avatar.gif">
@@ -201,7 +201,201 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/Mac%20%E8%BF%9C%E7%A8%8B%E7%9B%AE%E5%BD%95/" class="post-title-link" itemprop="url">Mac 远程目录</a>
+            <a href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/Linux%20SPI%E6%A1%86%E6%9E%B6/" class="post-title-link" itemprop="url">Linux SPI框架</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-12-31 14:48:01" itemprop="dateCreated datePublished" datetime="2020-12-31T14:48:01+08:00">2020-12-31</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-01-16 12:37:32" itemprop="dateModified" datetime="2020-01-16T12:37:32+08:00">2020-01-16</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%83%82%E7%AC%94%E5%A4%B4/" itemprop="url" rel="index"><span itemprop="name">烂笔头</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/Linux%20SPI%E6%A1%86%E6%9E%B6/" class="post-meta-item leancloud_visitors" data-flag-title="Linux SPI框架" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p> Linux的SPI子系统采用主机驱动和外设驱动分离的思想，首先主机SPI控制器是一种平台设备，因此它以platform的方式注册进内核，外设的信息是以boardinfo形式静态定义的，在创建spi_master时，会根据外设的bus_num和主机的bus_num是否相等，来选择是否将该外设挂接在该SPI主控制器下。先看SPI子系统中几个关键的数据结构：</p>
+<p>struct spi_master用来描述一个SPI主控制器</p>
+<p>[cpp] view plain copy</p>
+<p>struct spi_master {  </p>
+<p>struct device    dev;  </p>
+<p>    s16    bus_num; /<em>总线编号</em>/  </p>
+<p>    u16    num_chipselect;/<em>支持的外设数量</em>/  </p>
+<p>    u16    dma_alignment;  </p>
+<p>int   (*transfer)(struct spi_device <em>spi, struct spi_message *mesg);/*用于将消息添加到队列</em>/  </p>
+<p>void  (*cleanup)(struct spi_device *spi);  </p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/Linux%20SPI%E6%A1%86%E6%9E%B6/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/Linux%20Platform%20devices%20%E5%B9%B3%E5%8F%B0%E8%AE%BE%E5%A4%87%E9%A9%B1%E5%8A%A8/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/avatar.gif">
+      <meta itemprop="name" content="Edward">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="点点滴滴">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/Linux%20Platform%20devices%20%E5%B9%B3%E5%8F%B0%E8%AE%BE%E5%A4%87%E9%A9%B1%E5%8A%A8/" class="post-title-link" itemprop="url">Linux Platform devices 平台设备驱动</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-12-31 14:48:01" itemprop="dateCreated datePublished" datetime="2020-12-31T14:48:01+08:00">2020-12-31</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-01-16 12:37:32" itemprop="dateModified" datetime="2020-01-16T12:37:32+08:00">2020-01-16</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%83%82%E7%AC%94%E5%A4%B4/" itemprop="url" rel="index"><span itemprop="name">烂笔头</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/Linux%20Platform%20devices%20%E5%B9%B3%E5%8F%B0%E8%AE%BE%E5%A4%87%E9%A9%B1%E5%8A%A8/" class="post-meta-item leancloud_visitors" data-flag-title="Linux Platform devices 平台设备驱动" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p> platform平台设备驱动是基于设备总线驱动模型的，它只不过是将 device 进一步封装成为 platform_device，将 device_driver 进一步封装成为 platform_device_driver,前面已经分析过设备总线驱动模型，关于device 与 device_driver 的注册过程以及它们在sysfs文件系统中的层次关系就不在分析，本文重点分析platform平台设备驱动与设备总线驱动模型相比较新增添的那些东西。</p>
+<p>    在Linux设备模型的抽象中，存在着一类称作“Platform Device”的设备，内核是这样描述它们的（Documentation/driver-model/platform.txt）：</p>
+<p>    Platform devices are devices that typically appear as autonomous entities in the system. This includes legacy port-based devices and host bridges to peripheral buses, and most controllers integrated into system-on-chip platforms.  What they usually have in common is direct addressing from a CPU bus.  Rarely, a platform_device will be connected through a segment of some other kind of bus; but its registers will still be directly addressable.</p>
+<p>     概括来说，Platform设备包括：基于端口的设备（已不推荐使用，保留下来只为兼容旧设备，legacy）；连接物理总线的桥设备；集成在SOC平台上面的控制器；连接在其它bus上的设备（很少见）。等等。<br>    这些设备有一个基本的特征：可以通过CPU bus直接寻址（例如在嵌入式系统常见的“寄存器”）。因此，由于这个共性，内核在设备模型的基础上（device和device_driver），对这些设备进行了更进一步的封装，抽象出paltform bus、platform device和platform driver，以便驱动开发人员可以方便的开发这类设备的驱动。<br>    可以说，paltform设备对Linux驱动工程师是非常重要的，因为我们编写的大多数设备驱动，都是为了驱动plaftom设备。</p>
+<p>platform_bus_type<br>    我们知道，在设备总线驱动模型的中，BUS像一个月老一样，通过它的match函数，将注册到bus中的device与driver进行配对，那么每一个不同的bus 都有自己的match函数，我们来看看platform_bus_type.</p>
+<p>[cpp] view plain copy</p>
+<p>struct bus_type platform_bus_type = {  </p>
+<p>    .name       = &quot;platform&quot;,  </p>
+<p>    .dev_attrs  = platform_dev_attrs,  </p>
+<p>    .match      = platform_match,  </p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/Linux%20Platform%20devices%20%E5%B9%B3%E5%8F%B0%E8%AE%BE%E5%A4%87%E9%A9%B1%E5%8A%A8/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/linux%20jdk%20%E5%AE%89%E8%A3%85/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/avatar.gif">
+      <meta itemprop="name" content="Edward">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="点点滴滴">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/linux%20jdk%20%E5%AE%89%E8%A3%85/" class="post-title-link" itemprop="url">linux jdk 安装</a>
         </h2>
 
         <div class="post-meta">
@@ -231,7 +425,7 @@
             </span>
 
           
-            <span id="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/Mac%20%E8%BF%9C%E7%A8%8B%E7%9B%AE%E5%BD%95/" class="post-meta-item leancloud_visitors" data-flag-title="Mac 远程目录" title="阅读次数">
+            <span id="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/linux%20jdk%20%E5%AE%89%E8%A3%85/" class="post-meta-item leancloud_visitors" data-flag-title="linux jdk 安装" title="阅读次数">
               <span class="post-meta-item-icon">
                 <i class="fa fa-eye"></i>
               </span>
@@ -248,19 +442,19 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <p>Homebrew</p>
-<p><a target="_blank" rel="noopener" href="https://brew.sh/index_zh-cn.html">https://brew.sh/index_zh-cn.html</a></p>
-<p>/usr/bin/ruby -e &quot;$(curl -fsSL <a target="_blank" rel="noopener" href="https://raw.githubusercontent.com/Homebrew/install/master/install">https://raw.githubusercontent.com/Homebrew/install/master/install</a>)&quot;</p>
-<p>brew install sshfs</p>
-<p>按照提示，先安装osxfuse </p>
-<p>brew cask install osxfuse</p>
-<p>brew install sshfs</p>
-<p>sshfs -C -o reconnect &lt;user&gt;@&lt;host&gt;:&lt;remote_dir&gt; &lt;local_dir&gt;</p>
-<p>sshfs -C -o reconnect <a href="mailto:&#114;&#111;&#x6f;&#x74;&#x40;&#49;&#57;&#x32;&#x2e;&#49;&#x36;&#x38;&#46;&#49;&#x2e;&#x31;&#48;&#x31;">&#114;&#111;&#x6f;&#x74;&#x40;&#49;&#57;&#x32;&#x2e;&#49;&#x36;&#x38;&#46;&#49;&#x2e;&#x31;&#48;&#x31;</a>:/mnt/images/ ~/Desktop/images/</p>
-<p>sshfs -C -o reconnect <a href="mailto:&#x41;&#100;&#109;&#x69;&#x6e;&#105;&#115;&#116;&#114;&#97;&#116;&#x6f;&#x72;&#x40;&#49;&#57;&#50;&#46;&#x31;&#54;&#56;&#46;&#49;&#x2e;&#49;&#x38;">&#x41;&#100;&#109;&#x69;&#x6e;&#105;&#115;&#116;&#114;&#97;&#116;&#x6f;&#x72;&#x40;&#49;&#57;&#50;&#46;&#x31;&#54;&#56;&#46;&#49;&#x2e;&#49;&#x38;</a>:E:\ssh ~/Desktop/remote  //to Windows</p>
+          <p>        mkdir -p /usr/lib/jvm</p>
+<p>        tar zxvf jdk-7u71-linux-x64.tar.gz -C /usr/lib/jvm/</p>
+<p>        mv /usr/lib/jvm/jdk1.7.0_71 /usr/lib/jvm/java-7-sun</p>
+<p>1, 将jdk,解压到指定路径。</p>
+<p>2.update-alternatives 配置</p>
+<p>sudo update-alternatives –install /usr/bin/jar jar /usr/lib/jvm/java-7-sun/bin/jar 60</p>
+<p>sudo update-alternatives –install /usr/bin/java java /usr/lib/jvm/java-7-sun/bin/java 60</p>
+<p>sudo update-alternatives –install /usr/bin/javac javac /usr/lib/jvm/java-7-sun/bin/javac 60</p>
+<p>sudo update-alternatives –install /usr/bin/javap javap /usr/lib/jvm/java-7-sun/bin/javap 60</p>
+<p>sudo update-alternatives –config jar</p>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/Mac%20%E8%BF%9C%E7%A8%8B%E7%9B%AE%E5%BD%95/#more" rel="contents">
+              <a class="btn" href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/linux%20jdk%20%E5%AE%89%E8%A3%85/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -284,7 +478,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/LVDS%20(Low%20Voltage%20Differential%20Signaling)/">
+    <link itemprop="mainEntityOfPage" href="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/Linux%20IO%E7%BC%96%E7%A8%8B/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/uploads/avatar.gif">
@@ -298,7 +492,104 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/LVDS%20(Low%20Voltage%20Differential%20Signaling)/" class="post-title-link" itemprop="url">LVDS (Low Voltage Differential Signaling)</a>
+            <a href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/Linux%20IO%E7%BC%96%E7%A8%8B/" class="post-title-link" itemprop="url">Linux IO编程</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-12-31 14:48:01" itemprop="dateCreated datePublished" datetime="2020-12-31T14:48:01+08:00">2020-12-31</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-01-16 12:37:32" itemprop="dateModified" datetime="2020-01-16T12:37:32+08:00">2020-01-16</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%83%82%E7%AC%94%E5%A4%B4/" itemprop="url" rel="index"><span itemprop="name">烂笔头</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/Linux%20IO%E7%BC%96%E7%A8%8B/" class="post-meta-item leancloud_visitors" data-flag-title="Linux IO编程" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>2012-03-06:</p>
+<p>1.标准I/O</p>
+<p>缓冲  </p>
+<p>标准IO打开文件时，创建FILE结构体缓冲，我们只需用到文件指针 *fp</p>
+<p>*fp  (如：stdout(行缓冲),stderr(不缓中))</p>
+<p>printf(&quot; &quot;); -&gt;&gt; 传递给标准IO缓冲-&gt;&gt; 内核  </p>
+<p>sync 同步 把缓冲写到文件</p>
+<p>fprintf(stdout,&quot;helloworld&quot;);  ==  printf(&quot;helloworld&quot;);</p>
+<p>cache  缓存，延时读，提高CPU效率</p>
+<p>buffer 缓冲，延时写，提高文件操作效率</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/Linux%20IO%E7%BC%96%E7%A8%8B/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/libstagefright%E7%89%88%E6%9C%AC%20%E8%A7%86%E9%A2%91%E5%BA%93/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/avatar.gif">
+      <meta itemprop="name" content="Edward">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="点点滴滴">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/libstagefright%E7%89%88%E6%9C%AC%20%E8%A7%86%E9%A2%91%E5%BA%93/" class="post-title-link" itemprop="url">libstagefright版本 视频库</a>
         </h2>
 
         <div class="post-meta">
@@ -328,7 +619,7 @@
             </span>
 
           
-            <span id="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/LVDS%20(Low%20Voltage%20Differential%20Signaling)/" class="post-meta-item leancloud_visitors" data-flag-title="LVDS (Low Voltage Differential Signaling)" title="阅读次数">
+            <span id="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/libstagefright%E7%89%88%E6%9C%AC%20%E8%A7%86%E9%A2%91%E5%BA%93/" class="post-meta-item leancloud_visitors" data-flag-title="libstagefright版本 视频库" title="阅读次数">
               <span class="post-meta-item-icon">
                 <i class="fa fa-eye"></i>
               </span>
@@ -345,24 +636,11 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <p>LVDS ： Low-Voltage Differential Signaling 低压差分信号传输</p>
-<p>　　1994年由美国国家半导体公司提出的一种信号传输模式，是一种电平标准，广泛应用于液晶屏接口。它在提供高数据传输率的同时会有很低的功耗，另外它还有许多其他的优势：</p>
-<p>　　1、低电压电源的兼容性</p>
-<p>　　2、低噪声</p>
-<p>　　3、高噪声抑制能力</p>
-<p>　　4、可靠的信号传输</p>
-<p>　　5、能够集成到系统级IC内</p>
-<p>　　使用LVDS技术的的产品数据速率可以从几百Mbps到2Gbps。</p>
-<p>　　它是电流驱动的，通过在接收端放置一个负载而得到电压，当电流正向流动，接收端输出为1，反之为0</p>
-<p>　　他的摆幅为250mv-450mv</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/LVDS%20(Low%20Voltage%20Differential%20Signaling)/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
+          <p>busybox strings /system/lib/libstagefright.so | busybox grep author</p>
+<p>root@android:/ # busybox strings /system/lib/libstagefright.so | busybox grep author</p>
+<p>stagefright.so | busybox grep author                                          &lt;</p>
+<p>author:  csy time: Fri, 28 Dec 2012 19:00:33 +0800 version: 1743</p>
+
       
     </div>
 
@@ -381,7 +659,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/Linux%E5%AD%97%E7%AC%A6%E8%AE%BE%E5%A4%87%E9%A9%B1%E5%8A%A8%E5%89%96%E6%9E%90/">
+    <link itemprop="mainEntityOfPage" href="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/libncurses5-devi386/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/uploads/avatar.gif">
@@ -395,7 +673,92 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/Linux%E5%AD%97%E7%AC%A6%E8%AE%BE%E5%A4%87%E9%A9%B1%E5%8A%A8%E5%89%96%E6%9E%90/" class="post-title-link" itemprop="url">Linux字符设备驱动剖析</a>
+            <a href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/libncurses5-devi386/" class="post-title-link" itemprop="url">libncurses5-devi386</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-12-31 14:48:01" itemprop="dateCreated datePublished" datetime="2020-12-31T14:48:01+08:00">2020-12-31</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-01-16 12:37:34" itemprop="dateModified" datetime="2020-01-16T12:37:34+08:00">2020-01-16</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%83%82%E7%AC%94%E5%A4%B4/" itemprop="url" rel="index"><span itemprop="name">烂笔头</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/libncurses5-devi386/" class="post-meta-item leancloud_visitors" data-flag-title="libncurses5-devi386" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>libncurses5-dev:i386</p>
+<p>E: Unable to locate package libx11-dev:i386</p>
+<p>E: Unable to locate package libreadline6-dev:i386</p>
+<p>E: Unable to locate package libgl1-mesa-dri:i386</p>
+<p>ln -s /usr/lib/i386-linux-gnu/mesa/libGL.so.1/usr/lib/i386-linux-gnu/libGL.so</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/LCD%E6%97%B6%E5%BA%8F/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/avatar.gif">
+      <meta itemprop="name" content="Edward">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="点点滴滴">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/LCD%E6%97%B6%E5%BA%8F/" class="post-title-link" itemprop="url">LCD时序</a>
         </h2>
 
         <div class="post-meta">
@@ -425,7 +788,7 @@
             </span>
 
           
-            <span id="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/Linux%E5%AD%97%E7%AC%A6%E8%AE%BE%E5%A4%87%E9%A9%B1%E5%8A%A8%E5%89%96%E6%9E%90/" class="post-meta-item leancloud_visitors" data-flag-title="Linux字符设备驱动剖析" title="阅读次数">
+            <span id="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/LCD%E6%97%B6%E5%BA%8F/" class="post-meta-item leancloud_visitors" data-flag-title="LCD时序" title="阅读次数">
               <span class="post-meta-item-icon">
                 <i class="fa fa-eye"></i>
               </span>
@@ -442,19 +805,19 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <p>一、先看看设备应用程序</p>
-<p>1.很简单，open设备文件，read、write、ioctl，最后close退出。如下：</p>
-<p>int main(int argc ,char *argv[]){</p>
-<p>unsigned char val[1] = 1;</p>
-<p>int fd =open(&quot;/dev/LED&quot;,O_RDWR);//打开设备</p>
-<p>write(fd,val,1);//写入设备，这里代表LED全亮</p>
-<p>close(fd);//关闭设备</p>
-<p>return 0;</p>
-<p>}</p>
-<p>二、/dev目录与文件系统</p>
+          <p>kernel/drivers/video/display/screen/lcd_hdmi_1024x768.c</p>
+<p>/* Base */</p>
+<p>#define OUT_TYPE SCREEN_RGB//SCREEN_LVDS</p>
+<p>#define OUT_FORMAT      LVDS_8BIT_2</p>
+<p>#define OUT_FACE OUT_P888//OUT_D888_P666  </p>
+<p>#define OUT_CLK 65000000 // LCD _DCLK</p>
+<p>#define LCDC_ACLK        500000000//312000000           //29 lcdc axi DMA 频率</p>
+<p>/* Timing */</p>
+<p>#define H_PW 10              //同步信号宽度</p>
+<p>#define H_BP 150//160     //同步信号后消隐</p>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/Linux%E5%AD%97%E7%AC%A6%E8%AE%BE%E5%A4%87%E9%A9%B1%E5%8A%A8%E5%89%96%E6%9E%90/#more" rel="contents">
+              <a class="btn" href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/LCD%E6%97%B6%E5%BA%8F/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -478,7 +841,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/Linux%E4%B8%8B%E6%B7%BB%E5%8A%A0adb%20%E8%AE%BE%E5%A4%87/">
+    <link itemprop="mainEntityOfPage" href="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/LCD%E7%9A%84%E6%8E%A5%E5%8F%A3%E7%B1%BB%E5%9E%8B%E8%AF%A6%E8%A7%A3/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/uploads/avatar.gif">
@@ -492,595 +855,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/Linux%E4%B8%8B%E6%B7%BB%E5%8A%A0adb%20%E8%AE%BE%E5%A4%87/" class="post-title-link" itemprop="url">Linux下添加adb 设备</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-12-31 14:48:01" itemprop="dateCreated datePublished" datetime="2020-12-31T14:48:01+08:00">2020-12-31</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-01-16 12:37:32" itemprop="dateModified" datetime="2020-01-16T12:37:32+08:00">2020-01-16</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E7%83%82%E7%AC%94%E5%A4%B4/" itemprop="url" rel="index"><span itemprop="name">烂笔头</span></a>
-                </span>
-            </span>
-
-          
-            <span id="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/Linux%E4%B8%8B%E6%B7%BB%E5%8A%A0adb%20%E8%AE%BE%E5%A4%87/" class="post-meta-item leancloud_visitors" data-flag-title="Linux下添加adb 设备" title="阅读次数">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-eye"></i>
-              </span>
-              <span class="post-meta-item-text">阅读次数：</span>
-              <span class="leancloud-visitors-count"></span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>在RK平台下测试：</p>
-<ol>
-<li>在system/core/adb/usb_vendors.c 下添加VID</li>
-</ol>
-<p>例如：将Nvidia’s USB Vendor ID修改为Anydata的vid   (只需修改)</p>
-<p>#define VENDOR_ID_NVIDIA        0x16D5</p>
-<ol start="2">
-<li>编译 mmm system/core/adb/ </li>
-</ol>
-<p>生成于out/host/linux-x86/bin/adb   若有，先删除原来的</p>
-<p>3.拷贝到/sbin/下  并修改环境变量</p>
-<p>export PATH=$PATH:/sbin/adb</p>
-<p>4、在  /etc/udev/rules.d/70-android.rules  添加 VID &amp; PID  </p>
-<h1 id="fastboot-protocol-on-grouper-anydata"><a href="#fastboot-protocol-on-grouper-anydata" class="headerlink" title="fastboot protocol on grouper (anydata)"></a>fastboot protocol on grouper (anydata)</h1>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/Linux%E4%B8%8B%E6%B7%BB%E5%8A%A0adb%20%E8%AE%BE%E5%A4%87/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/Linux%E4%B8%8B%E8%BF%9B%E7%A8%8B%E4%B8%8E%E7%BA%BF%E7%A8%8B/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/uploads/avatar.gif">
-      <meta itemprop="name" content="Edward">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="点点滴滴">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/Linux%E4%B8%8B%E8%BF%9B%E7%A8%8B%E4%B8%8E%E7%BA%BF%E7%A8%8B/" class="post-title-link" itemprop="url">Linux下进程与线程</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-12-31 14:48:01" itemprop="dateCreated datePublished" datetime="2020-12-31T14:48:01+08:00">2020-12-31</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-01-16 12:37:32" itemprop="dateModified" datetime="2020-01-16T12:37:32+08:00">2020-01-16</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E7%83%82%E7%AC%94%E5%A4%B4/" itemprop="url" rel="index"><span itemprop="name">烂笔头</span></a>
-                </span>
-            </span>
-
-          
-            <span id="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/Linux%E4%B8%8B%E8%BF%9B%E7%A8%8B%E4%B8%8E%E7%BA%BF%E7%A8%8B/" class="post-meta-item leancloud_visitors" data-flag-title="Linux下进程与线程" title="阅读次数">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-eye"></i>
-              </span>
-              <span class="post-meta-item-text">阅读次数：</span>
-              <span class="leancloud-visitors-count"></span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>2012-03-12：</p>
-<p>1.进程API</p>
-<p>进程是资源管理的最小单位</p>
-<p>线程是程序执行的最小单位</p>
-<p>根据进程在内核中不同的表现分类：</p>
-<p>交互进程：该类进程是由shell控制和运行的，交互进程既可以在前台运行，也可以在后台运行。</p>
-<p>批处理进程：该类进程不属于某个终端，它被提交到一个队列中以便顺序执行。</p>
-<p>守护进程：该类进程在后台运行，它一般在linux启动时开始执行，系统关闭时才结束。</p>
-<p>进程的执行模式分为用户模式和内核模式</p>
-<p>中断或系统调用可以使进程进入内核态。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/Linux%E4%B8%8B%E8%BF%9B%E7%A8%8B%E4%B8%8E%E7%BA%BF%E7%A8%8B/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/Linux%E4%B8%8BSPI%E5%92%8CIIC%E9%A9%B1%E5%8A%A8%E5%9C%A8%E8%AE%BE%E5%A4%87%E6%A0%91%E4%B8%8A%E6%B7%BB%E5%8A%A0%E8%AE%BE%E5%A4%87%E4%BF%A1%E6%81%AF%E7%9A%84%E7%BC%96%E5%86%99%E6%96%B9%E6%B3%95/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/uploads/avatar.gif">
-      <meta itemprop="name" content="Edward">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="点点滴滴">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/Linux%E4%B8%8BSPI%E5%92%8CIIC%E9%A9%B1%E5%8A%A8%E5%9C%A8%E8%AE%BE%E5%A4%87%E6%A0%91%E4%B8%8A%E6%B7%BB%E5%8A%A0%E8%AE%BE%E5%A4%87%E4%BF%A1%E6%81%AF%E7%9A%84%E7%BC%96%E5%86%99%E6%96%B9%E6%B3%95/" class="post-title-link" itemprop="url">Linux下SPI和IIC驱动在设备树上添加设备信息的编写方法</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-12-31 14:48:01" itemprop="dateCreated datePublished" datetime="2020-12-31T14:48:01+08:00">2020-12-31</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-01-16 12:37:32" itemprop="dateModified" datetime="2020-01-16T12:37:32+08:00">2020-01-16</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E7%83%82%E7%AC%94%E5%A4%B4/" itemprop="url" rel="index"><span itemprop="name">烂笔头</span></a>
-                </span>
-            </span>
-
-          
-            <span id="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/Linux%E4%B8%8BSPI%E5%92%8CIIC%E9%A9%B1%E5%8A%A8%E5%9C%A8%E8%AE%BE%E5%A4%87%E6%A0%91%E4%B8%8A%E6%B7%BB%E5%8A%A0%E8%AE%BE%E5%A4%87%E4%BF%A1%E6%81%AF%E7%9A%84%E7%BC%96%E5%86%99%E6%96%B9%E6%B3%95/" class="post-meta-item leancloud_visitors" data-flag-title="Linux下SPI和IIC驱动在设备树上添加设备信息的编写方法" title="阅读次数">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-eye"></i>
-              </span>
-              <span class="post-meta-item-text">阅读次数：</span>
-              <span class="leancloud-visitors-count"></span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p> 编写i2c或spi驱动时，一般需要往设备树上(或者板级文件)添加节点信息，这里提供一种直接在驱动中添加设备信息的方法，使驱动更方便移植。</p>
-<p>i2c的驱动模板如下</p>
-<p>[plain] view plain copy</p>
-<p>#include &lt;linux/module.h&gt;  </p>
-<p>#include &lt;linux/i2c.h&gt;  </p>
-<p>#define SENSOR_BUS_NUM 0    //该设备在第几路iic上，根据硬件具体修改  </p>
-<p>#define SENSOR_SLAVE_ADDRESS 0x3e//设备地址，注意是7位地址（非8位地址,linux中会自动添加读写位）  </p>
-<p>#define SENSOR_NAME &quot;sensor&quot;  //设备的名字  </p>
-<p>struct i2c_client *sensor_client=NULL;  </p>
-<p>static int sensor_i2c_write(char *buf,int length)  </p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/Linux%E4%B8%8BSPI%E5%92%8CIIC%E9%A9%B1%E5%8A%A8%E5%9C%A8%E8%AE%BE%E5%A4%87%E6%A0%91%E4%B8%8A%E6%B7%BB%E5%8A%A0%E8%AE%BE%E5%A4%87%E4%BF%A1%E6%81%AF%E7%9A%84%E7%BC%96%E5%86%99%E6%96%B9%E6%B3%95/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/Linux%E8%AE%BE%E5%A4%87%E9%A9%B1%E5%8A%A8%E4%B9%8B%E5%AD%97%E7%AC%A6%E8%AE%BE%E5%A4%87%E9%A9%B1%E5%8A%A8/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/uploads/avatar.gif">
-      <meta itemprop="name" content="Edward">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="点点滴滴">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/Linux%E8%AE%BE%E5%A4%87%E9%A9%B1%E5%8A%A8%E4%B9%8B%E5%AD%97%E7%AC%A6%E8%AE%BE%E5%A4%87%E9%A9%B1%E5%8A%A8/" class="post-title-link" itemprop="url">Linux设备驱动之字符设备驱动</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-12-31 14:48:01" itemprop="dateCreated datePublished" datetime="2020-12-31T14:48:01+08:00">2020-12-31</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-01-16 12:37:32" itemprop="dateModified" datetime="2020-01-16T12:37:32+08:00">2020-01-16</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E7%83%82%E7%AC%94%E5%A4%B4/" itemprop="url" rel="index"><span itemprop="name">烂笔头</span></a>
-                </span>
-            </span>
-
-          
-            <span id="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/Linux%E8%AE%BE%E5%A4%87%E9%A9%B1%E5%8A%A8%E4%B9%8B%E5%AD%97%E7%AC%A6%E8%AE%BE%E5%A4%87%E9%A9%B1%E5%8A%A8/" class="post-meta-item leancloud_visitors" data-flag-title="Linux设备驱动之字符设备驱动" title="阅读次数">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-eye"></i>
-              </span>
-              <span class="post-meta-item-text">阅读次数：</span>
-              <span class="leancloud-visitors-count"></span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>一、linux系统将设备分为3类：字符设备、块设备、网络设备。使用驱动程序：</p>
-<p>字符设备：是指只能一个字节一个字节读写的设备，不能随机读取设备内存中的某一数据，读取数据需要按照先后数据。字符设备是面向流的设备，常见的字符设备有鼠标、键盘、串口、控制台和LED设备等。</p>
-<p>块设备：是指可以从设备的任意位置读取一定长度数据的设备。块设备包括硬盘、磁盘、U盘和SD卡等。</p>
-<p>每一个字符设备或块设备都在/dev目录下对应一个设备文件。linux用户程序通过设备文件（或称设备节点）来使用驱动程序操作字符设备和块设备。</p>
-<p>二、字符设备、字符设备驱动与用户空间访问该设备的程序三者之间的关系。</p>
-<p>如图，在Linux内核中使用cdev结构体来描述字符设备，通过其成员dev_t来定义设备号（分为主、次设备号）以确定字符设备的唯一性。通过其成员file_operations来定义字符设备驱动提供给VFS的接口函数，如常见的open()、read()、write()等。</p>
-<p>在Linux字符设备驱动中，模块加载函数通过register_chrdev_region( ) 或alloc_chrdev_region( )来静态或者动态获取设备号，通过cdev_init( )建立cdev与file_operations之间的连接，通过cdev_add( )向系统添加一个cdev以完成注册。模块卸载函数通过cdev_del( )来注销cdev，通过unregister_chrdev_region( )来释放设备号。</p>
-<p>用户空间访问该设备的程序通过Linux系统调用，如open( )、read( )、write( )，来“调用”file_operations来定义字符设备驱动提供给VFS的接口函数。</p>
-<p>三、字符设备驱动模型</p>
-<ol>
-<li>驱动初始化</li>
-</ol>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/Linux%E8%AE%BE%E5%A4%87%E9%A9%B1%E5%8A%A8%E4%B9%8B%E5%AD%97%E7%AC%A6%E8%AE%BE%E5%A4%87%E9%A9%B1%E5%8A%A8/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/linux%E5%86%85%E6%A0%B8SPI%E6%80%BB%E7%BA%BF%E9%A9%B1%E5%8A%A8%E7%AE%80%E5%8D%95%E7%BC%96%E5%86%99%E6%B5%8B%E8%AF%95/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/uploads/avatar.gif">
-      <meta itemprop="name" content="Edward">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="点点滴滴">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/linux%E5%86%85%E6%A0%B8SPI%E6%80%BB%E7%BA%BF%E9%A9%B1%E5%8A%A8%E7%AE%80%E5%8D%95%E7%BC%96%E5%86%99%E6%B5%8B%E8%AF%95/" class="post-title-link" itemprop="url">linux内核SPI总线驱动简单编写测试</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-12-31 14:48:01" itemprop="dateCreated datePublished" datetime="2020-12-31T14:48:01+08:00">2020-12-31</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-01-16 12:37:32" itemprop="dateModified" datetime="2020-01-16T12:37:32+08:00">2020-01-16</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E7%83%82%E7%AC%94%E5%A4%B4/" itemprop="url" rel="index"><span itemprop="name">烂笔头</span></a>
-                </span>
-            </span>
-
-          
-            <span id="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/linux%E5%86%85%E6%A0%B8SPI%E6%80%BB%E7%BA%BF%E9%A9%B1%E5%8A%A8%E7%AE%80%E5%8D%95%E7%BC%96%E5%86%99%E6%B5%8B%E8%AF%95/" class="post-meta-item leancloud_visitors" data-flag-title="linux内核SPI总线驱动简单编写测试" title="阅读次数">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-eye"></i>
-              </span>
-              <span class="post-meta-item-text">阅读次数：</span>
-              <span class="leancloud-visitors-count"></span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>linux内核SPI总线驱动简单编写测试</p>
-<p>下面有两个大的模块：</p>
-<p>一个是SPI总线驱动的分析            (研究了具体实现的过程)</p>
-<p>另一个是SPI总线驱动的编写（不用研究具体的实现过程）</p>
-<p>SPI总线驱动分析</p>
-<p>1 SPI概述<br>      SPI是英语Serial Peripheral interface的缩写，顾名思义就是串行外围设备接口，是Motorola首先在其MC68HCXX系列处理器上定义的。SPI接口主要应用在 EEPROM，FLASH，实时时钟，AD转换器，还有数字信号处理器和数字信号解码器之间。SPI是一种高速的，全双工，同步的通信总线，并且在芯片的管脚上只占用四根线，节约了芯片的管脚，同时为PCB的布局上节省空间，提供方便。<br>      SPI的通信原理很简单，它以主从方式工作，这种模式通常有一个主设备和一个或多个从设备，需要4根线，事实上3根也可以。也是所有基于SPI的设备共有的，它们是SDI(数据输入)，SDO(数据输出)，SCLK(时钟)，CS(片选)。<br>      MOSI(SDO)：主器件数据输出，从器件数据输入。<br>      MISO(SDI)：主器件数据输入，从器件数据输出。<br>      SCLK ：时钟信号，由主器件产生。<br>      CS：从器件使能信号，由主器件控制。<br>其中CS是控制芯片是否被选中的，也就是说只有片选信号为预先规定的使能信号时（高电位或低电位），对此芯片的操作才有效，这就允许在同一总线上连接多个SPI设备成为可能。需要注意的是，在具体的应用中，当一条SPI总线上连接有多个设备时，SPI本身的CS有可能被其他的GPIO脚代替，即每个设备的CS脚被连接到处理器端不同的GPIO，通过操作不同的GPIO口来控制具体的需要操作的SPI设备，减少各个SPI设备间的干扰。<br>      SPI是串行通讯协议，也就是说数据是一位一位从MSB或者LSB开始传输的，这就是SCK时钟线存在的原因，由SCK提供时钟脉冲，MISO、MOSI则基于此脉冲完成数据传输。 SPI支持4-32bits的串行数据传输，支持MSB和LSB，每次数据传输时当从设备的大小端发生变化时需要重新设置SPI Master的大小端。</p>
-<p>2 Linux SPI驱动总体架构<br>      在2.6的linux内核中，SPI的驱动架构可以分为如下三个层次：SPI 核心层、SPI控制器驱动层和SPI设备驱动层。<br>      Linux 中SPI驱动代码位于drivers/spi目录。<br>2.1 SPI核心层<br>      SPI核心层是Linux的SPI核心部分，提供了核心数据结构的定义、SPI控制器驱动和设备驱动的注册、注销管理等API。其为硬件平台无关层，向下屏蔽了物理总线控制器的差异，定义了统一的访问策略和接口；其向上提供了统一的接口，以便SPI设备驱动通过总线控制器进行数据收发。<br>      Linux中，SPI核心层的代码位于driver/spi/ spi.c。由于该层是平台无关层，本文将不再叙述，有兴趣可以查阅相关资料。<br>2.2 SPI控制器驱动层<br>      SPI控制器驱动层，每种处理器平台都有自己的控制器驱动，属于平台移植相关层。它的职责是为系统中每条SPI总线实现相应的读写方法。在物理上，每个SPI控制器可以连接若干个SPI从设备。<br>      在系统开机时，SPI控制器驱动被首先装载。一个控制器驱动用于支持一条特定的SPI总线的读写。一个控制器驱动可以用数据结构struct spi_master来描述。</p>
-<p>   在include/liunx/spi/spi.h文件中，在数据结构struct spi_master定义如下：</p>
-<p>struct spi_master { </p>
-<p>struct device   dev; </p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/linux%E5%86%85%E6%A0%B8SPI%E6%80%BB%E7%BA%BF%E9%A9%B1%E5%8A%A8%E7%AE%80%E5%8D%95%E7%BC%96%E5%86%99%E6%B5%8B%E8%AF%95/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/Linux%E5%9F%BA%E7%A1%80/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/uploads/avatar.gif">
-      <meta itemprop="name" content="Edward">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="点点滴滴">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/Linux%E5%9F%BA%E7%A1%80/" class="post-title-link" itemprop="url">Linux基础</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-12-31 14:48:01" itemprop="dateCreated datePublished" datetime="2020-12-31T14:48:01+08:00">2020-12-31</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-01-16 12:37:32" itemprop="dateModified" datetime="2020-01-16T12:37:32+08:00">2020-01-16</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E7%83%82%E7%AC%94%E5%A4%B4/" itemprop="url" rel="index"><span itemprop="name">烂笔头</span></a>
-                </span>
-            </span>
-
-          
-            <span id="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/Linux%E5%9F%BA%E7%A1%80/" class="post-meta-item leancloud_visitors" data-flag-title="Linux基础" title="阅读次数">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-eye"></i>
-              </span>
-              <span class="post-meta-item-text">阅读次数：</span>
-              <span class="leancloud-visitors-count"></span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>2012.02.17:</p>
-<p>vmware的安装 linux的介绍与安装，网络配置，vim使用</p>
-<p>网络配置：</p>
-<p>/etc/network/interfaces</p>
-<p>DNS客户端配置</p>
-<p>/etc/resolv.conf  </p>
-<p>nameserver 202.96.128.166 //深圳DNS</p>
-<p>nameserver 202.96.128.86  //中国</p>
-<p>/etc/hostname   //设置主机名</p>
-<p>/etc/hosts       //基于host列表实现命名解析</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/Linux%E5%9F%BA%E7%A1%80/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/Linux-dd%E5%91%BD%E4%BB%A4%E8%AF%A6%E8%A7%A3/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/uploads/avatar.gif">
-      <meta itemprop="name" content="Edward">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="点点滴滴">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/Linux-dd%E5%91%BD%E4%BB%A4%E8%AF%A6%E8%A7%A3/" class="post-title-link" itemprop="url">Linux-dd命令详解</a>
+            <a href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/LCD%E7%9A%84%E6%8E%A5%E5%8F%A3%E7%B1%BB%E5%9E%8B%E8%AF%A6%E8%A7%A3/" class="post-title-link" itemprop="url">LCD的接口类型详解</a>
         </h2>
 
         <div class="post-meta">
@@ -1110,7 +885,7 @@
             </span>
 
           
-            <span id="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/Linux-dd%E5%91%BD%E4%BB%A4%E8%AF%A6%E8%A7%A3/" class="post-meta-item leancloud_visitors" data-flag-title="Linux-dd命令详解" title="阅读次数">
+            <span id="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/LCD%E7%9A%84%E6%8E%A5%E5%8F%A3%E7%B1%BB%E5%9E%8B%E8%AF%A6%E8%A7%A3/" class="post-meta-item leancloud_visitors" data-flag-title="LCD的接口类型详解" title="阅读次数">
               <span class="post-meta-item-icon">
                 <i class="fa fa-eye"></i>
               </span>
@@ -1127,15 +902,218 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <p>Linux-dd命令详解 <br>dd 是 Linux/UNIX 下的一个非常有用的命令，作用是用指定大小的块拷贝一个文件，并在拷贝的同时进行指定的转换。<br>名称: dd <br>使用权限: 所有使用者dd 这个指令在 manual 里的定义是 convert and copy a file <br>使用方式: <br>dd [option] <br>如果你想要在线看 manual, 可以试试: <br>dd –help <br>或是 <br>info dd <br>如果你想要看看这个版本如何: <br>dd –version <br>输入或输出 <br>dd if=[STDIN] of=[STDOUT] <br>强迫输入或输出的Size为多少Bytes <br>bs: dd -ibs=[BYTE] -obs=[SIZE] <br>强迫一次只做多少个 Bytes <br>cbs=BYTES <br>跳过一段以后才输出 <br>seek=BLOCKS <br>跳过一段以后才输入 <br>skip=BLOCKS <br>当然你可以拿这个来方便的拷贝光碟(注意，你的光碟是标准的 iso9660格式才可以这么做唷！) <br>dd if=/dev/cdrom of=cdrom.iso <br>其中 if 后面以及 of 后面的内容依你的需求调整。 <br>然后给系统这个指令就可以烧了: <br>cdrecord -v cdrom.iso <br>这篇不是在讲 cdrecord 的，所以上面的指令是最为简单但是不一定能符合您的硬件环境…<br>功能：把指定的输入文件拷贝到指定的输出文件中，并且在拷贝过程中可以进行格式转换。可以用该命令实现DOS下的diskcopy命令的作用。先用dd命令把软盘上的数据写成硬盘的一个寄存文件，再把这个寄存文件写入第二张软盘上，完成diskcopy的功能。需要注意的是，应该将硬盘上的寄存文件用rm命令删除掉。系统默认使用标准输入文件和标准输出文件。 <br>语法：dd [选项] <br>if =输入文件（或设备名称）。 <br>of =输出文件（或设备名称）。 <br>ibs = bytes 一次读取bytes字节，即读入缓冲区的字节数。 <br>skip = blocks 跳过读入缓冲区开头的ibs*blocks块。 <br>obs = bytes 一次写入bytes字节，即写入缓冲区的字节数。 <br>bs = bytes 同时设置读/写缓冲区的字节数（等于设置ibs和obs）。 <br>cbs = byte 一次转换bytes字节。 <br>count=blocks 只拷贝输入的blocks块。 <br>conv = ASCII 把EBCDIC码转换为ASCIl码。 <br>conv = ebcdic 把ASCIl码转换为EBCDIC码。 <br>conv = ibm 把ASCIl码转换为alternate EBCDIC码。 <br>conv = block 把变动位转换成固定字符。 <br>conv = ublock 把固定位转换成变动位。 <br>conv = ucase 把字母由小写转换为大写。 <br>conv = lcase 把字母由大写转换为小写。 <br>conv = notrunc 不截短输出文件。 <br>conv = swab 交换每一对输入字节。 <br>conv = noerror 出错时不停止处理。 <br>conv = sync 把每个输入记录的大小都调到ibs的大小（用NUL填充）。 <br>　 <br>例1：要把一张软盘的内容拷贝到另一张软盘上，利用/tmp作为临时存储区。把源盘插入驱动器中，输入下述命令： <br>$ dd if =/dev/fd0 of = /tmp/tmpfile <br>拷贝完成后，将源盘从驱动器中取出，把目标盘插入，输入命令： <br>$ dd if = /tmp/tmpfile of =/dev/fd0 <br>软盘拷贝完成后，应该将临时文件删除： <br>$ rm /tmp/tmpfile <br>　 <br>例2：把net.i这个文件写入软盘中，并设定读/写缓冲区的数目。 <br>（注意：软盘中的内容会被完全覆盖掉） <br>$ dd if = net.i of = /dev/fd0 bs = 16384 <br>　 <br>例3：将文件sfile拷贝到文件 dfile中。 <br>$ dd if=sfile of=dfile</p>
-<p>例4：创建一个100M的空文件</p>
-<p>dd if=/dev/zero of=hello.txt bs=100M count=1</p>
-<p>=============================================</p>
-<p>/dev/null，外号叫无底洞，你可以向它输出任何数据，它通吃，并且不会撑着！<br>/dev/zero,是一个输入设备，你可你用它来初始化文件。</p>
-<p>/dev/null——它是空设备，也称为位桶（bit bucket）。任何写入它的输出都会被抛弃。如果不想让消息以标准输出显示或写入文件，那么可以将消息重定向到位桶。<br>/dev/zero——该设备无穷尽地提供0，可以使用任何你需要的数目——设备提供的要多的多。他可以用于向设备或文件写入字符串0。<br>$ dd if=/dev/zero of=./test.txt bs=1k count=1<br>$ ls -l<br>total 4<br>-rw-r–r–     1 oracle    dba           1024 Jul 15 16:56 test.txt</p>
-<p>eg:</p>
-<p>$ find / -name access_log   2&gt;/dev/null</p>
+          <p>LCD的接口类型详解</p>
+<p>          LCD的接口有多种，分类很细。主要看LCD的驱动方式和控制方式，目前手机上的彩色LCD的连接方式一般有这么几种：MCU模式，RGB模式，SPI模式，VSYNC模式，MDDI模式，DSI模式。MCU模式（也写成MPU模式的）。只有TFT模块才有RGB接口。</p>
+<p>但应用比较多的就是MUC模式和RGB模式，区别有以下几点：</p>
+<p>1.MCU接口:会解码命令，由timing generator产生时序信号，驱动COM和SEG驱器。</p>
+<p>   RGB接口:在写LCD register setting时，和MCU接口没有区别。区别只在于图像的写入方式。 </p>
+<p>2.用MCU模式时由于数据可以先存到IC内部GRAM后再往屏上写，所以这种模式LCD可以直接接在MEMORY的总线上。</p>
+<p>   用RGB模式时就不同了，它没有内部RAM，HSYNC，VSYNC，ENABLE，CS，RESET，RS可以直接接在MEMORY的GPIO口上，用GPIO口来模拟波形. </p>
+<p>3.MPU接口方式：显示数据写入DDRAM，常用于静止图片显示。</p>
+<p>    RGB接口方式：显示数据不写入DDRAM，直接写屏，速度快，常用于显示视频或动画用。</p>
+<p>MCU接口和RGB接口主要的区别是：</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/LCD%E7%9A%84%E6%8E%A5%E5%8F%A3%E7%B1%BB%E5%9E%8B%E8%AF%A6%E8%A7%A3/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
 
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/LCDC%E5%88%B7%E6%96%B0%E9%A2%91%E7%8E%87/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/avatar.gif">
+      <meta itemprop="name" content="Edward">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="点点滴滴">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/LCDC%E5%88%B7%E6%96%B0%E9%A2%91%E7%8E%87/" class="post-title-link" itemprop="url">LCDC刷新频率</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-12-31 14:48:01" itemprop="dateCreated datePublished" datetime="2020-12-31T14:48:01+08:00">2020-12-31</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-01-16 12:37:32" itemprop="dateModified" datetime="2020-01-16T12:37:32+08:00">2020-01-16</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%83%82%E7%AC%94%E5%A4%B4/" itemprop="url" rel="index"><span itemprop="name">烂笔头</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/LCDC%E5%88%B7%E6%96%B0%E9%A2%91%E7%8E%87/" class="post-meta-item leancloud_visitors" data-flag-title="LCDC刷新频率" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>cat sys/class/graphics/fb*/fps</p>
+<p>cat proc/clocks | busybox grep -r lcdc</p>
+<p>Android 的最高刷新频率为60fps，所以我们最好保证LCDC 的刷新频率也为60fps，</p>
+<p>根据文档第一部分介绍的LCDC 的刷新频率计算公式可以知道，</p>
+<p>LCDC 的刷新频率和DCLK 成正比，和水平方向与垂直方向参数之和的乘积成反比。</p>
+<p>写颜色：</p>
+<p>cat sys/class/graphics/fb0/disp_info</p>
+<p>YRGB buffer addr:0x9a800000</p>
+<p>stop //停止刷新</p>
+<p>io -w -4 -l 0x3e8000(数据长度1280<em>800</em>4)  0x9a800000  0x00ff0000 红色</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/LCDC%E5%88%B7%E6%96%B0%E9%A2%91%E7%8E%87/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/LCD/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/avatar.gif">
+      <meta itemprop="name" content="Edward">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="点点滴滴">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/LCD/" class="post-title-link" itemprop="url">LCD</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-12-31 14:48:01" itemprop="dateCreated datePublished" datetime="2020-12-31T14:48:01+08:00">2020-12-31</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-01-16 12:37:33" itemprop="dateModified" datetime="2020-01-16T12:37:33+08:00">2020-01-16</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%83%82%E7%AC%94%E5%A4%B4/" itemprop="url" rel="index"><span itemprop="name">烂笔头</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/LCD/" class="post-meta-item leancloud_visitors" data-flag-title="LCD" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>1、概念</p>
+<p>VSS(V Sync Start)是帧同步信号，每发出一个脉冲，都意味着新的一屏图像数据开始发送。</p>
+<p>HSS(H Sync Start) 是行同步信号，每发出一个脉冲都表明新的一行图像资料开始发送。</p>
+<p>HBP( Horizontal back porch )：前消隐所需要的周期</p>
+<p>HFP( Horizontal front porch )：后消隐所需要的周期</p>
+<p>2、帧同步以及行同步的头尾都必须留有回扫时间。这样的时序安排起源于 CRT 显示器电</p>
+<p>子枪偏转所需要的时间，但后来成为实际上的工业标准，因此 TFT 屏也包含了回扫时<br>间，虽然对于 TFT 来说，这是不需要的。</p>
+<p>3、正常的TFT一行的显示周期是 前消隐+实际点输出+后消隐</p>
+<p>如果前消隐设置小了,后消隐设置大了,LCD控制器的实际输出就会被当做消隐而不会实际显示出来,看到的效果就是图像左移,反之图像右移 <br>如果前后消隐都设置小了,理论上第二行的图像可能会被当做第一行的图像显示,照成屏幕歪斜不同步,但是有些TFT中内部的时序电路会自动补上缺少的时钟,所以也不一定会看到不同步的画面<br>场的消隐同理<br>至于为什么要消隐是为了兼容CRT显示器的显示原理,CRT显示器每一个扫描行完成后,电子枪需要回扫,这段时间不能显示,所以这段时间的视频信号需要暂停一下,就是消隐. </p>
+<p>4、一帧图像时间计算：</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/LCD/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
@@ -1153,7 +1131,7 @@
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/33/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/33/">33</a><span class="page-number current">34</span><a class="page-number" href="/page/35/">35</a><span class="space">&hellip;</span><a class="page-number" href="/page/57/">57</a><a class="extend next" rel="next" href="/page/35/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
+    <a class="extend prev" rel="prev" href="/page/33/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/33/">33</a><span class="page-number current">34</span><a class="page-number" href="/page/35/">35</a><span class="space">&hellip;</span><a class="page-number" href="/page/56/">56</a><a class="extend next" rel="next" href="/page/35/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
   </nav>
 
 
@@ -1221,14 +1199,14 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">570</span>
+          <span class="site-state-item-count">554</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-count">9</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
   </nav>
@@ -1255,7 +1233,7 @@
 <div class="copyright">
   
   &copy; 
-  <span itemprop="copyrightYear">2020</span>
+  <span itemprop="copyrightYear">2021</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>

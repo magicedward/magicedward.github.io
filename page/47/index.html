@@ -187,7 +187,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/BT.601%E4%B8%8EBT.656/">
+    <link itemprop="mainEntityOfPage" href="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/apk%E5%AE%89%E8%A3%85timeout%E6%97%B6%E9%97%B4/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/uploads/avatar.gif">
@@ -201,7 +201,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/BT.601%E4%B8%8EBT.656/" class="post-title-link" itemprop="url">BT</a>
+            <a href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/apk%E5%AE%89%E8%A3%85timeout%E6%97%B6%E9%97%B4/" class="post-title-link" itemprop="url">apk安装timeout时间</a>
         </h2>
 
         <div class="post-meta">
@@ -211,192 +211,7 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2020-12-31 14:48:01" itemprop="dateCreated datePublished" datetime="2020-12-31T14:48:01+08:00">2020-12-31</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-01-16 12:37:33" itemprop="dateModified" datetime="2020-01-16T12:37:33+08:00">2020-01-16</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E7%83%82%E7%AC%94%E5%A4%B4/" itemprop="url" rel="index"><span itemprop="name">烂笔头</span></a>
-                </span>
-            </span>
-
-          
-            <span id="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/BT.601%E4%B8%8EBT.656/" class="post-meta-item leancloud_visitors" data-flag-title="BT" title="阅读次数">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-eye"></i>
-              </span>
-              <span class="post-meta-item-text">阅读次数：</span>
-              <span class="leancloud-visitors-count"></span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>BT.601与BT.656<br>ITU-R Recommendation BT.601，简称Rec.601或者BT.601（或者它的前身，CCIR601），是1982年由ITU-R发布的一个标准，用于将各行数位视讯讯号进行数位化。旧名称为CCIR 601，国际电信联盟（ITU）所制订的标准规格。为现今标准电视放送规格标准。对应NTSC（525/60）与PAL（扫描线625/50）、对应4:3和16:9纵横比画面。规定了视频信号数字编码方法。虽然色彩成份为RGB 4:4:4跟色差(YCbCr) 4:2:2为既订的，但是，这里记录的是作为广播放送用的一般的色差方式。 PAL技术指标 场频：50Hz 帧频：25Hz 行频：15625Hz=625行/帧x25帧/秒 总行数：625 场回扫行数：25x2 图像行数：575       数字场：场1消隐24行，场2消隐25行，有效行576 NTSC技术指标 场频：29.97x2Hz 帧频：29.97Hz 行频：15734.25Hz=525x29.97 总行数：525 场回扫行数：20x2 图像行数：485(480) 为什么NTSC制式帧频是29.97FPS（精确来说是60FPS（场速率）/1.001）？ 是避免4.5MHz处的干扰而提出的，NTSC经过调查研究后，于1954年决定从30FPS更改为29.97FPS，因为干扰跳动频率出现在颜色副载波（3.5795MHz）和声音载波（4.5MHz）之间，以及颜色副载波和视频亮度信号的高频之间，选择水平频率fH=15734.25Hz（其286次谐波频率为4.5MHz，其227.5倍频率为3.5795MHz），可将干扰最小化。垂直频率从而变成了fH/525=29.97Hz 亮度采样频率fs 视频带宽6MHz PAL的fH和NTSC的fH的行扫描频率的最小公倍数是2.25MHz fs&gt;6x2MHz，采样定理 取fs=2.25MHzx6=13.5MHz&gt;6x2MHz 整合NTSC和PAL，减少硬件设计成本，所以选13.5MHz 色差信号抽样频率 6.75MHz（4:2:2） 3.375MHz（4:1:1和4:2:0） 每行采样样本N PAL 13.5MHz/(625x25)=864 NTSC 13.5MHz/(525x29.97)=858 每一扫描行的有效样本数 720 ITU-R BT.601规定采样时间是53.3333us 53.3333x13.5=719.99955=720 720x576x50=720x480x60=20736000=162x902x10 16x16是压缩算法的主要子块单位 4:2:2格式 CCIR建议两种制式有效行的取样点亮度信号取720个，两个色差信号各取360个 即每个有效行包括720个亮度数据和720个色度数据（两个色度各360个） 统一了数字分量编码标准，使三种制式便于转换和统一 所以有效行亮度信号与两个色差信号的取样点之比也为4:2:2（720:360:360） 分辨率 分辨率即是每帧图像有效行内的有效样本数，CCIR601规定对所有的制式，其每一行的有效样本点数为720个。由于不同的制式其有效行数不同，其分辨率也不同，分别为 PAL制和SECAM制 720×576 NTSC制 720×480 640x480 320x240（320x262），LCD实验 352x288，CMOS Sensor实验 数据量 4:2:2的格式采样，10Bit量化 13.5×10+6.75×10+6.75×10=270Mbps 4:2:2的格式采样，8Bit量化 13.5×8+6.75×8+6.75×8=216Mbps 数据时分复用 经量化、编码后的视频数据字有3个样本值，CCIR601规定进行多路复用后按27Mwords/s来传递,其中字按以下顺序传递:Cb、Y、Cr、Y、Cb、Y、Cr、Y、Cb、Y、Cr、Y…,也就是说，ITU-RBT601，16位数据传输；21芯；Y、U、V信号同时传输。601是并行数据，行场同步有单独输出。 分量取值 CCIR601规定，每个样本点都按8位数字化，也即有256个等级。但实际上亮度信号占220级，色度信号占225级，其它位作同步、编码等控制用。 Y：16（全黑）<del>235（全白） Cb，Cr：16</del>240，128除外 这种规格的机器通常可连接serial digital interface（SDI）规格SMPTE 259M为标准的接口。为了跟HDTV有所区别又称SD-SDI。<br>串行数字接口 (SDI) 是 ITU-R BT.656 以及移动图像和电视工程师协会 ( SMPTE) 提出的串行链路标准，在演播环境中通过 75 欧姆同轴电缆来传输未压缩的数字视频，大部分专业视频基础设备都采用了该标准。该标准的第一版是 SMPTE 259M，定义了通过串行接口来传输数字化的 NTSC 和 PAL 等模拟视频，它更流行的名称是标准清晰度 (SD) SDI 。传输 SD SDI 所需的数据速率是 270 Mbps。随着 1080i 和 720p 等高清晰 (HD) 视频标准的出现，对接口进行了调整以处理更高的 1.485 Gbps 数据速率。1.485-Gbps 串行接口通常被称为 HD SDI 接口，由 SMPTE 292M 进行定义，它使用同样的 75 欧姆同轴电缆。演播和其他视频产品开发商在同轴电缆硬件基础设备上进行了大量投入，希望能够延长其基础设备的生命周期。幸运的是，SMPTE 最近批准了名为 SMPTE 424M 的新标准，在同样的75欧姆同轴电缆上，SDI数据速率加倍，达到了2.97 Gbps。这一新标准也称为 3-Gbps (3G) SDI，支持 1080p 和数字影院等分辨率更高的图像质量。<br>BT.601它规定彩色电视信号采用分量编码。所谓分量编码就是彩色全电视信号在转换成数字形式之前，先被分离成亮度信号和色差信号，然后对它们分别进行编码。 ITU BT.656 ITU-R Recommendation BT.656，有时候也称为ITU656（前身CCIR 656），是一个简单的数字视频协议，用于将未压缩的PAL或NTSC（525行或者625行）信号进行编码。9芯，其输入接口有一根pixel_CLK时钟信号,8根YUV的数据信号,还有二根SVVS/SVHS(垂直水平同步信号)，8/10位数据传输；不需要同步信号；串行数据传输；传输速率是601的2倍；先传Y，后传UV。行场同步信号嵌入在数据流中。 BT656主要用于实时视频数据传递。包含三部分 1：视频信号，依BT.6012：数字消隐数据， 0x80,0x10,0x80,0x10(8位)，200h，40h，200h，40h（10位），分别与Cb,Y,Cr，Y的消隐电平相对应。 3：定时基准信号： 有两个定时基准信号，一个在每个视频数据块的开始(Start of ActiveVideo，SAV)，另一个在每个视频数据块的结束(End of Active Video，EAV)；每个定时基准信号由4个字的序列组成，格式如下： FF 00 00 XY（16进制）头三个是固定前缀，第4个字包含定义第二场标识、场消隐状态和行消隐状态的信息。 4：辅助信号： <br>辅助数据信号可以以10比特形式只在行消隐期间传送，还可以以8比特形式只在场消隐中的行的有效期间传送。依BT.1364标准。<br>简单的说ITU-R BT.601是&quot;演播室数字电视编码参数&quot;标准,而ITU-R BT.656则是ITU-R      BT.601附件A中的数字接口标准,用于主要数字视频设备(包括芯片)之间采用27Mhz/s并口或243Mb/s串行接口的数字传输接口标准. BT.601规划了对视频进行数字编码的方法 BT.656则实际定义了实施BT.601所必需的物理接口和数据流，以及位并行和位串行模式 位并行模式 只需要27MHz的时钟（在NTSC 30 帧/s条件下）以及8或10条连线（具体取决于像素的分辨率）。 所有的同步化信号都嵌入到数据流中，因此无需额外添加硬件连线。（25针D型迷你连接器） 位串行模式 只需要在单个通道上传输一路复用化的10bit/像素串行数据流，不过它需要运用复杂的同步化、频谱整形和时钟恢复调理等技术手段。 此外，其位时钟速率接近300MHz，因此要在很多系统中实施基于采用串行位形式的BT.656是极富挑战性的任务。<br>￼<br>帧划分：<br>￼<br>数据流：<br>￼<br>￼<br>请注意，视频数据有一个由三个字节构成的前导码（8bit视频是0xFF, 0x00，0x00，而10bit视频则是0x3FF, 0x000, 0x000），后面跟随着XY状态字，这个字除了包含F （场）, V （垂直消隐） 和 H （水平消隐）位之外，还包含了4个保护位，以实现单位错误的检测和纠正。请注意，F和V只能作为EAV序列的一部分来变化（即，从H = 0切换到H = 1）。此外，请注意，对于10bit视频来说，增加的两位实际上是最低位，而不是最高位。<br>￼<br>另外，垂直消隐间隔可以被用来发送非视频的信息，如字幕，音频，文字电视广播或者甚至交互电视应用所需的数据。这些辅助数据包并未采用通常的控制代码的前导码，而以0x00,0xFF,0xFF为前导码。如果不发送辅助数据，则在水平和垂直消隐间隔发送（0x80, 0x10, 0x80, 0x10, 0x80, 0x10。。。）对应（Cb, Y, Cr, Y, Cb, Y, …）。</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/BT%20%E8%93%9D%E7%89%99%20%E6%90%9C%E7%B4%A2%E6%97%B6%E4%B8%8D%E5%8F%AF%E8%A7%81/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/uploads/avatar.gif">
-      <meta itemprop="name" content="Edward">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="点点滴滴">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/BT%20%E8%93%9D%E7%89%99%20%E6%90%9C%E7%B4%A2%E6%97%B6%E4%B8%8D%E5%8F%AF%E8%A7%81/" class="post-title-link" itemprop="url">BT 蓝牙 搜索时不可见</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-12-31 14:48:01" itemprop="dateCreated datePublished" datetime="2020-12-31T14:48:01+08:00">2020-12-31</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-01-16 12:37:33" itemprop="dateModified" datetime="2020-01-16T12:37:33+08:00">2020-01-16</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E7%83%82%E7%AC%94%E5%A4%B4/" itemprop="url" rel="index"><span itemprop="name">烂笔头</span></a>
-                </span>
-            </span>
-
-          
-            <span id="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/BT%20%E8%93%9D%E7%89%99%20%E6%90%9C%E7%B4%A2%E6%97%B6%E4%B8%8D%E5%8F%AF%E8%A7%81/" class="post-meta-item leancloud_visitors" data-flag-title="BT 蓝牙 搜索时不可见" title="阅读次数">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-eye"></i>
-              </span>
-              <span class="post-meta-item-text">阅读次数：</span>
-              <span class="leancloud-visitors-count"></span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>diff –git a/src/com/android/settings/bluetooth/BluetoothDiscoverableEnabler.java b/src/com/android/settings/bluetooth/BluetoothDiscoverableEnabler.java</p>
-<p>index d687136..4f69c18 100755</p>
-<p>— a/src/com/android/settings/bluetooth/BluetoothDiscoverableEnabler.java</p>
-<p>+++ b/src/com/android/settings/bluetooth/BluetoothDiscoverableEnabler.java</p>
-<p>@@ -125,7 +125,8 @@ final class BluetoothDiscoverableEnabler implements Preference.OnPreferenceClick</p>
-<p>     public boolean onPreferenceClick(Preference preference) {</p>
-<p>         // toggle discoverability</p>
-<ul>
-<li>       mDiscoverable = !mDiscoverable;</li>
-</ul>
-<ul>
-<li><p>       mDiscoverable = !mDiscoverable;</p>
-</li>
-<li><p>              if(!mLocalAdapter.isDiscovering())</p>
-</li>
-</ul>
-<p>         setEnabled(mDiscoverable);</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/BT%20%E8%93%9D%E7%89%99%20%E6%90%9C%E7%B4%A2%E6%97%B6%E4%B8%8D%E5%8F%AF%E8%A7%81/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/bootloader%20%EF%BC%88Little%20Kernel%EF%BC%89/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/uploads/avatar.gif">
-      <meta itemprop="name" content="Edward">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="点点滴滴">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/bootloader%20%EF%BC%88Little%20Kernel%EF%BC%89/" class="post-title-link" itemprop="url">bootloader （Little Kernel）</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-12-31 14:48:01" itemprop="dateCreated datePublished" datetime="2020-12-31T14:48:01+08:00">2020-12-31</time>
+              <time title="创建时间：2020-12-31 14:48:00" itemprop="dateCreated datePublished" datetime="2020-12-31T14:48:00+08:00">2020-12-31</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
@@ -416,7 +231,7 @@
             </span>
 
           
-            <span id="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/bootloader%20%EF%BC%88Little%20Kernel%EF%BC%89/" class="post-meta-item leancloud_visitors" data-flag-title="bootloader （Little Kernel）" title="阅读次数">
+            <span id="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/apk%E5%AE%89%E8%A3%85timeout%E6%97%B6%E9%97%B4/" class="post-meta-item leancloud_visitors" data-flag-title="apk安装timeout时间" title="阅读次数">
               <span class="post-meta-item-icon">
                 <i class="fa fa-eye"></i>
               </span>
@@ -433,24 +248,8 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <p>LK是什么</p>
-<p>LK 是 Little Kernel 它是 appsbl （Applications ARM Boot Loader）流程代码  ，little kernel 是小内核小操作系统。</p>
-<p>           LK 代码 在 bootable/bootloadler/lk 目录下</p>
-<p>           LK 代码结构</p>
-<p>           +app            // 应用相关</p>
-<p>           +arch           // arm 体系 </p>
-<p>           +dev            // 设备相关</p>
-<p>           +include      // 头文件</p>
-<p>           +kernel        // lk系统相关   </p>
-<p>           +platform    // 相关驱动</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/bootloader%20%EF%BC%88Little%20Kernel%EF%BC%89/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
+          <p> — a/frameworks/base/services/java/com/android/server/NativeDaemonConnector.java<br>+++ b/frameworks/base/services/java/com/android/server/NativeDaemonConnector.java<br>@@ -61,7 +61,7 @@ final class NativeDaemonConnector implements Runnable, Handler.Callback, Watchdo<br>     private AtomicInteger mSequenceNumber;<br>-    private static final int DEFAULT_TIMEOUT = 1 * 60 * 1000; /* 1 minute <em>/<br>+    private static final int DEFAULT_TIMEOUT = 2 * 60 * 1000; /</em> 1 minute <em>/<br>     private static final long WARN_EXECUTE_DELAY_MS = 500; /</em> .5 sec */   </p>
+
       
     </div>
 
@@ -469,7 +268,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/bmp%20logo/">
+    <link itemprop="mainEntityOfPage" href="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/Apktool%20-%20Documentation/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/uploads/avatar.gif">
@@ -483,7 +282,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/bmp%20logo/" class="post-title-link" itemprop="url">bmp logo</a>
+            <a href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/Apktool%20-%20Documentation/" class="post-title-link" itemprop="url">Apktool - Documentation</a>
         </h2>
 
         <div class="post-meta">
@@ -493,7 +292,7 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2020-12-31 14:48:01" itemprop="dateCreated datePublished" datetime="2020-12-31T14:48:01+08:00">2020-12-31</time>
+              <time title="创建时间：2020-12-31 14:48:00" itemprop="dateCreated datePublished" datetime="2020-12-31T14:48:00+08:00">2020-12-31</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
@@ -513,7 +312,7 @@
             </span>
 
           
-            <span id="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/bmp%20logo/" class="post-meta-item leancloud_visitors" data-flag-title="bmp logo" title="阅读次数">
+            <span id="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/Apktool%20-%20Documentation/" class="post-meta-item leancloud_visitors" data-flag-title="Apktool - Documentation" title="阅读次数">
               <span class="post-meta-item-icon">
                 <i class="fa fa-eye"></i>
               </span>
@@ -530,101 +329,19 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <p> sudo apt-get install imagemagick</p>
-<p>convert -compress rle -colors 256 logo.bmp logo_rle8.bmp</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/Bluetooth%20%E6%9C%8D%E5%8A%A1%20%E5%B7%A5%E4%BD%9C%E6%B5%81%E7%A8%8B/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/uploads/avatar.gif">
-      <meta itemprop="name" content="Edward">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="点点滴滴">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/Bluetooth%20%E6%9C%8D%E5%8A%A1%20%E5%B7%A5%E4%BD%9C%E6%B5%81%E7%A8%8B/" class="post-title-link" itemprop="url">Bluetooth 服务 工作流程</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-12-31 14:48:01" itemprop="dateCreated datePublished" datetime="2020-12-31T14:48:01+08:00">2020-12-31</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-01-16 12:37:32" itemprop="dateModified" datetime="2020-01-16T12:37:32+08:00">2020-01-16</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E7%83%82%E7%AC%94%E5%A4%B4/" itemprop="url" rel="index"><span itemprop="name">烂笔头</span></a>
-                </span>
-            </span>
-
-          
-            <span id="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/Bluetooth%20%E6%9C%8D%E5%8A%A1%20%E5%B7%A5%E4%BD%9C%E6%B5%81%E7%A8%8B/" class="post-meta-item leancloud_visitors" data-flag-title="Bluetooth 服务 工作流程" title="阅读次数">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-eye"></i>
-              </span>
-              <span class="post-meta-item-text">阅读次数：</span>
-              <span class="leancloud-visitors-count"></span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>一、Bluez编译配置支持<br>    在BoardConfig.mk中添加：<br>    BOARD_HAVE_BLUETOOTH := true。<br>二、启动hciattach </p>
-<p>    BlueZ核心子系统使用hciattach守护进程添加指定的硬件串口驱动。<br>    修改init.rc来启动hciattach： </p>
-<p>    service hciattach /system/bin/hciattch -n -s 115200 /dev/ttyS2 bcm2035 115200<br>            user bluetooth<br>            group bluetooth net_bt_admin<br>            disabled<br>     同时也要启动dbus daemon,因为bluez需要dbus与其它进程通讯的。 </p>
-<p>用户可以在代码中通过调用property_service.c 中函数<br>property_set(&quot;ctl.start&quot;,hciattach)<br>property_set(&quot;ctl.stop&quot;,hciattach)<br>来使得android property service 去开启或结束 hciattach service. </p>
-<p>当然用户也可以在控制台直接使用命令<br>#setprop ctl.start hciattach<br>#setprop ctl.stop hciattach<br>来做同样的事情</p>
-<p>三、Bluez控制流程</p>
-<p>     class bluetoothsetting是UI的入口，通过按button scan进入搜索状态，<br>     applicaton层调用bluetoothdevice, 接着就是bluetoothservice的调用， <br>     bluetoothservice调用native方法，到此全部的java程序结束了。<br>     下面的调用都是JNI, cpp实现的。android_server_bluetoothservice.cpp里面实现了native </p>
-<p>     方法，最终通过dbus封装，调用 HCID deamon 的function DiscoverDevice。</p>
-<p>     Bluetooth的启动流程是：</p>
-<p>        1.  打开蓝牙电源，通过rfkill来enable;(system/bluetooth/bluedroid/bluetooth.c)<br>        2.  启动service hciattch -n -s 115200 /dev/ttyS2 bcm2035 115200；<br>        3.  检测HCI是否成功（接受HCIDEVUP socket来判断或hciconfig hci0 up）；<br>        4.  hcid deamon start up。</p>
+          <p>Introduction</p>
+<p>Basic</p>
+<p><a target="_blank" rel="noopener" href="https://ibotpeaches.github.io/Apktool/documentation">https://ibotpeaches.github.io/Apktool/documentation</a></p>
+<p>First lets take a lesson into apk files. Apks are nothing more than a zip file containing resources and assembled java code. If you were to simply unzip an apk like so, you would be left with files such as classes.dex and resources.arsc.</p>
+<p>$ unzip testapp.apk<br>Archive:  testapp.apk<br> inflating: AndroidManifest.xml<br> inflating: classes.dex<br> extracting: res/drawable-hdpi/ic_launcher.png<br> inflating: res/xml/literals.xml<br> inflating: res/xml/references.xml<br> extracting: resources.arsc</p>
+<p>However, at this point you have simply inflated compiled sources. If you tried to view AndroidManifest.xml. You’d be left viewing this.</p>
+<p>P4F0\fnversionCodeversionNameandroid*<a target="_blank" rel="noopener" href="http://schemas.android.com/apk/res/android%07package%18platformBuildVersionCode%18platformBuildVersionName%08manifest%14brut.apktool.testapp%031.0%0221%07APKTOOL">http://schemas.android.com/apk/res/androidpackageplatformBuildVersionCodeplatformBuildVersionNamemanifestbrut.apktool.testapp1.021APKTOOL</a></p>
+<p>Obviously, editing or viewing a compiled file is next to impossible. That is where Apktool comes into play.</p>
+<p>$ apktool d testapp.apkI: Using Apktool 2.0.0 on testapp.apk<br>I: Loading resource table…<br>I: Decoding AndroidManifest.xml with resources…<br>I: Loading resource table from file: 1.apk<br>I: Regular manifest package…<br>I: Decoding file-resources…<br>I: Decoding values <em>/</em> XMLs…<br>I: Baksmaling classes.dex…<br>I: Copying assets and libs…$</p>
+<p>Viewing AndroidManifest.xml again results in something much more human readable</p>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/Bluetooth%20%E6%9C%8D%E5%8A%A1%20%E5%B7%A5%E4%BD%9C%E6%B5%81%E7%A8%8B/#more" rel="contents">
+              <a class="btn" href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/Apktool%20-%20Documentation/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -648,7 +365,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/blob.png/">
+    <link itemprop="mainEntityOfPage" href="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/apk%20%E5%8F%8D%E7%BC%96%E8%AF%91%E5%B7%A5%E5%85%B7/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/uploads/avatar.gif">
@@ -662,7 +379,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/blob.png/" class="post-title-link" itemprop="url">blob</a>
+            <a href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/apk%20%E5%8F%8D%E7%BC%96%E8%AF%91%E5%B7%A5%E5%85%B7/" class="post-title-link" itemprop="url">apk 反编译工具</a>
         </h2>
 
         <div class="post-meta">
@@ -672,7 +389,7 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2020-12-31 14:48:01" itemprop="dateCreated datePublished" datetime="2020-12-31T14:48:01+08:00">2020-12-31</time>
+              <time title="创建时间：2020-12-31 14:48:00" itemprop="dateCreated datePublished" datetime="2020-12-31T14:48:00+08:00">2020-12-31</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
@@ -692,7 +409,7 @@
             </span>
 
           
-            <span id="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/blob.png/" class="post-meta-item leancloud_visitors" data-flag-title="blob" title="阅读次数">
+            <span id="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/apk%20%E5%8F%8D%E7%BC%96%E8%AF%91%E5%B7%A5%E5%85%B7/" class="post-meta-item leancloud_visitors" data-flag-title="apk 反编译工具" title="阅读次数">
               <span class="post-meta-item-icon">
                 <i class="fa fa-eye"></i>
               </span>
@@ -709,109 +426,19 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/Binder%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5%E6%B5%81%E7%A8%8B%E5%AD%A6%E4%B9%A0/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/uploads/avatar.gif">
-      <meta itemprop="name" content="Edward">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="点点滴滴">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/Binder%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5%E6%B5%81%E7%A8%8B%E5%AD%A6%E4%B9%A0/" class="post-title-link" itemprop="url">Binder基本概念流程学习</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-12-31 14:48:01" itemprop="dateCreated datePublished" datetime="2020-12-31T14:48:01+08:00">2020-12-31</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-01-16 12:37:32" itemprop="dateModified" datetime="2020-01-16T12:37:32+08:00">2020-01-16</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E7%83%82%E7%AC%94%E5%A4%B4/" itemprop="url" rel="index"><span itemprop="name">烂笔头</span></a>
-                </span>
-            </span>
-
-          
-            <span id="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/Binder%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5%E6%B5%81%E7%A8%8B%E5%AD%A6%E4%B9%A0/" class="post-meta-item leancloud_visitors" data-flag-title="Binder基本概念流程学习" title="阅读次数">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-eye"></i>
-              </span>
-              <span class="post-meta-item-text">阅读次数：</span>
-              <span class="leancloud-visitors-count"></span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>一 Media Service进程启动</p>
-<p>Init.rc中描述的service对应linux 的进程：</p>
-<p>Media进程定义：</p>
-<p>service media /system/bin/mediaserver<br>    class main<br>    user media<br>    group audio camera inet net_bt net_bt_admin net_bw_acct drmrpc<br>    ioprio rt 4</p>
-<p>servicemanager 进程定义：</p>
-<p>service servicemanager /system/bin/servicemanager<br>    class core<br>    user system<br>　　group system</p>
-<p>　　Media中有很多Native Service（AudioFlinger MediaPlayerService CameraService <br>AudioPolicyService等），整个Android（native或者framework）的Service都需要加入<br>servicemanager中进行统一管理。<br>　　那么Media Process 与ServiceManager Process是如何进行通信的呢——Binder.<br>通过Media Process中使用binder进行完成IPC过程，学习Binder的概念和使用方法。 </p>
-<p>\frameworks\av\media\mediaserver\ main_mediaserver.cpp：</p>
-<p>int main(int argc, char** argv)<br>{<br>    //创建ProcessState 当前进程属性<br>    sp&lt;ProcessState&gt; proc(ProcessState::self());</p>
-<pre><code>//IServiceManager对象
-sp&amp;lt;IServiceManager&amp;gt; sm = defaultServiceManager();
-
-//初始化MediaPlayerService服务对象
-MediaPlayerService::instantiate();
-……
-
-//启动进程的线程池
-ProcessState::self()-&amp;gt;startThreadPool();
-//执行线程消息循环
-IPCThreadState::self()-&amp;gt;joinThreadPool();</code></pre>
+          <p>android-apktool ：解压 </p>
+<p><a target="_blank" rel="noopener" href="http://code.google.com/p/android-apktool/">http://code.google.com/p/android-apktool/</a></p>
+<p><a target="_blank" rel="noopener" href="http://ibotpeaches.github.io/Apktool/">http://ibotpeaches.github.io/Apktool/</a></p>
+<p>apktool.jar 放在C:\Windows 或指定的地方</p>
+<p>然后可以在apktool的目录，执行apktool的命令</p>
+<p>decode</p>
+<p>apktool d xxx.apk</p>
+<p>rebuild</p>
+<p>apktool b files_path xxx.apk</p>
+<p>用系统签名：</p>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/Binder%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5%E6%B5%81%E7%A8%8B%E5%AD%A6%E4%B9%A0/#more" rel="contents">
+              <a class="btn" href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/apk%20%E5%8F%8D%E7%BC%96%E8%AF%91%E5%B7%A5%E5%85%B7/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -835,7 +462,7 @@ IPCThreadState::self()-&amp;gt;joinThreadPool();</code></pre>
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/Battery%E6%A1%86%E6%9E%B6/">
+    <link itemprop="mainEntityOfPage" href="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/Android%E4%B9%8Bframework%E4%BF%AE%E6%94%B9%E5%BA%95%E9%83%A8%E5%AF%BC%E8%88%AA%E6%A0%8FNavigationBar%E5%8A%A8%E6%80%81%E6%98%BE%E7%A4%BA%E5%92%8C%E9%9A%90%E8%97%8F/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/uploads/avatar.gif">
@@ -849,7 +476,7 @@ IPCThreadState::self()-&amp;gt;joinThreadPool();</code></pre>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/Battery%E6%A1%86%E6%9E%B6/" class="post-title-link" itemprop="url">Battery框架</a>
+            <a href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/Android%E4%B9%8Bframework%E4%BF%AE%E6%94%B9%E5%BA%95%E9%83%A8%E5%AF%BC%E8%88%AA%E6%A0%8FNavigationBar%E5%8A%A8%E6%80%81%E6%98%BE%E7%A4%BA%E5%92%8C%E9%9A%90%E8%97%8F/" class="post-title-link" itemprop="url">Android之framework修改底部导航栏NavigationBar动态显示和隐藏</a>
         </h2>
 
         <div class="post-meta">
@@ -859,201 +486,7 @@ IPCThreadState::self()-&amp;gt;joinThreadPool();</code></pre>
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2020-12-31 14:48:01" itemprop="dateCreated datePublished" datetime="2020-12-31T14:48:01+08:00">2020-12-31</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-01-16 12:37:32" itemprop="dateModified" datetime="2020-01-16T12:37:32+08:00">2020-01-16</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E7%83%82%E7%AC%94%E5%A4%B4/" itemprop="url" rel="index"><span itemprop="name">烂笔头</span></a>
-                </span>
-            </span>
-
-          
-            <span id="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/Battery%E6%A1%86%E6%9E%B6/" class="post-meta-item leancloud_visitors" data-flag-title="Battery框架" title="阅读次数">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-eye"></i>
-              </span>
-              <span class="post-meta-item-text">阅读次数：</span>
-              <span class="leancloud-visitors-count"></span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>frameworks/base/policy/src/com/android/internal/policy/impl/KeyguardUpdateMonitor.java</p>
-<p>KeyguardUpdateMonitor</p>
-<p>import static android.os.BatteryManager.EXTRA_LEVEL;</p>
-<p>//注册BroadcastReceiver 监听电池信息变化</p>
-<p>else if (Intent.ACTION_BATTERY_CHANGED.equals(action)) {</p>
-<p>                    final int status = intent.getIntExtra(EXTRA_STATUS, BATTERY_STATUS_UNKNOWN);</p>
-<p>                    final int plugged = intent.getIntExtra(EXTRA_PLUGGED, 0);</p>
-<p>                    final int level = intent.getIntExtra(EXTRA_LEVEL, 0);//从sys/class/power_supply中获取信息</p>
-<p>                    final int health = intent.getIntExtra(EXTRA_HEALTH, BATTERY_HEALTH_UNKNOWN);</p>
-<p>                    final Message msg = mHandler.obtainMessage(</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/Battery%E6%A1%86%E6%9E%B6/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/batarry/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/uploads/avatar.gif">
-      <meta itemprop="name" content="Edward">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="点点滴滴">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/batarry/" class="post-title-link" itemprop="url">batarry</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-12-31 14:48:01" itemprop="dateCreated datePublished" datetime="2020-12-31T14:48:01+08:00">2020-12-31</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-01-16 12:37:32" itemprop="dateModified" datetime="2020-01-16T12:37:32+08:00">2020-01-16</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E7%83%82%E7%AC%94%E5%A4%B4/" itemprop="url" rel="index"><span itemprop="name">烂笔头</span></a>
-                </span>
-            </span>
-
-          
-            <span id="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/batarry/" class="post-meta-item leancloud_visitors" data-flag-title="batarry" title="阅读次数">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-eye"></i>
-              </span>
-              <span class="post-meta-item-text">阅读次数：</span>
-              <span class="leancloud-visitors-count"></span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>每分钟记录一次电压</p>
-<p>#!/system/bin/sh</p>
-<p>j=1</p>
-<p>k=2</p>
-<p>echo &quot; Battery Test V1.0 by Edward !&quot;</p>
-<p>rm  /mnt/sdcard/batarray.txt</p>
-<p>while [ $j -lt $k ];</p>
-<p>do</p>
-<p>cat /sys/class/power_supply/battery/voltage_now </p>
-<p>cat /sys/class/power_supply/battery/voltage_now &gt;&gt; /mnt/sdcard/batarray.txt</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/batarry/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/bat%20%E4%BF%AE%E6%94%B9%E6%96%87%E4%BB%B6%E5%90%8D%20%E6%97%B6%E9%97%B4%E6%88%B3/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/uploads/avatar.gif">
-      <meta itemprop="name" content="Edward">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="点点滴滴">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/bat%20%E4%BF%AE%E6%94%B9%E6%96%87%E4%BB%B6%E5%90%8D%20%E6%97%B6%E9%97%B4%E6%88%B3/" class="post-title-link" itemprop="url">bat 修改文件名 时间戳</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-12-31 14:48:01" itemprop="dateCreated datePublished" datetime="2020-12-31T14:48:01+08:00">2020-12-31</time>
+              <time title="创建时间：2020-12-31 14:48:00" itemprop="dateCreated datePublished" datetime="2020-12-31T14:48:00+08:00">2020-12-31</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
@@ -1073,7 +506,7 @@ IPCThreadState::self()-&amp;gt;joinThreadPool();</code></pre>
             </span>
 
           
-            <span id="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/bat%20%E4%BF%AE%E6%94%B9%E6%96%87%E4%BB%B6%E5%90%8D%20%E6%97%B6%E9%97%B4%E6%88%B3/" class="post-meta-item leancloud_visitors" data-flag-title="bat 修改文件名 时间戳" title="阅读次数">
+            <span id="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/Android%E4%B9%8Bframework%E4%BF%AE%E6%94%B9%E5%BA%95%E9%83%A8%E5%AF%BC%E8%88%AA%E6%A0%8FNavigationBar%E5%8A%A8%E6%80%81%E6%98%BE%E7%A4%BA%E5%92%8C%E9%9A%90%E8%97%8F/" class="post-meta-item leancloud_visitors" data-flag-title="Android之framework修改底部导航栏NavigationBar动态显示和隐藏" title="阅读次数">
               <span class="post-meta-item-icon">
                 <i class="fa fa-eye"></i>
               </span>
@@ -1090,7 +523,599 @@ IPCThreadState::self()-&amp;gt;joinThreadPool();</code></pre>
     <div class="post-body" itemprop="articleBody">
 
       
-          <p>ren update.img &quot;%date:<del>0,2%%date:</del>5,2%%date:<del>8,2%_%time:</del>0,2%%time:<del>3,2%%time:</del>6,2%.img&quot;</p>
+          <p>Android之framework修改底部导航栏NavigationBar动态显示和隐藏</p>
+<p>大家都知道，Android从3.0版本开始就加入了NavigationBar，主要是为那些没有实体按键的设备提供虚拟按键，但是，它始终固定在底部，占用48dp的像素高度，尽管从android 4.4开始可以全透明，使用这一部分像素，但三个按钮始终悬浮在屏幕上，这对于有强迫症的朋友来说是无法忍受的。因此，本文的目的就是修改framework部分代码，可以动态隐藏和显示NavigationBar，同时又尽量不影响系统的正常。</p>
+<p>主要思路：</p>
+<p>在NavigationBar的布局左部加入一个Button(在SystemUI模块实现)，点击隐藏NavigationBar，即将NavigationBar从WindowManager中移除掉。需要的时候，通过一个从屏幕底部向上的滑动手势(在policy模块实现)调出NavigationBar。如下两图对比所示：一张为移除前，另一张为移除后。</p>
+<p>具体实现：</p>
+<p>①.增加按钮实现动态隐藏，主要修改在frameworks/base/packages/SystemUI模块，首先我们增加一个按钮，主要修改</p>
+<p>frameworks/base/packages/SystemUI/res/layout/navigation_bar.xml文件，图片资源和字符串我就不提了，具体如下：</p>
+<p>?</p>
+<p>1</p>
+<p>2</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/Android%E4%B9%8Bframework%E4%BF%AE%E6%94%B9%E5%BA%95%E9%83%A8%E5%AF%BC%E8%88%AA%E6%A0%8FNavigationBar%E5%8A%A8%E6%80%81%E6%98%BE%E7%A4%BA%E5%92%8C%E9%9A%90%E8%97%8F/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/Android%E7%B3%BB%E7%BB%9F%E5%90%AF%E5%8A%A8%E8%BF%87%E7%A8%8B/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/avatar.gif">
+      <meta itemprop="name" content="Edward">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="点点滴滴">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/Android%E7%B3%BB%E7%BB%9F%E5%90%AF%E5%8A%A8%E8%BF%87%E7%A8%8B/" class="post-title-link" itemprop="url">Android系统启动过程</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-12-31 14:48:00" itemprop="dateCreated datePublished" datetime="2020-12-31T14:48:00+08:00">2020-12-31</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-01-16 12:37:32" itemprop="dateModified" datetime="2020-01-16T12:37:32+08:00">2020-01-16</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%83%82%E7%AC%94%E5%A4%B4/" itemprop="url" rel="index"><span itemprop="name">烂笔头</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/Android%E7%B3%BB%E7%BB%9F%E5%90%AF%E5%8A%A8%E8%BF%87%E7%A8%8B/" class="post-meta-item leancloud_visitors" data-flag-title="Android系统启动过程" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>Android系统启动过程</p>
+<p>首先Android框架架构图：</p>
+<p>　　</p>
+<p>Linux内核启动之后就到Android Init进程，进而启动Android相关的服务和应用。</p>
+<p>启动的过程如下图所示：（图片来自网上，后面有地址）</p>
+<p>　　　 </p>
+<p>　　 </p>
+<p>　　 </p>
+<p>一 Init进程的启动</p>
+<p>　　init进程，它是一个由内核启动的用户级进程。内核自行启动（已经被载入内存，开始运行，</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/Android%E7%B3%BB%E7%BB%9F%E5%90%AF%E5%8A%A8%E8%BF%87%E7%A8%8B/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/Android%E7%B3%BB%E7%BB%9F%E7%89%88%E6%9C%AC%E4%BF%A1%E6%81%AF.Build/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/avatar.gif">
+      <meta itemprop="name" content="Edward">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="点点滴滴">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/Android%E7%B3%BB%E7%BB%9F%E7%89%88%E6%9C%AC%E4%BF%A1%E6%81%AF.Build/" class="post-title-link" itemprop="url">Android系统版本信息</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-12-31 14:48:00" itemprop="dateCreated datePublished" datetime="2020-12-31T14:48:00+08:00">2020-12-31</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-01-16 12:37:32" itemprop="dateModified" datetime="2020-01-16T12:37:32+08:00">2020-01-16</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%83%82%E7%AC%94%E5%A4%B4/" itemprop="url" rel="index"><span itemprop="name">烂笔头</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/Android%E7%B3%BB%E7%BB%9F%E7%89%88%E6%9C%AC%E4%BF%A1%E6%81%AF.Build/" class="post-meta-item leancloud_visitors" data-flag-title="Android系统版本信息" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>android.os.Build</p>
+<p>public static final String BOARD The name of the underlying board, like &quot;goldfish&quot;.</p>
+<p>public static final String BOOTLOADER The system bootloader version number.</p>
+<p>public static final String BRAND The brand (e.g., carrier) the software is customized for, if any.</p>
+<p>public static final String CPU_ABI The name of the instruction set (CPU type + ABI convention) of native code.</p>
+<p>public static final String CPU_ABI2 The name of the second instruction set (CPU type + ABI convention) of native code.</p>
+<p>public static final String DEVICEThe name of the industrial design.</p>
+<p>public static final String DISPLAY A build ID string meant for displaying to the user</p>
+<p>public static final String FINGERPRINTA string that uniquely identifies this build.</p>
+<p>public static final String HARDWARE The name of the hardware (from the kernel command line or /proc).</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/Android%E7%B3%BB%E7%BB%9F%E7%89%88%E6%9C%AC%E4%BF%A1%E6%81%AF.Build/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/Android%E7%B3%BB%E7%BB%9F%20%E5%90%AF%E5%8A%A8%E4%B8%89%E7%A7%8D%E6%A8%A1%E5%BC%8F%20%E5%8F%8AOTA%E5%8C%85%E5%8D%87%E7%BA%A7%E6%B5%81%E7%A8%8B/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/avatar.gif">
+      <meta itemprop="name" content="Edward">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="点点滴滴">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/Android%E7%B3%BB%E7%BB%9F%20%E5%90%AF%E5%8A%A8%E4%B8%89%E7%A7%8D%E6%A8%A1%E5%BC%8F%20%E5%8F%8AOTA%E5%8C%85%E5%8D%87%E7%BA%A7%E6%B5%81%E7%A8%8B/" class="post-title-link" itemprop="url">Android系统 启动三种模式 及OTA包升级流程</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-12-31 14:48:00" itemprop="dateCreated datePublished" datetime="2020-12-31T14:48:00+08:00">2020-12-31</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-01-16 12:37:33" itemprop="dateModified" datetime="2020-01-16T12:37:33+08:00">2020-01-16</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%83%82%E7%AC%94%E5%A4%B4/" itemprop="url" rel="index"><span itemprop="name">烂笔头</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/Android%E7%B3%BB%E7%BB%9F%20%E5%90%AF%E5%8A%A8%E4%B8%89%E7%A7%8D%E6%A8%A1%E5%BC%8F%20%E5%8F%8AOTA%E5%8C%85%E5%8D%87%E7%BA%A7%E6%B5%81%E7%A8%8B/" class="post-meta-item leancloud_visitors" data-flag-title="Android系统 启动三种模式 及OTA包升级流程" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>三种模式</p>
+<p>        烧写的过程中，需要在三种模式下互相切换。确切的说，应该是三个操作环境：bootloader、recovery和main system。</p>
+<p>        bootloader主要用来屏蔽硬件的差异，类似于PC中的BIOS，它的功能相对比较简单，内部提供了一些命令，比如：可以将nand flash分区加载到内存、运行内存中的程序、操作SD卡等。Android中的booloader是uboot，位于源码的uboot目录下。</p>
+<p>        main system就是正常运行的Android操作系统，而recovery则是一个mini的Android系统，顾名思义，就是用来进行系统恢复相关的操作的，它的运行规则和main system一样，只是，它在启动时只加载recovery服务，此服务用于烧写Android系统。</p>
+<p>        三者之间的关系如下图所示：</p>
+<p>        系统先启动到bootloader模式下，然后根据情况，启动到recovery或者main system模式下。</p>
+<p>bootloader</p>
+<p>        板子启动时，在Putty控制台中按回车，可以进入uboot，输入help可以查看其可用的命令。uboot的命令是可以自定义的，需要在uboot源码中进行设置。</p>
+<p>uboot下可以使用fastboot命令，进入fastboot模式下，可以使用PC与之连接（此时，使用fastboot协议通信），进行Android系统的烧写工作。</p>
+<p>        在uboot中，你可以更新uboot在内的所有系统模块。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/Android%E7%B3%BB%E7%BB%9F%20%E5%90%AF%E5%8A%A8%E4%B8%89%E7%A7%8D%E6%A8%A1%E5%BC%8F%20%E5%8F%8AOTA%E5%8C%85%E5%8D%87%E7%BA%A7%E6%B5%81%E7%A8%8B/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/Android%E5%9B%BE%E7%89%87%E5%8A%A0%E8%BD%BD%EF%BC%9A%E9%87%87%E7%94%A8%E4%BA%8C%E7%BA%A7%E7%BC%93%E5%AD%98%E3%80%81%E5%BC%82%E6%AD%A5%E5%8A%A0%E8%BD%BD%E7%BD%91%E7%BB%9C%E5%9B%BE%E7%89%87/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/avatar.gif">
+      <meta itemprop="name" content="Edward">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="点点滴滴">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/Android%E5%9B%BE%E7%89%87%E5%8A%A0%E8%BD%BD%EF%BC%9A%E9%87%87%E7%94%A8%E4%BA%8C%E7%BA%A7%E7%BC%93%E5%AD%98%E3%80%81%E5%BC%82%E6%AD%A5%E5%8A%A0%E8%BD%BD%E7%BD%91%E7%BB%9C%E5%9B%BE%E7%89%87/" class="post-title-link" itemprop="url">Android图片加载：采用二级缓存、异步加载网络图片</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-12-31 14:48:00" itemprop="dateCreated datePublished" datetime="2020-12-31T14:48:00+08:00">2020-12-31</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-01-16 12:37:33" itemprop="dateModified" datetime="2020-01-16T12:37:33+08:00">2020-01-16</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%83%82%E7%AC%94%E5%A4%B4/" itemprop="url" rel="index"><span itemprop="name">烂笔头</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/Android%E5%9B%BE%E7%89%87%E5%8A%A0%E8%BD%BD%EF%BC%9A%E9%87%87%E7%94%A8%E4%BA%8C%E7%BA%A7%E7%BC%93%E5%AD%98%E3%80%81%E5%BC%82%E6%AD%A5%E5%8A%A0%E8%BD%BD%E7%BD%91%E7%BB%9C%E5%9B%BE%E7%89%87/" class="post-meta-item leancloud_visitors" data-flag-title="Android图片加载：采用二级缓存、异步加载网络图片" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>Android图片加载：采用二级缓存、异步加载网络图片</p>
+<p>2015-06-11 10:12 博客园 字号：T | T</p>
+<p>Android应用中经常涉及从网络中加载大量图片，为提升加载速度和效率，减少网络流量都会采用二级缓存和异步加载机制，所谓二级缓存就是通过先从内存中获取、再从文件中获取，最后才会访问网络。</p>
+<p>AD：51CTO网+ 首届中国APP创新评选大赛火热招募中……</p>
+<p>一、问题描述</p>
+<p>Android应用中经常涉及从网络中加载大量图片，为提升加载速度和效率，减少网络流量都会采用二级缓存和异步加载机制，所谓二级缓存就是通过先从内存中获取、再从文件中获取，最后才会访问网络。内存缓存（一级）本质上是Map集合以key-value对的方式存储图片的url和Bitmap信息，由于内存缓存会造成堆内存泄露， 管理相对复杂一些，可采用第三方组件，对于有经验的可自己编写组件，而文件缓存比较简单通常自己封装一下即可。下面就通过案例看如何实现网络图片加载的优化。</p>
+<p>二、案例介绍</p>
+<p>案例新闻的列表图片</p>
+<p>三、主要核心组件</p>
+<p>下面先看看实现一级缓存（内存）、二级缓存（磁盘文件）所编写的组件</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/Android%E5%9B%BE%E7%89%87%E5%8A%A0%E8%BD%BD%EF%BC%9A%E9%87%87%E7%94%A8%E4%BA%8C%E7%BA%A7%E7%BC%93%E5%AD%98%E3%80%81%E5%BC%82%E6%AD%A5%E5%8A%A0%E8%BD%BD%E7%BD%91%E7%BB%9C%E5%9B%BE%E7%89%87/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/android%E8%B0%83%E8%AF%95%E5%B7%A5%E5%85%B7/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/avatar.gif">
+      <meta itemprop="name" content="Edward">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="点点滴滴">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/android%E8%B0%83%E8%AF%95%E5%B7%A5%E5%85%B7/" class="post-title-link" itemprop="url">android调试工具</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-12-31 14:48:00" itemprop="dateCreated datePublished" datetime="2020-12-31T14:48:00+08:00">2020-12-31</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-01-16 12:37:32" itemprop="dateModified" datetime="2020-01-16T12:37:32+08:00">2020-01-16</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%83%82%E7%AC%94%E5%A4%B4/" itemprop="url" rel="index"><span itemprop="name">烂笔头</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/android%E8%B0%83%E8%AF%95%E5%B7%A5%E5%85%B7/" class="post-meta-item leancloud_visitors" data-flag-title="android调试工具" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <ol>
+<li>dmesg 内核信息</li>
+</ol>
+<p>adb shell dmesg</p>
+<p>2.netstat / netcfg  网络信息</p>
+<ol start="3">
+<li>am </li>
+</ol>
+<p>adb shell am start -n packagename/.name </p>
+<p>…</p>
+<p>4.dumpsys 信息</p>
+<p>可以观察activity、package、alarm等信息</p>
+<p>dumpsys activity </p>
+<p>dumpsys activity broadcasts</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/android%E8%B0%83%E8%AF%95%E5%B7%A5%E5%85%B7/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/Android%E7%A7%81%E6%9C%89%E6%96%87%E4%BB%B6%E8%B5%84%E6%BA%90%E6%96%87%E4%BB%B6%E7%9A%84%E5%AD%98%E5%8F%96/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/avatar.gif">
+      <meta itemprop="name" content="Edward">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="点点滴滴">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/Android%E7%A7%81%E6%9C%89%E6%96%87%E4%BB%B6%E8%B5%84%E6%BA%90%E6%96%87%E4%BB%B6%E7%9A%84%E5%AD%98%E5%8F%96/" class="post-title-link" itemprop="url">Android私有文件资源文件的存取</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-12-31 14:48:00" itemprop="dateCreated datePublished" datetime="2020-12-31T14:48:00+08:00">2020-12-31</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-01-16 12:37:32" itemprop="dateModified" datetime="2020-01-16T12:37:32+08:00">2020-01-16</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%83%82%E7%AC%94%E5%A4%B4/" itemprop="url" rel="index"><span itemprop="name">烂笔头</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/Android%E7%A7%81%E6%9C%89%E6%96%87%E4%BB%B6%E8%B5%84%E6%BA%90%E6%96%87%E4%BB%B6%E7%9A%84%E5%AD%98%E5%8F%96/" class="post-meta-item leancloud_visitors" data-flag-title="Android私有文件资源文件的存取" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>一、私有文件夹下的文件存取（/data/data/包名）</p>
+<p>import java.io.FileInputStream;   import java.io.FileOutputStream;    import org.apache.http.util.EncodingUtils;       public void writeFileData(String fileName,String message){       try{         FileOutputStream fout = openFileOutput(fileName, MODE_PRIVATE);        byte [] bytes = message.getBytes();         fout.write(bytes);         fout.close();         }       catch(Exception e){         e.printStackTrace();       }    }             public String readFileData(String fileName){         String res=&quot;&quot;;        try{          FileInputStream fin = openFileInput(fileName);         int length = fin.available();          byte [] buffer = new byte[length];         fin.read(buffer);              res = EncodingUtils.getString(buffer, &quot;UTF-8&quot;);         fin.close();             }        catch(Exception e){          e.printStackTrace();        }         return res;       }      </p>
+<p>二、从resource中的raw文件夹中获取文件并读取数据（资源文件只能读不能写）</p>
+<p>dpublic String getFromRaw(String fileName){  </p>
+<p>    String res = &quot;&quot;;           try{            InputStream in = getResources().openRawResource(R.raw.test1);             int length = in.available();                  byte [] buffer = new byte[length];                   in.read(buffer);                    res = EncodingUtils.getString(buffer, &quot;UTF-8&quot;);               in.close();                      }           catch(Exception e){            e.printStackTrace();                   }        return res ;       }    </p>
+<p>三、从asset中获取文件并读取数据（资源文件只能读不能写）</p>
+<p>public String getFromAsset(String fileName){       String res=&quot;&quot;;        try{        InputStream in = getResources().getAssets().open(fileName);           int length = in.available();                   byte [] buffer = new byte[length];                   in.read(buffer);                      res = EncodingUtils.getString(buffer, &quot;UTF-8&quot;);            }       catch(Exception e){         e.printStackTrace();               }        return res;      }     </p>
 
       
     </div>
@@ -1109,7 +1134,7 @@ IPCThreadState::self()-&amp;gt;joinThreadPool();</code></pre>
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/46/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/46/">46</a><span class="page-number current">47</span><a class="page-number" href="/page/48/">48</a><span class="space">&hellip;</span><a class="page-number" href="/page/57/">57</a><a class="extend next" rel="next" href="/page/48/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
+    <a class="extend prev" rel="prev" href="/page/46/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/46/">46</a><span class="page-number current">47</span><a class="page-number" href="/page/48/">48</a><span class="space">&hellip;</span><a class="page-number" href="/page/56/">56</a><a class="extend next" rel="next" href="/page/48/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
   </nav>
 
 
@@ -1177,14 +1202,14 @@ IPCThreadState::self()-&amp;gt;joinThreadPool();</code></pre>
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">570</span>
+          <span class="site-state-item-count">554</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-count">9</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
   </nav>
@@ -1211,7 +1236,7 @@ IPCThreadState::self()-&amp;gt;joinThreadPool();</code></pre>
 <div class="copyright">
   
   &copy; 
-  <span itemprop="copyrightYear">2020</span>
+  <span itemprop="copyrightYear">2021</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>

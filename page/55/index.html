@@ -187,7 +187,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/ACCELEROMETER_ROTATION/">
+    <link itemprop="mainEntityOfPage" href="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/4.2%20phonestatusbar%20%E7%8A%B6%E6%80%81%E6%A0%8F%E6%A0%87%E9%A2%98%E6%98%BE%E7%A4%BA100%%E7%99%BE%E5%88%86%E6%AF%94/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/uploads/avatar.gif">
@@ -201,7 +201,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/ACCELEROMETER_ROTATION/" class="post-title-link" itemprop="url">ACCELEROMETER_ROTATION</a>
+            <a href="/2020/12/31/%EF%BF%BD%144/4.2%20phonestatusbar%20%EF%BF%BD%01%0F%07%EF%BF%BD%3E:100%25~%06%EF%BF%BD/" class="post-title-link" itemprop="url">4</a>
         </h2>
 
         <div class="post-meta">
@@ -231,7 +231,7 @@
             </span>
 
           
-            <span id="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/ACCELEROMETER_ROTATION/" class="post-meta-item leancloud_visitors" data-flag-title="ACCELEROMETER_ROTATION" title="阅读次数">
+            <span id="/2020/12/31/%EF%BF%BD%144/4.2%20phonestatusbar%20%EF%BF%BD%01%0F%07%EF%BF%BD%3E:100%25~%06%EF%BF%BD/" class="post-meta-item leancloud_visitors" data-flag-title="4" title="阅读次数">
               <span class="post-meta-item-icon">
                 <i class="fa fa-eye"></i>
               </span>
@@ -248,19 +248,44 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <p>frameworks/base/core/java/com/android/internal/view/RotationPolicy.java</p>
-<p>  * Returns true if rotation lock is enabled.</p>
-<p>     */</p>
-<p>    public static boolean isRotationLocked(Context context) {</p>
-<p>        return Settings.System.getIntForUser(context.getContentResolver(),</p>
-<p>                Settings.System.ACCELEROMETER_ROTATION, 0, UserHandle.USER_CURRENT) == 0;</p>
-<p>    }</p>
-<p>   /**</p>
-<p>     * Enables or disables rotation lock.</p>
-<p>     *</p>
+          <p>diff –git a/frameworks/base/packages/SystemUI/res/layout/status_bar.xml b/frameworks/base/packages/SystemUI/res/layout/status_bar.xml</p>
+<p>index bf20e9d..c686e95 100644</p>
+<p>— a/frameworks/base/packages/SystemUI/res/layout/status_bar.xml</p>
+<p>+++ b/frameworks/base/packages/SystemUI/res/layout/status_bar.xml</p>
+<p>@@ -100,7 +100,17 @@</p>
+<p>                     android:layout_height=&quot;wrap_content&quot;</p>
+<p>                     android:layout_width=&quot;wrap_content&quot;</p>
+<p>                     android:paddingLeft=&quot;4dip&quot;</p>
+<ul>
+<li>                   /&gt;</li>
+</ul>
+<ul>
+<li><p>                  /&gt;</p>
+</li>
+<li><p>              &lt;TextView</p>
+</li>
+<li><p>               android:id=&quot;@+id/battery_text&quot;</p>
+</li>
+<li><p>               android:textAppearance=&quot;@style/TextAppearance.StatusBar.Clock&quot;</p>
+</li>
+<li><p>               android:layout_width=&quot;wrap_content&quot;</p>
+</li>
+<li><p>               android:layout_height=&quot;wrap_content&quot;</p>
+</li>
+<li><p>               android:layout_gravity=&quot;left|center_vertical&quot;</p>
+</li>
+<li><p>               android:paddingRight=&quot;2dp&quot;</p>
+</li>
+<li><p>               android:singleLine=&quot;true&quot;</p>
+</li>
+<li><p>               android:text=&quot;@string/status_bar_settings_settings_button&quot;</p>
+</li>
+<li><p>               /&gt;</p>
+</li>
+</ul>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/ACCELEROMETER_ROTATION/#more" rel="contents">
+              <a class="btn" href="/2020/12/31/%EF%BF%BD%144/4.2%20phonestatusbar%20%EF%BF%BD%01%0F%07%EF%BF%BD%3E:100%25~%06%EF%BF%BD/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -284,7 +309,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/9820e%20debug/">
+    <link itemprop="mainEntityOfPage" href="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/4.2%20Laucher2%E5%8E%BB%E6%8E%89%E4%B8%A4%E8%BE%B9%E9%98%B4%E5%BD%B1/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/uploads/avatar.gif">
@@ -298,104 +323,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/9820e%20debug/" class="post-title-link" itemprop="url">9820e debug</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-12-31 14:48:00" itemprop="dateCreated datePublished" datetime="2020-12-31T14:48:00+08:00">2020-12-31</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-01-16 12:37:34" itemprop="dateModified" datetime="2020-01-16T12:37:34+08:00">2020-01-16</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E7%83%82%E7%AC%94%E5%A4%B4/" itemprop="url" rel="index"><span itemprop="name">烂笔头</span></a>
-                </span>
-            </span>
-
-          
-            <span id="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/9820e%20debug/" class="post-meta-item leancloud_visitors" data-flag-title="9820e debug" title="阅读次数">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-eye"></i>
-              </span>
-              <span class="post-meta-item-text">阅读次数：</span>
-              <span class="leancloud-visitors-count"></span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>IMEI</p>
-<p>dumpsys iphonesubinfo</p>
-<p>Device ID = 867400020316612</p>
-<p>获取手机分辨率</p>
-<p>adb shell &quot;dumpsys window | grep mUnrestrictedScreen&quot;</p>
-<p>手机物理密度</p>
-<p>adb shell wm density</p>
-<p>mac</p>
-<p>/sys/class/net/wlan0/address</p>
-<p>frameworks\base\services\java\com\android\server\wifi\WifiService.java</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/9820e%20debug/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/512MB%20%20camera2/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/uploads/avatar.gif">
-      <meta itemprop="name" content="Edward">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="点点滴滴">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/512MB%20%20camera2/" class="post-title-link" itemprop="url">512MB  camera2</a>
+            <a href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/4.2%20Laucher2%E5%8E%BB%E6%8E%89%E4%B8%A4%E8%BE%B9%E9%98%B4%E5%BD%B1/" class="post-title-link" itemprop="url">4</a>
         </h2>
 
         <div class="post-meta">
@@ -425,7 +353,7 @@
             </span>
 
           
-            <span id="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/512MB%20%20camera2/" class="post-meta-item leancloud_visitors" data-flag-title="512MB  camera2" title="阅读次数">
+            <span id="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/4.2%20Laucher2%E5%8E%BB%E6%8E%89%E4%B8%A4%E8%BE%B9%E9%98%B4%E5%BD%B1/" class="post-meta-item leancloud_visitors" data-flag-title="4" title="阅读次数">
               <span class="post-meta-item-icon">
                 <i class="fa fa-eye"></i>
               </span>
@@ -442,29 +370,15 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <p>src/com/android/camera/WideAnglePanoramaModule.java</p>
-<p>@@ -380,6 +380,10 @@ public class WideAnglePanoramaModule</p>
-<p>             if (need4To3 &amp;&amp; (h * 4 != w * 3)) {</p>
-<p>                 continue;</p>
-<p>             }</p>
-<p>+</p>
-<ul>
-<li><p>if(h &gt; 480)// no bigger preview than 480x for 512MB ddr</p>
-</li>
-<li><p>continue;</p>
-</li>
-</ul>
-<p>+</p>
-<p>             d = Math.abs(d);</p>
-<p>             if (d &lt; pixelsDiff) {</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/512MB%20%20camera2/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
+          <p>必须两步同时修改：</p>
+<p>1.在launcher布局中去掉android:background=&quot;@drawable/workspace_bg</p>
+<p>packages/apps/Launcher2/res/layout-port/launcher.xml</p>
+<p>packages/apps/Launcher2/res/layout-land/launcher.xml</p>
+<p>2.packages/apps/Launcher2/src/com/android/launcher2/Launcher.java</p>
+<p> private void setWorkspaceBackground(boolean workspace) {</p>
+<p>   //    mLauncherView.setBackground(workspace ?</p>
+<p>    //            mWorkspaceBackgroundDrawable : mBlackBackgroundDrawable);</p>
+
       
     </div>
 
@@ -483,7 +397,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/312x%20uboot%20%E7%AD%BE%E5%90%8D%E5%8F%AF%E6%93%A6%E5%86%99/">
+    <link itemprop="mainEntityOfPage" href="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/4.1%20%E6%9C%80%E8%BF%91%E5%BA%94%E7%94%A8%E5%88%97%E8%A1%A8%20%E8%83%8C%E6%99%AF/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/uploads/avatar.gif">
@@ -497,104 +411,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/312x%20uboot%20%E7%AD%BE%E5%90%8D%E5%8F%AF%E6%93%A6%E5%86%99/" class="post-title-link" itemprop="url">312x uboot 签名可擦写</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-12-31 14:48:00" itemprop="dateCreated datePublished" datetime="2020-12-31T14:48:00+08:00">2020-12-31</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-01-16 12:37:33" itemprop="dateModified" datetime="2020-01-16T12:37:33+08:00">2020-01-16</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E7%83%82%E7%AC%94%E5%A4%B4/" itemprop="url" rel="index"><span itemprop="name">烂笔头</span></a>
-                </span>
-            </span>
-
-          
-            <span id="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/312x%20uboot%20%E7%AD%BE%E5%90%8D%E5%8F%AF%E6%93%A6%E5%86%99/" class="post-meta-item leancloud_visitors" data-flag-title="312x uboot 签名可擦写" title="阅读次数">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-eye"></i>
-              </span>
-              <span class="post-meta-item-text">阅读次数：</span>
-              <span class="leancloud-visitors-count"></span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>diff –git a/board/rockchip/common/SecureBoot/SecureBoot.c b/board/rockchip/common/SecureBoot/SecureBoot.c</p>
-<p>index 2b0f7b5..a639a24 100755</p>
-<p>— a/board/rockchip/common/SecureBoot/SecureBoot.c</p>
-<p>+++ b/board/rockchip/common/SecureBoot/SecureBoot.c</p>
-<p>@@ -32,7 +32,7 @@ uint32  SecureBootLock_backup;</p>
-<p> BOOT_CONFIG_INFO gBootConfig <strong>attribute</strong>((aligned(ARCH_DMA_MINALIGN)));</p>
-<p> DRM_KEY_INFO gDrmKeyInfo <strong>attribute</strong>((aligned(ARCH_DMA_MINALIGN)));</p>
-<p>-</p>
-<p>+#define ERASE_DRM_KEY_EN</p>
-<p> #ifdef ERASE_DRM_KEY_EN</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/312x%20uboot%20%E7%AD%BE%E5%90%8D%E5%8F%AF%E6%93%A6%E5%86%99/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/270%20android%20%E5%8A%A8%E7%94%BB%20D%20%E4%B8%8D%E8%A7%81%20%E4%BF%AE%E6%94%B9/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/uploads/avatar.gif">
-      <meta itemprop="name" content="Edward">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="点点滴滴">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/270%20android%20%E5%8A%A8%E7%94%BB%20D%20%E4%B8%8D%E8%A7%81%20%E4%BF%AE%E6%94%B9/" class="post-title-link" itemprop="url">270 android 动画 D 不见 修改</a>
+            <a href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/4.1%20%E6%9C%80%E8%BF%91%E5%BA%94%E7%94%A8%E5%88%97%E8%A1%A8%20%E8%83%8C%E6%99%AF/" class="post-title-link" itemprop="url">4</a>
         </h2>
 
         <div class="post-meta">
@@ -624,7 +441,7 @@
             </span>
 
           
-            <span id="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/270%20android%20%E5%8A%A8%E7%94%BB%20D%20%E4%B8%8D%E8%A7%81%20%E4%BF%AE%E6%94%B9/" class="post-meta-item leancloud_visitors" data-flag-title="270 android 动画 D 不见 修改" title="阅读次数">
+            <span id="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/4.1%20%E6%9C%80%E8%BF%91%E5%BA%94%E7%94%A8%E5%88%97%E8%A1%A8%20%E8%83%8C%E6%99%AF/" class="post-meta-item leancloud_visitors" data-flag-title="4" title="阅读次数">
               <span class="post-meta-item-icon">
                 <i class="fa fa-eye"></i>
               </span>
@@ -641,25 +458,15 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <p>ro.sf.fakerotation=true</p>
-<p>ro.sf.hwrotation=270</p>
-<p>android 动画 D 不见 修改</p>
-<p>diff –git a/services/surfaceflinger/DisplayDevice.cpp b/services/surfaceflinger/DisplayDevice.cpp<br>index d5ffacf..71fec48 100755<br>— a/services/surfaceflinger/DisplayDevice.cpp<br>+++ b/services/surfaceflinger/DisplayDevice.cpp<br>-110,8 +110,14 DisplayDevice::DisplayDevice(<br>mViewport.makeInvalid();<br>mFrame.makeInvalid(); </p>
+          <p>frameworks/base/packages/SystemUI/res/layout/system_bar_recent_panel.xml</p>
+<p>     &lt;FrameLayout</p>
+<p>         android:id=&quot;@+id/recents_bg_protect&quot;</p>
 <ul>
-<li>mViewport.set(bounds());</li>
-<li>mFrame.set(bounds());</li>
+<li>       android:background=&quot;@drawable/recents_bg_protect_tile&quot;</li>
 </ul>
 <ul>
-<li>if (mFlinger-&gt;orientationSwap()) {</li>
-<li>mViewport.set(Rect(mDisplayHeight, mDisplayWidth));</li>
-<li>mFrame.set(Rect(mDisplayHeight, mDisplayWidth));</li>
-<li>} else {</li>
-<li>mViewport.set(bounds());</li>
-<li>mFrame.set(bounds());</li>
-<li>}</li>
-<li></li>
+<li>       android:background=&quot;@android:color/transparent&quot;</li>
 </ul>
-<p>// virtual displays are always considered enabled<br>mScreenAcquired = (mType &gt;= DisplayDevice::DISPLAY_VIRTUAL); </p>
 
       
     </div>
@@ -679,7 +486,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/64bit%20%E7%BC%96%E8%AF%91android4.0%20%E9%94%99%E8%AF%AF/">
+    <link itemprop="mainEntityOfPage" href="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/4.1%20%E7%8A%B6%E6%80%81%E6%A0%8F%20systembar/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/uploads/avatar.gif">
@@ -693,7 +500,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/64bit%20%E7%BC%96%E8%AF%91android4.0%20%E9%94%99%E8%AF%AF/" class="post-title-link" itemprop="url">64bit 编译android4</a>
+            <a href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/4.1%20%E7%8A%B6%E6%80%81%E6%A0%8F%20systembar/" class="post-title-link" itemprop="url">4</a>
         </h2>
 
         <div class="post-meta">
@@ -723,7 +530,7 @@
             </span>
 
           
-            <span id="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/64bit%20%E7%BC%96%E8%AF%91android4.0%20%E9%94%99%E8%AF%AF/" class="post-meta-item leancloud_visitors" data-flag-title="64bit 编译android4" title="阅读次数">
+            <span id="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/4.1%20%E7%8A%B6%E6%80%81%E6%A0%8F%20systembar/" class="post-meta-item leancloud_visitors" data-flag-title="4" title="阅读次数">
               <span class="post-meta-item-icon">
                 <i class="fa fa-eye"></i>
               </span>
@@ -740,10 +547,8 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <p>frameworks/compile/slang/slang_rs_export_foreach.cpp:247:23: error: variable ‘ParamName’ set but not used [-Werror=unused-but-set-variable] <br>解决办法： <br>vim frameworks/compile/slang/Android.mk <br>把： <br>local_cflags_for_slang := -Wno-sign-promo -Wall -Wno-unused-parameter -Werror <br>改为： <br>local_cflags_for_slang := -Wno-sign-promo -Wall -Wno-unused-parameter <br>参考：<a target="_blank" rel="noopener" href="http://code.google.com/p/android/issues/detail?id=22006#c0">http://code.google.com/p/android/issues/detail?id=22006#c0</a> <br>参考：<a target="_blank" rel="noopener" href="http://groups.google.com/group/android-building/browse_thread/thread/0207abb98ed72304">http://groups.google.com/group/android-building/browse_thread/thread/0207abb98ed72304</a>  </p>
-<p>external/mesa3d/src/glsl/linker.cpp: 在函数‘void assign_varying_locations(gl_shader_program*, gl_shader*, gl_shader*)’中: <br>external/mesa3d/src/glsl/linker.cpp:1394:49: 错误： expected primary-expression before ‘,’ token <br>external/mesa3d/src/glsl/linker.cpp:1394:50: 错误： ‘varyings’在此作用域中尚未声明 <br>…<br>解决方法： <br>vim external/mesa3d/src/glsl/linker.cpp <br>添加： <br>#include &lt;cstddef&gt; </p>
-<p>In file included from external/oprofile/libpp/arrange_profiles.cpp:24:0: <br>external/oprofile/libpp/format_output.h:94:22: error: reference ‘counts’ cannot be declared ‘mutable’ [-fpermissive] <br>make: *** [out/host/linux-x86/obj/STATIC_LIBRARIES/liboprofile_pp_intermediates/arrange_profiles.o] Error 1 <br>解决办法： <br>external/oprofile/libpp/format_output.h <br>把： <br>mutable counts_t &amp; counts; <br>改为： <br>counts_t &amp; counts;  </p>
-<p>3.external/gtest/src/../include/gtest/internal/gtest-param-util.h:122:11: 错误： ‘ptrdiff_t’不是一个类型名 <br>In file included from external/gtest/src/../include/gtest/gtest-param-test.h:157:0, <br>                 from external/gtest/src/../include/gtest/gtest.h:69, <br>                 from external/gtest/src/../src/gtest.cc:34, <br>                 from external/gtest/src/gtest-all.cc:36: <br>解决方法： <br>$vim external/gtest/src/../include/gtest/internal/gtest-param-util.h <br>#include &lt;cstddef&gt; </p>
+          <p>系统条的布局</p>
+<p>frameworks/base/packages/SystemUI/res/layout/system_bar.xml</p>
 
       
     </div>
@@ -763,7 +568,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/5.1%20%E9%94%81%E7%95%8C%E9%9D%A2%20%E9%94%81%E5%9B%BE%E6%A0%87/">
+    <link itemprop="mainEntityOfPage" href="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/4.0%E4%BD%BF%E7%94%A8%E6%89%8B%E6%9C%BA%E8%B5%84%E6%BA%90%EF%BC%8C%E7%9B%B4%E6%8E%A5%E5%85%B3%E6%9C%BA%E7%95%8C%E9%9D%A2%EF%BC%8C%E6%A0%B8%E5%BF%83%E9%85%8D%E7%BD%AE/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/uploads/avatar.gif">
@@ -777,7 +582,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/5.1%20%E9%94%81%E7%95%8C%E9%9D%A2%20%E9%94%81%E5%9B%BE%E6%A0%87/" class="post-title-link" itemprop="url">5</a>
+            <a href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/4.0%E4%BD%BF%E7%94%A8%E6%89%8B%E6%9C%BA%E8%B5%84%E6%BA%90%EF%BC%8C%E7%9B%B4%E6%8E%A5%E5%85%B3%E6%9C%BA%E7%95%8C%E9%9D%A2%EF%BC%8C%E6%A0%B8%E5%BF%83%E9%85%8D%E7%BD%AE/" class="post-title-link" itemprop="url">4</a>
         </h2>
 
         <div class="post-meta">
@@ -794,7 +599,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-01-16 12:37:33" itemprop="dateModified" datetime="2020-01-16T12:37:33+08:00">2020-01-16</time>
+                <time title="修改时间：2020-01-16 12:37:32" itemprop="dateModified" datetime="2020-01-16T12:37:32+08:00">2020-01-16</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -807,7 +612,7 @@
             </span>
 
           
-            <span id="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/5.1%20%E9%94%81%E7%95%8C%E9%9D%A2%20%E9%94%81%E5%9B%BE%E6%A0%87/" class="post-meta-item leancloud_visitors" data-flag-title="5" title="阅读次数">
+            <span id="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/4.0%E4%BD%BF%E7%94%A8%E6%89%8B%E6%9C%BA%E8%B5%84%E6%BA%90%EF%BC%8C%E7%9B%B4%E6%8E%A5%E5%85%B3%E6%9C%BA%E7%95%8C%E9%9D%A2%EF%BC%8C%E6%A0%B8%E5%BF%83%E9%85%8D%E7%BD%AE/" class="post-meta-item leancloud_visitors" data-flag-title="4" title="阅读次数">
               <span class="post-meta-item-icon">
                 <i class="fa fa-eye"></i>
               </span>
@@ -824,29 +629,19 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <p>diff –git a/packages/SystemUI/res/values/dimens.xml b/packages/SystemUI/res/values/dimens.xml</p>
-<p>index 44330e8..e18eb8f 100644</p>
-<p>— a/packages/SystemUI/res/values/dimens.xml</p>
-<p>+++ b/packages/SystemUI/res/values/dimens.xml</p>
-<p>@@ -478,12 +478,12 @@</p>
-<p>     &lt;dimen name=&quot;search_panel_threshold&quot;&gt;100dp&lt;/dimen&gt;</p>
-<p>     &lt;!– The width/height of the phone/camera/unlock icon view on keyguard. –&gt;</p>
-<ul>
-<li><p>   &lt;dimen name=&quot;keyguard_affordance_height&quot;&gt;56dp&lt;/dimen&gt;</p>
-</li>
-<li><p>   &lt;dimen name=&quot;keyguard_affordance_width&quot;&gt;56dp&lt;/dimen&gt;</p>
-</li>
-</ul>
-<ul>
-<li><p>   &lt;dimen name=&quot;keyguard_affordance_height&quot;&gt;80dp&lt;/dimen&gt;</p>
-</li>
-<li><p>   &lt;dimen name=&quot;keyguard_affordance_width&quot;&gt;80dp&lt;/dimen&gt;</p>
-</li>
-</ul>
-<p>     &lt;!– The width/height of the phone/camera/unlock icon drawable on keyguard. –&gt;</p>
+          <p>//注释tablet的判断，使用使用手机的资源文件</p>
+<p>frameworks\base\services\java\com\android\server\wm\WindowManagerService.java     </p>
+<p> //   if (SystemProperties.get(&quot;ro.build.characteristics&quot;,&quot;none&quot;).equals(&quot;tablet&quot;)</p>
+<p>        //        &amp;&amp; sw &lt; 600) {</p>
+<p>        //    sw = 600;</p>
+<p>      //  }</p>
+<p> //忽略tablet配置，按屏幕分辨率判断使用的资源</p>
+<p> frameworks\base\policy\src\com\android\internal\policy\impl\PhoneWindowManager.java</p>
+<p>     // if (SystemProperties.get(&quot;ro.build.characteristics&quot;,&quot;none&quot;).equals(&quot;tablet&quot;)) {</p>
+<p>       //   mStatusBarCanHide = false;</p>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/5.1%20%E9%94%81%E7%95%8C%E9%9D%A2%20%E9%94%81%E5%9B%BE%E6%A0%87/#more" rel="contents">
+              <a class="btn" href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/4.0%E4%BD%BF%E7%94%A8%E6%89%8B%E6%9C%BA%E8%B5%84%E6%BA%90%EF%BC%8C%E7%9B%B4%E6%8E%A5%E5%85%B3%E6%9C%BA%E7%95%8C%E9%9D%A2%EF%BC%8C%E6%A0%B8%E5%BF%83%E9%85%8D%E7%BD%AE/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -870,7 +665,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/5.1%20%E5%BC%80%E5%85%B3%E6%9C%BA%E5%8A%A8%E7%94%BB%EF%BC%8C%E9%93%83%E5%A3%B0/">
+    <link itemprop="mainEntityOfPage" href="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/3G%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/uploads/avatar.gif">
@@ -884,7 +679,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/5.1%20%E5%BC%80%E5%85%B3%E6%9C%BA%E5%8A%A8%E7%94%BB%EF%BC%8C%E9%93%83%E5%A3%B0/" class="post-title-link" itemprop="url">5</a>
+            <a href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/3G%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98/" class="post-title-link" itemprop="url">3G常见问题</a>
         </h2>
 
         <div class="post-meta">
@@ -901,7 +696,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-01-16 12:37:33" itemprop="dateModified" datetime="2020-01-16T12:37:33+08:00">2020-01-16</time>
+                <time title="修改时间：2020-01-16 12:37:32" itemprop="dateModified" datetime="2020-01-16T12:37:32+08:00">2020-01-16</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -914,7 +709,7 @@
             </span>
 
           
-            <span id="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/5.1%20%E5%BC%80%E5%85%B3%E6%9C%BA%E5%8A%A8%E7%94%BB%EF%BC%8C%E9%93%83%E5%A3%B0/" class="post-meta-item leancloud_visitors" data-flag-title="5" title="阅读次数">
+            <span id="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/3G%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98/" class="post-meta-item leancloud_visitors" data-flag-title="3G常见问题" title="阅读次数">
               <span class="post-meta-item-icon">
                 <i class="fa fa-eye"></i>
               </span>
@@ -931,19 +726,19 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <p>diff –git a/cmds/bootanimation/BootAnimation.cpp b/cmds/bootanimation/BootAnimation.cpp</p>
-<p>index df87c26..6a183c4 100644</p>
-<p>— a/cmds/bootanimation/BootAnimation.cpp</p>
-<p>+++ b/cmds/bootanimation/BootAnimation.cpp</p>
-<p>@@ -60,13 +60,15 @@</p>
-<p> #include &quot;BootAnimation.h&quot;</p>
-<p> #include &quot;AudioPlayer.h&quot;</p>
-<p> #include &lt;media/mediaplayer.h&gt;</p>
-<p>+#include &lt;media/AudioSystem.h&gt;</p>
-<p>+#include &lt;media/IMediaHTTPService.h&gt;</p>
+          <p>一、3G相关日志信息的获取</p>
+<p>     1、使用串口捕捉LOG 信息：</p>
+<p>          A、打开串口，输入：</p>
+<p>               logcat –b radio &amp;</p>
+<p>               logcat –s pppd CHAT &amp;</p>
+<p>               此时串口屏幕上会不断打印出捕捉到的信息</p>
+<p>          B、插入Dongle 或者开启modem，把出问题的流程走一遍</p>
+<p>          C、把串口输出的信息保存成文件</p>
+<p>      2、使用 adb工具捕捉LOG信息：</p>
+<p>          A、打开adb shell： adb shell</p>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/5.1%20%E5%BC%80%E5%85%B3%E6%9C%BA%E5%8A%A8%E7%94%BB%EF%BC%8C%E9%93%83%E5%A3%B0/#more" rel="contents">
+              <a class="btn" href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/3G%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -967,7 +762,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/5.1%20SIM,%203G%20dongle%E6%98%BE%E7%A4%BA%E7%AC%A6%E5%8F%B7%E9%97%AE%E9%A2%98/">
+    <link itemprop="mainEntityOfPage" href="http://edward.org.cn/2020/12/31/%E9%9F%B3%E8%A7%86%E9%A2%91/%E6%96%87%E6%A1%A307-H264%E4%B8%8EH265%E7%9A%84%E5%8C%BA%E5%88%AB%E4%BA%8E%E5%B7%AE%E5%BC%82/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/uploads/avatar.gif">
@@ -981,7 +776,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/5.1%20SIM,%203G%20dongle%E6%98%BE%E7%A4%BA%E7%AC%A6%E5%8F%B7%E9%97%AE%E9%A2%98/" class="post-title-link" itemprop="url">5</a>
+            <a href="/2020/12/31/%E9%9F%B3%E8%A7%86%E9%A2%91/%E6%96%87%E6%A1%A307-H264%E4%B8%8EH265%E7%9A%84%E5%8C%BA%E5%88%AB%E4%BA%8E%E5%B7%AE%E5%BC%82/" class="post-title-link" itemprop="url">文档07-H264与H265的区别于差异</a>
         </h2>
 
         <div class="post-meta">
@@ -991,27 +786,20 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2020-12-31 14:48:00" itemprop="dateCreated datePublished" datetime="2020-12-31T14:48:00+08:00">2020-12-31</time>
+              <time title="创建时间：2020-12-31 13:39:25" itemprop="dateCreated datePublished" datetime="2020-12-31T13:39:25+08:00">2020-12-31</time>
             </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-01-16 12:37:33" itemprop="dateModified" datetime="2020-01-16T12:37:33+08:00">2020-01-16</time>
-              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="far fa-folder"></i>
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E7%83%82%E7%AC%94%E5%A4%B4/" itemprop="url" rel="index"><span itemprop="name">烂笔头</span></a>
+                  <a href="/categories/%E9%9F%B3%E8%A7%86%E9%A2%91/" itemprop="url" rel="index"><span itemprop="name">音视频</span></a>
                 </span>
             </span>
 
           
-            <span id="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/5.1%20SIM,%203G%20dongle%E6%98%BE%E7%A4%BA%E7%AC%A6%E5%8F%B7%E9%97%AE%E9%A2%98/" class="post-meta-item leancloud_visitors" data-flag-title="5" title="阅读次数">
+            <span id="/2020/12/31/%E9%9F%B3%E8%A7%86%E9%A2%91/%E6%96%87%E6%A1%A307-H264%E4%B8%8EH265%E7%9A%84%E5%8C%BA%E5%88%AB%E4%BA%8E%E5%B7%AE%E5%BC%82/" class="post-meta-item leancloud_visitors" data-flag-title="文档07-H264与H265的区别于差异" title="阅读次数">
               <span class="post-meta-item-icon">
                 <i class="fa fa-eye"></i>
               </span>
@@ -1028,23 +816,32 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <p>packages/Keyguard/src/com/android/keyguard/CarrierText.java</p>
-<p>@@ -147,7 +147,7 @@ public class CarrierText extends TextView {</p>
-<p>                         getContext().getText(R.string.keyguard_missing_sim_message_short), text);</p>
-<p>             }</p>
-<p>         }</p>
-<ul>
-<li>       setText(displayText);</li>
-</ul>
-<ul>
-<li>       setText(&quot;&quot;);//displayText</li>
-</ul>
-<p>SIM, 3G dongle显示符号问题</p>
-<p>packages/SystemUI/src/com/android/systemui/qs/tiles/CellularTileForSlot.java</p>
-<p>+++ b/packages/SystemUI/src/com/android/systemui/qs/tiles/CellularTileForSlot.java</p>
+          <h2 id="H-265与H-264的差异详解"><a href="#H-265与H-264的差异详解" class="headerlink" title="H.265与H.264的差异详解"></a>H.265与H.264的差异详解</h2><blockquote>
+<p><strong>码牛只为跟牛逼的你</strong></p>
+</blockquote>
+<p>通过以下几种来对比H264与H265的差异</p>
+<blockquote>
+<p>1.编解码框架差异</p>
+<p>2.压缩性能比较</p>
+<p>3.各模块技术差异汇总</p>
+<p>4.块划分结构</p>
+<p>5.帧内预测</p>
+<p>6.帧间预测</p>
+<p>7.去块滤波</p>
+<p>8.SAO滤波</p>
+<p>9.Tile</p>
+<p>10.WPP</p>
+<p>11.Dependent slice</p>
+<p>12.其他技术</p>
+</blockquote>
+<h4 id="1-1-H-264与H-265的主要差异"><a href="#1-1-H-264与H-265的主要差异" class="headerlink" title="1.1  H.264与H.265的主要差异"></a>1.1  H.264与H.265的主要差异</h4><p>H.265仍然采用混合编解码，编解码结构域H.264基本一致，</p>
+<p>主要的不同在于：</p>
+<p>Ø 编码块划分结构：采用CU (CodingUnit)、PU(PredictionUnit)和TU(TransformUnit)的递归结构。</p>
+<p>Ø 基本细节：各功能块的内部细节有很多差异</p>
+<p>Ø 并行工具：增加了Tile以及WPP等并行工具集以提高编码速度</p>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/5.1%20SIM,%203G%20dongle%E6%98%BE%E7%A4%BA%E7%AC%A6%E5%8F%B7%E9%97%AE%E9%A2%98/#more" rel="contents">
+              <a class="btn" href="/2020/12/31/%E9%9F%B3%E8%A7%86%E9%A2%91/%E6%96%87%E6%A1%A307-H264%E4%B8%8EH265%E7%9A%84%E5%8C%BA%E5%88%AB%E4%BA%8E%E5%B7%AE%E5%BC%82/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -1068,7 +865,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/4.4%20%E9%94%81%E5%9B%BE%E6%A0%87/">
+    <link itemprop="mainEntityOfPage" href="http://edward.org.cn/2020/12/31/%E9%9F%B3%E8%A7%86%E9%A2%91/%E6%96%87%E6%A1%A306-H264%E8%A7%A3%E7%A0%81%E6%B5%81%E7%A8%8B/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/uploads/avatar.gif">
@@ -1082,7 +879,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/4.4%20%E9%94%81%E5%9B%BE%E6%A0%87/" class="post-title-link" itemprop="url">4</a>
+            <a href="/2020/12/31/%E9%9F%B3%E8%A7%86%E9%A2%91/%E6%96%87%E6%A1%A306-H264%E8%A7%A3%E7%A0%81%E6%B5%81%E7%A8%8B/" class="post-title-link" itemprop="url">文档06-H264解码流程</a>
         </h2>
 
         <div class="post-meta">
@@ -1092,27 +889,20 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2020-12-31 14:48:00" itemprop="dateCreated datePublished" datetime="2020-12-31T14:48:00+08:00">2020-12-31</time>
+              <time title="创建时间：2020-12-31 13:39:25" itemprop="dateCreated datePublished" datetime="2020-12-31T13:39:25+08:00">2020-12-31</time>
             </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-01-16 12:37:33" itemprop="dateModified" datetime="2020-01-16T12:37:33+08:00">2020-01-16</time>
-              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="far fa-folder"></i>
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E7%83%82%E7%AC%94%E5%A4%B4/" itemprop="url" rel="index"><span itemprop="name">烂笔头</span></a>
+                  <a href="/categories/%E9%9F%B3%E8%A7%86%E9%A2%91/" itemprop="url" rel="index"><span itemprop="name">音视频</span></a>
                 </span>
             </span>
 
           
-            <span id="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/4.4%20%E9%94%81%E5%9B%BE%E6%A0%87/" class="post-meta-item leancloud_visitors" data-flag-title="4" title="阅读次数">
+            <span id="/2020/12/31/%E9%9F%B3%E8%A7%86%E9%A2%91/%E6%96%87%E6%A1%A306-H264%E8%A7%A3%E7%A0%81%E6%B5%81%E7%A8%8B/" class="post-meta-item leancloud_visitors" data-flag-title="文档06-H264解码流程" title="阅读次数">
               <span class="post-meta-item-icon">
                 <i class="fa fa-eye"></i>
               </span>
@@ -1129,19 +919,202 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <p>keyguard_glow_pad_view.xml</p>
-<p>&lt;com.android.internal.widget.multiwaveview.GlowPadView</p>
-<p>    xmlns:prvandroid=&quot;<a target="_blank" rel="noopener" href="http://schemas.android.com/apk/prv/res/android">http://schemas.android.com/apk/prv/res/android</a>&quot;</p>
-<p>    xmlns:android=&quot;<a target="_blank" rel="noopener" href="http://schemas.android.com/apk/res/android">http://schemas.android.com/apk/res/android</a>&quot;</p>
-<p>    android:id=&quot;@+id/glow_pad_view&quot;</p>
-<p>    android:layout_width=&quot;wrap_content&quot;</p>
-<p>    android:layout_height=&quot;wrap_content&quot;</p>
-<p>    android:layout_gravity=&quot;center&quot;</p>
-<p>    android:orientation=&quot;horizontal&quot;</p>
-<p>    android:gravity=&quot;@integer/kg_selector_gravity&quot;</p>
+          <h4 id="H264解码详解"><a href="#H264解码详解" class="headerlink" title="H264解码详解"></a>H264解码详解</h4><p>​        H264是新一代的编码标准，以高压缩高质量和支持多种网络的流媒体传输著称，在编码方面，我理解的他的理论依据是：参照一段时间内图像的统计结果表明，在相邻几幅图像画面中，一般有差别的像素只有10%以内的点,亮度差值变化不超过2%，而色度差值的变化只有1%以内。所以对于一段变化不大图像画面，我们可以先编码出一个完整的图像帧A，随后的B帧就不编码全部图像，只写入与A帧的差别，这样B帧的大小就只有完整帧的1/10或更小！B帧之后的C帧如果变化不大，我们可以继续以参考B的方式编码C帧，这样循环下去。这段图像我们称为一个序列（序列就是有相同特点的一段数据），当某个图像与之前的图像变化很大，无法参考前面的帧来生成，那我们就结束上一个序列，开始下一段序列，也就是对这个图像生成一个完整帧A1，随后的图像就参考A1生成，只写入与A1的差别内容。</p>
+<p>​    在H264协议里定义了三种帧，完整编码的帧叫I帧，参考之前的I帧生成的只包含差异部分编码的帧叫P帧，还有一种参考前后的帧编码的帧叫B帧。</p>
+<p>​    H264采用的核心算法是帧内压缩和帧间压缩，帧内压缩是生成I帧的算法，帧间压缩是生成B帧和P帧的算法。</p>
+<p>-———————</p>
+<p>序列的说明</p>
+<p>-———————</p>
+<p>​    在H264中图像以序列为单位进行组织，一个序列是一段图像编码后的数据流，以I帧开始，到下一个I帧结束。</p>
+<p>​    <strong><em>\</em>一个序列的第一个图像叫做 IDR图像（立即刷新图像），IDR 图像都是 I 帧图像。\</strong>*<em>H.264引入 IDR 图像是为了解码的重同步，当解码器解码到 IDR图像时，立即将参考帧队列清空，将已解码的数据全部输出或抛弃，重新查找参数集，开始一个新的序列。****</em>这样，如果前一个序列出现重大错误，在这里可以获得重新同步的机会。IDR图像之后的图像永远不会使用IDR之前的图像的数据来解码。*</p>
+<p>​    一个序列就是一段内容差异不太大的图像编码后生成的一串数据流。当运动变化比较少时，一个序列可以很长，因为运动变化少就代表图像画面的内容变动很小，所以就可以编一个I帧，然后一直P帧、B帧了。当运动变化多时，可能一个序列就比较短了，比如就包含一个I帧和3、4个P帧。</p>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/4.4%20%E9%94%81%E5%9B%BE%E6%A0%87/#more" rel="contents">
+              <a class="btn" href="/2020/12/31/%E9%9F%B3%E8%A7%86%E9%A2%91/%E6%96%87%E6%A1%A306-H264%E8%A7%A3%E7%A0%81%E6%B5%81%E7%A8%8B/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://edward.org.cn/2020/12/31/%E9%9F%B3%E8%A7%86%E9%A2%91/%E6%96%87%E6%A1%A304-H264%E5%88%86%E5%B1%82/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/avatar.gif">
+      <meta itemprop="name" content="Edward">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="点点滴滴">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/12/31/%E9%9F%B3%E8%A7%86%E9%A2%91/%E6%96%87%E6%A1%A304-H264%E5%88%86%E5%B1%82/" class="post-title-link" itemprop="url">文档04-H264分层</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-12-31 13:39:25" itemprop="dateCreated datePublished" datetime="2020-12-31T13:39:25+08:00">2020-12-31</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E9%9F%B3%E8%A7%86%E9%A2%91/" itemprop="url" rel="index"><span itemprop="name">音视频</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2020/12/31/%E9%9F%B3%E8%A7%86%E9%A2%91/%E6%96%87%E6%A1%A304-H264%E5%88%86%E5%B1%82/" class="post-meta-item leancloud_visitors" data-flag-title="文档04-H264分层" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h4 id="音视频高手课07-视频流H264码流分析实战"><a href="#音视频高手课07-视频流H264码流分析实战" class="headerlink" title="音视频高手课07-视频流H264码流分析实战"></a>音视频高手课07-视频流H264码流分析实战</h4><h4 id="1-1-H-264编码格式"><a href="#1-1-H-264编码格式" class="headerlink" title="1.1 H.264编码格式"></a>1.1 H.264编码格式</h4><p>H.264的功能分为两层：</p>
+<blockquote>
+<ul>
+<li>视频编码层 </li>
+<li>网络提取层 </li>
+</ul>
+</blockquote>
+<blockquote>
+<p>H.264 的编码视频序列包括一系列的NAL 单元，每个NAL 单元包含一个RBSP。一个原始的H.264由<strong>N个NALU单元组成</strong>、 NALU 单元常由 [StartCode] [NALU Header] [NALU Payload] 三部分组成，其中 Start Code 用于标示这是一个NALU 单元的开始，必须是”00 00 00 01” 或”00 00 01”。    </p>
+</blockquote>
+<p><img src="/img/68.png" alt="img"></p>
+<p>​     </p>
+<h4 id="1-2-H-264网络传输"><a href="#1-2-H-264网络传输" class="headerlink" title="1.2 H.264网络传输"></a>1.2 H.264网络传输</h4><p>​        H.264的编码视频序列包括一系列的<strong>NAL单元</strong>，每个NAL单元包含<strong>一个RBSP</strong>，</p>
+<p>见表1。编码片（包括数据分割片IDR片）和序列RBSP结束符被定义为VCL NAL单元，其余为NAL单元。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2020/12/31/%E9%9F%B3%E8%A7%86%E9%A2%91/%E6%96%87%E6%A1%A304-H264%E5%88%86%E5%B1%82/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://edward.org.cn/2020/12/31/%E9%9F%B3%E8%A7%86%E9%A2%91/%E6%96%87%E6%A1%A303-%E5%88%87%E7%89%87/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/avatar.gif">
+      <meta itemprop="name" content="Edward">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="点点滴滴">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/12/31/%E9%9F%B3%E8%A7%86%E9%A2%91/%E6%96%87%E6%A1%A303-%E5%88%87%E7%89%87/" class="post-title-link" itemprop="url">文档03-切片</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-12-31 13:39:25" itemprop="dateCreated datePublished" datetime="2020-12-31T13:39:25+08:00">2020-12-31</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E9%9F%B3%E8%A7%86%E9%A2%91/" itemprop="url" rel="index"><span itemprop="name">音视频</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2020/12/31/%E9%9F%B3%E8%A7%86%E9%A2%91/%E6%96%87%E6%A1%A303-%E5%88%87%E7%89%87/" class="post-meta-item leancloud_visitors" data-flag-title="文档03-切片" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>视频流H264的组装</p>
+<h4 id="1-H264介绍"><a href="#1-H264介绍" class="headerlink" title="1 H264介绍"></a>1 H264介绍</h4><blockquote>
+<p> 我们了解了什么是宏快，宏快作为压缩视频的最小的一部分，需要被组织，然后在网络之间做相互传输。</p>
+</blockquote>
+<p>H264更深层次    —》宏块   太浅了</p>
+<p>​        如果单纯的用<strong>宏快</strong>来发送数据是<strong>杂乱无章</strong>的，就好像在没有<strong>集装箱</strong> 出现之前，货物总是随意被堆放到船上。</p>
+<p>上货（编码），下货是非常痛苦的。 当集装箱出现之后，一切都发生了改变，传输效率大大增高。</p>
+<p>​        集装箱可以理解成<strong>H264编码标准</strong>，他制定了相互传输的格式，将宏快 有组织，有结构，有顺序的形成一系列的码流。这种码流既可 通过 InputStream 网络流的数据进行传输，也可以封装成一个文件进行保存</p>
+<p><strong>H264: H264/AVC是广泛采用的一种编码方式。</strong>主要作用是为了传输</p>
+<h4 id="1-1-H264码流组成"><a href="#1-1-H264码流组成" class="headerlink" title="1.1 H264码流组成"></a>1.1 H264码流组成</h4><p><strong>组成H264码流的结构中 包含以下几部分 ，从大到小排序依次是</strong> </p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2020/12/31/%E9%9F%B3%E8%A7%86%E9%A2%91/%E6%96%87%E6%A1%A303-%E5%88%87%E7%89%87/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -1164,7 +1137,7 @@
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/54/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/54/">54</a><span class="page-number current">55</span><a class="page-number" href="/page/56/">56</a><a class="page-number" href="/page/57/">57</a><a class="extend next" rel="next" href="/page/56/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
+    <a class="extend prev" rel="prev" href="/page/54/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/54/">54</a><span class="page-number current">55</span><a class="page-number" href="/page/56/">56</a><a class="extend next" rel="next" href="/page/56/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
   </nav>
 
 
@@ -1232,14 +1205,14 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">570</span>
+          <span class="site-state-item-count">554</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-count">9</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
   </nav>
@@ -1266,7 +1239,7 @@
 <div class="copyright">
   
   &copy; 
-  <span itemprop="copyrightYear">2020</span>
+  <span itemprop="copyrightYear">2021</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>

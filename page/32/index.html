@@ -187,7 +187,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/OAUTH%20%202-legged%20%E4%B8%8E%203-legged%20%E7%9A%84%E5%B7%AE%E5%88%A5/">
+    <link itemprop="mainEntityOfPage" href="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/MCC(%E7%A7%BB%E5%8A%A8%E5%9B%BD%E5%AE%B6%E7%A0%81)%E5%92%8C%20MNC(%E7%A7%BB%E5%8A%A8%E7%BD%91%E7%BB%9C%E7%A0%81)/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/uploads/avatar.gif">
@@ -201,7 +201,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/OAUTH%20%202-legged%20%E4%B8%8E%203-legged%20%E7%9A%84%E5%B7%AE%E5%88%A5/" class="post-title-link" itemprop="url">OAUTH  2-legged 与 3-legged 的差別</a>
+            <a href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/MCC(%E7%A7%BB%E5%8A%A8%E5%9B%BD%E5%AE%B6%E7%A0%81)%E5%92%8C%20MNC(%E7%A7%BB%E5%8A%A8%E7%BD%91%E7%BB%9C%E7%A0%81)/" class="post-title-link" itemprop="url">MCC(移动国家码)和 MNC(移动网络码)</a>
         </h2>
 
         <div class="post-meta">
@@ -231,7 +231,7 @@
             </span>
 
           
-            <span id="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/OAUTH%20%202-legged%20%E4%B8%8E%203-legged%20%E7%9A%84%E5%B7%AE%E5%88%A5/" class="post-meta-item leancloud_visitors" data-flag-title="OAUTH  2-legged 与 3-legged 的差別" title="阅读次数">
+            <span id="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/MCC(%E7%A7%BB%E5%8A%A8%E5%9B%BD%E5%AE%B6%E7%A0%81)%E5%92%8C%20MNC(%E7%A7%BB%E5%8A%A8%E7%BD%91%E7%BB%9C%E7%A0%81)/" class="post-meta-item leancloud_visitors" data-flag-title="MCC(移动国家码)和 MNC(移动网络码)" title="阅读次数">
               <span class="post-meta-item-icon">
                 <i class="fa fa-eye"></i>
               </span>
@@ -248,19 +248,19 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <p>名词解释</p>
-<p>在认证和授权的过程中涉及的三方包括：</p>
-<p>服务提供方，用户使用服务提供方来存储受保护的资源，如照片，视频，联系人列表。</p>
-<p>用户，存放在服务提供方的受保护的资源的拥有者。</p>
-<p>客户端，要访问服务提供方资源的第三方应用，通常是网站，如提供照片打印服务的网站。在认证过程之前，客户端要向服务提供者申请客户端标识。</p>
-<p>使用OAuth进行认证和授权的过程如下所示：</p>
-<p>用户访问客户端的网站，想操作用户存放在服务提供方的资源。</p>
-<p>客户端向服务提供方请求一个临时令牌。</p>
-<p>服务提供方验证客户端的身份后，授予一个临时令牌。</p>
-<p>客户端获得临时令牌后，将用户引导至服务提供方的授权页面请求用户授权。在这个过程中将临时令牌和客户端的回调连接发送给服务提供方。</p>
+          <p>MCC(移动国家码)和 MNC(移动网络码)</p>
+<p>国际移动用户识别码（IMSI） international mobile subscriber identity 国际上为唯一识别一个移动用户所分配的号码。　　</p>
+<p>    从技术上讲，IMSI可以彻底解决国际漫游问题。但是由于北美目前仍有大量的AMPS系统使用MIN号码，且北美的MDN和MIN采用相同的编号，系统已经无法更改，所以目前国际漫游暂时还是以MIN为主。其中以O和1打头的MIN资源称为IRM(International Roaming MIN)，由IFAST (International Forum on ANSI-41 Standards Technology)统一管理。目前联通申请的IRM资源以09打头。可以看出，随着用户的增长，用于国际漫游的MIN资源将很快耗尽，全球统一采用IMSI标识用户势在必行。</p>
+<p>    结构组合</p>
+<p>    IMSI共有15位，其结构如下：MCC+MNC+MSIN ，（MNC+MSIN=NMSI）</p>
+<p>    MCC：Mobile Country Code，移动国家码，MCC的资源由国际电联（ITU）统一分配和管理，唯一识别移动用户所属的国家，共3位，中国为460;　　</p>
+<p>    MNC:Mobile Network Code，移动网络码，共2位，中国移动TD系统使用00，中国联通GSM系统使用01，中国移动GSM系统使用02，中国电信CDMA系统使用03，一个典型的IMSI号码为460030912121001</p>
+<p>    MSIN:Mobile Subscriber Identification Number共有10位，其结构如下：09+M0M1M2M3+ABCD　其中的M0M1M2M3和MDN号码中的H0H1H2H3可存在对应关系，ABCD四位为自由分配。可以看出IMSI在MSIN号码前加了MCC即NMSI，可以区别出每个用户的来自的国家，因此可以实现国际漫游。在同一个国家内，如果有多个移动网络运营商，可以通过MNC来进行区别。</p>
+<p>MCC(3位)+MNC(2位)</p>
+<p>20201,    &quot;Cosmote&quot;,          &quot;GR&quot;</p>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/OAUTH%20%202-legged%20%E4%B8%8E%203-legged%20%E7%9A%84%E5%B7%AE%E5%88%A5/#more" rel="contents">
+              <a class="btn" href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/MCC(%E7%A7%BB%E5%8A%A8%E5%9B%BD%E5%AE%B6%E7%A0%81)%E5%92%8C%20MNC(%E7%A7%BB%E5%8A%A8%E7%BD%91%E7%BB%9C%E7%A0%81)/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -284,7 +284,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/nvconf/">
+    <link itemprop="mainEntityOfPage" href="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/maps%E7%9B%B8%E5%85%B3%E9%9A%90%E8%97%8F/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/uploads/avatar.gif">
@@ -298,91 +298,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/nvconf/" class="post-title-link" itemprop="url">nvconf</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-12-31 14:48:01" itemprop="dateCreated datePublished" datetime="2020-12-31T14:48:01+08:00">2020-12-31</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-01-16 12:37:34" itemprop="dateModified" datetime="2020-01-16T12:37:34+08:00">2020-01-16</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E7%83%82%E7%AC%94%E5%A4%B4/" itemprop="url" rel="index"><span itemprop="name">烂笔头</span></a>
-                </span>
-            </span>
-
-          
-            <span id="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/nvconf/" class="post-meta-item leancloud_visitors" data-flag-title="nvconf" title="阅读次数">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-eye"></i>
-              </span>
-              <span class="post-meta-item-text">阅读次数：</span>
-              <span class="leancloud-visitors-count"></span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>nvconf set 1 wireless.apstaswitch STA</p>
-<p>nvconf set 1 wireless.sta.ssid CIOT_5598544</p>
-<p>nvconf set 1 wireless.ap.ipaddr 192.168.43.139</p>
-<p>nvconf set 1 wireless.sta.ssid CIOT_7690851</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/note/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/uploads/avatar.gif">
-      <meta itemprop="name" content="Edward">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="点点滴滴">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/note/" class="post-title-link" itemprop="url">note</a>
+            <a href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/maps%E7%9B%B8%E5%85%B3%E9%9A%90%E8%97%8F/" class="post-title-link" itemprop="url">maps相关隐藏</a>
         </h2>
 
         <div class="post-meta">
@@ -412,7 +328,7 @@
             </span>
 
           
-            <span id="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/note/" class="post-meta-item leancloud_visitors" data-flag-title="note" title="阅读次数">
+            <span id="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/maps%E7%9B%B8%E5%85%B3%E9%9A%90%E8%97%8F/" class="post-meta-item leancloud_visitors" data-flag-title="maps相关隐藏" title="阅读次数">
               <span class="post-meta-item-icon">
                 <i class="fa fa-eye"></i>
               </span>
@@ -429,100 +345,21 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <p><a target="_blank" rel="noopener" href="http://www.cnblogs.com/itgungnir/category/983781.html">http://www.cnblogs.com/itgungnir/category/983781.html</a></p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/note%20android/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/uploads/avatar.gif">
-      <meta itemprop="name" content="Edward">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="点点滴滴">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/note%20android/" class="post-title-link" itemprop="url">note android</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-12-31 14:48:01" itemprop="dateCreated datePublished" datetime="2020-12-31T14:48:01+08:00">2020-12-31</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-01-16 12:37:33" itemprop="dateModified" datetime="2020-01-16T12:37:33+08:00">2020-01-16</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E7%83%82%E7%AC%94%E5%A4%B4/" itemprop="url" rel="index"><span itemprop="name">烂笔头</span></a>
-                </span>
-            </span>
-
-          
-            <span id="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/note%20android/" class="post-meta-item leancloud_visitors" data-flag-title="note android" title="阅读次数">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-eye"></i>
-              </span>
-              <span class="post-meta-item-text">阅读次数：</span>
-              <span class="leancloud-visitors-count"></span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>Volley 轻量级网络下载</p>
-<p><a target="_blank" rel="noopener" href="https://github.com/google/volley">https://github.com/google/volley</a> </p>
-<p>OKHttp</p>
-<p><a target="_blank" rel="noopener" href="http://square.github.io/okhttp/">http://square.github.io/okhttp/</a> </p>
-<p>Glide 图片加载</p>
-<p><a target="_blank" rel="noopener" href="https://github.com/bumptech/glide">https://github.com/bumptech/glide</a> </p>
-<p>LruCache  DiskLruCache  </p>
-<p><a target="_blank" rel="noopener" href="https://github.com/JakeWharton/DiskLruCache">https://github.com/JakeWharton/DiskLruCache</a> </p>
-<p>资源</p>
-<p>selector item layer-list shape</p>
+          <p>diff –git a/packages/apps/Launcher2/src/com/android/launcher2/AllAppsList.java b/packages/apps</p>
+<p>index cf93335..2aa3d80 100644</p>
+<p>— a/packages/apps/Launcher2/src/com/android/launcher2/AllAppsList.java</p>
+<p>+++ b/packages/apps/Launcher2/src/com/android/launcher2/AllAppsList.java</p>
+<p>@@ -65,6 +65,7 @@ class AllAppsList {</p>
+<p>         if (findActivity(data, info.componentName)) {</p>
+<p>             return;</p>
+<p>         }</p>
+<ul>
+<li>              if(&quot;com.google.android.maps.driveabout.app.DestinationActivity&quot;.equals(info.com</li>
+</ul>
+<p>                String [] hidedapps = null;</p>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/note%20android/#more" rel="contents">
+              <a class="btn" href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/maps%E7%9B%B8%E5%85%B3%E9%9A%90%E8%97%8F/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -546,7 +383,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/net_read%20ret=7/">
+    <link itemprop="mainEntityOfPage" href="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/make%20update-api/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/uploads/avatar.gif">
@@ -560,7 +397,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/net_read%20ret=7/" class="post-title-link" itemprop="url">net_read ret=7</a>
+            <a href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/make%20update-api/" class="post-title-link" itemprop="url">make update-api</a>
         </h2>
 
         <div class="post-meta">
@@ -590,7 +427,7 @@
             </span>
 
           
-            <span id="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/net_read%20ret=7/" class="post-meta-item leancloud_visitors" data-flag-title="net_read ret=7" title="阅读次数">
+            <span id="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/make%20update-api/" class="post-meta-item leancloud_visitors" data-flag-title="make update-api" title="阅读次数">
               <span class="post-meta-item-icon">
                 <i class="fa fa-eye"></i>
               </span>
@@ -607,24 +444,19 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <p>net_read: ret=7   </p>
-<p>26668 RECV:  A5 A5 A6 02 01 02 54 </p>
-<p>Select DB 3</p>
-<p>soundtype : 0</p>
-<p>bJpgFileName: SD:\Photo\F\IMG190807-195212F.JPG</p>
-<p>MMPS_DSC_SetCaptureBuf mod:0 pos:21fbc00~243bc00 (sz:240000)</p>
-<p>W:780 H:438 ShotEn:0 MaxDramAdr:0</p>
-<p>End of DSC capture buffers = 0x243BC00</p>
-<p>AIHC_DCFDT_PostAddFile szFullPath SD:\Photo\F\IMG190807-195212F.JPG</p>
-<p>sDcfDtSet.m_uiCurrDBIdx = 3</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/net_read%20ret=7/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
+          <p>在编译framework时出错提示要 make update-api</p>
+<p>这是因为修改frameworks层， 定义了新的 公有变量、常量、方法名称要提交 frameworks/base/api/ current.txt 这个文件。</p>
+<ol>
+<li> 添加系统API或者修改@hide的API后，需要执行</li>
+</ol>
+<p>     make update-api，然后再make</p>
+<ol start="2">
+<li>修改公共api后，需要</li>
+</ol>
+<p>     make update-api</p>
+<p>     比较framework/base/api 下的current.xml跟原始x.xml(比如2.2为8.xml, 2.3.3为10.xml)，同时修改x.xml</p>
+<p>     然后make</p>
+
       
     </div>
 
@@ -643,7 +475,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/navigation_bar.xml/">
+    <link itemprop="mainEntityOfPage" href="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/make%20menuconfig%20%E5%87%BA%E9%94%99/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/uploads/avatar.gif">
@@ -657,7 +489,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/navigation_bar.xml/" class="post-title-link" itemprop="url">navigation_bar</a>
+            <a href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/make%20menuconfig%20%E5%87%BA%E9%94%99/" class="post-title-link" itemprop="url">make menuconfig 出错</a>
         </h2>
 
         <div class="post-meta">
@@ -687,7 +519,7 @@
             </span>
 
           
-            <span id="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/navigation_bar.xml/" class="post-meta-item leancloud_visitors" data-flag-title="navigation_bar" title="阅读次数">
+            <span id="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/make%20menuconfig%20%E5%87%BA%E9%94%99/" class="post-meta-item leancloud_visitors" data-flag-title="make menuconfig 出错" title="阅读次数">
               <span class="post-meta-item-icon">
                 <i class="fa fa-eye"></i>
               </span>
@@ -704,24 +536,8 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <p>&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;</p>
-<p>&lt;!–</p>
-<p>**</p>
-<p>** Copyright 2012, The Android Open Source Project</p>
-<p>**</p>
-<p>** Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); </p>
-<p>** you may not use this file except in compliance with the License. </p>
-<p>** You may obtain a copy of the License at </p>
-<p>**</p>
-<p>**     <a target="_blank" rel="noopener" href="http://www.apache.org/licenses/LICENSE-2.0">http://www.apache.org/licenses/LICENSE-2.0</a> </p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/navigation_bar.xml/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
+          <p> sudo apt-get install lib32ncurses5-dev</p>
+
       
     </div>
 
@@ -740,7 +556,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/nand%20flash%20%E5%88%86%E5%8C%BA/">
+    <link itemprop="mainEntityOfPage" href="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/make%20CM11/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/uploads/avatar.gif">
@@ -754,7 +570,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/nand%20flash%20%E5%88%86%E5%8C%BA/" class="post-title-link" itemprop="url">nand flash 分区</a>
+            <a href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/make%20CM11/" class="post-title-link" itemprop="url">make CM11</a>
         </h2>
 
         <div class="post-meta">
@@ -784,7 +600,7 @@
             </span>
 
           
-            <span id="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/nand%20flash%20%E5%88%86%E5%8C%BA/" class="post-meta-item leancloud_visitors" data-flag-title="nand flash 分区" title="阅读次数">
+            <span id="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/make%20CM11/" class="post-meta-item leancloud_visitors" data-flag-title="make CM11" title="阅读次数">
               <span class="post-meta-item-icon">
                 <i class="fa fa-eye"></i>
               </span>
@@ -801,19 +617,19 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <p>Paremeter 分区信息等                                4M</p>
-<p>0x00002000@0x00002000(misc),   4M</p>
-<p>0x00008000@0x00004000(kernel), 16M</p>
-<p>0x00008000@0x0000c000(boot),   16M</p>
-<p>0x00010000@0x00014000(recovery),      32M</p>
-<p>0x00020000@0x00024000(backup),   64M</p>
-<p>0x00040000@0x00044000(cache),   128M</p>
-<p>0x00200000@0x00084000(userdata), 1024M</p>
-<p>0x00002000@0x00284000(kpanic),     4M</p>
-<p>0x00100000@0x00286000(system), 512M</p>
+          <p>$ curl <a target="_blank" rel="noopener" href="https://dl-ssl.google.com/dl/googlesource/git-repo/repo">https://dl-ssl.google.com/dl/googlesource/git-repo/repo</a> &gt; ~/bin/repo<br>$ chmod a+x ~/bin/repo</p>
+<p>if can’t not touch the url please try next :</p>
+<p>curl &quot;<a target="_blank" rel="noopener" href="http://php.webtutor.pl/en/wp-content/uploads/2011/09/repo">http://php.webtutor.pl/en/wp-content/uploads/2011/09/repo</a>&quot; &gt; ~/bin/repo</p>
+<p><a target="_blank" rel="noopener" href="https://skydrive.live.com/?id=B3BFF0D42AE1E534!107&amp;cid=b3bff0d42ae1e534#!/?id=B3BFF0D42AE1E534%21107&amp;cid=b3bff0d42ae1e534">https://skydrive.live.com/?id=B3BFF0D42AE1E534!107&amp;cid=b3bff0d42ae1e534#!/?id=B3BFF0D42AE1E534%21107&amp;cid=b3bff0d42ae1e534</a></p>
+<p>repo init -u git://github.com/CyanogenMod/android.git -b cm-10.1 </p>
+<p>gedit ~/android/cm10/.repo/local_manifests/local_manifest.xml </p>
+<p>Yarly:  To use with toroplus or maguro, just sub out any mention the word &quot;toro&quot; from the XML markup above you have to paste for whatever you are trying to build.  </p>
+<p>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt; </p>
+<p>&lt;manifest&gt; </p>
+<p>  &lt;remote fetch=&quot;<a target="_blank" rel="noopener" href="http://github.com/">http://github.com/</a>&quot; name=&quot;gh&quot; revision=&quot;master&quot; /&gt; </p>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/nand%20flash%20%E5%88%86%E5%8C%BA/#more" rel="contents">
+              <a class="btn" href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/make%20CM11/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -837,7 +653,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/mysql%20hz4g%20%E7%BB%91%E5%AE%9A/">
+    <link itemprop="mainEntityOfPage" href="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/make%203.82%20%E7%BC%96%E8%AF%91%E9%97%AE%E9%A2%98/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/uploads/avatar.gif">
@@ -851,7 +667,88 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/mysql%20hz4g%20%E7%BB%91%E5%AE%9A/" class="post-title-link" itemprop="url">mysql hz4g 绑定</a>
+            <a href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/make%203.82%20%E7%BC%96%E8%AF%91%E9%97%AE%E9%A2%98/" class="post-title-link" itemprop="url">make 3</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-12-31 14:48:01" itemprop="dateCreated datePublished" datetime="2020-12-31T14:48:01+08:00">2020-12-31</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-01-16 12:37:32" itemprop="dateModified" datetime="2020-01-16T12:37:32+08:00">2020-01-16</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%83%82%E7%AC%94%E5%A4%B4/" itemprop="url" rel="index"><span itemprop="name">烂笔头</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/make%203.82%20%E7%BC%96%E8%AF%91%E9%97%AE%E9%A2%98/" class="post-meta-item leancloud_visitors" data-flag-title="make 3" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>在编译  make-3.82  的时候出现如下错误提示glob/glob.c:xxx:  undefined  reference  to  <code>__alloca&#39;</code><br>修改  /glob/glob.c <br>//      #if  !defined  __alloca  &amp;&amp;  !defined  __GNU_LIBRARY__<br>#  ifdef        <strong>GNUC</strong><br>#    undef  alloca<br>#    define  alloca(n)        __builtin_alloca  (n)<br>#  else        /*  Not  GCC.    <em>/<br>#    ifdef  HAVE_ALLOCA_H<br>#      include  &lt;alloca.h&gt;<br>#    else        /</em>  Not  HAVE_ALLOCA_H.    */<br>#      ifndef  _AIX<br>#        ifdef  WINDOWS32<br>#          include  &lt;malloc.h&gt;<br>#        else<br>extern  char  <em>alloca  ();<br>#        endif  /</em>  WINDOWS32  <em>/<br>#      endif  /</em>  Not  _AIX.    <em>/<br>#    endif  /</em>  sparc  or  HAVE_ALLOCA_H.    <em>/<br>#  endif        /</em>  GCC.    */<br>#  define  __alloca        alloca<br>//      #endif<br>保存后编译通过</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/Mac%20%E8%BF%9C%E7%A8%8B%E7%9B%AE%E5%BD%95/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/avatar.gif">
+      <meta itemprop="name" content="Edward">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="点点滴滴">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/Mac%20%E8%BF%9C%E7%A8%8B%E7%9B%AE%E5%BD%95/" class="post-title-link" itemprop="url">Mac 远程目录</a>
         </h2>
 
         <div class="post-meta">
@@ -881,7 +778,7 @@
             </span>
 
           
-            <span id="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/mysql%20hz4g%20%E7%BB%91%E5%AE%9A/" class="post-meta-item leancloud_visitors" data-flag-title="mysql hz4g 绑定" title="阅读次数">
+            <span id="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/Mac%20%E8%BF%9C%E7%A8%8B%E7%9B%AE%E5%BD%95/" class="post-meta-item leancloud_visitors" data-flag-title="Mac 远程目录" title="阅读次数">
               <span class="post-meta-item-icon">
                 <i class="fa fa-eye"></i>
               </span>
@@ -898,19 +795,19 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <p>t_device 设备列表</p>
-<p>t_user 用户列表</p>
-<p>t_bond 添加绑定关系（自动触发v_bond_device，  v_bond_user），添加数据库后，还需手动绑定按按键确认。</p>
-<p>（f_status = 0）不行先改这个，再去绑定。待测。</p>
-<p>mysql -ucarassist -pcarassist</p>
-<p>show databases;</p>
-<p>use db_carcloud;</p>
-<p>select * from t_user where f_nickname like &quot;%serena%&quot;;</p>
-<p>show tables;</p>
-<p>select * from t_bond where f_userindex=1000009632;</p>
+          <p>Homebrew</p>
+<p><a target="_blank" rel="noopener" href="https://brew.sh/index_zh-cn.html">https://brew.sh/index_zh-cn.html</a></p>
+<p>/usr/bin/ruby -e &quot;$(curl -fsSL <a target="_blank" rel="noopener" href="https://raw.githubusercontent.com/Homebrew/install/master/install">https://raw.githubusercontent.com/Homebrew/install/master/install</a>)&quot;</p>
+<p>brew install sshfs</p>
+<p>按照提示，先安装osxfuse </p>
+<p>brew cask install osxfuse</p>
+<p>brew install sshfs</p>
+<p>sshfs -C -o reconnect &lt;user&gt;@&lt;host&gt;:&lt;remote_dir&gt; &lt;local_dir&gt;</p>
+<p>sshfs -C -o reconnect <a href="mailto:&#x72;&#111;&#111;&#116;&#x40;&#49;&#57;&#50;&#x2e;&#49;&#54;&#x38;&#x2e;&#x31;&#x2e;&#49;&#x30;&#x31;">&#x72;&#111;&#111;&#116;&#x40;&#49;&#57;&#50;&#x2e;&#49;&#54;&#x38;&#x2e;&#x31;&#x2e;&#49;&#x30;&#x31;</a>:/mnt/images/ ~/Desktop/images/</p>
+<p>sshfs -C -o reconnect <a href="mailto:&#x41;&#x64;&#109;&#105;&#110;&#x69;&#115;&#116;&#114;&#97;&#x74;&#x6f;&#x72;&#x40;&#49;&#x39;&#x32;&#46;&#49;&#x36;&#56;&#46;&#49;&#x2e;&#49;&#56;">&#x41;&#x64;&#109;&#105;&#110;&#x69;&#115;&#116;&#114;&#97;&#x74;&#x6f;&#x72;&#x40;&#49;&#x39;&#x32;&#46;&#49;&#x36;&#56;&#46;&#49;&#x2e;&#49;&#56;</a>:E:\ssh ~/Desktop/remote  //to Windows</p>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/mysql%20hz4g%20%E7%BB%91%E5%AE%9A/#more" rel="contents">
+              <a class="btn" href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/Mac%20%E8%BF%9C%E7%A8%8B%E7%9B%AE%E5%BD%95/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -934,7 +831,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/mv%20%E4%B8%8B%E8%BD%BD/">
+    <link itemprop="mainEntityOfPage" href="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/LVDS%20(Low%20Voltage%20Differential%20Signaling)/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/uploads/avatar.gif">
@@ -948,7 +845,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/mv%20%E4%B8%8B%E8%BD%BD/" class="post-title-link" itemprop="url">mv 下载</a>
+            <a href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/LVDS%20(Low%20Voltage%20Differential%20Signaling)/" class="post-title-link" itemprop="url">LVDS (Low Voltage Differential Signaling)</a>
         </h2>
 
         <div class="post-meta">
@@ -978,7 +875,7 @@
             </span>
 
           
-            <span id="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/mv%20%E4%B8%8B%E8%BD%BD/" class="post-meta-item leancloud_visitors" data-flag-title="mv 下载" title="阅读次数">
+            <span id="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/LVDS%20(Low%20Voltage%20Differential%20Signaling)/" class="post-meta-item leancloud_visitors" data-flag-title="LVDS (Low Voltage Differential Signaling)" title="阅读次数">
               <span class="post-meta-item-icon">
                 <i class="fa fa-eye"></i>
               </span>
@@ -995,8 +892,24 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <p><a target="_blank" rel="noopener" href="http://www.hopemv.com/">http://www.hopemv.com/</a></p>
-
+          <p>LVDS ： Low-Voltage Differential Signaling 低压差分信号传输</p>
+<p>　　1994年由美国国家半导体公司提出的一种信号传输模式，是一种电平标准，广泛应用于液晶屏接口。它在提供高数据传输率的同时会有很低的功耗，另外它还有许多其他的优势：</p>
+<p>　　1、低电压电源的兼容性</p>
+<p>　　2、低噪声</p>
+<p>　　3、高噪声抑制能力</p>
+<p>　　4、可靠的信号传输</p>
+<p>　　5、能够集成到系统级IC内</p>
+<p>　　使用LVDS技术的的产品数据速率可以从几百Mbps到2Gbps。</p>
+<p>　　它是电流驱动的，通过在接收端放置一个负载而得到电压，当电流正向流动，接收端输出为1，反之为0</p>
+<p>　　他的摆幅为250mv-450mv</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/LVDS%20(Low%20Voltage%20Differential%20Signaling)/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
@@ -1015,7 +928,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/mtk%206735%20%E8%B0%83%E8%AF%95%E8%AE%B0%E5%BD%95/">
+    <link itemprop="mainEntityOfPage" href="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/Linux%E5%AD%97%E7%AC%A6%E8%AE%BE%E5%A4%87%E9%A9%B1%E5%8A%A8%E5%89%96%E6%9E%90/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/uploads/avatar.gif">
@@ -1029,7 +942,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/mtk%206735%20%E8%B0%83%E8%AF%95%E8%AE%B0%E5%BD%95/" class="post-title-link" itemprop="url">mtk 6735 调试记录</a>
+            <a href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/Linux%E5%AD%97%E7%AC%A6%E8%AE%BE%E5%A4%87%E9%A9%B1%E5%8A%A8%E5%89%96%E6%9E%90/" class="post-title-link" itemprop="url">Linux字符设备驱动剖析</a>
         </h2>
 
         <div class="post-meta">
@@ -1046,7 +959,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-01-16 12:37:34" itemprop="dateModified" datetime="2020-01-16T12:37:34+08:00">2020-01-16</time>
+                <time title="修改时间：2020-01-16 12:37:32" itemprop="dateModified" datetime="2020-01-16T12:37:32+08:00">2020-01-16</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -1059,7 +972,7 @@
             </span>
 
           
-            <span id="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/mtk%206735%20%E8%B0%83%E8%AF%95%E8%AE%B0%E5%BD%95/" class="post-meta-item leancloud_visitors" data-flag-title="mtk 6735 调试记录" title="阅读次数">
+            <span id="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/Linux%E5%AD%97%E7%AC%A6%E8%AE%BE%E5%A4%87%E9%A9%B1%E5%8A%A8%E5%89%96%E6%9E%90/" class="post-meta-item leancloud_visitors" data-flag-title="Linux字符设备驱动剖析" title="阅读次数">
               <span class="post-meta-item-icon">
                 <i class="fa fa-eye"></i>
               </span>
@@ -1076,19 +989,120 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <p><a target="_blank" rel="noopener" href="https://blog.csdn.net/cherenbiao/article/details/50673081">https://blog.csdn.net/cherenbiao/article/details/50673081</a></p>
-<p>ARP</p>
-<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/github_30662571/article/details/75088644">https://blog.csdn.net/github_30662571/article/details/75088644</a></p>
-<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/king4148/article/details/70156760">https://blog.csdn.net/king4148/article/details/70156760</a></p>
-<p>/proc/net/arp</p>
-<p> arp -a</p>
-<p>make bootimage-nodeps showcommands</p>
-<p>make bootimage-nodeps </p>
-<p>禁止热点联网</p>
-<p>iptables -P FORWARD DROP</p>
+          <p>一、先看看设备应用程序</p>
+<p>1.很简单，open设备文件，read、write、ioctl，最后close退出。如下：</p>
+<p>int main(int argc ,char *argv[]){</p>
+<p>unsigned char val[1] = 1;</p>
+<p>int fd =open(&quot;/dev/LED&quot;,O_RDWR);//打开设备</p>
+<p>write(fd,val,1);//写入设备，这里代表LED全亮</p>
+<p>close(fd);//关闭设备</p>
+<p>return 0;</p>
+<p>}</p>
+<p>二、/dev目录与文件系统</p>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/mtk%206735%20%E8%B0%83%E8%AF%95%E8%AE%B0%E5%BD%95/#more" rel="contents">
+              <a class="btn" href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/Linux%E5%AD%97%E7%AC%A6%E8%AE%BE%E5%A4%87%E9%A9%B1%E5%8A%A8%E5%89%96%E6%9E%90/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/Linux%E4%B8%8B%E6%B7%BB%E5%8A%A0adb%20%E8%AE%BE%E5%A4%87/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/avatar.gif">
+      <meta itemprop="name" content="Edward">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="点点滴滴">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/Linux%E4%B8%8B%E6%B7%BB%E5%8A%A0adb%20%E8%AE%BE%E5%A4%87/" class="post-title-link" itemprop="url">Linux下添加adb 设备</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-12-31 14:48:01" itemprop="dateCreated datePublished" datetime="2020-12-31T14:48:01+08:00">2020-12-31</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-01-16 12:37:32" itemprop="dateModified" datetime="2020-01-16T12:37:32+08:00">2020-01-16</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%83%82%E7%AC%94%E5%A4%B4/" itemprop="url" rel="index"><span itemprop="name">烂笔头</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/Linux%E4%B8%8B%E6%B7%BB%E5%8A%A0adb%20%E8%AE%BE%E5%A4%87/" class="post-meta-item leancloud_visitors" data-flag-title="Linux下添加adb 设备" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>在RK平台下测试：</p>
+<ol>
+<li>在system/core/adb/usb_vendors.c 下添加VID</li>
+</ol>
+<p>例如：将Nvidia’s USB Vendor ID修改为Anydata的vid   (只需修改)</p>
+<p>#define VENDOR_ID_NVIDIA        0x16D5</p>
+<ol start="2">
+<li>编译 mmm system/core/adb/ </li>
+</ol>
+<p>生成于out/host/linux-x86/bin/adb   若有，先删除原来的</p>
+<p>3.拷贝到/sbin/下  并修改环境变量</p>
+<p>export PATH=$PATH:/sbin/adb</p>
+<p>4、在  /etc/udev/rules.d/70-android.rules  添加 VID &amp; PID  </p>
+<h1 id="fastboot-protocol-on-grouper-anydata"><a href="#fastboot-protocol-on-grouper-anydata" class="headerlink" title="fastboot protocol on grouper (anydata)"></a>fastboot protocol on grouper (anydata)</h1>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/Linux%E4%B8%8B%E6%B7%BB%E5%8A%A0adb%20%E8%AE%BE%E5%A4%87/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -1111,7 +1125,7 @@
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/31/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/31/">31</a><span class="page-number current">32</span><a class="page-number" href="/page/33/">33</a><span class="space">&hellip;</span><a class="page-number" href="/page/57/">57</a><a class="extend next" rel="next" href="/page/33/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
+    <a class="extend prev" rel="prev" href="/page/31/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/31/">31</a><span class="page-number current">32</span><a class="page-number" href="/page/33/">33</a><span class="space">&hellip;</span><a class="page-number" href="/page/56/">56</a><a class="extend next" rel="next" href="/page/33/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
   </nav>
 
 
@@ -1179,14 +1193,14 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">570</span>
+          <span class="site-state-item-count">554</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-count">9</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
   </nav>
@@ -1213,7 +1227,7 @@
 <div class="copyright">
   
   &copy; 
-  <span itemprop="copyrightYear">2020</span>
+  <span itemprop="copyrightYear">2021</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>

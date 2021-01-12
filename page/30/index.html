@@ -187,7 +187,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/RefInvoke/">
+    <link itemprop="mainEntityOfPage" href="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/PHP%20WEB%20%20API%20framework/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/uploads/avatar.gif">
@@ -201,7 +201,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/RefInvoke/" class="post-title-link" itemprop="url">RefInvoke</a>
+            <a href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/PHP%20WEB%20%20API%20framework/" class="post-title-link" itemprop="url">PHP WEB  API framework</a>
         </h2>
 
         <div class="post-meta">
@@ -231,7 +231,7 @@
             </span>
 
           
-            <span id="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/RefInvoke/" class="post-meta-item leancloud_visitors" data-flag-title="RefInvoke" title="阅读次数">
+            <span id="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/PHP%20WEB%20%20API%20framework/" class="post-meta-item leancloud_visitors" data-flag-title="PHP WEB  API framework" title="阅读次数">
               <span class="post-meta-item-icon">
                 <i class="fa fa-eye"></i>
               </span>
@@ -248,55 +248,14 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <p>import java.lang.reflect.Field;<br>import java.lang.reflect.Method;</p>
-<p>class RefInvoke {</p>
-<pre><code>static Object getFieldObject(String className, Object obj, String fieldName) &#123;
-    try &#123;
-        Class&amp;lt;?&amp;gt; objClass = Class.forName(className);
-        Field field = objClass.getDeclaredField(fieldName);
-        field.setAccessible(true);
-        return field.get(obj);
-    &#125; catch (Exception e) &#123;
-        e.printStackTrace();
-    &#125;
-    return null;
-&#125;
-
-static Object getStaticFieldObject(String className, String fieldName) &#123;
-    return getFieldObject(className, null, fieldName);
-&#125;
-
-static void setFieldObject(String className, String fieldName, Object obj, Object fieldValue) &#123;
-    try &#123;
-        Class objClass = Class.forName(className);
-        Field field = objClass.getDeclaredField(fieldName);
-        field.setAccessible(true);
-        field.set(obj, fieldValue);
-    &#125; catch (Exception e) &#123;
-        e.printStackTrace();
-    &#125;
-&#125;
-
-static void setStaticFieldObject(String className, String fieldName, Object fieldValue) &#123;
-    setFieldObject(className, fieldName, null, fieldValue);
-&#125;
-
-static Object invokeMethod(String className, String methodName, Object obj, Class[] pareTyple, Object[] pareValues) &#123;
-    try &#123;
-        Class&amp;lt;?&amp;gt; objClass = Class.forName(className);
-        Method method = objClass.getDeclaredMethod(methodName, pareTyple);
-        method.setAccessible(true);
-        return method.invoke(obj, pareValues);
-    &#125; catch (Exception e) &#123;
-        e.printStackTrace();
-    &#125;
-    return null;
-&#125;
-
-static Object invokeStaticMethod(String className, String methodName, Class[] pareTyple, Object[] pareValues) &#123;
-    return invokeMethod(className, methodName, null, pareTyple, pareValues);
-&#125;</code></pre>
-<p>}</p>
+          <p><a target="_blank" rel="noopener" href="http://www.phalapi.net/">http://www.phalapi.net/</a> </p>
+<p><a target="_blank" rel="noopener" href="http://www.slimframework.com/">http://www.slimframework.com/</a> </p>
+<p><a target="_blank" rel="noopener" href="http://dev.enchant.com/api/v1">http://dev.enchant.com/api/v1</a> </p>
+<p><a target="_blank" rel="noopener" href="http://symfony.com/">http://symfony.com/</a> </p>
+<p><a target="_blank" rel="noopener" href="http://blog.csdn.net/xukai871105/article/details/18775957">http://blog.csdn.net/xukai871105/article/details/18775957</a> </p>
+<p><a target="_blank" rel="noopener" href="http://www.vinaysahni.com/best-practices-for-a-pragmatic-restful-api">http://www.vinaysahni.com/best-practices-for-a-pragmatic-restful-api</a> </p>
+<p><a target="_blank" rel="noopener" href="http://initphp.com/">http://initphp.com/</a> </p>
+<p><a target="_blank" rel="noopener" href="http://www.waveframework.com/">http://www.waveframework.com/</a></p>
 
       
     </div>
@@ -316,7 +275,7 @@ static Object invokeStaticMethod(String className, String methodName, Class[] pa
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/redfish%20VPN/">
+    <link itemprop="mainEntityOfPage" href="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/PhoneWindowManger/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/uploads/avatar.gif">
@@ -330,7 +289,970 @@ static Object invokeStaticMethod(String className, String methodName, Class[] pa
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/redfish%20VPN/" class="post-title-link" itemprop="url">redfish VPN</a>
+            <a href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/PhoneWindowManger/" class="post-title-link" itemprop="url">PhoneWindowManger</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-12-31 14:48:01" itemprop="dateCreated datePublished" datetime="2020-12-31T14:48:01+08:00">2020-12-31</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-01-16 12:37:32" itemprop="dateModified" datetime="2020-01-16T12:37:32+08:00">2020-01-16</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%83%82%E7%AC%94%E5%A4%B4/" itemprop="url" rel="index"><span itemprop="name">烂笔头</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/PhoneWindowManger/" class="post-meta-item leancloud_visitors" data-flag-title="PhoneWindowManger" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>在按键上报前做了些动作。。。做 了一半没做好。。。</p>
+<p>if (keyCode == KeyEvent.KEYCODE_VOLUME_DOWN){</p>
+<p>if (repeatCount == 0) {</p>
+<p>startDockOrHome();</p>
+<p>                    return -1;</p>
+<p>                } else if ((event.getFlags() &amp; KeyEvent.FLAG_LONG_PRESS) != 0) {</p>
+<p>                    if (!keyguardOn) {</p>
+<p>                        return 0;</p>
+<p>                    }</p>
+<p>                }</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/PhoneWindowManger/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/phone%20%E6%A8%A1%E5%BC%8F%20%E9%BB%98%E8%AE%A4%20USB%20%E9%94%AE%E7%9B%98/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/avatar.gif">
+      <meta itemprop="name" content="Edward">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="点点滴滴">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/phone%20%E6%A8%A1%E5%BC%8F%20%E9%BB%98%E8%AE%A4%20USB%20%E9%94%AE%E7%9B%98/" class="post-title-link" itemprop="url">phone 模式 默认 USB 键盘</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-12-31 14:48:01" itemprop="dateCreated datePublished" datetime="2020-12-31T14:48:01+08:00">2020-12-31</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-01-16 12:37:33" itemprop="dateModified" datetime="2020-01-16T12:37:33+08:00">2020-01-16</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%83%82%E7%AC%94%E5%A4%B4/" itemprop="url" rel="index"><span itemprop="name">烂笔头</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/phone%20%E6%A8%A1%E5%BC%8F%20%E9%BB%98%E8%AE%A4%20USB%20%E9%94%AE%E7%9B%98/" class="post-meta-item leancloud_visitors" data-flag-title="phone 模式 默认 USB 键盘" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>— a/frameworks/base/services/java/com/android/server/input/InputManagerService.java</p>
+<p>+++ b/frameworks/base/services/java/com/android/server/input/InputManagerService.java</p>
+<p>@@ -89,7 +89,8 @@ import java.util.HashSet;</p>
+<p> import libcore.io.Streams;</p>
+<p> import libcore.util.Objects;</p>
+<p>-</p>
+<p>+import android.os.SystemProperties;</p>
+<p>+import android.content.res.Configuration;</p>
+<p> /*</p>
+<p>  * Wraps the C++ InputManager and provides its callbacks.</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/phone%20%E6%A8%A1%E5%BC%8F%20%E9%BB%98%E8%AE%A4%20USB%20%E9%94%AE%E7%9B%98/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/persist%20%E5%B1%9E%E6%80%A7/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/avatar.gif">
+      <meta itemprop="name" content="Edward">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="点点滴滴">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/persist%20%E5%B1%9E%E6%80%A7/" class="post-title-link" itemprop="url">persist 属性</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-12-31 14:48:01" itemprop="dateCreated datePublished" datetime="2020-12-31T14:48:01+08:00">2020-12-31</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-01-16 12:37:32" itemprop="dateModified" datetime="2020-01-16T12:37:32+08:00">2020-01-16</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%83%82%E7%AC%94%E5%A4%B4/" itemprop="url" rel="index"><span itemprop="name">烂笔头</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/persist%20%E5%B1%9E%E6%80%A7/" class="post-meta-item leancloud_visitors" data-flag-title="persist 属性" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>/data/property  目录下面保存persist值。可作公有标志。</p>
+<p>SystemProperties.set(&quot;persist.sys.preinstalled&quot;, &quot;1&quot;);</p>
+<p>import android.os.SystemProperties;</p>
+<p>SystemProperties.set(&quot;persist.sys.country&quot;,”china”);</p>
+<p>String vmHeapSize = SystemProperties.get(&quot;dalvik.vm.heapgrowthlimit&quot;, &quot;24m&quot;);</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/pck_type%20%E6%89%93%E5%8C%85/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/avatar.gif">
+      <meta itemprop="name" content="Edward">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="点点滴滴">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/pck_type%20%E6%89%93%E5%8C%85/" class="post-title-link" itemprop="url">pck_type 打包</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-12-31 14:48:01" itemprop="dateCreated datePublished" datetime="2020-12-31T14:48:01+08:00">2020-12-31</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-01-16 12:37:33" itemprop="dateModified" datetime="2020-01-16T12:37:33+08:00">2020-01-16</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%83%82%E7%AC%94%E5%A4%B4/" itemprop="url" rel="index"><span itemprop="name">烂笔头</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/pck_type%20%E6%89%93%E5%8C%85/" class="post-meta-item leancloud_visitors" data-flag-title="pck_type 打包" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>/*<strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong>**</strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></p>
+<ul>
+<li>FILENAME  :   </li>
+<li>AUTHOR    :   <a href="mailto:&#x66;&#101;&#x6e;&#103;&#x6a;&#x6c;&#48;&#50;&#54;&#64;&#x31;&#50;&#x36;&#x2e;&#x63;&#111;&#109;">&#x66;&#101;&#x6e;&#103;&#x6a;&#x6c;&#48;&#50;&#54;&#64;&#x31;&#50;&#x36;&#x2e;&#x63;&#111;&#109;</a></li>
+<li>DATA      :   2007-1-3</li>
+<li>MODIFY    :   </li>
+<li>HISTORY   :   </li>
+<li>DESC      :   pck_type 打包</li>
+<li>COPYRIGHT :   深圳永辉昌 2007</li>
+<li><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong>**</strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong>/<br>#include &quot;config.h&quot;<br>#include &quot;ezxml.h&quot;<br>#include &quot;readDB.h&quot;<br>#include &quot;pck_type.h&quot;<br>#include &quot;command.h&quot;<br>#ifdef __cplusplus<br>extern &quot;C&quot; {<br>#endif<br>extern HANDLE                             g_carportHandle ;     //诊断串口句柄<br>extern DEFAULT_MSGATTR                      g_defaultMsgAttr;     //MSG项的缺省参数<br>int unpack_mbuf(int type, U8 *buf, int bufsize)<br>{<br>//分裂<br>int pos = 0;<br>//int times = 0;<br>U8 rbuf[256];<br>int len = 0;<br>int num;<br>while(pos + buf[3+pos] +5 &lt;= bufsize)<br>  {<pre><code> num = unpack_buf(type, buf+pos, buf[pos+3]+5);</code></pre>
+memcpy(rbuf+len, buf+pos,num);<br>len += num;<br>pos += buf[3+pos] + 5;<br>}<br>  memcpy(buf, rbuf, len);<br>return len;<br>}<br>int unpack_buf(int type,U8 <em>buf, int bufsize)<br>{<br>if((buf[4]&amp;0xf0) == 0xf0)<br>  {<br>return 0;<br>}<br>switch(type)<br>  {<br>case 0: return unpack_buf0(buf,bufsize);<br>case 1: return unpack_buf1(buf,bufsize);<br>case 2: return unpack_buf2(buf,bufsize);<br>case 3: return unpack_buf3(buf,bufsize);<br>case 4: return unpack_buf4(buf,bufsize);<br>case 5: return unpack_buf5(buf,bufsize);<br>case 6: return unpack_buf6(buf,bufsize);//解包方式同方式零,但校验位CRC校验<br>case 7: return unpack_buf7(buf,bufsize);//解包方式同方式零,但校验位为一字节和<br>case 8: return unpack_buf8(buf,bufsize);<br>case 9: return unpack_buf9(buf,bufsize);<br>case 0x0a: return unpack_bufa(buf,bufsize);<br>case 0x0b: return unpack_bufb(buf,bufsize);<br>case 0x0c: return unpack_bufc(buf,bufsize);<br>case 0x0d: return unpack_bufd(buf,bufsize);<br>case 0x0e: return unpack_bufe(buf,bufsize);<br>case 0x0f: return unpack_buff(buf,bufsize);<br>case 0x13: return unpack_buf13(buf,bufsize);<br>case 0x14: return unpack_buf14(buf,bufsize);<br>}<br>return 0;<br>}<br>/</em><br>FMT:格式头<br>TGT:发送ID<br>SRC:接收ID<br>LEN:命令数据长度<br>SID:命令头，一般是SID+DATA表示一条完整的命令<br>DATA:命令内容<br>CS:一字节校验和<br>0x00:直接打包，无校验<br>0x01:KWP2000格式1 Fmt    + Sid + Data + CS        (0x80+len)<br>0x02:KWP2000格式2 Fmt + Tgt + Src + Sid + Data + CS     (0x80+len)<br>0x03:KWP2000格式3 Fmt + Len + Sid + Data + CS          (80)<br>0x04:KWP2000格式4 Fmt + Tgt + Src + Len + Sid + Data + CS    (80)<br>0x05:KWP2000格式5 Fmt + Tgt + Src + Sid + Data + CS       (68) Tgt:0x6A<br>0X06:主要是通用VPW协议，打包方式同方式零,但校验位CRC校验<br>0X07:KWP2000格式，打包方式同方式零,校验位是一字节和<br>0x08:马自达老协议打包方式 FMT + TGT + SRC + SID + DATA + CS (0x04+LEN*0x10)<br>0x09:OBDII,TGT=6A,校验位CRC校验<br>0x0a:福特，加C4的头,校验位CRC校验<br>0x0b:OBDII,68,6a,f1,其它同打包方式9<br>0x0c:打包方式同方式零,加长度和一字节校验和 LEN + SID + DATA + CS<br>0x0d:打包方式同方式2, FMT + TGT + SRC + SID + DATA + CS (0xc0+len)<br>0x0e:打包方式同方式零,第三位是数据长度，最后两位是前面全部字节的和，低字节在前,高字节在后(主要用于奔驰协议)<br>0x0f:打包方式同方式0，第二位是长度，校验位为一字节和取补<br>0x13:打包方式同方式0，最后一位是异或校验<br>0x14:打包方式同方式0，倒数第二位是异或校验,最后一位是一字节和取反</li>
+<li>/<br>int pack_type(ezxml_t xml, U8 *u8buf ,int bufsize)<br>{<br>switch(getPackType(xml))<br>  {<br>case 0: return pack_type0(xml,u8buf, bufsize);<br>case 1: return pack_type1(xml,u8buf, bufsize);<br>case 2: return pack_type2(xml,u8buf, bufsize);<br>case 3: return pack_type3(xml,u8buf, bufsize);<br>case 4: return pack_type4(xml,u8buf, bufsize);<br>case 5: return pack_type5(xml,u8buf, bufsize);<br>case 6: return pack_type6(xml,u8buf, bufsize);<br>case 7: return pack_type7(xml,u8buf, bufsize);<br>case 8: return pack_type8(xml,u8buf, bufsize);<br>case 9: return pack_type9(xml,u8buf, bufsize);<br>case 0x0a: return pack_typea(xml,u8buf, bufsize);<br>case 0x0b: return pack_typeb(xml,u8buf, bufsize);<br>case 0x0c: return pack_typec(xml,u8buf, bufsize);<br>case 0x0d: return pack_typed(xml,u8buf, bufsize);<br>case 0x0e: return pack_typee(xml,u8buf, bufsize);<br>case 0x0f: return pack_typef(xml,u8buf, bufsize);<br>case 0x13: return pack_type13(xml,u8buf, bufsize);<br>case 0x14: return pack_type14(xml,u8buf, bufsize);<br>}<br>return 0;<br>}<br>int getPackType(ezxml_t msgxml)<br>{<br>char *pck_type = (char *)ezxml_attr(msgxml, &quot;PCK_TYPE&quot;);<br>if(pck_type)<br>return getHex(pck_type);      <br>return g_defaultMsgAttr.m_PCK_TYPE;<br>}<br>int unpack_bufb(U8 *buf, int bufsize)<br>{<br>int m=0;<br>int i,j,k;<br>int l=285;int n;<br>//int number=0;<br>if(bufsize &lt; 9)<br>return 0;<br>for(i=5; i&lt;bufsize; i++)<br>  {<pre><code> buf[m++] = buf[i];</code></pre>
+}<br>  m=bufsize-5;<br>buf[m-1] = buf[m-2];<br>buf[m-2] = 0;<br>if(m==9||m==8||m==13||m==7||m==11||m==10||m==6||m==12)<br>  {  <pre><code> buf[m-2]=0x0a;</code></pre>
+if(m==8)<pre><code>    buf[m-2]=0xf6;</code></pre>
+if(m==13)<pre><code>    buf[m-2]=0xe2;</code></pre>
+if(m==7)<pre><code>    buf[m-2]=0x10;</code></pre>
+if(m==11)<pre><code>    buf[m-2]=0x7c;</code></pre>
+if(m==10)<pre><code>    buf[m-2]=0xe9;</code></pre>
+if(m==12)<pre><code>    buf[m-2]=0xfe;</code></pre>
+if(m==6)<pre><code>    buf[m-2]=0x59;</code></pre>
+j=buf[0];<br>for(i=1;i&lt;m-1;i++)<pre><code> &#123;</code></pre>
+//MessageBox(&quot;ok&quot;);<br>for(k=0;k&lt;8;k++)<pre><code>    &#123;
+       j=j&amp;lt;&amp;lt;1;</code></pre>
+n=(buf[i]&gt;&gt;(7-k))&amp;0x01;<br>j+=n;<br>if(j&gt;255)<pre><code>          j=j^l;</code></pre>
+}<pre><code> &#125;
+ buf[m-2]=j;</code></pre>
+}<br>if(buf[m-1]!=buf[m-2])<br>return 0;<br>else<br>     return m-2;<br>}<br>int unpack_bufa(U8 *buf, int bufsize)<br>{<br>int m=0;<br>int i,j,k;<br>int l=285;int n;<br>//int number=0;<br>if(bufsize &lt; 9)<br>return 0;<br>for(i=5; i&lt;bufsize; i++)<br>  {<pre><code> buf[m++] = buf[i];</code></pre>
+}<br>  m=bufsize-5;<br>buf[m-1] = buf[m-2];<br>buf[m-2] = 0;<br>if(m==9||m==8||m==13||m==7||m==11||m==10||m==6||m==12)<br>  {  <pre><code> buf[m-2]=0x0a;</code></pre>
+if(m==8)<pre><code>    buf[m-2]=0xf6;</code></pre>
+if(m==13)<pre><code>    buf[m-2]=0xe2;</code></pre>
+if(m==7)<pre><code>    buf[m-2]=0x10;</code></pre>
+if(m==11)<pre><code>    buf[m-2]=0x7c;</code></pre>
+if(m==10)<pre><code>    buf[m-2]=0xe9;</code></pre>
+if(m==12)<pre><code>    buf[m-2]=0xfe;</code></pre>
+if(m==6)<pre><code>    buf[m-2]=0x59;</code></pre>
+j=buf[0];<br>for(i=1;i&lt;m-1;i++)<pre><code> &#123;</code></pre>
+//MessageBox(&quot;ok&quot;);<br>for(k=0;k&lt;8;k++)<pre><code>    &#123;
+       j=j&amp;lt;&amp;lt;1;</code></pre>
+n=(buf[i]&gt;&gt;(7-k))&amp;0x01;<br>j+=n;<br>if(j&gt;255)<pre><code>          j=j^l;</code></pre>
+}<pre><code> &#125;
+ buf[m-2]=j;</code></pre>
+}<br>if(buf[m-1]!=buf[m-2])<br>return 0;<br>else<br>     return m-2;<br>}<br>int unpack_buf9(U8 *buf, int bufsize)<br>{<br>int m=0;<br>int i,j,k;<br>int l=285;int n;<br>//int number=0;<br>if(bufsize &lt; 9)<br>return 0;<br>for(i=5; i&lt;bufsize; i++)<br>  {<pre><code> buf[m++] = buf[i];</code></pre>
+}<br>  m=bufsize-5;<br>buf[m-1] = buf[m-2];<br>buf[m-2] = 0;<br>if(m==9||m==8||m==13||m==7||m==11||m==10||m==6||m==12)<br>  {  <pre><code> buf[m-2]=0x0a;</code></pre>
+if(m==8)<pre><code>    buf[m-2]=0xf6;</code></pre>
+if(m==13)<pre><code>    buf[m-2]=0xe2;</code></pre>
+if(m==7)<pre><code>    buf[m-2]=0x10;</code></pre>
+if(m==11)<pre><code>    buf[m-2]=0x7c;</code></pre>
+if(m==10)<pre><code>    buf[m-2]=0xe9;</code></pre>
+if(m==12)<pre><code>    buf[m-2]=0xfe;</code></pre>
+if(m==6)<pre><code>    buf[m-2]=0x59;</code></pre>
+j=buf[0];<br>for(i=1;i&lt;m-1;i++)<pre><code> &#123;</code></pre>
+//MessageBox(&quot;ok&quot;);<br>for(k=0;k&lt;8;k++)<pre><code>    &#123;
+       j=j&amp;lt;&amp;lt;1;</code></pre>
+n=(buf[i]&gt;&gt;(7-k))&amp;0x01;<br>j+=n;<br>if(j&gt;255)<pre><code>          j=j^l;</code></pre>
+}<pre><code> &#125;
+ buf[m-2]=j;</code></pre>
+}<br>if(buf[m-1]!=buf[m-2])<br>return 0;<br>else<br>     return m-2;<br>}<br>int unpack_buf8(U8 *buf, int bufsize)<br>{<br>int m=0;<br>int i,j;<br>int n = 0;<br>U8 u8buf[128];<br>int number = 0 ;<br>if(bufsize &lt; 9)<br>return 0;<br>for(i=5; i&lt;bufsize; i++)<br>  {<pre><code> buf[m++] = buf[i];</code></pre>
+}<br>  m=bufsize-5;<br>if(m &gt; (buf[0]/16+2))<br>  {<pre><code> number = m;</code></pre>
+for(j = 0; number &gt;1; )<pre><code> &#123;
+    memcpy(u8buf, buf+j, number);</code></pre>
+n = u8buf[0]/16+1;<br>u8buf[n] = 0;<br>for(i = 0; i&lt;n-1; i++)<pre><code>    &#123;
+       u8buf[n] += u8buf[i];</code></pre>
+}<br>if(u8buf[n]!=u8buf[n-1])<br>return 0;<br>number = number-n;<br>j = j+n;<br>}<br>return m-1;<br>}<br>else<br>{<pre><code> buf[m] = 0;</code></pre>
+for(i = 0; i&lt;m-2; i++)<pre><code> &#123;
+    buf[m] += buf[i];</code></pre>
+}<br>if(buf[m]!=buf[m-2])<br>return 0;<br>}<br>return m-2;<br>}<br>int unpack_buf7(U8 *buf, int bufsize)<br>{<br>int number=0;<br>int i;<br>U8 cs=0;<br>if(bufsize &lt; 5)<br>return 0;<br>for(i=5; i&lt;bufsize; i++)<br>  {<pre><code> buf[number++] = buf[i];</code></pre>
+}<br>  number–;<br>for(i=0;i&lt;number-1;i++)<pre><code> cs+=buf[i];</code></pre>
+if(cs!=buf[number-1])<br>return 0;<br>return number;<br>}<br>int unpack_buf6(U8 *buf, int bufsize)<br>{<br>int m=0;<br>int i,j,k;<br>int l=285;int n;<br>if(bufsize &lt; 5)<br>return 0;<br>for(i=5; i&lt;bufsize; i++)<br>  {<pre><code> buf[m++] = buf[i];</code></pre>
+}<br>  m=bufsize-5;<br>buf[m-1]=buf[m-2];<br>if(m==9||m==8||m==13||m==7||m==11||m==10||m==6||m==12)<br>  {  <pre><code> buf[m-2]=0x0a;</code></pre>
+if(m==8)<pre><code>    buf[m-2]=0xf6;</code></pre>
+if(m==13)<pre><code>    buf[m-2]=0xe2;</code></pre>
+if(m==7)<pre><code>    buf[m-2]=0x10;</code></pre>
+if(m==11)<pre><code>    buf[m-2]=0x7c;</code></pre>
+if(m==10)<pre><code>    buf[m-2]=0xe9;</code></pre>
+if(m==12)<pre><code>    buf[m-2]=0xfe;</code></pre>
+if(m==6)<pre><code>    buf[m-2]=0x59;</code></pre>
+j=buf[0];<br>for(i=1;i&lt;m-1;i++)<pre><code> &#123;</code></pre>
+//MessageBox(&quot;ok&quot;);<br>for(k=0;k&lt;8;k++)<pre><code>    &#123;
+       j=j&amp;lt;&amp;lt;1;</code></pre>
+n=(buf[i]&gt;&gt;(7-k))&amp;0x01;<br>j+=n;<br>if(j&gt;255)<pre><code>          j=j^l;</code></pre>
+}<pre><code> &#125;
+ buf[m-2]=j;</code></pre>
+}<br>if(buf[m-2]!=buf[m-1])<br>return 0;<br>else<br>     return m-1;<br>}<br>int unpack_buf5(U8 *buf, int bufsize)<br>{<br>int number = 0;<br>int i;<br>if(bufsize &lt; 9)<br>return 0;<br>if(buf[5] != 0x48)<br>return 0;<br>for(i=8; i&lt;bufsize; i++)<br>  {<pre><code> buf[number++] = buf[i];</code></pre>
+}<br>return number-1;<br>}<br>int unpack_buf4(U8 *buf, int bufsize)<br>{<br>int number=0;<br>int i;<br>U8 len;<br>//U8 hex = 0;<br>if(bufsize &lt; 8)<br>return 0;<br>//长度校验<br>len = buf[5]&amp;0x3f;<br>if(len==0)<br>  {<pre><code> len=buf[8];</code></pre>
+number=9;<br>}<br>else<br>number=8;<br>if(bufsize &lt; number+ len+1)<br>return 0;<br>//校验和校验<br>  //for(i = 0; i&lt; len+3;i++)<br>  //{<br>  // hex += buf[5+i];<br>  //}<br>  //if(hex != buf[5+i])<br>  // return 0;<br>for(i=0; i&lt;len; i++)<br>  {<pre><code> buf[i]= buf[number+i];</code></pre>
+}<br>  buf[i] = ‘\0’;<br>return len;<br>}<br>int unpack_buf3(U8 *buf, int bufsize)<br>{<br>int number = 0;<br>int i;<br>int len;<br>if(bufsize &lt; 7)<br>return 0;<br>len = buf[5]&amp;0x3f;    //去掉最高两位<br>if(len==0)<br>  {<pre><code> len=buf[6];</code></pre>
+number=6;<br>}<br>else<br>number=5;<br>if(bufsize &lt; number + len+1)<br>return 0;<br>//校验和校验<br>  //for(i = 0; i&lt; len+1;i++)<br>  //{<br>  // hex += buf[5+i];<br>  //}<br>  //if(hex != buf[5+i])<br>  // return 0;<br>for(i=0; i&lt;len;i++)<br>  {<pre><code> buf[i] = buf[number+i];</code></pre>
+}<br>return len;<br>}<br>int unpack_buf2(U8 *buf, int bufsize)<br>{<br>int number=0;<br>int i;<br>U8 len;<br>//U8 hex = 0;<br>if(bufsize &lt; 8)<br>return 0;<br>//长度校验<br>len = buf[5]&amp;0x3f;<br>if(len==0)<br>  {<pre><code> len=buf[8];</code></pre>
+number=9;<br>}<br>else<br>number=8;<br>if(bufsize &lt; number+ len+1)<br>return 0;<br>//校验和校验<br>  //for(i = 0; i&lt; len+3;i++)<br>  //{<br>  // hex += buf[5+i];<br>  //}<br>  //if(hex != buf[5+i])<br>  // return 0;<br>for(i=0; i&lt;len; i++)<br>  {<pre><code> buf[i]= buf[number+i];</code></pre>
+}<br>  buf[i] = ‘\0’;<br>return len;<br>}<br>int unpack_buf1(U8 *buf, int bufsize)<br>{<br>int number=0;<br>int i;<br>U8 len;<br>if(bufsize &lt; 7)<br>return 0;<br>len = buf[5]&amp;0x3f;    //去掉最高两位<br>if(len==0)<br>  {<pre><code> len=buf[6];</code></pre>
+number=6;<br>}<br>else<br>number=5;<br>if(bufsize &lt; number+1 + len)<br>return 0;<br>//校验和校验<br>  //for(i = 0; i&lt; len+1;i++)<br>  //{<br>  // hex += buf[5+i];<br>  //}<br>  //if(hex != buf[5+i])<br>  // return 0;<br>for(i=0; i&lt;len;i++)<br>  {<pre><code> buf[i] = buf[number+i];</code></pre>
+}<br>  buf[i] = ‘\0’;<br>return len;<br>}<br>int unpack_buf0(U8 *buf, int bufsize)<br>{<br>int number=0;<br>int i;<br>if(bufsize &lt; 5)<br>return 0;<br>for(i=5; i&lt;bufsize; i++)<br>  {<pre><code> buf[number++] = buf[i];</code></pre>
+}<br>  buf[i] = ‘\0’;<br>return number-1;<br>}<br>int unpack_buf13(U8 *buf, int bufsize)<br>{<br>int number=0;<br>int i;<br>if(bufsize &lt; 5)<br>return 0;<br>for(i=5; i&lt;bufsize; i++)<br>  {<pre><code> buf[number++] = buf[i];</code></pre>
+}<br>//计算校验位 异或<br>buf[number] = buf[0];<br>for(i=1;i&lt;number;i++)<br>  {<pre><code> buf[number] ^= buf[i];</code></pre>
+}<br>if(buf[number] != buf[number-1])<br>  {<br>return 0;<br>}<br>return number-1;<br>}<br>int unpack_buf14(U8 *buf, int bufsize)<br>{<br>int number=0;<br>int i;<br>if(bufsize &lt; 5)<br>return 0;<br>for(i=5; i&lt;bufsize; i++)<br>  {<pre><code> buf[number++] = buf[i];</code></pre>
+}<br>//计算校验位 异或<br>buf[number] = buf[0];<br>for(i=1;i&lt;number-2;i++)<br>  {<pre><code> buf[number] ^= buf[i];</code></pre>
+}<br>if(buf[number] != buf[number-2])<br>  {<br>return 0;<br>}<br>return number-1;<br>}<br>int unpack_bufc(U8 *buf, int bufsize)<br>{<br>int number=0;<br>int i;<br>if(bufsize &lt; 6)<br>return 0;<br>if(buf[5] == buf[3] - 3)<br>  {<pre><code> number = buf[5];//number为长度</code></pre>
+number+=2;<br>memcpy(buf,buf+5,number);<br>//计算校验和<br>buf[number] = 0x00;<br>for(i=0;i&lt;number-1;i++)<pre><code>    buf[number] += buf[i];</code></pre>
+if(buf[number] != buf[number-1])<pre><code> &#123;
+    memcpy(buf,buf+1,number-2);</code></pre>
+return 0;<br>}<br>else<br>{<pre><code>    memcpy(buf,buf+1,number-2);</code></pre>
+return number-2;<br>}<br>  }<br>else<br>     return 0;<br>}<br>//暂时以方式2解包<br>int unpack_bufd(U8 *buf, int bufsize)<br>{<br>int number=0;<br>int i;<br>U8 len;<br>//U8 hex = 0;<br>if(bufsize &lt; 8)<br>return 0;<br>//长度校验<br>len = buf[5]&amp;0x3f;<br>if(len==0)<br>  {<pre><code> len=buf[8];</code></pre>
+number=9;<br>}<br>else<br>number=8;<br>if(bufsize &lt; number+ len+1)<br>return 0;<br>//校验和校验<br>  //for(i = 0; i&lt; len+3;i++)<br>  //{<br>  // hex += buf[5+i];<br>  //}<br>  //if(hex != buf[5+i])<br>  // return 0;<br>for(i=0; i&lt;len; i++)<br>  {<pre><code> buf[i]= buf[number+i];</code></pre>
+}<br>  buf[i] = ‘\0’;<br>return len;<br>}<br>int unpack_buff(U8 *buf, int bufsize)<br>{<br>int number=0;<br>int i;<br>U8 len;<br>if(bufsize &lt; 8)<br>return 0;<br>number=5;<br>//长度校验<br>len = buf[6];<br>//if(bufsize &lt; len+6)<br>  // return 0;<br>  //校验和校验<br>  //for(i = 0; i&lt; len+3;i++)<br>  //{<br>  // hex += buf[5+i];<br>  //}<br>  //if(hex != buf[5+i])<br>  // return 0;<br>for(i=0; i&lt;len; i++)<br>  {<pre><code> buf[i]= buf[number+i];</code></pre>
+}<br>  buf[i] = ‘\0’;<br>return len;<br>}<br>//解包只校验了数据长度<br>int unpack_bufe(U8 *buf, int bufsize)<br>{<br>int number=0;<br>int i;<br>int dnumber=0;<br>if(bufsize &lt; 5)<br>return 0;<br>if(buf[07] != bufsize-6)<br>return 0;<br>for(i=5; i&lt;bufsize-3; i++)<br>  {<pre><code> buf[number++] = buf[i];</code></pre>
+dnumber += buf[i];<br>}<br>while(i&lt;bufsize)<br>  {<pre><code> buf[number++] = buf[i++];</code></pre>
+}<br>if(buf[number-3] == (dnumber&amp;0x00FF) &amp;&amp; buf[number-2] == (dnumber&amp;0xFF00)&gt;&gt;8)<br>return number-1;<br>else<br>     return 0;<br>}<br>int pack_typeb(ezxml_t xml, U8 *u8buf, int bufsize)<br>{<br>int number = 8;<br>char <em>p;<br>int i;<br>char *p0 ;<br>//int l=285;<br>int m,j,k,n,l;<br>//检查<br>if(xml == NULL)<br>return 0;<br>p0 = (char *)ezxml_txt(xml);<br>if(strlen(p0) &lt; 2)<br>return 0;<br>//处理<br>m = getHexEx(p0,u8buf+number);<br>//头<br>p = (char</em>)ezxml_attr(xml,&quot;ORD&quot;);<br>if(p)<pre><code> u8buf[4] = getHex(p);</code></pre>
+else<br>u8buf[4] = g_defaultMsgAttr.m_ORD;<br>p=(char*)ezxml_attr(xml,&quot;TGT&quot;);<br>if(p)<pre><code> u8buf[6] = getHex(p);</code></pre>
+else<br>u8buf[6] = g_defaultMsgAttr.m_TGT;<br>if(u8buf[6] == 0x6a)<br>  {<pre><code> u8buf[5] = 0x68;</code></pre>
+u8buf[6] = 0x6a;<br>p =(char*)ezxml_attr(xml,&quot;SRC&quot;);<br>if(p)<pre><code>    u8buf[7] = getHex(p);</code></pre>
+else<br>u8buf[7] = g_defaultMsgAttr.m_SRC;<br>}<br>else<br>     return 0;<br>//u8buf[5] = m*0x10 + 0x34;<br>m+=4;<br>number = m ;<br>number +=5;<br>u8buf[0] = 0xa5;<br>u8buf[1] = 0xa5;<br>u8buf[2] = (number-4) / 0x100;<br>u8buf[3] = (number-4) % 0x100;<br>//CRC校验<br>l=285;<br>if(m==8||m==7||m==12||m==6||m==10||m==9||m==5||m==11)<br>  {  <pre><code> u8buf[number-1]=0x0a;</code></pre>
+if(m==7)<pre><code>    u8buf[number-1]=0xf6;</code></pre>
+if(m==12)<pre><code>    u8buf[number-1]=0xe2;</code></pre>
+if(m==6)<pre><code>    u8buf[number-1]=0x10;</code></pre>
+if(m==10)<pre><code>    u8buf[number-1]=0x7c;</code></pre>
+if(m==9)<pre><code>    u8buf[number-1]=0xe9;</code></pre>
+if(m==11)<pre><code>    u8buf[number-1]=0xfe;</code></pre>
+if(m==5)<pre><code>    u8buf[number-1]=0x59;</code></pre>
+j=u8buf[5];<br>for(i=6;i&lt;number;i++)<pre><code> &#123;</code></pre>
+//MessageBox(&quot;ok&quot;);<br>for(k=0;k&lt;8;k++)<pre><code>    &#123;
+       j=j&amp;lt;&amp;lt;1;</code></pre>
+n=(u8buf[i]&gt;&gt;(7-k))&amp;0x01;<br>j+=n;<br>if(j&gt;255)<pre><code>          j=j^l;</code></pre>
+}<pre><code> &#125;
+ u8buf[number-1]=j;</code></pre>
+}<br>  u8buf[number] = 0;<br>for(i = 2; i&lt;number; i++)<br>  {<pre><code> u8buf[number] += u8buf[i];</code></pre>
+}<br>  u8buf[number] = ~u8buf[number];    <br>return number+1;<br>}<br>int pack_typea(ezxml_t xml, U8 *u8buf, int bufsize)<br>{<br>int number = 8;<br>int i;<br>char <em>p;<br>char *p0 ;<br>int l=285;<br>int m,j,k,n;<br>//检查<br>if(xml == NULL)<br>return 0;<br>p0 = (char *)ezxml_txt(xml);<br>if(strlen(p0) &lt; 2)<br>return 0;<br>//处理<br>m = getHexEx(p0,u8buf+number);<br>//头<br>p = (char</em>)ezxml_attr(xml,&quot;ORD&quot;);<br>if(p)<pre><code> u8buf[4] = getHex(p);</code></pre>
+else<br>u8buf[4] = g_defaultMsgAttr.m_ORD;<br>p=(char*)ezxml_attr(xml,&quot;TGT&quot;);<br>if(p)<pre><code> u8buf[6] = getHex(p);</code></pre>
+else<br>u8buf[6] = g_defaultMsgAttr.m_TGT;<br>p =(char*)ezxml_attr(xml,&quot;SRC&quot;);<br>if(p)<pre><code> u8buf[7] = getHex(p);</code></pre>
+else<br>u8buf[7] = g_defaultMsgAttr.m_SRC;<br>getHexEx(p0,u8buf+number);<br>u8buf[5] = 0xc4;<br>number = m ;<br>number += 8;<br>u8buf[0] = 0xa5;<br>u8buf[1] = 0xa5;<br>u8buf[2] = (number-4) / 0x100;<br>u8buf[3] = (number-4) % 0x100;<br>m += 3;    <br>//CRC校验<br>if(m==8||m==7||m==12||m==6||m==10||m==9||m==5||m==11)<br>  {  <pre><code> u8buf[number-1]=0x0a;</code></pre>
+if(m==7)<pre><code>    u8buf[number-1]=0xf6;</code></pre>
+if(m==12)<pre><code>    u8buf[number-1]=0xe2;</code></pre>
+if(m==6)<pre><code>    u8buf[number-1]=0x10;</code></pre>
+if(m==10)<pre><code>    u8buf[number-1]=0x7c;</code></pre>
+if(m==9)<pre><code>    u8buf[number-1]=0xe9;</code></pre>
+if(m==11)<pre><code>    u8buf[number-1]=0xfe;</code></pre>
+if(m==5)<pre><code>    u8buf[number-1]=0x59;</code></pre>
+j=u8buf[5];<br>for(i=6;i&lt;number;i++)<pre><code> &#123;</code></pre>
+//MessageBox(&quot;ok&quot;);<br>for(k=0;k&lt;8;k++)<pre><code>    &#123;
+       j=j&amp;lt;&amp;lt;1;</code></pre>
+n=(u8buf[i]&gt;&gt;(7-k))&amp;0x01;<br>j+=n;<br>if(j&gt;255)<pre><code>          j=j^l;</code></pre>
+}<pre><code> &#125;
+ u8buf[number-1]=j;</code></pre>
+}<br>  u8buf[number] = 0;<br>for(i = 2; i&lt;number; i++)<br>  {<pre><code> u8buf[number] += u8buf[i];</code></pre>
+}<br>  u8buf[number] = ~u8buf[number];    <br>return number+1;<br>}<br>int pack_type9(ezxml_t xml, U8 *u8buf, int bufsize)<br>{<br>int number = 8;<br>char <em>p;<br>int i;<br>char *p0 ;<br>//int l=285;<br>int m,j,k,n,l;<br>//检查<br>if(xml == NULL)<br>return 0;<br>p0 = (char *)ezxml_txt(xml);<br>if(strlen(p0) &lt; 2)<br>return 0;<br>//处理<br>m = getHexEx(p0,u8buf+number);<br>//头<br>p = (char</em>)ezxml_attr(xml,&quot;ORD&quot;);<br>if(p)<pre><code> u8buf[4] = getHex(p);</code></pre>
+else<br>u8buf[4] = g_defaultMsgAttr.m_ORD;<br>p=(char*)ezxml_attr(xml,&quot;TGT&quot;);<br>if(p)<pre><code> u8buf[6] = getHex(p);</code></pre>
+else<br>u8buf[6] = g_defaultMsgAttr.m_TGT;<br>if(u8buf[6] == 0x6a)<br>  {<pre><code> u8buf[5] = 0x61;</code></pre>
+u8buf[6] = 0x6a;<br>p =(char*)ezxml_attr(xml,&quot;SRC&quot;);<br>if(p)<pre><code>    u8buf[7] = getHex(p);</code></pre>
+else<br>u8buf[7] = g_defaultMsgAttr.m_SRC;<br>}<br>else<br>     return 0;<br>//u8buf[5] = m*0x10 + 0x34;<br>m+=4;<br>number = m ;<br>number +=5;<br>u8buf[0] = 0xa5;<br>u8buf[1] = 0xa5;<br>u8buf[2] = (number-4) / 0x100;<br>u8buf[3] = (number-4) % 0x100;<br>//CRC校验<br>l=285;<br>if(m==8||m==7||m==12||m==6||m==10||m==9||m==5||m==11)<br>  {  <pre><code> u8buf[number-1]=0x0a;</code></pre>
+if(m==7)<pre><code>    u8buf[number-1]=0xf6;</code></pre>
+if(m==12)<pre><code>    u8buf[number-1]=0xe2;</code></pre>
+if(m==6)<pre><code>    u8buf[number-1]=0x10;</code></pre>
+if(m==10)<pre><code>    u8buf[number-1]=0x7c;</code></pre>
+if(m==9)<pre><code>    u8buf[number-1]=0xe9;</code></pre>
+if(m==11)<pre><code>    u8buf[number-1]=0xfe;</code></pre>
+if(m==5)<pre><code>    u8buf[number-1]=0x59;</code></pre>
+j=u8buf[5];<br>for(i=6;i&lt;number;i++)<pre><code> &#123;</code></pre>
+//MessageBox(&quot;ok&quot;);<br>for(k=0;k&lt;8;k++)<pre><code>    &#123;
+       j=j&amp;lt;&amp;lt;1;</code></pre>
+n=(u8buf[i]&gt;&gt;(7-k))&amp;0x01;<br>j+=n;<br>if(j&gt;255)<pre><code>          j=j^l;</code></pre>
+}<pre><code> &#125;
+ u8buf[number-1]=j;</code></pre>
+}<br>  u8buf[number] = 0;<br>for(i = 2; i&lt;number; i++)<br>  {<pre><code> u8buf[number] += u8buf[i];</code></pre>
+}<br>  u8buf[number] = ~u8buf[number];    <br>return number+1;<br>}<br>int pack_type8(ezxml_t xml, U8 <em>u8buf, int bufsize)<br>{<br>int number = 8;<br>int i;<br>char <em>p;<br>char *p0 ;<br>//int l=285;<br>int m;<br>//检查<br>if(xml == NULL)<br>return 0;<br>p0 = (char *)ezxml_txt(xml);<br>if(strlen(p0) &lt; 2)<br>return 0;<br>//处理<br>m = getHexEx(p0,u8buf+number);<br>u8buf[5] = m</em>0x10 + 0x34;<br>number = m ;<br>number += 9;<br>//头<br>u8buf[0] = 0xa5;<br>u8buf[1] = 0xa5;<br>u8buf[2] = (number-4) / 0x100;<br>u8buf[3] = (number-4) % 0x100;<br>p = (char</em>)ezxml_attr(xml,&quot;ORD&quot;);<br>if(p)<pre><code> u8buf[4] = getHex(p);</code></pre>
+else<br>u8buf[4] = g_defaultMsgAttr.m_ORD;<br>p=(char*)ezxml_attr(xml,&quot;TGT&quot;);<br>if(p)<pre><code> u8buf[6] = getHex(p);</code></pre>
+else<br>u8buf[6] = g_defaultMsgAttr.m_TGT;<br>p =(char*)ezxml_attr(xml,&quot;SRC&quot;);<br>if(p)<pre><code> u8buf[7] = getHex(p);</code></pre>
+else<br>u8buf[7] = g_defaultMsgAttr.m_SRC;<br>//校验和<br>u8buf[number-1] = 0;<br>for(i = 5; i&lt;number-1; i++)<br>  {<pre><code> u8buf[number-1] += u8buf[i];</code></pre>
+}<br>  u8buf[number] = 0;<br>for(i = 2; i&lt;number; i++)<br>  {<pre><code> u8buf[number] += u8buf[i];</code></pre>
+}<br>  u8buf[number] = ~u8buf[number];    <br>return number+1;<br>}<br>int pack_type7(ezxml_t xml, U8 *u8buf, int bufsize)<br>{<br>int number = 5;<br>int i;<br>char <em>p;<br>char *p0 ;<br>//检查<br>if(xml == NULL)<br>return 0;<br>p0 = (char *)ezxml_txt(xml);<br>if(strlen(p0) &lt; 2)<br>return 0;<br>//处理<br>number+=getHexEx(p0,u8buf+number);<br>//头<br>u8buf[0] = 0xa5;<br>u8buf[1] = 0xa5;<br>u8buf[2] = (number-4) / 0x100;<br>u8buf[3] = (number-4) % 0x100;<br>p = (char</em>)ezxml_attr(xml,&quot;ORD&quot;);<br>if(p)<pre><code> u8buf[4] = getHex(p);</code></pre>
+else<br>u8buf[4] = g_defaultMsgAttr.m_ORD;<br>u8buf[number-1]=0;<br>for(i=5;i&lt;number-1;i++)<pre><code> u8buf[number-1]+=u8buf[i];</code></pre>
+//校验和<br>u8buf[number] = 0;<br>for(i = 2; i&lt;number; i++)<br>  {<pre><code> u8buf[number] += u8buf[i];</code></pre>
+}<br>  u8buf[number] = ~u8buf[number];    <br>return number+1;<br>}<br>int pack_type6(ezxml_t xml, U8 *u8buf, int bufsize)<br>{<br>int number = 5;<br>int i;<br>char <em>p;<br>char *p0 ;<br>int l=285;<br>int m,j,k,n;<br>//检查<br>if(xml == NULL)<br>return 0;<br>p0 = (char *)ezxml_txt(xml);<br>if(strlen(p0) &lt; 2)<br>return 0;<br>//处理<br>number=getHexEx(p0,u8buf+number);<br>number+=5;<br>//头<br>u8buf[0] = 0xa5;<br>u8buf[1] = 0xa5;<br>u8buf[2] = (number-4) / 0x100;<br>u8buf[3] = (number-4) % 0x100;<br>p = (char</em>)ezxml_attr(xml,&quot;ORD&quot;);<br>if(p)<pre><code> u8buf[4] = getHex(p);</code></pre>
+else<br>u8buf[4] = g_defaultMsgAttr.m_ORD;<br>m=number-5;<br>//CRC校验<br>if(m==8||m==7||m==12||m==6||m==10||m==9||m==5||m==11)<br>  {  <pre><code> u8buf[number-1]=0x0a;</code></pre>
+if(m==7)<pre><code>    u8buf[number-1]=0xf6;</code></pre>
+if(m==12)<pre><code>    u8buf[number-1]=0xe2;</code></pre>
+if(m==6)<pre><code>    u8buf[number-1]=0x10;</code></pre>
+if(m==10)<pre><code>    u8buf[number-1]=0x7c;</code></pre>
+if(m==9)<pre><code>    u8buf[number-1]=0xe9;</code></pre>
+if(m==11)<pre><code>    u8buf[number-1]=0xfe;</code></pre>
+if(m==5)<pre><code>    u8buf[number-1]=0x59;</code></pre>
+j=u8buf[5];<br>for(i=6;i&lt;number;i++)<pre><code> &#123;</code></pre>
+//MessageBox(&quot;ok&quot;);<br>for(k=0;k&lt;8;k++)<pre><code>    &#123;
+       j=j&amp;lt;&amp;lt;1;</code></pre>
+n=(u8buf[i]&gt;&gt;(7-k))&amp;0x01;<br>j+=n;<br>if(j&gt;255)<pre><code>          j=j^l;</code></pre>
+}<pre><code> &#125;
+ u8buf[number-1]=j;</code></pre>
+}<br>//校验和<br>u8buf[number] = 0;<br>for(i = 2; i&lt;number; i++)<br>  {<pre><code> u8buf[number] += u8buf[i];</code></pre>
+}<br>  u8buf[number] = ~u8buf[number];    <br>return number+1;<br>}<br>int pack_type5(ezxml_t xml, U8 *u8buf, int bufsize)<br>{<br>int number = 5;<br>int i;<br>char *p;<br>char *p0 ;<br>//检查<br>if(xml == NULL)<br>return 0;<br>p0 = (char *)ezxml_txt(xml);<br>if(strlen(p0) &lt; 2)<br>return 0;<br>//处理<br>u8buf[number++] = 0x68;<br>u8buf[number++] = 0x6a;<br>p = (char *)ezxml_attr(xml,&quot;SRC&quot;);<br>if(p)<pre><code> u8buf[number++] = getHex(p);</code></pre>
+else<br>u8buf[number++] = g_defaultMsgAttr.m_SRC;<br>number+=getHexEx(p0,u8buf+number);<br>/<em>u8buf[number++] = getHex(p0);<br>  while(p = (char</em>)strstr(p0,&quot;,&quot;))<br>  {<br>     u8buf[number++] = getHex(p+1);<br>     p0 = p+1;<br>     if(number &gt;= bufsize)<br>        break;<br>  }*/<br>  //校验<br>u8buf[number] = 0;<br>for(i = 5; i&lt;number; i++)<br>  {<pre><code> u8buf[number] += u8buf[i];</code></pre>
+}<br>  number++;<br>//头<br>u8buf[0] = 0xa5;<br>u8buf[1] = 0xa5;<br>u8buf[2] = (number-4) / 0x100;<br>u8buf[3] = (number-4) % 0x100;<br>p = (char*)ezxml_attr(xml,&quot;ORD&quot;);<br>if(p)<pre><code> u8buf[4] = getHex(p);</code></pre>
+else<br>u8buf[4] = g_defaultMsgAttr.m_ORD;<br>//校验和<br>u8buf[number] = 0;<br>for(i = 2; i&lt;number; i++)<br>  {<pre><code> u8buf[number] += u8buf[i];</code></pre>
+}<br>  u8buf[number] = ~u8buf[number];    <br>return number+1;<br>}<br>int pack_type4(ezxml_t xml, U8 *u8buf, int bufsize)<br>{<br>int number = 5;<br>int i;<br>char <em>p;<br>char *p0 ;<br>U8 buf[256];<br>//检查<br>if(xml == NULL)<br>return 0;<br>p0 = (char *)ezxml_txt(xml);<br>if(strlen(p0) &lt; 2)<br>return 0;<br>//处理<br>u8buf[number++] = 0x80;<br>p=(char</em>)ezxml_attr(xml,&quot;TGT&quot;);<br>if(p)<pre><code> u8buf[number++] = getHex(p);</code></pre>
+else<br>u8buf[number++] = g_defaultMsgAttr.m_TGT;<br>p =(char*)ezxml_attr(xml,&quot;SRC&quot;);<br>if(p)<pre><code> u8buf[number++] = getHex(p);</code></pre>
+else<br>u8buf[number++] = g_defaultMsgAttr.m_SRC;<br>u8buf[number++] =getHexEx(ezxml_txt(xml),buf);<br>number+=getHexEx(p0,u8buf+number);<br>/<em>u8buf[number++] = getHex(p0);<br>  while(p = (char</em>)strstr(p0,&quot;,&quot;))<br>  {<br>     u8buf[number++] = getHex(p+1);<br>     p0 = p+1;<br>     if(number &gt;= bufsize)<br>        break;<br>  }<br>  */<br>u8buf[number] = 0;<br>for(i = 5; i&lt;number; i++)<br>  {<pre><code> u8buf[number] += u8buf[i];</code></pre>
+}<br>  number++;<br>//头<br>u8buf[0] = 0xa5;<br>u8buf[1] = 0xa5;<br>u8buf[2] = (number-4) / 0x100;<br>u8buf[3] = (number-4) % 0x100;<br>p = (char*)ezxml_attr(xml,&quot;ORD&quot;);<br>if(p)<pre><code> u8buf[4] = getHex(p);</code></pre>
+else<br>u8buf[4] = g_defaultMsgAttr.m_ORD;<br>//校验和<br>u8buf[number] = 0;<br>for(i = 2; i&lt;number; i++)<br>  {<pre><code> u8buf[number] += u8buf[i];</code></pre>
+}<br>  u8buf[number] = ~u8buf[number];    <br>return number+1;<br>}<br>int pack_type3(ezxml_t xml, U8 <em>u8buf, int bufsize)<br>{<br>int number = 5;<br>int i;<br>char *p;<br>char *p0 ;<br>U8  buf[256];<br>//检查<br>if(xml == NULL)<br>return 0;<br>p0 = (char *)ezxml_txt(xml);<br>if(strlen(p0) &lt; 2)<br>return 0;<br>//处理<br>u8buf[number++] = 0x80;<br>u8buf[number++] = getHexEx(ezxml_txt(xml),buf);<br>number+=getHexEx(p0,u8buf+number);<br>/*u8buf[number++] = getHex(p0);<br>  while(p = (char</em>)strstr(p0,&quot;,&quot;))<br>  {<br>     u8buf[number++] = getHex(p+1);<br>     p0 = p+1;<br>     if(number &gt;= bufsize)<br>        break;<br>  }<br>  */<br>u8buf[number] = 0;<br>for(i = 5; i&lt;number; i++)<br>  {<pre><code> u8buf[number] += u8buf[i];</code></pre>
+}<br>  number++;<br>//头<br>u8buf[0] = 0xa5;<br>u8buf[1] = 0xa5;<br>u8buf[2] = (number-4) / 0x100;<br>u8buf[3] = (number-4) % 0x100;<br>p = (char*)ezxml_attr(xml,&quot;ORD&quot;);<br>if(p)<pre><code> u8buf[4] = getHex(p);</code></pre>
+else<br>u8buf[4] = g_defaultMsgAttr.m_ORD;<br>//校验和<br>u8buf[number] = 0;<br>for(i = 2; i&lt;number; i++)<br>  {<pre><code> u8buf[number] += u8buf[i];</code></pre>
+}<br>  u8buf[number] = ~u8buf[number];    <br>return number+1;<br>}<br>int pack_type2(ezxml_t xml, U8 *u8buf, int bufsize)<br>{<br>int number = 5;<br>int i;<br>char <em>p;<br>char *p0 ;<br>U8 buf[256];<br>//检查<br>if(xml == NULL)<br>return 0;<br>p0 = (char *)ezxml_txt(xml);<br>if(strlen(p0) &lt; 2)<br>return 0;<br>//处理<br>u8buf[number++] = 0x80 + getHexEx(ezxml_txt(xml),buf);<br>p=(char</em>)ezxml_attr(xml,&quot;TGT&quot;);<br>if(p)<pre><code> u8buf[number++] = getHex(p);</code></pre>
+else<br>u8buf[number++] = g_defaultMsgAttr.m_TGT;<br>p =(char*)ezxml_attr(xml,&quot;SRC&quot;);<br>if(p)<pre><code> u8buf[number++] = getHex(p);</code></pre>
+else<br>u8buf[number++] = g_defaultMsgAttr.m_SRC;<br>number+=getHexEx(p0,u8buf+number);<br>/<em>u8buf[number++] = getHex(p0);<br>  while(p = (char</em>)strstr(p0,&quot;,&quot;))<br>  {<br>     u8buf[number++] = getHex(p+1);<br>     p0 = p+1;<br>     if(number &gt;= bufsize)<br>        break;<br>  }</li>
+<li>/<br>  //校验<br>u8buf[number] = 0;<br>for(i = 5; i&lt;number; i++)<br>  {<pre><code> u8buf[number] += u8buf[i];</code></pre>
+}<br>  number++;<br>//头<br>u8buf[0] = 0xa5;<br>u8buf[1] = 0xa5;<br>u8buf[2] = (number-4) / 0x100;<br>u8buf[3] = (number-4) % 0x100;<br>p = (char*)ezxml_attr(xml,&quot;ORD&quot;);<br>if(p)<pre><code> u8buf[4] = getHex(p);</code></pre>
+else<br>u8buf[4] = g_defaultMsgAttr.m_ORD;<br>//校验和<br>u8buf[number] = 0;<br>for(i = 2; i&lt;number; i++)<br>  {<pre><code> u8buf[number] += u8buf[i];</code></pre>
+}<br>  u8buf[number] = ~u8buf[number];    <br>return number+1;<br>}<br>int pack_type1(ezxml_t xml, U8 <em>u8buf, int bufsize)<br>{<br>int number = 5;<br>int i;<br>char *p;<br>char *p0 ;<br>U8 buf[256];<br>//检查<br>if(xml == NULL)<br>return 0;<br>p0 = (char *)ezxml_txt(xml);<br>if(strlen(p0) &lt; 2)<br>return 0;<br>//处理<br>u8buf[number++] = 0x80 + getHexEx(ezxml_txt(xml),buf);<br>number+=getHexEx(p0,u8buf+number);<br>/*u8buf[number++] = getHex(p0);<br>  while(p = (char</em>)strstr(p0,&quot;,&quot;))<br>  {<br>     u8buf[number++] = getHex(p+1);<br>     p0 = p+1;<br>     if(number &gt;= bufsize)<br>        break;<br>  }<br>  */<br>  //校验<br>u8buf[number] = 0;<br>for(i = 5; i&lt;number; i++)<br>  {<pre><code> u8buf[number] += u8buf[i];</code></pre>
+}<br>  number++;<br>//头<br>u8buf[0] = 0xa5;<br>u8buf[1] = 0xa5;<br>u8buf[2] = (number-4) / 0x100;<br>u8buf[3] = (number-4) % 0x100;<br>p = (char*)ezxml_attr(xml,&quot;ORD&quot;);<br>if(p)<pre><code> u8buf[4] = getHex(p);</code></pre>
+else<br>u8buf[4] = g_defaultMsgAttr.m_ORD;<br>//校验和<br>u8buf[number] = 0;<br>for(i = 2; i&lt;number; i++)<br>  {<pre><code> u8buf[number] += u8buf[i];</code></pre>
+}<br>  u8buf[number] = ~u8buf[number];    <br>return number+1;<br>}<br>int pack_type0(ezxml_t xml, U8 <em>u8buf, int bufsize)<br>{<br>int number = 5;<br>int i;<br>char *p;<br>char *p0 ;<br>//检查<br>if(xml == NULL)<br>return 0;<br>p0 = (char *)ezxml_txt(xml);<br>if(strlen(p0) &lt; 2)<br>return 0;<br>//处理<br>number+=getHexEx(p0,u8buf+number);<br>/*u8buf[number++] = getHex(p0);<br>  while(p = (char</em>)strstr(p0,&quot;,&quot;))<br>  {<br>     if(strlen(p+1)&gt;0)<br>        u8buf[number++] = getHex(p+1);<br>     p0 = p+1;<br>     if(number &gt;= bufsize)<br>        break;<br>  }</li>
+<li>/<br>  //头<br>u8buf[0] = 0xa5;<br>u8buf[1] = 0xa5;<br>u8buf[2] = (number-4) / 0x100;<br>u8buf[3] = (number-4) % 0x100;<br>p = (char*)ezxml_attr(xml,&quot;ORD&quot;);<br>if(p)<pre><code> u8buf[4] = getHex(p);</code></pre>
+else<br>u8buf[4] = g_defaultMsgAttr.m_ORD;<br>//校验和<br>u8buf[number] = 0;<br>for(i = 2; i&lt;number; i++)<br>  {<pre><code> u8buf[number] += u8buf[i];</code></pre>
+}<br>  u8buf[number] = ~u8buf[number];    <br>return number+1;<br>}<br>int pack_type13(ezxml_t xml, U8 *u8buf, int bufsize)<br>{<br>int number = 5;<br>int i;<br>char <em>p;<br>char *p0 ;<br>//检查<br>if(xml == NULL)<br>return 0;<br>p0 = (char *)ezxml_txt(xml);<br>if(strlen(p0) &lt; 2)<br>return 0;<br>//处理<br>number+=getHexEx(p0,u8buf+number);<br>//头<br>u8buf[0] = 0xa5;<br>u8buf[1] = 0xa5;<br>u8buf[2] = (number-4) / 0x100;<br>u8buf[3] = (number-4) % 0x100;<br>p = (char</em>)ezxml_attr(xml,&quot;ORD&quot;);<br>if(p)<pre><code> u8buf[4] = getHex(p);</code></pre>
+else<br>u8buf[4] = g_defaultMsgAttr.m_ORD;<br>//处理校验位 异或<br>u8buf[number-1] = u8buf[5];<br>for(i=6;i&lt;number-1;i++)<br>  {<pre><code> u8buf[number-1] ^= u8buf[i];</code></pre>
+}<br>//校验和<br>u8buf[number] = 0;<br>for(i = 2; i&lt;number; i++)<br>  {<pre><code> u8buf[number] += u8buf[i];</code></pre>
+}<br>  u8buf[number] = ~u8buf[number];    <br>return number+1;<br>}<br>int pack_type14(ezxml_t xml, U8 *u8buf, int bufsize)<br>{<br>int number = 6;<br>int i;<br>char <em>p;<br>char *p0 ;<br>//检查<br>if(xml == NULL)<br>return 0;<br>p0 = (char *)ezxml_txt(xml);<br>if(strlen(p0) &lt; 2)<br>return 0;<br>//处理<br>number+=getHexEx(p0,u8buf+5);<br>//头<br>u8buf[0] = 0xa5;<br>u8buf[1] = 0xa5;<br>u8buf[2] = (number-4) / 0x100;<br>u8buf[3] = (number-4) % 0x100;<br>p = (char</em>)ezxml_attr(xml,&quot;ORD&quot;);<br>if(p)<pre><code> u8buf[4] = getHex(p);</code></pre>
+else<br>u8buf[4] = g_defaultMsgAttr.m_ORD;<br>//处理校验位 异或<br>u8buf[number-1] = u8buf[5];<br>for(i=6;i&lt;number-1;i++)<br>  {<pre><code> u8buf[number-1] ^= u8buf[i];</code></pre>
+}<br>//校验和<br>u8buf[number] = 0;<br>for(i = 2; i&lt;number; i++)<br>  {<pre><code> u8buf[number] += u8buf[i];</code></pre>
+}<br>  u8buf[number] = ~u8buf[number];    <br>return number+1;<br>}<br>int pack_typec(ezxml_t xml, U8 *u8buf, int bufsize)<br>{<br>int number = 6;<br>int i;<br>char <em>p;<br>char *p0;<br>int len=0;<br>//检查<br>if(xml == NULL)<br>return 0;<br>p0 = (char *)ezxml_txt(xml);<br>if(strlen(p0) &lt; 2)<br>return 0;<br>//处理<br>len = getHexEx(p0,u8buf+number);<br>number+=len+1;<br>//头<br>u8buf[0] = 0xa5;<br>u8buf[1] = 0xa5;<br>u8buf[2] = (number-4) / 0x100;<br>u8buf[3] = (number-4) % 0x100;<br>p = (char</em>)ezxml_attr(xml,&quot;ORD&quot;);<br>if(p)<pre><code> u8buf[4] = getHex(p);</code></pre>
+else<br>u8buf[4] = g_defaultMsgAttr.m_ORD;<br>u8buf[5] = len;<br>//校验和<br>u8buf[number-1] = 0;<br>for(i = 5; i&lt;number-1; i++)<br>  {<pre><code> u8buf[number-1] += u8buf[i];</code></pre>
+}<br>//一字节取反<br>u8buf[number] = 0;<br>for(i = 2; i&lt;number; i++)<br>  {<pre><code> u8buf[number] += u8buf[i];</code></pre>
+}<br>  u8buf[number] = ~u8buf[number];    <br>return number+1;<br>}<br>int pack_typed(ezxml_t xml, U8 *u8buf, int bufsize)<br>{<br>int number = 5;<br>int i;<br>char <em>p;<br>char *p0 ;<br>U8 buf[256];<br>//检查<br>if(xml == NULL)<br>return 0;<br>p0 = (char *)ezxml_txt(xml);<br>if(strlen(p0) &lt; 2)<br>return 0;<br>//处理<br>u8buf[number++] = 0xC0 + getHexEx(ezxml_txt(xml),buf);<br>p=(char</em>)ezxml_attr(xml,&quot;TGT&quot;);<br>if(p)<pre><code> u8buf[number++] = getHex(p);</code></pre>
+else<br>u8buf[number++] = g_defaultMsgAttr.m_TGT;<br>p =(char*)ezxml_attr(xml,&quot;SRC&quot;);<br>if(p)<pre><code> u8buf[number++] = getHex(p);</code></pre>
+else<br>u8buf[number++] = g_defaultMsgAttr.m_SRC;<br>number+=getHexEx(p0,u8buf+number);<br>u8buf[number] = 0;<br>for(i = 5; i&lt;number; i++)<br>  {<pre><code> u8buf[number] += u8buf[i];</code></pre>
+}<br>  number++;<br>//头<br>u8buf[0] = 0xa5;<br>u8buf[1] = 0xa5;<br>u8buf[2] = (number-4) / 0x100;<br>u8buf[3] = (number-4) % 0x100;<br>p = (char*)ezxml_attr(xml,&quot;ORD&quot;);<br>if(p)<pre><code> u8buf[4] = getHex(p);</code></pre>
+else<br>u8buf[4] = g_defaultMsgAttr.m_ORD;<br>//校验和<br>u8buf[number] = 0;<br>for(i = 2; i&lt;number; i++)<br>  {<pre><code> u8buf[number] += u8buf[i];</code></pre>
+}<br>  u8buf[number] = ~u8buf[number];    <br>return number+1;<br>}<br>int pack_typef(ezxml_t xml, U8 *u8buf, int bufsize)<br>{<br>int number = 5;<br>int i;<br>char *p;<br>char *p0 ;<br>//检查<br>if(xml == NULL)<br>return 0;<br>p0 = (char *)ezxml_txt(xml);<br>if(strlen(p0) &lt; 2)<br>return 0;<br>//处理<br>number += getHexEx(p0,u8buf+number);<br>if(u8buf[6]+5==number)<pre><code> number=number-1;</code></pre>
+//校验<br>u8buf[number] = 0;<br>for(i = 5; i&lt;number; i++)<br>  {<pre><code> u8buf[number] += u8buf[i];</code></pre>
+}<br>  u8buf[number]=~u8buf[number]+1;<br>number++;<br>//头<br>u8buf[0] = 0xa5;<br>u8buf[1] = 0xa5;<br>u8buf[2] = (number-4) / 0x100;<br>u8buf[3] = (number-4) % 0x100;<br>p = (char*)ezxml_attr(xml,&quot;ORD&quot;);<br>if(p)<pre><code> u8buf[4] = getHex(p);</code></pre>
+else<br>u8buf[4] = g_defaultMsgAttr.m_ORD;<br>//校验和<br>u8buf[number] = 0;<br>for(i = 2; i&lt;number; i++)<br>  {<pre><code> u8buf[number] += u8buf[i];</code></pre>
+}<br>  u8buf[number] = ~u8buf[number];    <br>return number+1;<br>}<br>int pack_typee(ezxml_t xml, U8 *u8buf, int bufsize)<br>{<br>int number = 5;<br>int i;<br>char *p;<br>char *p0 ;<br>U8 buf[256];<br>U8 len;<br>int dnumber=0;<br>if(xml == NULL)<br>return 0;<br>p0 = (char *)ezxml_txt(xml);<br>if(strlen(p0) &lt; 2)<br>return 0;<br>len = getHexEx(ezxml_txt(xml),buf);<br>if(buf[02]==len)<br>  {<br>//计算校验和<br>for(i=0;i&lt;len-2;i++)<pre><code> &#123;
+    dnumber += buf[i];</code></pre>
+}<pre><code> buf[len-2] = dnumber&amp;amp;0x00FF;</code></pre>
+buf[len-1] = (dnumber&amp;0xFF00)&gt;&gt;8;<br>for(i=0;i&lt;len;i++)<pre><code> &#123;
+    u8buf[number++] = buf[i];</code></pre>
+}<br>  }<br>else<br>     return 0;<br>u8buf[0] = 0xa5;<br>u8buf[1] = 0xa5;<br>u8buf[2] = (number-4) / 0x100;<br>u8buf[3] = (number-4) % 0x100;<br>p = (char*)ezxml_attr(xml,&quot;ORD&quot;);<br>if(p)<pre><code> u8buf[4] = getHex(p);</code></pre>
+else<br>u8buf[4] = g_defaultMsgAttr.m_ORD;<br>//校验和<br>u8buf[number] = 0;<br>for(i = 2; i&lt;number; i++)<br>  {<pre><code> u8buf[number] += u8buf[i];</code></pre>
+}<br>  u8buf[number] = ~u8buf[number];    <br>return number+1;<br>}<br>int crcVerify(U8 *buf, int len)<br>{<br>int i;<br>int j;<br>int l;<br>int k;<br>int n;<br>if(len==9||len==8||len==13||len==7||len==11||len==10||len==6||len==12)<br>  {  <pre><code> buf[len-1]=0x0a;</code></pre>
+if(len==8)<pre><code>    buf[len-1]=0xf6;</code></pre>
+if(len==13)<pre><code>    buf[len-1]=0xe2;</code></pre>
+if(len==7)<pre><code>    buf[len-1]=0x10;</code></pre>
+if(len==11)<pre><code>    buf[len-1]=0x7c;</code></pre>
+if(len==10)<pre><code>    buf[len-1]=0xe9;</code></pre>
+if(len==12)<pre><code>    buf[len-1]=0xfe;</code></pre>
+if(len==6)<pre><code>    buf[len-1]=0x59;</code></pre>
+l=285;<br>j=buf[1];<br>for(i=2;i&lt;len;i++)<pre><code> &#123;</code></pre>
+//lenessageBox(&quot;ok&quot;);<br>for(k=0;k&lt;8;k++)<pre><code>    &#123;
+       j=j&amp;lt;&amp;lt;1;</code></pre>
+n=(buf[i]&gt;&gt;(7-k))&amp;0x01;<br>j+=n;<br>if(j&gt;255)<pre><code>          j=j^l;</code></pre>
+}<pre><code> &#125;
+ buf[len-1]=j;</code></pre>
+}<br>else<br>     return 0;<br>return 1;<br>}<br>int autoFillCrc(char* strHex)<br>{<br>size_t i;<br>U8 buf[256];<br>int buflen = 0;<br>for(i=0; i&lt;strlen(strHex); i+=3)<br>  {<pre><code> buf[buflen++] =getHex(strHex+i); </code></pre>
+if(buflen &gt; 255)<br>return 0;<br>}<br>if(!crcVerify(buf, buflen))<br>return 0;<br>sprintf(strHex+3*(buflen-1),&quot;%02x&quot;,buf[buflen-1]);<br>return 1;<br>}<br>int kwptype(ezxml_t msgxml,U8 *recvbuf)<br>{<br>int number;<br>int pack_t;<br>int i;<br>//int dpos = 0;<br>U8 nTempData=0;<br>if(msgxml != NULL)<br>  {<pre><code> pack_t = getPackType(msgxml);</code></pre>
+number = pack_type(msgxml, recvbuf , 256);<br>Uart_ClearInput(g_carportHandle);<br>Uart_ClearOutput(g_carportHandle);      <br>Device_SendBuf(g_carportHandle, recvbuf , number);<br>}<br>else<br>{<pre><code> pack_t = 0;</code></pre>
+}<br>if((recvbuf[4]&amp;0xf0)==0x20)<br>  {<pre><code> number = Device_ReadBuf(g_carportHandle, recvbuf, 256, 5000);                                              </code></pre>
+}<br>else<br>{<pre><code> number = Device_ReadBuf(g_carportHandle, recvbuf, 256, g_defaultMsgAttr.m_AnswerFrameTimeOut*50);                                              </code></pre>
+}<br>if(!number)<br>return 0;<br>for(i=5;i&lt;number-2;i++)<br>  {<pre><code> nTempData +=recvbuf[i];</code></pre>
+}<br>if(nTempData != recvbuf[i])<br>return 0;<br>if((ezxml_attr(msgxml, &quot;DPOS&quot;))&amp;&amp;(getHex(ezxml_attr(msgxml, &quot;DPOS&quot;))&gt;0))<br>  {<br>//dpos计算数据流的逆向偏移位,此处不能为负值<br>     /<em>dpos = getHex(ezxml_attr(msgxml, &quot;DPOS&quot;));<br>     if(0&lt;dpos&lt;9)<br>     {<br>     Debug_vc(&quot;DPOS=%02X\r\n&quot;,dpos);<br>     memcpy(recvbuf+dpos,recvbuf, number);<br>     }</em>/<br>number = unpack_buf(0, recvbuf, number);<br>}<br>else<br>{<pre><code> number = unpack_buf(pack_t, recvbuf, number);</code></pre>
+}<br>return number;<br>}<br>//有长度控制的命令,如02 07 09, 其中02为长度,09为02+07<br>int lentype1(ezxml_t msgxml,U8 <em>recvbuf)<br>{<br>int number;<br>int snumber;<br>int i;<br>int j,k=0;<br>char *p;<br>char *p0 ;<br>U8 sbuf[50];<br>U8 rbuf[50];<br>U8 buf[256];<br>U8 uTempBuf=0;<br>memset(sbuf,0,sizeof(sbuf));<br>snumber=getHexEx(ezxml_txt(msgxml),buf);<br>if(msgxml == NULL)<br>return 0;<br>p0 = (char</em>)ezxml_txt(msgxml);<br>if(strlen(p0) &lt; 2)<br>return 0;<br>number = snumber+5;<br>//头<br>sbuf[0] = 0xa5;<br>sbuf[1] = 0xa5;<br>sbuf[2] = (number-4) / 0x100;<br>sbuf[3] = (number-4) % 0x100;<br>p = (char*)ezxml_attr(msgxml,&quot;ORD&quot;);<br>if(p)<pre><code> sbuf[4] = getHex(p);</code></pre>
+for(i=0; i &lt; snumber; i++)<br>  {<pre><code> sbuf[i+5]=buf[i];</code></pre>
+}<br>  sbuf[number]=0;<br>for(j=2;j&lt;number;j++)<pre><code> sbuf[number]+=sbuf[j];</code></pre>
+sbuf[number] = ~sbuf[number];  <br>Uart_ClearInput(g_carportHandle);<br>Uart_ClearOutput(g_carportHandle);<br>Device_SendBuf(g_carportHandle,sbuf ,number+1);<br>if((sbuf[4]&amp;0xf0)==0x20)<br>  {<pre><code> number = Device_ReadBuf(g_carportHandle, rbuf, 256, 5000);                                              </code></pre>
+}<br>else<br>{<pre><code> number = Device_ReadBuf(g_carportHandle, rbuf, 256, g_defaultMsgAttr.m_AnswerFrameTimeOut*50);                                              </code></pre>
+}<br>if(!number)<br>return 0;<br>if((rbuf[0] != 0xa5) &amp;&amp; (rbuf[1] != 0xa5))<br>return 0;<br>if(number &lt; 5)<br>return 0;<br>if(rbuf[3] == number -5)<br>  {<br>if(rbuf[5] == number-7)<pre><code> &#123;</code></pre>
+for(i=0; i&lt;rbuf[5]; ++i)<pre><code>    &#123;
+       uTempBuf += rbuf[i+5]; </code></pre>
+}<br>if(uTempBuf != rbuf[i+5])<br>return 0;<br>for(j=5;j&lt;number-1;j++)<pre><code>    &#123;  
+       recvbuf[k]=rbuf[j];</code></pre>
+k++;<br>}<pre><code>    recvbuf[k]=&#39;\0&#39;;</code></pre>
+return k;<br>}<br>else<br>        return 0;<br>}<br>else<br>     return 0;<br>}<br>//有长度控制的命令,如韩国大宇f4,56,01,b5格式命令,第二位表示长度,长度为56-52. b5为取补.<br>int lentype2(ezxml_t msgxml,U8 <em>recvbuf)<br>{<br>int number;<br>int snumber;<br>int i;<br>int j,k=0;<br>char *p;<br>char *p0 ;<br>U8 sbuf[250];<br>U8 rbuf[250];<br>U8 buf[256];<br>U8 uTempBuf=0;<br>memset(sbuf,0,sizeof(sbuf));<br>snumber=getHexEx(ezxml_txt(msgxml),buf);<br>if(msgxml == NULL)<br>return 0;<br>p0 = (char</em>)ezxml_txt(msgxml);<br>if(strlen(p0) &lt; 2)<br>return 0;<br>number = snumber+5;<br>//头<br>sbuf[0] = 0xa5;<br>sbuf[1] = 0xa5;<br>sbuf[2] = (number-4) / 0x100;<br>sbuf[3] = (number-4) % 0x100;<br>p = (char*)ezxml_attr(msgxml,&quot;ORD&quot;);<br>if(p)<pre><code> sbuf[4] = getHex(p);</code></pre>
+for(i=0; i &lt; snumber; i++)<br>  {<pre><code> sbuf[i+5]=buf[i];</code></pre>
+}<br>  sbuf[number]=0;<br>for(j=2;j&lt;number;j++)<pre><code> sbuf[number]+=sbuf[j];</code></pre>
+sbuf[number] = ~sbuf[number];  <br>Uart_ClearInput(g_carportHandle);<br>Uart_ClearOutput(g_carportHandle);<br>Device_SendBuf(g_carportHandle,sbuf ,number+1);<br>if((sbuf[4]&amp;0xf0)==0x20)<br>  {<pre><code> number = Device_ReadBuf(g_carportHandle, rbuf, 256, 5000);                                              </code></pre>
+}<br>else<br>{<pre><code> number = Device_ReadBuf(g_carportHandle, rbuf, 256, g_defaultMsgAttr.m_AnswerFrameTimeOut*50);                                              </code></pre>
+}<br>if(!number)<br>return 0;<br>if((rbuf[0] != 0xa5) &amp;&amp; (rbuf[1] != 0xa5))<br>return 0;<br>if(number &lt; 5)<br>return 0;<br>if(rbuf[6] == number+0x52-6)<br>  {<br>for(i=0; i&lt;number-7; ++i)<pre><code> &#123;
+    uTempBuf += rbuf[i+5]; </code></pre>
+}<pre><code> uTempBuf = ~uTempBuf +1;</code></pre>
+if(uTempBuf != rbuf[i+5])<br>return 0;<br>for(j=5;j&lt;number-1;j++)<pre><code> &#123;  
+    recvbuf[k]=rbuf[j];</code></pre>
+k++;<br>}<pre><code> recvbuf[k]=&#39;\0&#39;;</code></pre>
+return k;<br>}<br>else<br>     return 0;<br>}<br>//有长度控制的命令,如01 82 83, 其中01为长度,83为01+82<br>int lentype3(ezxml_t msgxml,U8 <em>recvbuf)<br>{<br>int number;<br>int snumber;<br>int i;<br>int j,k=0;<br>char *p;<br>char *p0 ;<br>U8 sbuf[50];<br>U8 rbuf[50];<br>U8 buf[256];<br>U8 uTempBuf=0;<br>memset(sbuf,0,sizeof(sbuf));<br>snumber=getHexEx(ezxml_txt(msgxml),buf);<br>if(msgxml == NULL)<br>return 0;<br>p0 = (char</em>)ezxml_txt(msgxml);<br>if(strlen(p0) &lt; 2)<br>return 0;<br>number = snumber+5;<br>//头<br>sbuf[0] = 0xa5;<br>sbuf[1] = 0xa5;<br>sbuf[2] = (number-4) / 0x100;<br>sbuf[3] = (number-4) % 0x100;<br>p = (char*)ezxml_attr(msgxml,&quot;ORD&quot;);<br>if(p)<pre><code>    sbuf[4] = getHex(p);</code></pre>
+for(i=0; i &lt; snumber; i++)<br>  {<pre><code> sbuf[i+5]=buf[i];</code></pre>
+}<br>  sbuf[number]=0;<br>for(j=2;j&lt;number;j++)<pre><code> sbuf[number]+=sbuf[j];</code></pre>
+sbuf[number] = ~sbuf[number];  <br>Uart_ClearInput(g_carportHandle);<br>Uart_ClearOutput(g_carportHandle);<br>Device_SendBuf(g_carportHandle,sbuf ,number+1);<br>if((sbuf[4]&amp;0xf0)==0x20)<br>  {<pre><code> number = Device_ReadBuf(g_carportHandle, rbuf, 256, 5000);                                              </code></pre>
+}<br>else<br>{<pre><code> number = Device_ReadBuf(g_carportHandle, rbuf, 256, g_defaultMsgAttr.m_AnswerFrameTimeOut*50);                                              </code></pre>
+}<br>if(!number)<br>return 0;<br>if((rbuf[0] != 0xa5) &amp;&amp; (rbuf[1] != 0xa5))<br>return 0;<br>if(number &lt; 5)<br>return 0;<br>if(rbuf[3] == number -5)<br>  {<br>if(rbuf[5] == number-8)<pre><code> &#123;</code></pre>
+for(i=0; i&lt;rbuf[5]+1; ++i)<pre><code>    &#123;
+       uTempBuf += rbuf[i+5]; </code></pre>
+}<br>if(uTempBuf != rbuf[i+5])<br>return 0;<br>for(j=5;j&lt;number-1;j++)<pre><code>    &#123;  
+       recvbuf[k]=rbuf[j];</code></pre>
+k++;<br>}<pre><code>    recvbuf[k]=&#39;\0&#39;;</code></pre>
+return k;<br>}<br>else<br>        return 0;<br>}<br>else<br>     return 0;<br>}<br>//有长度控制的命令,如03 13 16, 其中03为长度,16为03+13<br>int lentype4(ezxml_t msgxml,U8 <em>recvbuf)<br>{<br>int number;<br>int snumber;<br>int i;<br>int j,k=0;<br>char *p;<br>char *p0 ;<br>U8 sbuf[50];<br>U8 rbuf[50];<br>U8 buf[256];<br>U8 uTempBuf=0;<br>memset(sbuf,0,sizeof(sbuf));<br>snumber=getHexEx(ezxml_txt(msgxml),buf);<br>if(msgxml == NULL)<br>return 0;<br>p0 = (char</em>)ezxml_txt(msgxml);<br>if(strlen(p0) &lt; 2)<br>return 0;<br>number = snumber+5;<br>//头<br>sbuf[0] = 0xa5;<br>sbuf[1] = 0xa5;<br>sbuf[2] = (number-4) / 0x100;<br>sbuf[3] = (number-4) % 0x100;<br>p = (char*)ezxml_attr(msgxml,&quot;ORD&quot;);<br>if(p)<pre><code>    sbuf[4] = getHex(p);</code></pre>
+for(i=0; i &lt; snumber; i++)<pre><code> &#123;
+    sbuf[i+5]=buf[i];</code></pre>
+}<pre><code> sbuf[number]=0;</code></pre>
+for(j=2;j&lt;number;j++)<pre><code>    sbuf[number]+=sbuf[j];</code></pre>
+sbuf[number] = ~sbuf[number];  <br>Uart_ClearInput(g_carportHandle);<br>Uart_ClearOutput(g_carportHandle);<br>Device_SendBuf(g_carportHandle,sbuf ,number+1);<br>if((sbuf[4]&amp;0xf0)==0x20)<pre><code> &#123;
+    number = Device_ReadBuf(g_carportHandle, rbuf, 256, 5000);                                              </code></pre>
+}<br>else<br>{<pre><code>    number = Device_ReadBuf(g_carportHandle, rbuf, 256, g_defaultMsgAttr.m_AnswerFrameTimeOut*50);                                              </code></pre>
+}<br>if(!number)<br>return 0;<br>if((rbuf[0] != 0xa5) &amp;&amp; (rbuf[1] != 0xa5))<br>return 0;<br>if(number &lt; 5)<br>return 0;<br>if(rbuf[3] == number-5)  // &gt;FF情况下不行<br>{<br>if(rbuf[5] == number-6)<pre><code>    &#123;</code></pre>
+for(i=0; i&lt;rbuf[5]-1; ++i)<pre><code>       &#123;
+          uTempBuf += rbuf[i+5]; </code></pre>
+}<br>if(uTempBuf != rbuf[i+5])<br>return 0;<br>for(j=5;j&lt;number-1;j++)<pre><code>       &#123;  
+          recvbuf[k]=rbuf[j];</code></pre>
+k++;<br>}<pre><code>       recvbuf[k]=&#39;\0&#39;;</code></pre>
+return k;<br>}<br>else<br>           return 0;<br>}<br>else<br>        return 0;<br>}<br>//有长度控制的命令,如01 13 14, 其中01为长度,14为13+01<br>int lentype5(ezxml_t msgxml,U8 <em>recvbuf)<br>{<br>int number;<br>int snumber;<br>int i;<br>int j,k=0;<br>char *p;<br>char *p0 ;<br>U8 sbuf[50];<br>U8 rbuf[50];<br>U8 buf[256];<br>U8 uTempBuf=0;<br>memset(sbuf,0,sizeof(sbuf));<br>snumber=getHexEx(ezxml_txt(msgxml),buf);<br>if(msgxml == NULL)<br>return 0;<br>p0 = (char</em>)ezxml_txt(msgxml);<br>if(strlen(p0) &lt; 2)<br>return 0;<br>number = snumber+5;<br>//头<br>sbuf[0] = 0xa5;<br>sbuf[1] = 0xa5;<br>sbuf[2] = (number-4) / 0x100;<br>sbuf[3] = (number-4) % 0x100;<br>p = (char*)ezxml_attr(msgxml,&quot;ORD&quot;);<br>if(p)<pre><code>    sbuf[4] = getHex(p);</code></pre>
+for(i=0; i &lt; snumber; i++)<pre><code> &#123;
+    sbuf[i+5]=buf[i];</code></pre>
+}<pre><code> sbuf[number]=0;</code></pre>
+for(j=2;j&lt;number;j++)<pre><code>    sbuf[number]+=sbuf[j];</code></pre>
+sbuf[number] = ~sbuf[number];  <br>Uart_ClearInput(g_carportHandle);<br>Uart_ClearOutput(g_carportHandle);<br>Device_SendBuf(g_carportHandle,sbuf ,number+1);<br>if((sbuf[4]&amp;0xf0)==0x20)<pre><code> &#123;
+    number = Device_ReadBuf(g_carportHandle, rbuf, 256, 5000);                                              </code></pre>
+}<br>else<br>{<pre><code>    number = Device_ReadBuf(g_carportHandle, rbuf, 256, g_defaultMsgAttr.m_AnswerFrameTimeOut*50);                                              </code></pre>
+}<br>if(!number)<br>return 0;<br>if((rbuf[0] != 0xa5) &amp;&amp; (rbuf[1] != 0xa5))<br>return 0;<br>if(number &lt; 5)<br>return 0;<br>if(rbuf[3] == number -5)             //  &gt;FF情况下不行<br>{<br>if(rbuf[5] == number-8)<pre><code>    &#123;</code></pre>
+for(i=0; i&lt;rbuf[5]+1; ++i)<pre><code>       &#123;
+          uTempBuf += rbuf[i+5]; </code></pre>
+}<br>if(uTempBuf != rbuf[i+5])<br>return 0;<br>for(j=5;j&lt;number-1;j++)<pre><code>       &#123;  
+          recvbuf[k]=rbuf[j];</code></pre>
+k++;<br>}<pre><code>       recvbuf[k]=&#39;\0&#39;;</code></pre>
+return k;<br>}<br>else<br>           return 0;<br>}<br>else<br>        return 0;<br>}<br>//有长度控制的命令,如03 13 ea, 其中03为长度,ea为前面取补<br>int lentype6(ezxml_t msgxml,U8 <em>recvbuf)<br>{<br>int number;<br>int snumber;<br>int i;<br>int j,k=0;<br>char *p;<br>char *p0 ;<br>U8 sbuf[50];<br>U8 rbuf[50];<br>U8 buf[256];<br>U8 uTempBuf=0;<br>memset(sbuf,0,sizeof(sbuf));<br>snumber=getHexEx(ezxml_txt(msgxml),buf);<br>if(msgxml == NULL)<br>return 0;<br>p0 = (char</em>)ezxml_txt(msgxml);<br>if(strlen(p0) &lt; 2)<br>return 0;<br>number = snumber+5;<br>//头<br>sbuf[0] = 0xa5;<br>sbuf[1] = 0xa5;<br>sbuf[2] = (number-4) / 0x100;<br>sbuf[3] = (number-4) % 0x100;<br>p = (char*)ezxml_attr(msgxml,&quot;ORD&quot;);<br>if(p)<pre><code>    sbuf[4] = getHex(p);</code></pre>
+for(i=0; i &lt; snumber; i++)<pre><code> &#123;
+    sbuf[i+5]=buf[i];</code></pre>
+}<pre><code> sbuf[number]=0;</code></pre>
+for(j=2;j&lt;number;j++)<pre><code>    sbuf[number]+=sbuf[j];</code></pre>
+sbuf[number] = ~sbuf[number];  <br>Uart_ClearInput(g_carportHandle);<br>Uart_ClearOutput(g_carportHandle);<br>Device_SendBuf(g_carportHandle,sbuf ,number+1);<br>if((sbuf[4]&amp;0xf0)==0x20)<pre><code> &#123;
+    number = Device_ReadBuf(g_carportHandle, rbuf, 256, 5000);                                              </code></pre>
+}<br>else<br>{<pre><code>    number = Device_ReadBuf(g_carportHandle, rbuf, 256, g_defaultMsgAttr.m_AnswerFrameTimeOut*50);                                              </code></pre>
+}<br>if(!number)<br>return 0;<br>if((rbuf[0] != 0xa5) &amp;&amp; (rbuf[1] != 0xa5))<br>return 0;<br>if(number &lt; 5)<br>return 0;<br>if(rbuf[3] == number-5)  // &gt;FF情况下不行<br>{<br>if(rbuf[5] == number-6)<pre><code>    &#123;</code></pre>
+for(i=0; i&lt;rbuf[5]-1; ++i)<pre><code>       &#123;
+          uTempBuf += rbuf[i+5]; </code></pre>
+}<pre><code>       uTempBuf = (~uTempBuf)+1;</code></pre>
+if(uTempBuf != rbuf[i+5])<br>return 0;<br>for(j=5;j&lt;number-1;j++)<pre><code>       &#123;  
+          recvbuf[k]=rbuf[j];</code></pre>
+k++;<br>}<pre><code>       recvbuf[k]=&#39;\0&#39;;</code></pre>
+return k;<br>}<br>else<br>           return 0;<br>}<br>else<br>        return 0;<br>}<br>#ifdef __cplusplus<br>}<br>#endif </li>
+</ul>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/ota%E5%8D%87%E7%BA%A7%E5%8C%85/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/avatar.gif">
+      <meta itemprop="name" content="Edward">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="点点滴滴">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/ota%E5%8D%87%E7%BA%A7%E5%8C%85/" class="post-title-link" itemprop="url">ota升级包</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-12-31 14:48:01" itemprop="dateCreated datePublished" datetime="2020-12-31T14:48:01+08:00">2020-12-31</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-01-16 12:37:33" itemprop="dateModified" datetime="2020-01-16T12:37:33+08:00">2020-01-16</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%83%82%E7%AC%94%E5%A4%B4/" itemprop="url" rel="index"><span itemprop="name">烂笔头</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/ota%E5%8D%87%E7%BA%A7%E5%8C%85/" class="post-meta-item leancloud_visitors" data-flag-title="ota升级包" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>./mkimage.sh ota</p>
+<p>生成ota完整包</p>
+<p>make otapackage</p>
+<p>生成差异包</p>
+<p>./build/tools/releasetools/ota_from_target_files -v -i out/target/product/rk2928sdk/obj/PACKAGING/target_files_intermediates/rk2928sdk-target_files-20130123.175438.zip -p out/host/linux-x86/ -k build/target/product/security/testkey out/target/product/rk2928sdk/obj/PACKAGING/target_files_intermediates/rk2928sdk-target_files-20130123.190455.zip out/target/product/rk2928sdk/update.zip</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/OSI%E4%B8%83%E5%B1%82%E5%8D%8F%E8%AE%AE%E6%A8%A1%E5%9E%8B%E3%80%81TCPIP%E5%9B%9B%E5%B1%82%E6%A8%A1%E5%9E%8B/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/avatar.gif">
+      <meta itemprop="name" content="Edward">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="点点滴滴">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/OSI%E4%B8%83%E5%B1%82%E5%8D%8F%E8%AE%AE%E6%A8%A1%E5%9E%8B%E3%80%81TCPIP%E5%9B%9B%E5%B1%82%E6%A8%A1%E5%9E%8B/" class="post-title-link" itemprop="url">OSI七层协议模型、TCPIP四层模型</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-12-31 14:48:01" itemprop="dateCreated datePublished" datetime="2020-12-31T14:48:01+08:00">2020-12-31</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-01-16 12:37:31" itemprop="dateModified" datetime="2020-01-16T12:37:31+08:00">2020-01-16</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%83%82%E7%AC%94%E5%A4%B4/" itemprop="url" rel="index"><span itemprop="name">烂笔头</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/OSI%E4%B8%83%E5%B1%82%E5%8D%8F%E8%AE%AE%E6%A8%A1%E5%9E%8B%E3%80%81TCPIP%E5%9B%9B%E5%B1%82%E6%A8%A1%E5%9E%8B/" class="post-meta-item leancloud_visitors" data-flag-title="OSI七层协议模型、TCPIP四层模型" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <ol>
+<li>OSI七层和TCP/IP四层的关系</li>
+</ol>
+<p>1.1 OSI引入了服务、接口、协议、分层的概念，TCP/IP借鉴了OSI的这些概念建立TCP/IP模型。</p>
+<p>1.2 OSI先有模型，后有协议，先有标准，后进行实践；而TCP/IP则相反，先有协议和应用再提出了模型，且是参照的OSI模型。</p>
+<p>1.3 OSI是一种理论下的模型，而TCP/IP已被广泛使用，成为网络互联事实上的标准。</p>
+<p>TCP：transmission control protocol 传输控制协议</p>
+<p>UDP：user data protocol 用户数据报协议</p>
+<p>OSI七层网络模型</p>
+<p>TCP/IP四层概念模型  </p>
+<p>对应网络协议</p>
+<p>应用层（Application）</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/OSI%E4%B8%83%E5%B1%82%E5%8D%8F%E8%AE%AE%E6%A8%A1%E5%9E%8B%E3%80%81TCPIP%E5%9B%9B%E5%B1%82%E6%A8%A1%E5%9E%8B/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/oracle-java6/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/avatar.gif">
+      <meta itemprop="name" content="Edward">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="点点滴滴">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/oracle-java6/" class="post-title-link" itemprop="url">oracle-java6</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-12-31 14:48:01" itemprop="dateCreated datePublished" datetime="2020-12-31T14:48:01+08:00">2020-12-31</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-01-16 12:37:32" itemprop="dateModified" datetime="2020-01-16T12:37:32+08:00">2020-01-16</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%83%82%E7%AC%94%E5%A4%B4/" itemprop="url" rel="index"><span itemprop="name">烂笔头</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/oracle-java6/" class="post-meta-item leancloud_visitors" data-flag-title="oracle-java6" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>It is recommended to build Android using the Oracle JDK 6. However it is no longer available as package in Ubuntu. A good source is <a target="_blank" rel="noopener" href="http://www.webupd8.org/">http://www.webupd8.org</a></p>
+<p>sudo add-apt-repository ppa:webupd8team/java</p>
+<p>sudo apt-get update</p>
+<p>sudo apt-get install oracle-java6-installer</p>
+<p>sudo update-java-alternatives -s java-6-oracle</p>
+<p>sudo apt-get install oracle-java6-set-default</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/OneDrive/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/avatar.gif">
+      <meta itemprop="name" content="Edward">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="点点滴滴">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/OneDrive/" class="post-title-link" itemprop="url">OneDrive</a>
         </h2>
 
         <div class="post-meta">
@@ -360,7 +1282,7 @@ static Object invokeStaticMethod(String className, String methodName, Class[] pa
             </span>
 
           
-            <span id="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/redfish%20VPN/" class="post-meta-item leancloud_visitors" data-flag-title="redfish VPN" title="阅读次数">
+            <span id="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/OneDrive/" class="post-meta-item leancloud_visitors" data-flag-title="OneDrive" title="阅读次数">
               <span class="post-meta-item-icon">
                 <i class="fa fa-eye"></i>
               </span>
@@ -377,7 +1299,8 @@ static Object invokeStaticMethod(String className, String methodName, Class[] pa
     <div class="post-body" itemprop="articleBody">
 
       
-          <p><a target="_blank" rel="noopener" href="https://redfishnetworks.org/zh-cn/home">https://redfishnetworks.org/zh-cn/home</a></p>
+          <p><a target="_blank" rel="noopener" href="https://t.odmail.cn/">https://t.odmail.cn</a> 注册临时邮箱</p>
+<p><a href="mailto:&#109;&#97;&#103;&#x69;&#x63;&#x65;&#x64;&#119;&#x61;&#114;&#100;&#x40;&#116;&#46;&#x6f;&#100;&#109;&#97;&#x69;&#108;&#46;&#99;&#110;">&#109;&#97;&#103;&#x69;&#x63;&#x65;&#x64;&#119;&#x61;&#114;&#100;&#x40;&#116;&#46;&#x6f;&#100;&#109;&#97;&#x69;&#108;&#46;&#99;&#110;</a></p>
 
       
     </div>
@@ -397,7 +1320,7 @@ static Object invokeStaticMethod(String className, String methodName, Class[] pa
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/recovery%20%E5%8F%8D%E8%BD%AC/">
+    <link itemprop="mainEntityOfPage" href="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/odex%20%E5%8F%8D%E7%BC%96%E8%AF%91%E5%8F%8A%E7%AD%BE%E5%90%8D/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/uploads/avatar.gif">
@@ -411,7 +1334,7 @@ static Object invokeStaticMethod(String className, String methodName, Class[] pa
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/recovery%20%E5%8F%8D%E8%BD%AC/" class="post-title-link" itemprop="url">recovery 反转</a>
+            <a href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/odex%20%E5%8F%8D%E7%BC%96%E8%AF%91%E5%8F%8A%E7%AD%BE%E5%90%8D/" class="post-title-link" itemprop="url">odex 反编译及签名</a>
         </h2>
 
         <div class="post-meta">
@@ -441,7 +1364,7 @@ static Object invokeStaticMethod(String className, String methodName, Class[] pa
             </span>
 
           
-            <span id="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/recovery%20%E5%8F%8D%E8%BD%AC/" class="post-meta-item leancloud_visitors" data-flag-title="recovery 反转" title="阅读次数">
+            <span id="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/odex%20%E5%8F%8D%E7%BC%96%E8%AF%91%E5%8F%8A%E7%AD%BE%E5%90%8D/" class="post-meta-item leancloud_visitors" data-flag-title="odex 反编译及签名" title="阅读次数">
               <span class="post-meta-item-icon">
                 <i class="fa fa-eye"></i>
               </span>
@@ -458,658 +1381,24 @@ static Object invokeStaticMethod(String className, String methodName, Class[] pa
     <div class="post-body" itemprop="articleBody">
 
       
-          <p>device/rockchip/rksdk/BoardConfig.mk</p>
-<p>BOARD_HAS_FLIPPED_SCREEN = true </p>
-<p>然后执行下面命令,重新生成recovery.img： </p>
-<p>    （1）touch bootable/recovery/minui/graphics.c </p>
-<p>    （2）make out/target/product/rk312x/recovery.img</p>
-<p>    （3）./mkimage.sh </p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/recovery%20%E7%BF%BB%E8%BD%AC/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/uploads/avatar.gif">
-      <meta itemprop="name" content="Edward">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="点点滴滴">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/recovery%20%E7%BF%BB%E8%BD%AC/" class="post-title-link" itemprop="url">recovery 翻转</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-12-31 14:48:01" itemprop="dateCreated datePublished" datetime="2020-12-31T14:48:01+08:00">2020-12-31</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-01-16 12:37:33" itemprop="dateModified" datetime="2020-01-16T12:37:33+08:00">2020-01-16</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E7%83%82%E7%AC%94%E5%A4%B4/" itemprop="url" rel="index"><span itemprop="name">烂笔头</span></a>
-                </span>
-            </span>
-
-          
-            <span id="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/recovery%20%E7%BF%BB%E8%BD%AC/" class="post-meta-item leancloud_visitors" data-flag-title="recovery 翻转" title="阅读次数">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-eye"></i>
-              </span>
-              <span class="post-meta-item-text">阅读次数：</span>
-              <span class="leancloud-visitors-count"></span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>BOARD_HAS_FLIPPED_SCREEN := false</p>
-<p>touch bootable/recovery/minui/graphics.c</p>
-<p> make out/target/product/rk312x/recovery.img</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/recent%20%E7%8A%B6%E6%80%81%E6%A0%8F%20%E9%92%88%E5%AF%B9com.mofing%20%E7%82%B9%E5%87%BB%E6%97%A0%E6%95%88/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/uploads/avatar.gif">
-      <meta itemprop="name" content="Edward">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="点点滴滴">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/recent%20%E7%8A%B6%E6%80%81%E6%A0%8F%20%E9%92%88%E5%AF%B9com.mofing%20%E7%82%B9%E5%87%BB%E6%97%A0%E6%95%88/" class="post-title-link" itemprop="url">recent 状态栏 针对com</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-12-31 14:48:01" itemprop="dateCreated datePublished" datetime="2020-12-31T14:48:01+08:00">2020-12-31</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-01-16 12:37:33" itemprop="dateModified" datetime="2020-01-16T12:37:33+08:00">2020-01-16</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E7%83%82%E7%AC%94%E5%A4%B4/" itemprop="url" rel="index"><span itemprop="name">烂笔头</span></a>
-                </span>
-            </span>
-
-          
-            <span id="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/recent%20%E7%8A%B6%E6%80%81%E6%A0%8F%20%E9%92%88%E5%AF%B9com.mofing%20%E7%82%B9%E5%87%BB%E6%97%A0%E6%95%88/" class="post-meta-item leancloud_visitors" data-flag-title="recent 状态栏 针对com" title="阅读次数">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-eye"></i>
-              </span>
-              <span class="post-meta-item-text">阅读次数：</span>
-              <span class="leancloud-visitors-count"></span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>diff –git a/frameworks/base/packages/SystemUI/src/com/android/systemui/statusbar/tablet/TabletStatusBar.java b/frameworks/base/packages/SystemUI/src/com/android/systemui/st</p>
-<p>index 6951389..3490064 100644</p>
-<p>— a/frameworks/base/packages/SystemUI/src/com/android/systemui/statusbar/tablet/TabletStatusBar.java</p>
-<p>+++ b/frameworks/base/packages/SystemUI/src/com/android/systemui/statusbar/tablet/TabletStatusBar.java</p>
-<p>@@ -868,6 +868,12 @@ public class TabletStatusBar extends BaseStatusBar implements</p>
-<p>                     mNotificationPeekKey = null;</p>
-<p>                     break;</p>
-<p>                 case MSG_OPEN_NOTIFICATION_PANEL:</p>
-<p>+</p>
-<ul>
-<li><p>                                 ActivityManager am = (ActivityManager)getContext().getSystemService(Context.ACTIVITY_SERVICE);</p>
-</li>
-<li><p>                                 ComponentName cn = am.getRunningTasks(1).get(0).topActivity;</p>
-</li>
-<li><p>                                 String topapp = cn.getPackageName();</p>
-</li>
-<li><p>                                 //Log.d(&quot;edward&quot;,topapp);</p>
-</li>
-<li><p>                                 if(&quot;com.mofing&quot;.equals(topapp)) break;</p>
-</li>
-</ul>
+          <p>java -jar baksmali-2.2.1.jar x android.policy.odex -d classpath</p>
+<p>java -jar smali-2.1.2.jar out -o pclasses.dex</p>
+<hr>
+<p>直接用apktool 比较省事 </p>
+<p>$ apktool d testapp.apk</p>
+<p>$ apktool b bar</p>
+<p>adb push ./dexopt-wrapper /system/bin <br>chmod 777 /system/bin/dexopt-wrapper</p>
+<p>重新生成odex</p>
+<p>dexopt-wrapper /system/framework/android.policy.jar /system/framework/new_android.policy.odex $BOOTCLASSPATH</p>
+<p>odex拷贝原来的签名信息</p>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/recent%20%E7%8A%B6%E6%80%81%E6%A0%8F%20%E9%92%88%E5%AF%B9com.mofing%20%E7%82%B9%E5%87%BB%E6%97%A0%E6%95%88/#more" rel="contents">
+              <a class="btn" href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/odex%20%E5%8F%8D%E7%BC%96%E8%AF%91%E5%8F%8A%E7%AD%BE%E5%90%8D/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
           <!--/noindex-->
         
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/provison/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/uploads/avatar.gif">
-      <meta itemprop="name" content="Edward">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="点点滴滴">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/provison/" class="post-title-link" itemprop="url">provison</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-12-31 14:48:01" itemprop="dateCreated datePublished" datetime="2020-12-31T14:48:01+08:00">2020-12-31</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-01-16 12:37:33" itemprop="dateModified" datetime="2020-01-16T12:37:33+08:00">2020-01-16</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E7%83%82%E7%AC%94%E5%A4%B4/" itemprop="url" rel="index"><span itemprop="name">烂笔头</span></a>
-                </span>
-            </span>
-
-          
-            <span id="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/provison/" class="post-meta-item leancloud_visitors" data-flag-title="provison" title="阅读次数">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-eye"></i>
-              </span>
-              <span class="post-meta-item-text">阅读次数：</span>
-              <span class="leancloud-visitors-count"></span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>/*</p>
-<p> * Copyright (C) 2008 The Android Open Source Project</p>
-<p> *</p>
-<p> * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);</p>
-<p> * you may not use this file except in compliance with the License.</p>
-<p> * You may obtain a copy of the License at</p>
-<p> *</p>
-<p> *      <a target="_blank" rel="noopener" href="http://www.apache.org/licenses/LICENSE-2.0">http://www.apache.org/licenses/LICENSE-2.0</a></p>
-<p> *</p>
-<p> * Unless required by applicable law or agreed to in writing, software</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/provison/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/Power%20control%E5%8E%BB%E6%8E%89%E8%93%9D%E7%89%99BT%E6%88%96GPS/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/uploads/avatar.gif">
-      <meta itemprop="name" content="Edward">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="点点滴滴">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/Power%20control%E5%8E%BB%E6%8E%89%E8%93%9D%E7%89%99BT%E6%88%96GPS/" class="post-title-link" itemprop="url">Power control去掉蓝牙BT或GPS</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-12-31 14:48:01" itemprop="dateCreated datePublished" datetime="2020-12-31T14:48:01+08:00">2020-12-31</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-01-16 12:37:32" itemprop="dateModified" datetime="2020-01-16T12:37:32+08:00">2020-01-16</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E7%83%82%E7%AC%94%E5%A4%B4/" itemprop="url" rel="index"><span itemprop="name">烂笔头</span></a>
-                </span>
-            </span>
-
-          
-            <span id="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/Power%20control%E5%8E%BB%E6%8E%89%E8%93%9D%E7%89%99BT%E6%88%96GPS/" class="post-meta-item leancloud_visitors" data-flag-title="Power control去掉蓝牙BT或GPS" title="阅读次数">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-eye"></i>
-              </span>
-              <span class="post-meta-item-text">阅读次数：</span>
-              <span class="leancloud-visitors-count"></span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>packages/apps/Settings/src/com/android/settings/widget/SettingsAppWidgetProvider.java</p>
-<p>static RemoteViews buildUpdate(Context context) {</p>
-<p>        RemoteViews views;</p>
-<p>        int hwMask = getHardwareMask(context);</p>
-<p>        int hwType = resolveHwMask(hwMask);</p>
-<p>hwType = HW_NO_GPS_BT; //强制更改</p>
-<p>  switch (hwType) {</p>
-<p>        case HW_NO_BT:</p>
-<p>            views = new RemoteViews(context.getPackageName(), R.layout.widget_no_bt);</p>
-<p>            views.setOnClickPendingIntent(R.id.btn_gps,</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/Power%20control%E5%8E%BB%E6%8E%89%E8%93%9D%E7%89%99BT%E6%88%96GPS/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/PopupWindow/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/uploads/avatar.gif">
-      <meta itemprop="name" content="Edward">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="点点滴滴">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/PopupWindow/" class="post-title-link" itemprop="url">PopupWindow</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-12-31 14:48:01" itemprop="dateCreated datePublished" datetime="2020-12-31T14:48:01+08:00">2020-12-31</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-01-16 12:37:33" itemprop="dateModified" datetime="2020-01-16T12:37:33+08:00">2020-01-16</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E7%83%82%E7%AC%94%E5%A4%B4/" itemprop="url" rel="index"><span itemprop="name">烂笔头</span></a>
-                </span>
-            </span>
-
-          
-            <span id="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/PopupWindow/" class="post-meta-item leancloud_visitors" data-flag-title="PopupWindow" title="阅读次数">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-eye"></i>
-              </span>
-              <span class="post-meta-item-text">阅读次数：</span>
-              <span class="leancloud-visitors-count"></span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>PopupWindow showAllPopupWindow;</p>
-<p>   private void showAllStream() {<br>       if ((customFileExist &amp;&amp; mCustomDataListRead.size() &lt; mDataStreamList.size())) {<br>           if (showAllPopupWindow == null) {<br>                ImageView iv = new ImageView(getContext());<br>               iv.setBackgroundResource(R.drawable.show_all_bg);<br>               iv.setImageResource(R.drawable.icon_select_all);<br>               iv.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));<br>               iv.setOnClickListener(new OnClickListener() {<br>                   @Override<br>                   public void onClick(View v) {<br>                       mCustomDataList.clear();<br>                       mCustomDataList.addAll(mDataStreamList);<br>                       mCustomDataListRead.clear();<br>                       mCustomDataListRead.addAll(mDataStreamList);<br>                       mStreamListAdapter.notifyDataSetChanged();<br>                   }<br>               });<br>               iv.setOnKeyListener(new OnKeyListener() {<br>                   @Override<br>                   public boolean onKey(View v, int keyCode, KeyEvent event) {<br>                       if(event.getKeyCode() == KeyEvent.KEYCODE_BACK)<br>                           showAllPopupWindow.dismiss();<br>                       return true;<br>                   }<br>               });<br>               showAllPopupWindow = new PopupWindow(iv, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, true);<br>//                showAllPopupWindow.setTouchable(true);<br>//                showAllPopupWindow.setTouchInterceptor(new OnTouchListener() {<br>//                    @Override<br>//                    public boolean onTouch(View v, MotionEvent event) {<br>//                        return false;<br>//                    }<br>//                });<br>              // showAllPopupWindow.setOutsideTouchable(true);<br>               setPopupWindowTouchModal(showAllPopupWindow,false);<br>               showAllPopupWindow.showAsDropDown(topCustom);<br>           } else {<br>               if (!showAllPopupWindow.isShowing())<br>                   showAllPopupWindow.showAsDropDown(topCustom);<br>           }<br>       } else {<br>           if (showAllPopupWindow != null &amp;&amp; showAllPopupWindow.isShowing())<br>               showAllPopupWindow.dismiss();<br>       }<br>   }<br>   private static void setPopupWindowTouchModal(PopupWindow popupWindow,<br>                                               boolean touchModal) {<br>       if (null == popupWindow) {<br>           return;<br>       }<br>       Method method;<br>       try {<br>           method = PopupWindow.class.getDeclaredMethod(&quot;setTouchModal&quot;,<br>                   boolean.class);<br>           method.setAccessible(true);<br>           method.invoke(popupWindow, touchModal);<br>       }<br>       catch (Exception e) {<br>           e.printStackTrace();<br>       }<br>   }</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/php%E9%AA%8C%E8%AF%81%E7%A0%81/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/uploads/avatar.gif">
-      <meta itemprop="name" content="Edward">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="点点滴滴">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/php%E9%AA%8C%E8%AF%81%E7%A0%81/" class="post-title-link" itemprop="url">php验证码</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-12-31 14:48:01" itemprop="dateCreated datePublished" datetime="2020-12-31T14:48:01+08:00">2020-12-31</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-01-16 12:37:32" itemprop="dateModified" datetime="2020-01-16T12:37:32+08:00">2020-01-16</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E7%83%82%E7%AC%94%E5%A4%B4/" itemprop="url" rel="index"><span itemprop="name">烂笔头</span></a>
-                </span>
-            </span>
-
-          
-            <span id="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/php%E9%AA%8C%E8%AF%81%E7%A0%81/" class="post-meta-item leancloud_visitors" data-flag-title="php验证码" title="阅读次数">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-eye"></i>
-              </span>
-              <span class="post-meta-item-text">阅读次数：</span>
-              <span class="leancloud-visitors-count"></span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>&lt;?php</p>
-<p>/**</p>
-<p> * vCode(m,n,x,y) m个数字  显示大小为n   边宽x   边高y</p>
-<p> * 自己改写记录session $code</p>
-<p> */</p>
-<p>session_start(); </p>
-<p>vCode(4, 12); //4个数字，显示大小为15</p>
-<p>function vCode($num = 4, $size = 20, $width = 0, $height = 0) {</p>
-<p>!$width &amp;&amp; $width = $num * $size * 4 / 5 + 5;</p>
-<p>!$height &amp;&amp; $height = $size + 10; </p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/php%E9%AA%8C%E8%AF%81%E7%A0%81/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://edward.org.cn/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/PHP%E6%97%A5%E6%9C%9F%E6%97%B6%E9%97%B4/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/uploads/avatar.gif">
-      <meta itemprop="name" content="Edward">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="点点滴滴">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/PHP%E6%97%A5%E6%9C%9F%E6%97%B6%E9%97%B4/" class="post-title-link" itemprop="url">PHP日期时间</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-12-31 14:48:01" itemprop="dateCreated datePublished" datetime="2020-12-31T14:48:01+08:00">2020-12-31</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-01-16 12:37:32" itemprop="dateModified" datetime="2020-01-16T12:37:32+08:00">2020-01-16</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E7%83%82%E7%AC%94%E5%A4%B4/" itemprop="url" rel="index"><span itemprop="name">烂笔头</span></a>
-                </span>
-            </span>
-
-          
-            <span id="/2020/12/31/%E7%83%82%E7%AC%94%E5%A4%B4/PHP%E6%97%A5%E6%9C%9F%E6%97%B6%E9%97%B4/" class="post-meta-item leancloud_visitors" data-flag-title="PHP日期时间" title="阅读次数">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-eye"></i>
-              </span>
-              <span class="post-meta-item-text">阅读次数：</span>
-              <span class="leancloud-visitors-count"></span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>PHP提供了大量的内置函数，使开发人员在时间的处理上游刃有余，大大提高了工作效率。我们今天就为学员介绍一些常见的PHP日期和时间函数以及日期和时间的处理。 <br>9.1 常用的日期和时间处理函数    表9-1：常用的日期和时间处理函数        函 数     说  明          checkdate     验证时间函数，判断时间是否有效，有效返回true，否则返回false         date_default_timezone_get     取得脚本日期时间函数所使用的默认时区         date_default_timezone_set     设定日期时间函数的默认时区          date     格式化一个本地时间/日期          getdate     获取日期/时间信息          gettimeofday     获取当前时间         localtime     获取本地时间         microtime     返回当前时间戳和微秒数          mktime     取得一个UNIX时间戳          strtotime     将任何英文文本的日期时间描述解析为UNIX时间戳         time     返回当前的UNIX时间戳             9.2 处理日期和时间    9.2.1 获取当前日期和时间：date()函数，用法：     date(string format,int timestamp)                 该函数将返回参数timestamp按照指定格式而产生的字符串。其中参数timestamp是可选的，如果省略，则使用当前时间。format参数可以使开发人员按其指定的格式输出时间日期。        date_default_timezone_set(PRC);  //设置北京时间.        1. 年-月-日         echo date(‘Y-m-j’);  //例：2007-02-6         echo date(‘y-n-j’);  //例：07-2-6                 大写Y表示年四位数字，而小写y表示年的两位数字；        小写m表示月份的数字(带前导)，而小写n则表示不带前导的月份数字。         echo date(‘Y-M-j’);   //例：2007-Feb-6         echo date(‘Y-m-d’);   //例：2007-02-06                 大写M表示月份的3个缩写字符，而小写m则表示月份的数字(带前导0);        没有大写的J，只有小写j表示月份的日期，无前导o；若需要月份带前导则使用小写d。         echo date(‘Y-M-j’);   //例：2007-Feb-6         echo date(‘Y-F-jS’);  //例：2007-February-6                 大写M表示月份的3个缩写字符，而大写F表示月份的英文全写。(没有小写f)        大写S表示日期的后缀，比如“st”、“nd”、“rd”和“th”，具体看日期数字为何。        小结：        表示年可以用大写的Y和小写y;        表示月可以用大写F、大写M、小写m和小写n(分别表示字符和数字的两种方式);        表示日可以用小写d和小写j，大写S表示日期的后缀。        2，时:分:秒        默认情况下，PHP解释显示的时间为“格林威治标准时间”，与我们本地的时间相差8个小时。         echo date(‘g:i:s a’);    //例：5:56:57 am         echo date(‘h:i:s A’);    //例：05:56:57 AM                 小写g表示12小时制，无前导0，而小写h则表示有前导0的12小时制。        当使用12小时制时需要表明上下午，小写a表示小写的“am”和“pm”，大写A表示大写的“AM”和“PM”。         echo date(‘G:i:s’);14:02:26                 大写G表示24小时制的小时数，但是不带前导的；使用大写的H表示带前导的24小时制小时数        小结：        字母g表示小时不带前导，字母h表示小时带前导；        小写g、h表示12小时制，大写G、H表示24小时制。        3，闰年、星期、天            大写L表示判断今年是否闰年，布尔值，为真返回1，否则为0；        小写l表示当天是星期几的英文全写(Tuesday)；        而使用大写D表示星期几的3个字符缩写(Tue)。         echo date(‘w’);    //例：今天星期：2         echo date(‘W’);    //例：本周是全年中的第 06 周                 小写w表示星期几，数字形式表示        大写W表示一年中的星期数         echo date(‘t’);    //例：本月是 28 天         echo date(‘z’);    //例：今天是今年的第 36 天                 小写t表示当前月份又多少天        小写z表示今天是本年中第几天        4，其他         echo date(‘T’);    //例：UTC                 大写T表示服务器的时间区域设置         echo date(‘I’);    //例：0                 大写I表示判断当前是否为夏令时，为真返回1，否则为0         echo date(‘U’);    //例：1170769424                 大写U表示从1970年1月1日到现在的总秒数，就是Unix时间纪元的UNIX时间戳。         echo date(‘c’);    //例：2007-02-06T14:24:43+00:00                 小写c表示ISO8601日期，日期格式为YYYY-MM-DD，用字母T来间隔日期和时间，时间格式为HH:MM:SS，时区使用格林威治标准时间(GMT)的偏差来表示。         echo date(‘r’);    //例：Tue, 06 Feb 2007 14:25:52 +0000                 小写r表示RFC822日期。        9.2.2 获取日期信息：getdate()函数    语法：            array getdate(int timestamp)                 该函数返回数组形式的日期时间信息，如果没有时间戳，则以当前时间为准。该函数返回的关联数组元素的说明如表9-2所示：        表9-2：getdate()函数返回的关联数组元素说明        元  素     说  明         seconds     秒，返回值0～59         minutes     分钟，返回值为0～59         hours     小时，返回值为0～23         mday     月份中第几天，返回值为1～31         wday     星期中第几天，返回值为0（星期天）～6（星期六）         mon     月份数字，返回值为1～12         year     4位数字表示的完整年份，返回值加2000或2008         yday     一年中第几天，返回值0～365         weekday     星期几的完整文本表示，返回值为Sunday<del>Saturday         month     月份的完整文本表示，返回值为January</del>December         0     返回从UNIX纪元开始的秒数             例：        &lt;?php            $arr = getdate();            echo $arr[year].&quot;-&quot;.$arr[mon].&quot;-&quot;.$arr[mday].&quot;&quot;;            echo $arr[hours].&quot;:&quot;.$arr[minutes].&quot;:&quot;.$arr[seconds].&quot;&quot;.$arr[weekday];            echo &quot;&lt;p&gt;&quot;;            echo &quot;Today is the $arr[yday]th of year&quot;;        ?&gt;                 效果：            9.3  UNIX时间戳    时间戳是文件属性中的创建、修改、访问时间。数字时间戳服务（digital time stamp service, DTS）是web网站安全服务项目之一，能提供电子文件的日期和时间信息的安全保护。        9.3.1  什么是时间戳    时间戳是一个经加密后形成后的凭证文档，它包括3个部分：        ²  需要添加时间戳的文件用Hash编码加密形成摘要。        ²  DTS接受文件的日期和时间信息。        ²  对接受的DTS文件加密。        数字时间是由认证单位DTS来添加的，以DTS接收到文件的时间为依据。        时间戳的作用原理是通过其他加密法将时间的数值转换为加密的数值，时间变化后加密的数值也随之变化。        时间戳的优点是：变化的加密数值来防止数值被窃取后非法重复利用，也就起到了加密的作用。时间戳主要依赖于时间，在约定的一段时间内产生唯一的一个数值。        9.3.2 获取本地时间戳：mktime()函数    语法：        int mktime(int hour, int minute, int month, int day, int year, int [is_dst])                 表9-3：mktime()函数的参数说明        参  数     说  明         hour     小时数         minute     分钟数         second     秒数（一分钟之内）         month     月份数         day     天数         year     年份数         is_dst     参数is_dst在夏令时可以被设置为1，如果不是则设置为0；如果不确定是否为夏令时则设置为-1（默认值）             注意：有效的时间戳典型范围是格林尼治时间1901年12月13日20：45：54～2038年1月19日03：13：07（此范围符合32位有符号整数的最小值和最大值）。在Windows系统中此范围限制为从1970年1月1日～2038年1月19日。        例：        &lt;?php            echo &quot;mktime函数返回的时间戳：&quot;.mktime().&quot;&lt;p&gt;&quot;;            echo &quot;当前的日期为：&quot;.date(&quot;Y-m-d&quot;,mktime()).&quot;&lt;p&gt;&quot;;  //现在用time()代替了           echo &quot;当前的时间是：&quot;.date(&quot;H:i:s&quot;,mktime());        ?&gt;                 效果：            9.4  系统时区设置    很多学员在学习过程中发现通过date()函数获取到的时间跟本地时间不一样，这是由于PHP5对date()函数进行了重写，因此，目前的日期时间函数比系统时间少8个小时。在PHP语言中默认设置的是标准的格林威治时间（即采用的是零时区）。        更改PHP语言中的时区设置主要有以下两种方法：        1. 修改php.ini文件中的设置，找到[date]下的;date.timezone = 选项，将该项修改为date.timezone=Asia/Hong_Kong，然后重新启动apache服务器。        2. 在应用程序中，使用时间日期函数之前添加如下函数：        date_default_timezone_set(“Asia/Hong_Kong”);                 设置完成后，date()函数就可以正常使用了，不会再出现时差问题。        9.5  时间开发中遇到的日期和时间问题    9.5.1 比较两个时间的大小    在实际开发中经常遇到判断两个时间的大小，PHP中的时间是不可以直接来进行比较的。所以，首先要将时间输出为时间戳的格式，然后再进行比较，这是常用到的方法。        有两个函数都可以实现这个功能，这里使用strtotime()函数，该函数可以将任何英文文本的日期时间描述解析为UNIX时间戳。该函数的语法为：        int strtotime(string time, int now)                     该函数有两个参数。如果参数time的格式是绝对时间，则now参数不起作用；如果参数time的格式是相对时间，那么其对应的时间就是参数now来提供的，如果没有提供参数now，对应的时间就是当前时间。如果解析失败，则返回-1.        例：        &lt;?php            $time1 = date(&quot;Y-m-d H:i:s&quot;);   //获取当前时间            $time2 = &quot;2008-2-3 16:30:00&quot;;   //给变量$time2设置一个时间            echo &quot;变量/$time1的时间为：&quot;.$time1.&quot;&lt;br&gt;&quot;;    //输出两个时间变量            echo &quot;变量/$time2的时间为：&quot;.$time2.&quot;&lt;br&gt;&quot;;            if (strtotime($time1)-strtotime($time2)&lt;0) {     //对两个时间进行比较                echo &quot;/$time1早于/$time2&quot;;   //如果time1-time2&lt;0说明time1的时间在前            }else{                echo &quot;/$time2早于/$time1&quot;;   //否则，说明time2的时间在前            }        ?&gt;                 效果：            9.5.2  计算两个日期的差值        strtotime()函数除了可以比较两个日期的大小，还可以精确地知道两个日期的差值。下面通过一个倒计时的小程序来为学员们讲解如何用strtotime()函数来计算两个日期的差值。        &lt;?PHP              $time1 = strtotime(date( &quot;Y-m-d H:i:s&quot;));             $time2 = strtotime(&quot;2008-2-3 17:10:00&quot;);             $time3 = strtotime(&quot;2008-8-8&quot;);             $sub1 = ceil(($time2 - $time1) / 3600);          //60 * 60             $sub2 = ceil(($time3 - $time1) / 86400);         //60 * 60 * 24             echo &quot;离放假还有&lt;font color=red&gt; $sub1 &lt;/font&gt;小时!!!&quot; ;               echo &quot;&lt;p&gt;&quot;;             echo &quot;离北京奥运开幕还有&lt;font color=red&gt;$sub2 &lt;/font&gt;天!!!&quot;;        ?&gt;                 效果：            9.5.3 计算页面脚本的运行时间        在浏览网站时，经常会用到搜索引擎，在搜索信息时，细心的用户会发现，在搜索结果的最下方，一般都有“搜索时间为……秒”的字样。        这里使用到了microtime()函数，该函数返回当前UNIX时间戳和微秒数。返回格式为msec sec的字符串，其中sec是当前的UNIX时间戳，msec为微秒数。该函数的格式为：        string microtime(void)                     下面我们来计算一下上例的运行时间，代码如下：        &lt;?php         function run_time()        {            list($msec, $sec) = explode(&quot; &quot;, microtime());            return ((float)$msec + (float)$sec);        }             $start_time = run_time();             $time1 = strtotime(date( &quot;Y-m-d H:i:s&quot;));             $time2 = strtotime(&quot;2008-2-3 17:10:00&quot;);             $time3 = strtotime(&quot;2008-8-8&quot;);             $sub1 = ceil(($time2 - $time1) / 3600);          //60 * 60             $sub2 = ceil(($time3 - $time1) / 86400);         //60 * 60 * 24             echo &quot;离放假还有&lt;font color=red&gt; $sub1 &lt;/font&gt;小时!!!&quot; ;               echo &quot;&lt;p&gt;&quot;;             echo &quot;离北京奥运开幕还有&lt;font color=red&gt;$sub2 &lt;/font&gt;天!!!&quot;;             $end_time = run_time();        ?&gt;         &lt;p&gt;        该示例的运行时间为&lt;font color=blue&gt; &lt;?php echo ($end_time - $start_time); ?&gt; &lt;/font&gt;秒            </p>
-
       
     </div>
 
@@ -1127,7 +1416,7 @@ static Object invokeStaticMethod(String className, String methodName, Class[] pa
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/29/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/29/">29</a><span class="page-number current">30</span><a class="page-number" href="/page/31/">31</a><span class="space">&hellip;</span><a class="page-number" href="/page/57/">57</a><a class="extend next" rel="next" href="/page/31/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
+    <a class="extend prev" rel="prev" href="/page/29/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/29/">29</a><span class="page-number current">30</span><a class="page-number" href="/page/31/">31</a><span class="space">&hellip;</span><a class="page-number" href="/page/56/">56</a><a class="extend next" rel="next" href="/page/31/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
   </nav>
 
 
@@ -1195,14 +1484,14 @@ static Object invokeStaticMethod(String className, String methodName, Class[] pa
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">570</span>
+          <span class="site-state-item-count">554</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-count">9</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
   </nav>
@@ -1229,7 +1518,7 @@ static Object invokeStaticMethod(String className, String methodName, Class[] pa
 <div class="copyright">
   
   &copy; 
-  <span itemprop="copyrightYear">2020</span>
+  <span itemprop="copyrightYear">2021</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>

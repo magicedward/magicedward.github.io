@@ -187,6 +187,836 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://edward.org.cn/2021/01/12/Git/gitLabdocker-compose/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/avatar.gif">
+      <meta itemprop="name" content="Edward">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="点点滴滴">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/01/12/Git/gitLabdocker-compose/" class="post-title-link" itemprop="url">gitLabdocker-compose</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2021-01-12 14:35:05 / 修改时间：14:37:41" itemprop="dateCreated datePublished" datetime="2021-01-12T14:35:05+08:00">2021-01-12</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Git/" itemprop="url" rel="index"><span itemprop="name">Git</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2021/01/12/Git/gitLabdocker-compose/" class="post-meta-item leancloud_visitors" data-flag-title="gitLabdocker-compose" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">web:</span></span><br><span class="line"></span><br><span class="line">  <span class="attr">image:</span> <span class="string">&#x27;gitlab/gitlab-ce:latest&#x27;</span></span><br><span class="line"></span><br><span class="line">  <span class="attr">restart:</span> <span class="string">always</span></span><br><span class="line"></span><br><span class="line">  <span class="attr">hostname:</span> <span class="string">&#x27;gitLab&#x27;</span></span><br><span class="line"></span><br><span class="line">  <span class="attr">environment:</span></span><br><span class="line"></span><br><span class="line"><span class="string">​</span>    <span class="attr">GITLAB_OMNIBUS_CONFIG:</span> <span class="string">|</span></span><br><span class="line"></span><br><span class="line"><span class="string">​</span>            <span class="string">external_url</span> <span class="string">&#x27;http://192.168.1.2:8089&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="string">​</span>            <span class="string">gitlab_rails[&#x27;smtp_enable&#x27;]</span> <span class="string">=</span> <span class="literal">true</span></span><br><span class="line"></span><br><span class="line"><span class="string">​</span>            <span class="string">gitlab_rails[&#x27;smtp_address&#x27;]</span> <span class="string">=</span> <span class="string">&quot;smtp.exmail.qq.com&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="string">​</span>            <span class="string">gitlab_rails[&#x27;smtp_port&#x27;]</span> <span class="string">=</span> <span class="number">465</span></span><br><span class="line"></span><br><span class="line"><span class="string">​</span>            <span class="string">gitlab_rails[&#x27;smtp_user_name&#x27;]</span> <span class="string">=</span> <span class="string">&quot;xxx@szxxen.com&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="string">​</span>            <span class="string">gitlab_rails[&#x27;smtp_password&#x27;]</span> <span class="string">=</span> <span class="string">&quot;xxxx&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="string">​</span>            <span class="string">gitlab_rails[&#x27;smtp_authentication&#x27;]</span> <span class="string">=</span> <span class="string">&quot;login&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="string">​</span>            <span class="string">gitlab_rails[&#x27;smtp_enable_starttls_auto&#x27;]</span> <span class="string">=</span> <span class="literal">true</span></span><br><span class="line"></span><br><span class="line"><span class="string">​</span>            <span class="string">gitlab_rails[&#x27;smtp_tls&#x27;]</span> <span class="string">=</span> <span class="literal">true</span></span><br><span class="line"></span><br><span class="line"><span class="string">​</span>            <span class="string">gitlab_rails[&#x27;gitlab_email_from&#x27;]</span> <span class="string">=</span> <span class="string">&#x27;yanfa001@szhaizhen.com&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="string">​</span>            <span class="string">gitlab_rails[&#x27;smtp_domain&#x27;]</span> <span class="string">=</span> <span class="string">&quot;exmail.qq.com&quot;</span></span><br><span class="line"></span><br><span class="line">  <span class="attr">ports:</span></span><br><span class="line"></span><br><span class="line"><span class="string">​</span>    <span class="string">\-</span> <span class="string">&#x27;8089:8089&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="string">​</span>    <span class="string">\-</span> <span class="string">&#x27;8443:443&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="string">​</span>    <span class="string">\-</span> <span class="string">&#x27;2222:22&#x27;</span></span><br><span class="line"></span><br><span class="line">  <span class="attr">volumes:</span></span><br><span class="line"></span><br><span class="line"><span class="string">​</span>    <span class="string">\-</span> <span class="string">&#x27;./gitlab/config:/etc/gitlab&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="string">​</span>    <span class="string">\-</span> <span class="string">&#x27;./gitlab/logs:/var/log/gitlab&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="string">​</span>    <span class="string">\-</span> <span class="string">&#x27;./gitlab/data:/var/opt/gitlab&#x27;</span></span><br></pre></td></tr></table></figure>
+
+
+<p><strong>docker-compose up -d</strong></p>
+<p><strong>docker-compose down</strong></p>
+<p>192.168.1.2:8089</p>
+<p>第一次登录修改root 密码</p>
+<p>修改默认邮箱、</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://edward.org.cn/2021/01/12/IOS/Kotlin%E5%92%8CSwift%E6%A8%AA%E5%90%91%E5%AF%B9%E6%AF%94/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/avatar.gif">
+      <meta itemprop="name" content="Edward">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="点点滴滴">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/01/12/IOS/Kotlin%E5%92%8CSwift%E6%A8%AA%E5%90%91%E5%AF%B9%E6%AF%94/" class="post-title-link" itemprop="url">Kotlin和Swift横向对比</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2021-01-12 14:33:21 / 修改时间：14:33:57" itemprop="dateCreated datePublished" datetime="2021-01-12T14:33:21+08:00">2021-01-12</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/IOS/" itemprop="url" rel="index"><span itemprop="name">IOS</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2021/01/12/IOS/Kotlin%E5%92%8CSwift%E6%A8%AA%E5%90%91%E5%AF%B9%E6%AF%94/" class="post-meta-item leancloud_visitors" data-flag-title="Kotlin和Swift横向对比" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>主要介绍两个语言的基础语法的对比。</p>
+<ul>
+<li><strong>变量</strong></li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Kotlin</th>
+<th>Swift</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>var a: Int = 1</td>
+<td>var a: Int = 1</td>
+</tr>
+<tr>
+<td>var b = 2</td>
+<td>var b = 2</td>
+</tr>
+<tr>
+<td>val a: Int = 1</td>
+<td>let a: Int = 1</td>
+</tr>
+<tr>
+<td>val b = 2</td>
+<td>let b = 2</td>
+</tr>
+<tr>
+<td>var str: String? = null</td>
+<td>var str: String? = nil</td>
+</tr>
+<tr>
+<td>var x = 5x += 1</td>
+<td>var x = 1x += 1</td>
+</tr>
+<tr>
+<td>val a = 1val s1 = “a is $a”val s2 = “${s1.replace(“is”, “was”)}, but now is $a”</td>
+<td>let a = 1let s1 = “a is (a)”let s2 = “(s1.replacingCharacters(in: “is”, with: “was”)), but now is (a)”</td>
+</tr>
+</tbody></table>
+<ul>
+<li><strong>方法</strong></li>
+</ul>
+<p>Kotlin</p>
+<p>fun maxOf(a: Int, b: Int): Int {    if (a &gt; b) {        return a    } else {        return b    } }</p>
+<p>Swift</p>
+<p>func maxOf(a: Int, b: Int) -&gt; Int {    if  a &gt; b {        return a    } else {        return b    } }</p>
+<ul>
+<li><strong>for循环</strong></li>
+</ul>
+<p>Kotlin</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2021/01/12/IOS/Kotlin%E5%92%8CSwift%E6%A8%AA%E5%90%91%E5%AF%B9%E6%AF%94/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://edward.org.cn/2021/01/12/MySql/mysql%E8%BF%9C%E7%A8%8B%E8%AE%BF%E9%97%AE/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/avatar.gif">
+      <meta itemprop="name" content="Edward">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="点点滴滴">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/01/12/MySql/mysql%E8%BF%9C%E7%A8%8B%E8%AE%BF%E9%97%AE/" class="post-title-link" itemprop="url">mysql远程访问</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2021-01-12 14:30:51 / 修改时间：14:33:24" itemprop="dateCreated datePublished" datetime="2021-01-12T14:30:51+08:00">2021-01-12</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/MySql/" itemprop="url" rel="index"><span itemprop="name">MySql</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2021/01/12/MySql/mysql%E8%BF%9C%E7%A8%8B%E8%AE%BF%E9%97%AE/" class="post-meta-item leancloud_visitors" data-flag-title="mysql远程访问" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <ol>
+<li>允许3306</li>
+</ol>
+<p>iptables -A INPUT -p tcp -s 192.168.1.66 –dport 3306 -j ACCEPT</p>
+<p>  iptables -A INPUT -p tcp  –dport 3306 -j ACCEPT</p>
+<p>2.mysql 配置</p>
+<p>vi /etc/mysql/mysql.conf.d/mysqld.cnf</p>
+<p>#bind-address = 127.0.0.1  //注释这行，允许外网访问</p>
+<p>service mysql restart</p>
+<p>3.创建外网访问的账号</p>
+<p>GRANT ALL PRIVILEGES ON <em>.</em> TO ‘user’@’%’ IDENTIFIED BY ‘123456’ WITH GRANT OPTION;</p>
+<p>4.修改密码</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2021/01/12/MySql/mysql%E8%BF%9C%E7%A8%8B%E8%AE%BF%E9%97%AE/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://edward.org.cn/2021/01/12/%E5%89%8D%E7%AB%AF/vue%E5%AE%89%E8%A3%85%E7%8E%AF%E5%A2%83/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/avatar.gif">
+      <meta itemprop="name" content="Edward">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="点点滴滴">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/01/12/%E5%89%8D%E7%AB%AF/vue%E5%AE%89%E8%A3%85%E7%8E%AF%E5%A2%83/" class="post-title-link" itemprop="url">vue安装环境</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2021-01-12 14:25:24 / 修改时间：14:29:35" itemprop="dateCreated datePublished" datetime="2021-01-12T14:25:24+08:00">2021-01-12</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%89%8D%E7%AB%AF/" itemprop="url" rel="index"><span itemprop="name">前端</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2021/01/12/%E5%89%8D%E7%AB%AF/vue%E5%AE%89%E8%A3%85%E7%8E%AF%E5%A2%83/" class="post-meta-item leancloud_visitors" data-flag-title="vue安装环境" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>|— dist                项目打包后的文件夹（npm run build）</p>
+<p>|</p>
+<p>|— node_modules        存放第三方依赖（npm install 执行产生）</p>
+<p>|</p>
+<p>|— public              存放静态文件夹</p>
+<p>|   |— favicon.ico     是网站图标 </p>
+<p>|   |— index.html      页面入口文件</p>
+<p>|</p>
+<p>|— src                 存放源码文件夹</p>
+<p>|   |— assets         存放 css、图片等文件</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2021/01/12/%E5%89%8D%E7%AB%AF/vue%E5%AE%89%E8%A3%85%E7%8E%AF%E5%A2%83/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://edward.org.cn/2021/01/12/SP9820E%E8%B0%83%E8%AF%95/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/avatar.gif">
+      <meta itemprop="name" content="Edward">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="点点滴滴">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/01/12/SP9820E%E8%B0%83%E8%AF%95/" class="post-title-link" itemprop="url">SP9820E调试</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2021-01-12 14:21:29 / 修改时间：14:23:59" itemprop="dateCreated datePublished" datetime="2021-01-12T14:21:29+08:00">2021-01-12</time>
+            </span>
+
+          
+            <span id="/2021/01/12/SP9820E%E8%B0%83%E8%AF%95/" class="post-meta-item leancloud_visitors" data-flag-title="SP9820E调试" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>dumpsys iphonesubinfo<br>Device ID = 867400020316612</p>
+<p>获取手机分辨率<br>adb shell “dumpsys window | grep mUnrestrictedScreen”</p>
+<p>手机物理密度<br>adb shell wm density</p>
+<p>mac<br>/sys/class/net/wlan0/address</p>
+<p>frameworks\base\services\java\com\android\server\wifi\WifiService.java<br>checkAndStartWifi<br>在frameworks\base\services\java\com\android\server\SystemServer.java里搜索wifi.checkAndStartWifi()，<br>frameworks\base\wifi\java\android\net\wifi\WifiApConfigStore.java<br>setDefaultApConfiguration</p>
+<p>/data/misc/wifi/softap.conf</p>
+<p>public boolean setWifiApEnabled(boolean enabled) {<br>if (enabled) { // disable WiFi in any case<br>//wifi和热点不能同时打开，所以打开热点的时候需要关闭wifi<br>wifiManager.setWifiEnabled(false);<br>}<br>try {<br>//热点的配置类<br>WifiConfiguration apConfig = new WifiConfiguration();<br>//配置热点的名称(可以在名字后面加点随机数什么的)<br>apConfig.SSID = “YRCCONNECTION”;<br>//配置热点的密码<br>apConfig.preSharedKey=”12122112”;<br>//通过反射调用设置热点<br>Method method = wifiManager.getClass().getMethod(<br>“setWifiApEnabled”, WifiConfiguration.class, Boolean.TYPE);<br>//返回热点打开状态<br>return (Boolean) method.invoke(wifiManager, apConfig, enabled);<br>} catch (Exception e) {<br>return false;<br>}<br>}</p>
+<p>am start -n com.sprd.engineermode/com.sprd.engineermode.EngineerModeActivity</p>
+<p>am start -n com.spreadtrum.sgps/com.spreadtrum.sgps.SgpsActivity<br>am start -n com.alibaba.sdk.aligeniesdkdemo/com.yunos.tv.alitvasr.MainActivity<br>am start -n com.android.settings/.wifi.HotspotSettings<br>am start -n com.hizen.ciot/com.hizen.ciot.MainActivity<br>am start -n ai.t.rec/ai.test.rec.Main<br>am start -n com.sprd.fileexplorer/.activities.FileExploreActivity<br>am start -n com.sprd.simple.launcher/com.sprd.classichome.Home<br>am start -n com.chartcross.gpstest/.GPSTest<br>am start -n com.android.gpstest/.GpsTestActivity<br>am start com.aliyun.iotx.linkvisual.ipc/.MainActivity<br>am start -n org.zwanoo.android.speedtest/com.ookla.mobile4.screens.main.MainActivity</p>
+<p>device/sprd/sharkle/common/BoardCommon.mk:19:KERNEL_DEFCONFIG := sprd_sharkle_fp_defconfig<br>kernel\arch\arm\configs\sprd_sharkle_fp_defconfig</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2021/01/12/SP9820E%E8%B0%83%E8%AF%95/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://edward.org.cn/2021/01/12/Android/MTKLogger/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/avatar.gif">
+      <meta itemprop="name" content="Edward">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="点点滴滴">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/01/12/Android/MTKLogger/" class="post-title-link" itemprop="url">MTKLogger</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2021-01-12 14:19:10 / 修改时间：14:22:13" itemprop="dateCreated datePublished" datetime="2021-01-12T14:19:10+08:00">2021-01-12</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Android/" itemprop="url" rel="index"><span itemprop="name">Android</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2021/01/12/Android/MTKLogger/" class="post-meta-item leancloud_visitors" data-flag-title="MTKLogger" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="MTKLogger"><a href="#MTKLogger" class="headerlink" title="MTKLogger"></a>MTKLogger</h2><p>如何通过adb command去控制MTKLogger 开关，设定log路径等等。</p>
+<p>[KEYWORD]<br>MTKLogger adb控制 路径 大小</p>
+<p>[SOLUTION]</p>
+<ol>
+<li>开启/关闭</li>
+</ol>
+<p>adb shell am broadcast -a com.mediatek.mtklogger.ADB_CMD -e cmd_name start/stop –ei</p>
+<p>cmd_target 23<br>(start表示开启，stop表示关闭；23可改为1/2/4/16，分别代表MobileLog/ModemLog/NetworkLog/GPSLog)</p>
+<ol>
+<li>获取开关状态<br>adb shell getprop debug.MB.running<br>adb shell getprop debug.mdlogger.Running<br>adb shell getprop debug.mtklog.netlog.Running</li>
+<li>控制Tag Log</li>
+</ol>
+<p>Enable Taglog:</p>
+<p>adb shell am broadcast -a com.mediatek.mtklogger.ADB_CMD -e cmd_name switch_taglog –ei</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2021/01/12/Android/MTKLogger/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://edward.org.cn/2021/01/12/IOS/MACOSXCatalina%E7%B3%BB%E7%BB%9F/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/avatar.gif">
+      <meta itemprop="name" content="Edward">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="点点滴滴">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/01/12/IOS/MACOSXCatalina%E7%B3%BB%E7%BB%9F/" class="post-title-link" itemprop="url">MACOSXCatalina系统</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-01-12 14:18:56" itemprop="dateCreated datePublished" datetime="2021-01-12T14:18:56+08:00">2021-01-12</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/IOS/" itemprop="url" rel="index"><span itemprop="name">IOS</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2021/01/12/IOS/MACOSXCatalina%E7%B3%BB%E7%BB%9F/" class="post-meta-item leancloud_visitors" data-flag-title="MACOSXCatalina系统" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h3 id="MAC-OS-X-Catalina-系统"><a href="#MAC-OS-X-Catalina-系统" class="headerlink" title="MAC OS X  Catalina 系统"></a>MAC OS X  Catalina 系统</h3><p>Step 1 ：从Mac App Store下载最新的Catalina 系统<br>如果无法下载Catalina 系统，则直接跳到Step 2 结尾处下载 Catalina ISO<br>文件<br>Step 2 ：创建macOS Catalina ISO 文件<br>找到你下载的macOS Catalina.App文件，打开终端，cd 到下载系统的目录：</p>
+<h1 id="创建一个Catalina的虚拟磁盘镜像-会生成一个dmg文件"><a href="#创建一个Catalina的虚拟磁盘镜像-会生成一个dmg文件" class="headerlink" title="创建一个Catalina的虚拟磁盘镜像(会生成一个dmg文件)"></a>创建一个Catalina的虚拟磁盘镜像(会生成一个dmg文件)</h1><p>hdiutil create -o ./temp -size 8000m -layout SPUD -fs HFS+J</p>
+<h1 id="将虚拟镜像挂载到mac系统上"><a href="#将虚拟镜像挂载到mac系统上" class="headerlink" title="将虚拟镜像挂载到mac系统上"></a>将虚拟镜像挂载到mac系统上</h1><p>hdiutil attach ./temp.dmg -noverify -mountpoint /Volumes/install_build</p>
+<h1 id="用-macOS-Createinstallmedia-Tool-创建一个安装镜像"><a href="#用-macOS-Createinstallmedia-Tool-创建一个安装镜像" class="headerlink" title="用 macOS Createinstallmedia Tool 创建一个安装镜像"></a>用 macOS Createinstallmedia Tool 创建一个安装镜像</h1><p>sudo Catalina.app/Contents/Resources/createinstallmedia –volume<br>/Volumes/install_build</p>
+<h1 id="卸载Catalina"><a href="#卸载Catalina" class="headerlink" title="卸载Catalina"></a>卸载Catalina</h1><p>hdiutil detach /Volumes/Install\ macOS\ Catalina/</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2021/01/12/IOS/MACOSXCatalina%E7%B3%BB%E7%BB%9F/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://edward.org.cn/2020/12/31/Git/GitLargeFileStorage(LFS)/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/avatar.gif">
+      <meta itemprop="name" content="Edward">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="点点滴滴">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/12/31/Git/GitLargeFileStorage(LFS)/" class="post-title-link" itemprop="url">GitLargeFileStorage(LFS)</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-12-31 18:49:12" itemprop="dateCreated datePublished" datetime="2020-12-31T18:49:12+08:00">2020-12-31</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Git/" itemprop="url" rel="index"><span itemprop="name">Git</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2020/12/31/Git/GitLargeFileStorage(LFS)/" class="post-meta-item leancloud_visitors" data-flag-title="GitLargeFileStorage(LFS)" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="Git-Large-File-Storage-LFS"><a href="#Git-Large-File-Storage-LFS" class="headerlink" title="Git Large File Storage (LFS)"></a>Git Large File Storage (LFS)</h1><p><a target="_blank" rel="noopener" href="https://git-lfs.github.com/">https://git-lfs.github.com/</a></p>
+<p>   github 上传大文件</p>
+<ol>
+<li><p><a target="_blank" rel="noopener" href="https://github.com/git-lfs/git-lfs/releases/download/v2.13.1/git-lfs-windows-v2.13.1.exe">Download</a> and install the Git command line extension. Once downloaded and installed, set up Git LFS for your user account by running:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git lfs install</span><br></pre></td></tr></table></figure>
+<p>You only need to run this once per user account.</p>
+</li>
+<li><p>In each Git repository where you want to use Git LFS, select the file types you’d like Git LFS to manage (or directly edit your .gitattributes). You can configure additional file extensions at anytime.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git lfs track &quot;*.psd&quot;</span><br></pre></td></tr></table></figure>
+<p>Now make sure .gitattributes is tracked:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git add .gitattributes</span><br></pre></td></tr></table></figure>
+<p>Note that defining the file types Git LFS should track will not, by itself, convert any pre-existing files to Git LFS, such as files on other branches or in your prior commit history. To do that, use the [git lfs migrate<a target="_blank" rel="noopener" href="https://github.com/git-lfs/git-lfs/blob/master/docs/man/git-lfs-migrate.1.ronn?utm_source=gitlfs_site&utm_medium=doc_man_migrate_link&utm_campaign=gitlfs">1]</a> command, which has a range of options designed to suit various potential use cases.</p>
+</li>
+<li><p>There is no step three. Just commit and push to GitHub as you normally would.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">git add file.psd</span><br><span class="line">git commit -m &quot;Add design file&quot;</span><br><span class="line">git push origin master</span><br></pre></td></tr></table></figure></li>
+</ol>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://edward.org.cn/2020/12/31/hexo-next/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/avatar.gif">
+      <meta itemprop="name" content="Edward">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="点点滴滴">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/12/31/hexo-next/" class="post-title-link" itemprop="url">hexo-next</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2020-12-31 16:10:50 / 修改时间：16:10:33" itemprop="dateCreated datePublished" datetime="2020-12-31T16:10:50+08:00">2020-12-31</time>
+            </span>
+
+          
+            <span id="/2020/12/31/hexo-next/" class="post-meta-item leancloud_visitors" data-flag-title="hexo-next" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="快速、简洁且高效的博客框架"><a href="#快速、简洁且高效的博客框架" class="headerlink" title="快速、简洁且高效的博客框架"></a>快速、简洁且高效的博客框架</h2><h3 id="https-hexo-io"><a href="#https-hexo-io" class="headerlink" title="https://hexo.io"></a><a target="_blank" rel="noopener" href="https://hexo.io/">https://hexo.io</a></h3><p><a target="_blank" rel="noopener" href="https://hexo.io/zh-cn/docs/">https://hexo.io/zh-cn/docs/</a></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ npm install -g hexo-cli</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ npm install hexo</span><br></pre></td></tr></table></figure>
+
+
+<p>source/_posts  //MD目录</p>
+<p>CNAME  //存放域名</p>
+<p>source  //存放资源文件</p>
+<h3 id="主题"><a href="#主题" class="headerlink" title="主题"></a>主题</h3><h3 id="hexo-theme-next"><a href="#hexo-theme-next" class="headerlink" title="hexo-theme-next"></a><a target="_blank" rel="noopener" href="https://github.com/magicedward/hexo-theme-next">hexo-theme-next</a></h3>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2020/12/31/hexo-next/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://edward.org.cn/2020/12/31/Android/packages%20above%20can%20set%20RTC_WAKEUP%20ELAPSED_REALTIME_WAKEUP%20alarm/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -263,804 +1093,10 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://edward.org.cn/2020/12/31/Android/Adding%20for%20auto%20update%20FW%20in%20vold/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/uploads/avatar.gif">
-      <meta itemprop="name" content="Edward">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="点点滴滴">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/12/31/Android/Adding%20for%20auto%20update%20FW%20in%20vold/" class="post-title-link" itemprop="url">Adding for auto update FW in vold</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-12-31 15:36:43" itemprop="dateCreated datePublished" datetime="2020-12-31T15:36:43+08:00">2020-12-31</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-10-10 18:20:33" itemprop="dateModified" datetime="2020-10-10T18:20:33+08:00">2020-10-10</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Android/" itemprop="url" rel="index"><span itemprop="name">Android</span></a>
-                </span>
-            </span>
-
-          
-            <span id="/2020/12/31/Android/Adding%20for%20auto%20update%20FW%20in%20vold/" class="post-meta-item leancloud_visitors" data-flag-title="Adding for auto update FW in vold" title="阅读次数">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-eye"></i>
-              </span>
-              <span class="post-meta-item-text">阅读次数：</span>
-              <span class="leancloud-visitors-count"></span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment">//CM: Adding for auto update FW in vold</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> MAX_CM_UPDATE_PATH_LEN    256</span></span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">bool</span> <span class="title">chkUpFile</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *label, <span class="keyword">char</span> *upFile)</span></span>&#123;</span><br><span class="line">    <span class="keyword">const</span> <span class="keyword">char</span> *FILE_NAME = <span class="string">&quot;cm_update.zip&quot;</span>;</span><br><span class="line">    <span class="keyword">char</span> UPDATE_FILE_NAME[<span class="number">256</span>];</span><br><span class="line">    <span class="keyword">char</span> UPDATE_FILE_PATH[<span class="number">256</span>];</span><br><span class="line">    <span class="keyword">char</span> UPDATE_FILE_PATH_NEW[<span class="number">256</span>];</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Check if OTA update file exists or not</span></span><br><span class="line">    <span class="built_in">snprintf</span>(UPDATE_FILE_PATH, <span class="keyword">sizeof</span>(UPDATE_FILE_PATH), <span class="string">&quot;%s/%s&quot;</span>, label, FILE_NAME);</span><br><span class="line">    <span class="keyword">if</span> (access(UPDATE_FILE_PATH, F_OK|R_OK) &lt; <span class="number">0</span>)&#123;</span><br><span class="line">        SLOGW(<span class="string">&quot;CheckUpdate update file %s is not exist&quot;</span>, UPDATE_FILE_PATH);</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Rename OTA update files to prevent updating at next boot/plugin</span></span><br><span class="line">    <span class="built_in">strncpy</span>(UPDATE_FILE_NAME, FILE_NAME, <span class="keyword">sizeof</span>(UPDATE_FILE_NAME));</span><br><span class="line">    <span class="keyword">char</span> *dot = <span class="built_in">strrchr</span>(UPDATE_FILE_NAME, <span class="string">&#x27;.&#x27;</span>);</span><br><span class="line">    <span class="keyword">if</span> (dot != <span class="literal">NULL</span>)&#123;</span><br><span class="line">        *dot = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">char</span> *prefix = UPDATE_FILE_NAME;</span><br><span class="line">        <span class="keyword">char</span> *postfix = dot+<span class="number">1</span>;</span><br><span class="line">        <span class="built_in">snprintf</span>(UPDATE_FILE_PATH_NEW, <span class="keyword">sizeof</span>(UPDATE_FILE_PATH_NEW), <span class="string">&quot;%s/%s-%ld.%s&quot;</span>, label, prefix, time(<span class="literal">NULL</span>), postfix);</span><br><span class="line">    &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">        <span class="built_in">snprintf</span>(UPDATE_FILE_PATH_NEW, <span class="keyword">sizeof</span>(UPDATE_FILE_PATH_NEW), <span class="string">&quot;%s/%s-%ld&quot;</span>, label, UPDATE_FILE_NAME, time(<span class="literal">NULL</span>));</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">if</span> (rename(UPDATE_FILE_PATH, UPDATE_FILE_PATH_NEW) &lt; <span class="number">0</span>)&#123;</span><br><span class="line">        SLOGW(<span class="string">&quot;CheckUpdate rename %s to %s failure&quot;</span>, UPDATE_FILE_PATH, UPDATE_FILE_PATH_NEW);</span><br><span class="line">        <span class="built_in">snprintf</span>(upFile, MAX_CM_UPDATE_PATH_LEN, <span class="string">&quot;%s&quot;</span>, UPDATE_FILE_PATH);</span><br><span class="line">    &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">        <span class="built_in">snprintf</span>(upFile, MAX_CM_UPDATE_PATH_LEN, <span class="string">&quot;%s&quot;</span>, UPDATE_FILE_PATH_NEW);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    SLOGI(<span class="string">&quot;CheckUpdate updateFile = %s&quot;</span>, upFile);</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">bool</span> <span class="title">chkUpFolder</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *label, <span class="keyword">char</span> *upFile)</span></span>&#123;</span><br><span class="line">    <span class="keyword">const</span> <span class="keyword">char</span> *FOLDER_NAME = <span class="string">&quot;cm_update&quot;</span>;</span><br><span class="line">    <span class="keyword">char</span> UPDATE_PATH[<span class="number">256</span>];</span><br><span class="line">    <span class="keyword">char</span> FOLDER_NAME_NEW[<span class="number">256</span>];</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">dirent</span> *<span class="title">entry</span> =</span> <span class="literal">NULL</span>;</span><br><span class="line">    <span class="keyword">bool</span> isUpdate = <span class="literal">false</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Check if OTA update folder exists or not</span></span><br><span class="line">    <span class="built_in">snprintf</span>(UPDATE_PATH, <span class="keyword">sizeof</span>(UPDATE_PATH), <span class="string">&quot;%s/%s&quot;</span>, label, FOLDER_NAME);</span><br><span class="line">    DIR *dirptr = opendir(UPDATE_PATH);</span><br><span class="line">    <span class="keyword">if</span> (dirptr == <span class="literal">NULL</span>)&#123;</span><br><span class="line">        SLOGW(<span class="string">&quot;CheckUpdate update folder %s is not exist&quot;</span>, UPDATE_PATH);</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">while</span> ((entry = readdir(dirptr)) != <span class="literal">NULL</span>)&#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;entry: %s\n&quot;</span>, entry-&gt;d_name);</span><br><span class="line">        <span class="keyword">if</span> ((entry-&gt;d_type == DT_REG) || (entry-&gt;d_type == DT_UNKNOWN)) &#123;</span><br><span class="line">            <span class="keyword">if</span> ( <span class="built_in">strstr</span>(entry-&gt;d_name, <span class="string">&quot;.bin&quot;</span>) || <span class="built_in">strstr</span>(entry-&gt;d_name, <span class="string">&quot;.img&quot;</span>))</span><br><span class="line">                isUpdate = <span class="literal">true</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    closedir(dirptr);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> ( isUpdate == <span class="literal">false</span> )</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Rename OTA update files to prevent updating at next boot/plugin</span></span><br><span class="line">    <span class="built_in">snprintf</span>(FOLDER_NAME_NEW, <span class="keyword">sizeof</span>(FOLDER_NAME_NEW), <span class="string">&quot;%s/%s-%ld&quot;</span>, label, FOLDER_NAME, time(<span class="literal">NULL</span>));</span><br><span class="line">    <span class="keyword">if</span> (rename(UPDATE_PATH, FOLDER_NAME_NEW) &lt; <span class="number">0</span>)&#123;</span><br><span class="line">        <span class="built_in">snprintf</span>(upFile, MAX_CM_UPDATE_PATH_LEN, <span class="string">&quot;%s/boot.img&quot;</span>, UPDATE_PATH);</span><br><span class="line">    &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">        <span class="built_in">snprintf</span>(upFile, MAX_CM_UPDATE_PATH_LEN, <span class="string">&quot;%s/boot.img&quot;</span>, FOLDER_NAME_NEW);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    SLOGI(<span class="string">&quot;CheckUpdate updateFile = %s&quot;</span>, upFile);</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">bool</span> <span class="title">prepareRecovery</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *upFile)</span></span>&#123;</span><br><span class="line">    <span class="keyword">const</span> <span class="keyword">char</span> *RECOVERY_DIR = <span class="string">&quot;/cache/recovery&quot;</span>;</span><br><span class="line">    <span class="keyword">const</span> <span class="keyword">char</span> *COMMAND_FILE = <span class="string">&quot;/cache/recovery/command&quot;</span>;</span><br><span class="line">    <span class="keyword">char</span> UPDATE_ARG[<span class="number">256</span>];</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">if</span>( upFile == <span class="literal">NULL</span> || <span class="built_in">strlen</span>(upFile) &lt;= <span class="number">0</span> )</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Remove recovery folder</span></span><br><span class="line">    remove(COMMAND_FILE);</span><br><span class="line">    mkdir(RECOVERY_DIR, <span class="number">0777</span>);</span><br><span class="line">    <span class="keyword">if</span> (access(RECOVERY_DIR, F_OK|R_OK|W_OK|X_OK) &lt; <span class="number">0</span>)&#123;</span><br><span class="line">        SLOGE(<span class="string">&quot;CheckUpdate create RECOVERY_DIR:%s failure&quot;</span>, RECOVERY_DIR);</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// Create recovery data file</span></span><br><span class="line">    <span class="keyword">int</span> fd = creat(COMMAND_FILE, <span class="number">0666</span>);</span><br><span class="line">    <span class="keyword">if</span> (fd &lt; <span class="number">0</span>)&#123;</span><br><span class="line">        SLOGE(<span class="string">&quot;CheckUpdate create COMMAND_FILE:%s failure&quot;</span>, COMMAND_FILE);</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Write recovery arg</span></span><br><span class="line">    <span class="built_in">snprintf</span>(UPDATE_ARG, <span class="keyword">sizeof</span>(UPDATE_ARG), <span class="string">&quot;--update_package=%s\n&quot;</span>, upFile);</span><br><span class="line">    <span class="keyword">int</span> length = <span class="built_in">strlen</span>(UPDATE_ARG);</span><br><span class="line">    <span class="keyword">int</span> written = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">do</span>&#123;</span><br><span class="line">        <span class="keyword">int</span> n = write(fd, UPDATE_ARG+written, length-written);</span><br><span class="line">        <span class="keyword">if</span> (n &lt; <span class="number">0</span>)&#123;</span><br><span class="line">            SLOGE(<span class="string">&quot;CheckUpdate write UPDATE_ARG:%s failure&quot;</span>, UPDATE_ARG);</span><br><span class="line">            close(fd);</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        written += n;</span><br><span class="line">    &#125;<span class="keyword">while</span> (written &lt; length);</span><br><span class="line">    </span><br><span class="line">    close(fd);</span><br><span class="line">    SLOGI(<span class="string">&quot;CheckUpdate write %s is success&quot;</span>, COMMAND_FILE);</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// Synchronize files</span></span><br><span class="line">    system(<span class="string">&quot;sync&quot;</span>);</span><br><span class="line">    sleep(<span class="number">5</span>);</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">checkUpdate</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *label)</span></span>&#123;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">if</span> (label == <span class="literal">NULL</span>)&#123;</span><br><span class="line">        SLOGW(<span class="string">&quot;CheckUpdate label is NULL&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// label must be contain sdcard</span></span><br><span class="line">    SLOGI(<span class="string">&quot;CheckUpdate label:%s&quot;</span>, label);</span><br><span class="line">    <span class="keyword">if</span> (<span class="built_in">strstr</span>(label, <span class="string">&quot;sdcard&quot;</span>) == <span class="literal">NULL</span>)&#123;</span><br><span class="line">        SLOGW(<span class="string">&quot;CheckUpdate skipped&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// check android properties</span></span><br><span class="line">    <span class="keyword">const</span> <span class="keyword">char</span> *prop = <span class="string">&quot;persist.updatefw.auto&quot;</span>;</span><br><span class="line">    <span class="keyword">char</span> prop_value[PROPERTY_VALUE_MAX];</span><br><span class="line">    <span class="keyword">if</span> (property_get(prop, prop_value, <span class="string">&quot;1&quot;</span>) &lt; <span class="number">0</span>)&#123;</span><br><span class="line">        SLOGW(<span class="string">&quot;CheckUpdate get android prop error&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    SLOGI(<span class="string">&quot;CheckUpdate %s: %s&quot;</span>, prop, prop_value);</span><br><span class="line">    <span class="keyword">if</span> (prop_value[<span class="number">0</span>] == <span class="string">&#x27;0&#x27;</span> &amp;&amp; prop_value[<span class="number">1</span>] == <span class="string">&#x27;\0&#x27;</span>)&#123;</span><br><span class="line">        SLOGI(<span class="string">&quot;CheckUpdate android prop: disable auto update&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Check label is exist</span></span><br><span class="line">    <span class="keyword">if</span> (access(label, F_OK|R_OK|X_OK) &lt; <span class="number">0</span>)&#123;</span><br><span class="line">        SLOGW(<span class="string">&quot;CheckUpdate label:%s is not exist&quot;</span>, label);</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    SLOGI(<span class="string">&quot;CheckUpdate fork parent process:%d&quot;</span>, getpid());</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">pid_t</span> pid = fork();</span><br><span class="line">    <span class="keyword">if</span> (pid &lt; <span class="number">0</span>)&#123;</span><br><span class="line">        SLOGE(<span class="string">&quot;CheckUpdate fork failure&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;<span class="keyword">else</span> <span class="keyword">if</span> (pid &gt; <span class="number">0</span>)&#123;</span><br><span class="line">        SLOGI(<span class="string">&quot;CheckUpdate forked child process:%d&quot;</span>, pid);</span><br><span class="line">        <span class="comment">// wait child process exit to avoid it become zombie(defunct)</span></span><br><span class="line">        <span class="keyword">if</span> (waitpid(pid, <span class="literal">NULL</span>, <span class="number">0</span>) == pid ) &#123;</span><br><span class="line">            SLOGI(<span class="string">&quot;CheckUpdate child(%d) completed.&quot;</span>, pid);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// Child process...</span></span><br><span class="line">    sleep(<span class="number">10</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">char</span> updateFile[MAX_CM_UPDATE_PATH_LEN];</span><br><span class="line">    <span class="built_in">memset</span>(updateFile, <span class="number">0</span>, MAX_CM_UPDATE_PATH_LEN);</span><br><span class="line">    <span class="keyword">if</span> ( chkUpFile(label, updateFile) == <span class="literal">false</span> )&#123;</span><br><span class="line">        chkUpFolder(label, updateFile);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">if</span> ( prepareRecovery(updateFile) ) &#123;</span><br><span class="line">        <span class="comment">// Reboot to recovery</span></span><br><span class="line">        SLOGI(<span class="string">&quot;CheckUpdate reboot to recovery&quot;</span>);</span><br><span class="line">        <span class="keyword">if</span> (execlp(<span class="string">&quot;reboot&quot;</span>, <span class="string">&quot;reboot&quot;</span>, <span class="string">&quot;recovery&quot;</span>, <span class="literal">NULL</span>) &lt; <span class="number">0</span>)&#123;</span><br><span class="line">            SLOGE(<span class="string">&quot;CheckUpdate run command \&quot;reboot recovery\&quot; failure&quot;</span>);</span><br><span class="line">            <span class="built_in">exit</span>(<span class="number">1</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="built_in">exit</span>(<span class="number">0</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">VolumeManager::mountVolume</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *label)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">...</span><br><span class="line"></span><br><span class="line">    <span class="comment">//CM: Adding for auto update FW in vold</span></span><br><span class="line">    <span class="comment">//return v-&gt;mountVol();</span></span><br><span class="line">    <span class="keyword">int</span> ret = v-&gt;mountVol();</span><br><span class="line">    <span class="keyword">if</span> (ret == <span class="number">0</span>)&#123;</span><br><span class="line">        checkUpdate(label);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> ret;</span><br></pre></td></tr></table></figure>
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://edward.org.cn/2020/12/31/Android/Uevent%E5%8F%91%E9%80%81%EF%BC%88%E7%83%AD%E6%8F%92%E6%8B%94%EF%BC%89%E4%BA%8B%E4%BB%B6%E5%88%B0%E7%94%A8%E6%88%B7%E7%A9%BA%E9%97%B4/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/uploads/avatar.gif">
-      <meta itemprop="name" content="Edward">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="点点滴滴">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/12/31/Android/Uevent%E5%8F%91%E9%80%81%EF%BC%88%E7%83%AD%E6%8F%92%E6%8B%94%EF%BC%89%E4%BA%8B%E4%BB%B6%E5%88%B0%E7%94%A8%E6%88%B7%E7%A9%BA%E9%97%B4/" class="post-title-link" itemprop="url">Uevent发送（热插拔）事件到用户空间</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-12-31 15:36:43" itemprop="dateCreated datePublished" datetime="2020-12-31T15:36:43+08:00">2020-12-31</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-10-10 18:39:39" itemprop="dateModified" datetime="2020-10-10T18:39:39+08:00">2020-10-10</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Android/" itemprop="url" rel="index"><span itemprop="name">Android</span></a>
-                </span>
-            </span>
-
-          
-            <span id="/2020/12/31/Android/Uevent%E5%8F%91%E9%80%81%EF%BC%88%E7%83%AD%E6%8F%92%E6%8B%94%EF%BC%89%E4%BA%8B%E4%BB%B6%E5%88%B0%E7%94%A8%E6%88%B7%E7%A9%BA%E9%97%B4/" class="post-meta-item leancloud_visitors" data-flag-title="Uevent发送（热插拔）事件到用户空间" title="阅读次数">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-eye"></i>
-              </span>
-              <span class="post-meta-item-text">阅读次数：</span>
-              <span class="leancloud-visitors-count"></span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">resume_set_reasen</span><span class="params">(<span class="keyword">char</span> * reasen)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">        <span class="keyword">char</span> name_buf[<span class="number">120</span>];</span><br><span class="line">        <span class="keyword">char</span> state_buf[<span class="number">120</span>];</span><br><span class="line">        <span class="keyword">char</span> *prop_buf;</span><br><span class="line">        <span class="keyword">char</span> *envp[<span class="number">3</span>];</span><br><span class="line">        <span class="keyword">int</span> env_offset = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">int</span> length;</span><br><span class="line"></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">resume_dev</span> *<span class="title">sdev</span> =</span> &amp;sdev_g;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">snprintf</span>(state_buf, <span class="keyword">sizeof</span>(state_buf),<span class="string">&quot;resume_reason=%s&quot;</span>,reasen);</span><br><span class="line">    envp[env_offset++] = state_buf;</span><br><span class="line"></span><br><span class="line">    envp[env_offset] = <span class="literal">NULL</span>;</span><br><span class="line"></span><br><span class="line">    kobject_uevent_env(&amp;sdev-&gt;dev-&gt;kobj, KOBJ_CHANGE, envp);</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line">EXPORT_SYMBOL_GPL(resume_set_state);</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//system\vold\NetlinkHandler.cpp</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">NetlinkHandler::onEvent</span><span class="params">(NetlinkEvent *evt)</span> </span>&#123;</span><br><span class="line">    VolumeManager *vm = VolumeManager::Instance();</span><br><span class="line">    <span class="keyword">const</span> <span class="keyword">char</span> *subsys = evt-&gt;getSubsystem();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (!subsys) &#123;</span><br><span class="line">        SLOGW(<span class="string">&quot;No subsystem found in netlink event&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (!<span class="built_in">strcmp</span>(subsys, <span class="string">&quot;resume_wake&quot;</span>)) &#123;</span><br><span class="line">        <span class="keyword">const</span> <span class="keyword">char</span> *resume_reason = evt-&gt;findParam(<span class="string">&quot;resume_reason&quot;</span>);</span><br><span class="line">        ALOGD(<span class="string">&quot;resume_reason %s\n&quot;</span>,resume_reason);        </span><br><span class="line">		vm-&gt;getBroadcaster()-&gt;sendBroadcast(<span class="number">697</span>,resume_reason, <span class="literal">false</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (!<span class="built_in">strcmp</span>(subsys, <span class="string">&quot;video4linux&quot;</span>)) &#123;</span><br><span class="line">        <span class="keyword">int</span> action = evt-&gt;getAction();</span><br><span class="line">        <span class="keyword">const</span> <span class="keyword">char</span> *path = evt-&gt;findParam(<span class="string">&quot;DEVPATH&quot;</span>);</span><br><span class="line">        <span class="keyword">char</span> usbcam_path[<span class="number">32</span>];</span><br><span class="line">        ALOGI(<span class="string">&quot;video4linux path: %s&quot;</span>, path);</span><br><span class="line">        <span class="built_in">memset</span>(usbcam_path, <span class="number">0</span>, <span class="keyword">sizeof</span>(usbcam_path));</span><br><span class="line">        <span class="comment">//default message: &quot;uvc&quot;</span></span><br><span class="line">        <span class="built_in">strcpy</span>(usbcam_path, <span class="string">&quot;uvc&quot;</span>);</span><br><span class="line">        stripUSBCamNode(path, usbcam_path);</span><br><span class="line">        </span><br><span class="line">		<span class="keyword">if</span>(action == NetlinkEvent::NlActionAdd)&#123;</span><br><span class="line">            updateUSBCameraProp(path, usbcam_path);</span><br><span class="line">	        vm-&gt;getBroadcaster()-&gt;sendBroadcast(<span class="number">698</span>, usbcam_path, <span class="literal">false</span>);</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">if</span>(action == NetlinkEvent::NlActionRemove)&#123;</span><br><span class="line">            ALOGE(<span class="string">&quot;USBCam NetlinkEvent::NlActionRemove, Force Power Off &quot;</span>);</span><br><span class="line">			vm-&gt;getBroadcaster()-&gt;sendBroadcast(<span class="number">699</span>, usbcam_path, <span class="literal">false</span>);</span><br><span class="line">		&#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-
-
-<p>Linux kernel – Uevent发送（热插拔）事件到用户空间</p>
-<p>Jackson_csdn 2016-07-15 14:16:30  14825  收藏 11<br>分类专栏： Linux内核<br>版权<br>Uevent是一种在内核空间和用户空间之间通信的机制，主要用于热插拔事件（hotplug）。</p>
-<p>uevent事件<br>根据include/linux/kobject.h中的定义，kobject对应的动作可分为以下几种：</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">enum</span> <span class="title">kobject_action</span> &#123;</span></span><br><span class="line">    KOBJ_ADD,</span><br><span class="line">    KOBJ_REMOVE,</span><br><span class="line">    KOBJ_CHANGE,</span><br><span class="line">    KOBJ_MOVE,</span><br><span class="line">    KOBJ_ONLINE,</span><br><span class="line">    KOBJ_OFFLINE,</span><br><span class="line">    KOBJ_MAX</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<p>这些动作对应的事件相应有以下几种：</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">static</span> <span class="keyword">const</span> <span class="keyword">char</span> *kobject_actions[] = &#123;</span><br><span class="line">    [KOBJ_ADD] =        <span class="string">&quot;add&quot;</span>,</span><br><span class="line">    [KOBJ_REMOVE] =     <span class="string">&quot;remove&quot;</span>,</span><br><span class="line">    [KOBJ_CHANGE] =     <span class="string">&quot;change&quot;</span>,</span><br><span class="line">    [KOBJ_MOVE] =       <span class="string">&quot;move&quot;</span>,</span><br><span class="line">    [KOBJ_ONLINE] =     <span class="string">&quot;online&quot;</span>,</span><br><span class="line">    [KOBJ_OFFLINE] =    <span class="string">&quot;offline&quot;</span>,</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<p>说明：本文所有的源代码均取自内核2.6.32。</p>
-<p>uevent环境变量<br>Uevent事件具体以环境变量（即字符串）的形式发送到用户空间。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2020/12/31/Android/Uevent%E5%8F%91%E9%80%81%EF%BC%88%E7%83%AD%E6%8F%92%E6%8B%94%EF%BC%89%E4%BA%8B%E4%BB%B6%E5%88%B0%E7%94%A8%E6%88%B7%E7%A9%BA%E9%97%B4/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://edward.org.cn/2020/12/31/MarkDown%E5%9F%BA%E6%9C%AC%E8%AF%AD%E6%B3%95/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/uploads/avatar.gif">
-      <meta itemprop="name" content="Edward">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="点点滴滴">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/12/31/MarkDown%E5%9F%BA%E6%9C%AC%E8%AF%AD%E6%B3%95/" class="post-title-link" itemprop="url">MarkDown基本语法</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-12-31 15:36:43" itemprop="dateCreated datePublished" datetime="2020-12-31T15:36:43+08:00">2020-12-31</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-07-14 10:09:15" itemprop="dateModified" datetime="2020-07-14T10:09:15+08:00">2020-07-14</time>
-              </span>
-
-          
-            <span id="/2020/12/31/MarkDown%E5%9F%BA%E6%9C%AC%E8%AF%AD%E6%B3%95/" class="post-meta-item leancloud_visitors" data-flag-title="MarkDown基本语法" title="阅读次数">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-eye"></i>
-              </span>
-              <span class="post-meta-item-text">阅读次数：</span>
-              <span class="leancloud-visitors-count"></span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="我展示的是一级标题"><a href="#我展示的是一级标题" class="headerlink" title="我展示的是一级标题"></a>我展示的是一级标题</h1><h2 id="我展示的是二级标题"><a href="#我展示的是二级标题" class="headerlink" title="我展示的是二级标题"></a>我展示的是二级标题</h2><h1 id="一级标题"><a href="#一级标题" class="headerlink" title="一级标题"></a>一级标题</h1><h2 id="二级标题"><a href="#二级标题" class="headerlink" title="二级标题"></a>二级标题</h2><h3 id="三级标题"><a href="#三级标题" class="headerlink" title="三级标题"></a>三级标题</h3><h4 id="四级标题"><a href="#四级标题" class="headerlink" title="四级标题"></a>四级标题</h4><h5 id="五级标题"><a href="#五级标题" class="headerlink" title="五级标题"></a>五级标题</h5><h6 id="六级标题"><a href="#六级标题" class="headerlink" title="六级标题"></a>六级标题</h6><h3 id="段落"><a href="#段落" class="headerlink" title="段落"></a>段落</h3><p>Markdown 段落没有特殊的格式，直接编写文字就好，段落的换行是使用两个以上空格加上回车。<br>当然也可以在段落后面使用一个空行来表示重新开始一个段落。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2020/12/31/MarkDown%E5%9F%BA%E6%9C%AC%E8%AF%AD%E6%B3%95/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://edward.org.cn/2020/12/31/Spring/%EF%BC%88Container%20Overview%EF%BC%89Spring%E7%AC%94%E8%AE%B0/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/uploads/avatar.gif">
-      <meta itemprop="name" content="Edward">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="点点滴滴">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/12/31/Spring/%EF%BC%88Container%20Overview%EF%BC%89Spring%E7%AC%94%E8%AE%B0/" class="post-title-link" itemprop="url">（Container Overview）Spring笔记</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-12-31 15:36:43" itemprop="dateCreated datePublished" datetime="2020-12-31T15:36:43+08:00">2020-12-31</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-07-14 11:14:46" itemprop="dateModified" datetime="2020-07-14T11:14:46+08:00">2020-07-14</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Spring/" itemprop="url" rel="index"><span itemprop="name">Spring</span></a>
-                </span>
-            </span>
-
-          
-            <span id="/2020/12/31/Spring/%EF%BC%88Container%20Overview%EF%BC%89Spring%E7%AC%94%E8%AE%B0/" class="post-meta-item leancloud_visitors" data-flag-title="（Container Overview）Spring笔记" title="阅读次数">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-eye"></i>
-              </span>
-              <span class="post-meta-item-text">阅读次数：</span>
-              <span class="leancloud-visitors-count"></span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="Container-Overview"><a href="#Container-Overview" class="headerlink" title="Container Overview"></a>Container Overview</h2><h3 id><a href="#" class="headerlink" title></a></h3><ul>
-<li><strong>Inversion of Control (IoC)</strong>  控制反转</li>
-<li><strong>dependency injection (DI)</strong>   依赖注入</li>
-</ul>
-<p><img src="https://docs.spring.io/spring/docs/5.2.7.RELEASE/spring-framework-reference/images/container-magic.png" alt="The Spring IoC container"></p>
-<h3 id="Configuration-Metadata"><a href="#Configuration-Metadata" class="headerlink" title="Configuration Metadata"></a>Configuration Metadata</h3><p>The following example shows the basic structure of XML-based configuration metadata:</p>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="meta">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">beans</span> <span class="attr">xmlns</span>=<span class="string">&quot;http://www.springframework.org/schema/beans&quot;</span></span></span><br><span class="line"><span class="tag">    <span class="attr">xmlns:xsi</span>=<span class="string">&quot;http://www.w3.org/2001/XMLSchema-instance&quot;</span></span></span><br><span class="line"><span class="tag">    <span class="attr">xsi:schemaLocation</span>=<span class="string">&quot;http://www.springframework.org/schema/beans</span></span></span><br><span class="line"><span class="tag"><span class="string">        https://www.springframework.org/schema/beans/spring-beans.xsd&quot;</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">&quot;...&quot;</span> <span class="attr">class</span>=<span class="string">&quot;...&quot;</span>&gt;</span>  </span><br><span class="line">        <span class="comment">&lt;!-- collaborators and configuration for this bean go here --&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">bean</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">&quot;...&quot;</span> <span class="attr">class</span>=<span class="string">&quot;...&quot;</span>&gt;</span></span><br><span class="line">        <span class="comment">&lt;!-- collaborators and configuration for this bean go here --&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">bean</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">&lt;!-- more bean definitions go here --&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;/<span class="name">beans</span>&gt;</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<h3 id="Instantiating-a-Container"><a href="#Instantiating-a-Container" class="headerlink" title="Instantiating a Container"></a>Instantiating a Container</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">ApplicationContext context = <span class="keyword">new</span> ClassPathXmlApplicationContext(<span class="string">&quot;services.xml&quot;</span>, <span class="string">&quot;daos.xml&quot;</span>);</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-
-<p>The following example shows the service layer objects (services.xml) configuration file:</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2020/12/31/Spring/%EF%BC%88Container%20Overview%EF%BC%89Spring%E7%AC%94%E8%AE%B0/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://edward.org.cn/2020/12/31/Spring/Bean%20Overview%20&&%20Dependencies%20(Spring%20%E7%AC%94%E8%AE%B0)/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/uploads/avatar.gif">
-      <meta itemprop="name" content="Edward">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="点点滴滴">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/12/31/Spring/Bean%20Overview%20&&%20Dependencies%20(Spring%20%E7%AC%94%E8%AE%B0)/" class="post-title-link" itemprop="url">Bean Overview && Dependencies (Spring 笔记)</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-12-31 15:36:42" itemprop="dateCreated datePublished" datetime="2020-12-31T15:36:42+08:00">2020-12-31</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-07-14 12:01:21" itemprop="dateModified" datetime="2020-07-14T12:01:21+08:00">2020-07-14</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Spring/" itemprop="url" rel="index"><span itemprop="name">Spring</span></a>
-                </span>
-            </span>
-
-          
-            <span id="/2020/12/31/Spring/Bean%20Overview%20&&%20Dependencies%20(Spring%20%E7%AC%94%E8%AE%B0)/" class="post-meta-item leancloud_visitors" data-flag-title="Bean Overview && Dependencies (Spring 笔记)" title="阅读次数">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-eye"></i>
-              </span>
-              <span class="post-meta-item-text">阅读次数：</span>
-              <span class="leancloud-visitors-count"></span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="Bean-Overview"><a href="#Bean-Overview" class="headerlink" title="Bean Overview"></a>Bean Overview</h2><h3 id="Aliasing-a-Bean-outside-the-Bean-Definition"><a href="#Aliasing-a-Bean-outside-the-Bean-Definition" class="headerlink" title="Aliasing a Bean outside the Bean Definition"></a>Aliasing a Bean outside the Bean Definition</h3><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">alias</span> <span class="attr">name</span>=<span class="string">&quot;myApp-dataSource&quot;</span> <span class="attr">alias</span>=<span class="string">&quot;subsystemA-dataSource&quot;</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">alias</span> <span class="attr">name</span>=<span class="string">&quot;myApp-dataSource&quot;</span> <span class="attr">alias</span>=<span class="string">&quot;subsystemB-dataSource&quot;</span>/&gt;</span></span><br></pre></td></tr></table></figure>
-<h3 id="Instantiating-Beans"><a href="#Instantiating-Beans" class="headerlink" title="Instantiating Beans"></a>Instantiating Beans</h3><p>With XML-based configuration metadata you can specify your bean class as follows:</p>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">&quot;exampleBean&quot;</span> <span class="attr">class</span>=<span class="string">&quot;examples.ExampleBean&quot;</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">name</span>=<span class="string">&quot;anotherExample&quot;</span> <span class="attr">class</span>=<span class="string">&quot;examples.ExampleBeanTwo&quot;</span>/&gt;</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<h3 id="Instantiation-with-a-Static-Factory-Method"><a href="#Instantiation-with-a-Static-Factory-Method" class="headerlink" title="Instantiation with a Static Factory Method"></a>Instantiation with a Static Factory Method</h3><p>In this example, the createInstance() method must be a static method. The following example shows how to specify a factory method:</p>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">&quot;clientService&quot;</span></span></span><br><span class="line"><span class="tag">    <span class="attr">class</span>=<span class="string">&quot;examples.ClientService&quot;</span></span></span><br><span class="line"><span class="tag">    <span class="attr">factory-method</span>=<span class="string">&quot;createInstance&quot;</span>/&gt;</span></span><br><span class="line">    </span><br></pre></td></tr></table></figure>
-<p>The following example shows a class that would work with the preceding bean definition:</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2020/12/31/Spring/Bean%20Overview%20&&%20Dependencies%20(Spring%20%E7%AC%94%E8%AE%B0)/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://edward.org.cn/2020/12/31/mybatis/Mybatis/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/uploads/avatar.gif">
-      <meta itemprop="name" content="Edward">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="点点滴滴">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/12/31/mybatis/Mybatis/" class="post-title-link" itemprop="url">Mybatis</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-12-31 15:36:42" itemprop="dateCreated datePublished" datetime="2020-12-31T15:36:42+08:00">2020-12-31</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-07-16 08:47:16" itemprop="dateModified" datetime="2020-07-16T08:47:16+08:00">2020-07-16</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/mybatis/" itemprop="url" rel="index"><span itemprop="name">mybatis</span></a>
-                </span>
-            </span>
-
-          
-            <span id="/2020/12/31/mybatis/Mybatis/" class="post-meta-item leancloud_visitors" data-flag-title="Mybatis" title="阅读次数">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-eye"></i>
-              </span>
-              <span class="post-meta-item-text">阅读次数：</span>
-              <span class="leancloud-visitors-count"></span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="Mybatis"><a href="#Mybatis" class="headerlink" title="Mybatis"></a>Mybatis</h2><p>MyBatis 是一款优秀的持久层框架，它支持自定义 SQL、存储过程以及高级映射。</p>
-<p>如果使用 Maven 来构建项目，则需将下面的依赖代码置于 pom.xml 文件中：</p>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.mybatis<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>mybatis<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">version</span>&gt;</span>x.x.x<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
-<h4 id="从-XML-中构建-SqlSessionFactory"><a href="#从-XML-中构建-SqlSessionFactory" class="headerlink" title="从 XML 中构建 SqlSessionFactory"></a>从 XML 中构建 SqlSessionFactory</h4><p>每个基于 MyBatis 的应用都是以一个 SqlSessionFactory 的实例为核心的。SqlSessionFactory 的实例可以通过 SqlSessionFactoryBuilder 获得。而 SqlSessionFactoryBuilder 则可以从 XML 配置文件或一个预先配置的 Configuration 实例来构建出 SqlSessionFactory 实例。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">String resource = <span class="string">&quot;org/mybatis/example/mybatis-config.xml&quot;</span>;</span><br><span class="line">InputStream inputStream = Resources.getResourceAsStream(resource);</span><br><span class="line">SqlSessionFactory sqlSessionFactory = <span class="keyword">new</span> SqlSessionFactoryBuilder().build(inputStream);</span><br></pre></td></tr></table></figure>
-
-
-<p>XML 配置文件中包含了对 MyBatis 系统的核心设置，包括获取数据库连接实例的数据源（DataSource）以及决定事务作用域和控制方式的事务管理器（TransactionManager）.</p>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; ?&gt;</span></span><br><span class="line"><span class="meta">&lt;!DOCTYPE <span class="meta-keyword">configuration</span></span></span><br><span class="line"><span class="meta">  <span class="meta-keyword">PUBLIC</span> <span class="meta-string">&quot;-//mybatis.org//DTD Config 3.0//EN&quot;</span></span></span><br><span class="line"><span class="meta">  <span class="meta-string">&quot;http://mybatis.org/dtd/mybatis-3-config.dtd&quot;</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">configuration</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">environments</span> <span class="attr">default</span>=<span class="string">&quot;development&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">environment</span> <span class="attr">id</span>=<span class="string">&quot;development&quot;</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">transactionManager</span> <span class="attr">type</span>=<span class="string">&quot;JDBC&quot;</span>/&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">dataSource</span> <span class="attr">type</span>=<span class="string">&quot;POOLED&quot;</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">&quot;driver&quot;</span> <span class="attr">value</span>=<span class="string">&quot;$&#123;driver&#125;&quot;</span>/&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">&quot;url&quot;</span> <span class="attr">value</span>=<span class="string">&quot;$&#123;url&#125;&quot;</span>/&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">&quot;username&quot;</span> <span class="attr">value</span>=<span class="string">&quot;$&#123;username&#125;&quot;</span>/&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">&quot;password&quot;</span> <span class="attr">value</span>=<span class="string">&quot;$&#123;password&#125;&quot;</span>/&gt;</span></span><br><span class="line">      <span class="tag">&lt;/<span class="name">dataSource</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">environment</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">environments</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">mappers</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">mapper</span> <span class="attr">resource</span>=<span class="string">&quot;org/mybatis/example/BlogMapper.xml&quot;</span>/&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">mappers</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">configuration</span>&gt;</span></span><br></pre></td></tr></table></figure>
-<p>当然，还有很多可以在 XML 文件中配置的选项，上面的示例仅罗列了最关键的部分。 注意 XML 头部的声明，它用来验证 XML 文档的正确性。environment 元素体中包含了事务管理和连接池的配置。mappers 元素则包含了一组映射器（mapper），这些映射器的 XML 映射文件包含了 SQL 代码和映射定义信息。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2020/12/31/mybatis/Mybatis/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://edward.org.cn/2020/12/31/Android/APN%20%E8%AE%BE%E7%BD%AE%E5%8F%8A%E6%9F%A5%E8%AF%A2/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/uploads/avatar.gif">
-      <meta itemprop="name" content="Edward">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="点点滴滴">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/12/31/Android/APN%20%E8%AE%BE%E7%BD%AE%E5%8F%8A%E6%9F%A5%E8%AF%A2/" class="post-title-link" itemprop="url">APN 设置及查询</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-12-31 15:36:42" itemprop="dateCreated datePublished" datetime="2020-12-31T15:36:42+08:00">2020-12-31</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-09-03 16:04:07" itemprop="dateModified" datetime="2020-09-03T16:04:07+08:00">2020-09-03</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Android/" itemprop="url" rel="index"><span itemprop="name">Android</span></a>
-                </span>
-            </span>
-
-          
-            <span id="/2020/12/31/Android/APN%20%E8%AE%BE%E7%BD%AE%E5%8F%8A%E6%9F%A5%E8%AF%A2/" class="post-meta-item leancloud_visitors" data-flag-title="APN 设置及查询" title="阅读次数">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-eye"></i>
-              </span>
-              <span class="post-meta-item-text">阅读次数：</span>
-              <span class="leancloud-visitors-count"></span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p><strong><em>APN 设置及查询</em></strong></p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">getDefaultAPN</span><span class="params">(Context context)</span></span>&#123;</span><br><span class="line">       Cursor mCursor = context.getContentResolver().query(Uri.parse(<span class="string">&quot;content://telephony/carriers/preferapn&quot;</span>),</span><br><span class="line">               <span class="keyword">null</span>, <span class="keyword">null</span>, <span class="keyword">null</span>, <span class="keyword">null</span>);</span><br><span class="line">       <span class="keyword">while</span> (mCursor != <span class="keyword">null</span> &amp;&amp; mCursor.moveToNext()) &#123;</span><br><span class="line">           String id = mCursor.getString(mCursor.getColumnIndex(<span class="string">&quot;_id&quot;</span>));</span><br><span class="line">           String name = mCursor.getString(mCursor.getColumnIndex(<span class="string">&quot;name&quot;</span>));</span><br><span class="line">           String apn = mCursor.getString(mCursor.getColumnIndex(<span class="string">&quot;apn&quot;</span>));</span><br><span class="line">           String type = mCursor.getString(mCursor.getColumnIndex(<span class="string">&quot;type&quot;</span>));</span><br><span class="line">           Log.d(TAG,<span class="string">&quot;DefaultAPN:&quot;</span>+id+<span class="string">&quot; &quot;</span>+name+<span class="string">&quot; &quot;</span>+apn+<span class="string">&quot; &quot;</span>+type);</span><br><span class="line">       &#125;</span><br><span class="line">       <span class="keyword">if</span>(mCursor != <span class="keyword">null</span>)</span><br><span class="line">           mCursor.close();</span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line">   <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">checkAPN</span><span class="params">(Context context,String apn)</span></span>&#123;</span><br><span class="line">      <span class="keyword">int</span> apnId = -<span class="number">1</span>;</span><br><span class="line">       ContentResolver resolver = context.getContentResolver();</span><br><span class="line">       Cursor c = resolver.query(Uri.parse(<span class="string">&quot;content://telephony/carriers&quot;</span>), <span class="keyword">new</span> String[] &#123; <span class="string">&quot;_id&quot;</span>, <span class="string">&quot;name&quot;</span>, <span class="string">&quot;apn&quot;</span> &#125;,</span><br><span class="line">               <span class="string">&quot;apn like &#x27;%&quot;</span>+apn+<span class="string">&quot;%&#x27;&quot;</span>, <span class="keyword">null</span>, <span class="keyword">null</span>);</span><br><span class="line">       <span class="keyword">if</span> (c != <span class="keyword">null</span> &amp;&amp; c.moveToNext()) &#123;</span><br><span class="line">           apnId = c.getShort(c.getColumnIndex(<span class="string">&quot;_id&quot;</span>));</span><br><span class="line">       &#125;</span><br><span class="line">       <span class="keyword">if</span>(c != <span class="keyword">null</span>)</span><br><span class="line">           c.close();</span><br><span class="line">       <span class="keyword">return</span> apnId;</span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line">   <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">AddApn</span><span class="params">(Context context,String name,String apn)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">       <span class="keyword">int</span> apnId = -<span class="number">1</span>;</span><br><span class="line">       TelephonyManager iPhoneManager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);</span><br><span class="line">       String NUMERIC = iPhoneManager.getSimOperator();</span><br><span class="line">       <span class="keyword">if</span> (NUMERIC == <span class="keyword">null</span>) &#123;</span><br><span class="line">           <span class="keyword">return</span> -<span class="number">1</span>;</span><br><span class="line">       &#125;</span><br><span class="line">       ContentResolver resolver = context.getContentResolver();</span><br><span class="line">       ContentValues values = <span class="keyword">new</span> ContentValues();</span><br><span class="line"></span><br><span class="line">       values.put(<span class="string">&quot;name&quot;</span>,name);</span><br><span class="line">       values.put(<span class="string">&quot;apn&quot;</span>,apn);</span><br><span class="line">       values.put(<span class="string">&quot;type&quot;</span>, <span class="string">&quot;default,xcap,supl&quot;</span>);</span><br><span class="line">       values.put(<span class="string">&quot;numeric&quot;</span>, NUMERIC);</span><br><span class="line">       values.put(<span class="string">&quot;mcc&quot;</span>, NUMERIC.substring(<span class="number">0</span>, <span class="number">3</span>));</span><br><span class="line">       values.put(<span class="string">&quot;mnc&quot;</span>, NUMERIC.substring(<span class="number">3</span>));</span><br><span class="line">       values.put(<span class="string">&quot;proxy&quot;</span>, <span class="string">&quot;&quot;</span>);</span><br><span class="line">       values.put(<span class="string">&quot;port&quot;</span>, <span class="string">&quot;&quot;</span>);</span><br><span class="line">       values.put(<span class="string">&quot;mmsproxy&quot;</span>, <span class="string">&quot;&quot;</span>);</span><br><span class="line">       values.put(<span class="string">&quot;mmsport&quot;</span>, <span class="string">&quot;&quot;</span>);</span><br><span class="line">       values.put(<span class="string">&quot;user&quot;</span>, <span class="string">&quot;&quot;</span>);</span><br><span class="line">       values.put(<span class="string">&quot;server&quot;</span>, <span class="string">&quot;&quot;</span>);</span><br><span class="line">       values.put(<span class="string">&quot;password&quot;</span>, <span class="string">&quot;&quot;</span>);</span><br><span class="line">       values.put(<span class="string">&quot;mmsc&quot;</span>, <span class="string">&quot;&quot;</span>);</span><br><span class="line">       Cursor c = <span class="keyword">null</span>;</span><br><span class="line">       <span class="keyword">try</span> &#123;</span><br><span class="line">           Uri newRow = resolver.insert(Uri.parse(<span class="string">&quot;content://telephony/carriers&quot;</span>), values);</span><br><span class="line">           <span class="keyword">if</span> (newRow != <span class="keyword">null</span>) &#123;</span><br><span class="line">               c = resolver.query(newRow, <span class="keyword">null</span>, <span class="keyword">null</span>, <span class="keyword">null</span>, <span class="keyword">null</span>);</span><br><span class="line">               <span class="keyword">if</span>(c != <span class="keyword">null</span>)&#123;</span><br><span class="line">                   apnId = c.getShort(c.getColumnIndex(<span class="string">&quot;_id&quot;</span>));</span><br><span class="line">                   c.moveToFirst();</span><br><span class="line">               &#125;</span><br><span class="line">           &#125;</span><br><span class="line">       &#125; <span class="keyword">catch</span> (SQLException e) &#123;</span><br><span class="line">           e.printStackTrace();</span><br><span class="line">       &#125;</span><br><span class="line">       <span class="keyword">if</span> (c != <span class="keyword">null</span>)</span><br><span class="line">           c.close();</span><br><span class="line"></span><br><span class="line">       <span class="keyword">return</span> apnId;</span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line">   <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">boolean</span> <span class="title">setDefaultApn</span><span class="params">(Context context,<span class="keyword">int</span> apnId)</span> </span>&#123;</span><br><span class="line">       <span class="keyword">boolean</span> ret = <span class="keyword">false</span>;</span><br><span class="line">       ContentResolver resolver = context.getContentResolver();</span><br><span class="line">       ContentValues values = <span class="keyword">new</span> ContentValues();</span><br><span class="line">       values.put(<span class="string">&quot;apn_id&quot;</span>, apnId);</span><br><span class="line">       <span class="keyword">try</span> &#123;</span><br><span class="line">           Uri uri = Uri.parse(<span class="string">&quot;content://telephony/carriers/preferapn&quot;</span>);</span><br><span class="line">           resolver.update(uri, values, <span class="keyword">null</span>, <span class="keyword">null</span>);</span><br><span class="line">           Cursor c = resolver.query(uri, <span class="keyword">new</span> String[] &#123; <span class="string">&quot;name&quot;</span>, <span class="string">&quot;apn&quot;</span> &#125;, <span class="string">&quot;_id=&quot;</span> + apnId, <span class="keyword">null</span>, <span class="keyword">null</span>);</span><br><span class="line">           <span class="keyword">if</span> (c != <span class="keyword">null</span>) &#123;</span><br><span class="line">               c.close();</span><br><span class="line">               ret = <span class="keyword">true</span>;</span><br><span class="line">           &#125;</span><br><span class="line">       &#125; <span class="keyword">catch</span> (SQLException e) &#123;</span><br><span class="line">           e.printStackTrace();</span><br><span class="line">       &#125;</span><br><span class="line">       <span class="keyword">return</span> ret;</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://edward.org.cn/2020/12/31/Android/cpu_info.sh/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/uploads/avatar.gif">
-      <meta itemprop="name" content="Edward">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="点点滴滴">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/12/31/Android/cpu_info.sh/" class="post-title-link" itemprop="url">cpu_info</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-12-31 15:36:42" itemprop="dateCreated datePublished" datetime="2020-12-31T15:36:42+08:00">2020-12-31</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-09-29 16:10:06" itemprop="dateModified" datetime="2020-09-29T16:10:06+08:00">2020-09-29</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Android/" itemprop="url" rel="index"><span itemprop="name">Android</span></a>
-                </span>
-            </span>
-
-          
-            <span id="/2020/12/31/Android/cpu_info.sh/" class="post-meta-item leancloud_visitors" data-flag-title="cpu_info" title="阅读次数">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-eye"></i>
-              </span>
-              <span class="post-meta-item-text">阅读次数：</span>
-              <span class="leancloud-visitors-count"></span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="meta">#!/busybox/sh</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#print top info if you need</span></span><br><span class="line"><span class="comment">#top -t -m 9 &amp;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">while</span> [ 1 ]; <span class="keyword">do</span> </span><br><span class="line">zone_type=<span class="string">&quot;zone?&quot;</span> </span><br><span class="line">maxTemp=0</span><br><span class="line">Cur_zone=9</span><br><span class="line"><span class="keyword">while</span> [ <span class="variable">$Cur_zone</span> -ge 0 ]; <span class="keyword">do</span></span><br><span class="line">    Cur_temp=`cat /sys/class/thermal/thermal_zone<span class="variable">$Cur_zone</span>/temp`</span><br><span class="line">    <span class="keyword">if</span> [ <span class="variable">$Cur_temp</span> -gt <span class="variable">$maxTemp</span> ]; <span class="keyword">then</span></span><br><span class="line">        maxTemp=<span class="variable">$Cur_temp</span></span><br><span class="line">        zone_type=`cat /sys/class/thermal/thermal_zone<span class="variable">$Cur_zone</span>/<span class="built_in">type</span>`</span><br><span class="line">        zone_type=<span class="string">&quot;<span class="variable">$zone_type</span>-<span class="variable">$Cur_zone</span>&quot;</span></span><br><span class="line">    <span class="keyword">fi</span></span><br><span class="line">    <span class="built_in">let</span> <span class="string">&quot;Cur_zone=<span class="variable">$Cur_zone</span> - 1&quot;</span></span><br><span class="line"><span class="keyword">done</span></span><br><span class="line">cpu_Temp=`cat /sys/class/thermal/thermal_zone7/temp`</span><br><span class="line">freq=`cat /sys/devices/system/cpu/cpu0/cpufreq/cpuinfo_cur_freq`</span><br><span class="line">core=`cat /proc/cpuinfo | grep <span class="string">&quot;processor&quot;</span> | busybox wc -l`</span><br><span class="line">tm=`date +%H:%M:%S`</span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;<span class="variable">$tm</span> maxTemp(<span class="variable">$zone_type</span>)=<span class="variable">$maxTemp</span> cpu_Temp=<span class="variable">$cpu_Temp</span> core=<span class="variable">$core</span> freq=<span class="variable">$freq</span>&quot;</span></span><br><span class="line">sleep 2</span><br><span class="line"><span class="keyword">done</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://edward.org.cn/2020/12/31/Android/hook.sh/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/uploads/avatar.gif">
-      <meta itemprop="name" content="Edward">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="点点滴滴">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/12/31/Android/hook.sh/" class="post-title-link" itemprop="url">hook</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-12-31 15:36:42" itemprop="dateCreated datePublished" datetime="2020-12-31T15:36:42+08:00">2020-12-31</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-09-29 16:12:23" itemprop="dateModified" datetime="2020-09-29T16:12:23+08:00">2020-09-29</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Android/" itemprop="url" rel="index"><span itemprop="name">Android</span></a>
-                </span>
-            </span>
-
-          
-            <span id="/2020/12/31/Android/hook.sh/" class="post-meta-item leancloud_visitors" data-flag-title="hook" title="阅读次数">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-eye"></i>
-              </span>
-              <span class="post-meta-item-text">阅读次数：</span>
-              <span class="leancloud-visitors-count"></span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="meta">#!/busybox/sh</span></span><br><span class="line"></span><br><span class="line">PATH=/system/bin:/busybox:<span class="variable">$PATH</span></span><br><span class="line"></span><br><span class="line">LOG ()</span><br><span class="line">&#123;</span><br><span class="line">    <span class="built_in">local</span> log_file=/dev/console</span><br><span class="line">    <span class="built_in">local</span> tag=<span class="string">&quot;CM_hook&quot;</span></span><br><span class="line"></span><br><span class="line">    <span class="built_in">local</span> sDate=`date <span class="string">&quot;+%Y-%m-%d %H:%M:%S&quot;</span>`</span><br><span class="line">    <span class="built_in">echo</span> <span class="string">&quot;[<span class="variable">$tag</span>] <span class="variable">$&#123;sDate&#125;</span> <span class="variable">$@</span>&quot;</span> &gt; <span class="variable">$log_file</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">LOG <span class="string">&quot;Start <span class="variable">$0</span>&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#turn off radar power</span></span><br><span class="line">ln -s /dev/ttyMT1  /dev/ttyS1</span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;0&quot;</span>&gt;/sys/devices/virtual/misc/radar/ctl</span><br><span class="line"></span><br><span class="line">ln -s /dev/ttyMT2  /dev/ttyS2</span><br><span class="line">ln -s /dev/ttyMT3  /dev/ttyS3</span><br><span class="line"></span><br><span class="line"><span class="built_in">echo</span> 0 &gt; /proc/hps/enabled</span><br><span class="line"><span class="built_in">echo</span> performance &gt; /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor</span><br><span class="line"><span class="built_in">echo</span> 4 &gt;proc/cpufreq/cpufreq_oppidx </span><br><span class="line"><span class="built_in">echo</span> 0 &gt;sys/devices/system/cpu/cpu3/online </span><br><span class="line"><span class="built_in">echo</span> 0 &gt;sys/devices/system/cpu/cpu2/online </span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">#set wifi bt mac addr</span></span><br><span class="line">/system/bin/wifibt_mac random&amp;</span><br><span class="line"></span><br><span class="line">gsensor_bmi=`cat /proc/cmdline | grep gs=bmi160`</span><br><span class="line"><span class="keyword">if</span> [ -n <span class="string">&quot;<span class="variable">$gsensor_bmi</span>&quot;</span> ]; <span class="keyword">then</span></span><br><span class="line">    LOG <span class="string">&quot;trigger bmibmmd for gsensor of bmi160&quot;</span></span><br><span class="line">    setprop sys.hw_gsensor.bmi 1</span><br><span class="line"><span class="keyword">fi</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">local</span> t=300</span><br><span class="line"><span class="built_in">local</span> tm_boot=0</span><br><span class="line"><span class="built_in">local</span> boot_ok=</span><br><span class="line"><span class="keyword">while</span> [ <span class="variable">$t</span> -gt 0 ]; <span class="keyword">do</span></span><br><span class="line">    boot_ok=`getprop sys.boot_completed`</span><br><span class="line">    <span class="keyword">if</span> [ <span class="string">&quot;<span class="variable">$boot_ok</span>&quot;</span> == <span class="string">&quot;1&quot;</span> ]; <span class="keyword">then</span></span><br><span class="line">        LOG <span class="string">&quot;<span class="variable">$0</span>: Boot finished(<span class="variable">$tm_boot</span>), then trigger xlog&quot;</span></span><br><span class="line">        <span class="comment">#/system/bin/xlog filter-set on</span></span><br><span class="line">        /system/bin/xlog filter-reset</span><br><span class="line">        <span class="comment">#am start -n com.mediatek.engineermode/.EngineerMode</span></span><br><span class="line">        <span class="comment">#am start -n com.mediatek.mtklogger/.MainActivity</span></span><br><span class="line">        <span class="built_in">break</span></span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">        sleep 2</span><br><span class="line">        <span class="built_in">let</span> <span class="string">&quot;t = t - 1&quot;</span></span><br><span class="line">        <span class="built_in">let</span> <span class="string">&quot;tm_boot = tm_boot + 2&quot;</span></span><br><span class="line">    <span class="keyword">fi</span></span><br><span class="line"><span class="keyword">done</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">local</span> cta=`getprop ro.cta`</span><br><span class="line"><span class="keyword">if</span> [ <span class="string">&quot;<span class="variable">$cta</span>&quot;</span> == <span class="string">&quot;1&quot;</span> ]; <span class="keyword">then</span></span><br><span class="line">    iptables -I INPUT -s 10.0.0.172 -j DROP</span><br><span class="line">    iptables -I INPUT -s mmsc.monternet.com -j DROP</span><br><span class="line"><span class="keyword">fi</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#remove it to init.project.rc</span></span><br><span class="line"><span class="comment">#default param tempCtrl/less/full Trig: 100 85 75</span></span><br><span class="line"><span class="comment">#/system/backup/bin/loop.sh 100 85 75 &amp;</span></span><br><span class="line"></span><br><span class="line">memTotal=`cat /proc/meminfo | grep MemTotal | sed <span class="string">&#x27;s/[ ]\+/ /g&#x27;</span> | cut -d<span class="string">&#x27; &#x27;</span> -f2`</span><br><span class="line">memTotal=`expr <span class="variable">$memTotal</span> \/ 1024`</span><br><span class="line"></span><br><span class="line"><span class="built_in">local</span> min_free_kbytes=`cat /proc/sys/vm/min_free_kbytes`</span><br><span class="line"></span><br><span class="line">chmod 660 /sys/module/lowmemorykiller/parameters/minfree</span><br><span class="line">lowmemkiller=`cat /sys/module/lowmemorykiller/parameters/minfree`</span><br><span class="line">LOG <span class="string">&quot;memTotal=<span class="variable">$memTotal</span> MB, org min_free_kbytes=<span class="variable">$min_free_kbytes</span> lowmemkiller=<span class="variable">$lowmemkiller</span>&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> [ <span class="variable">$memTotal</span> -gt 768 ]; <span class="keyword">then</span></span><br><span class="line">    <span class="comment">#1G DDR</span></span><br><span class="line">    min_free_kbytes=28672</span><br><span class="line">    lowmemkiller=<span class="string">&quot;6144,8192,16384,20480,22528,24576&quot;</span></span><br><span class="line"><span class="keyword">elif</span> [ <span class="variable">$memTotal</span> -gt 660 ]; <span class="keyword">then</span></span><br><span class="line">    <span class="comment">#768M DDR</span></span><br><span class="line">    min_free_kbytes=15360</span><br><span class="line">    lowmemkiller=<span class="string">&quot;2304,3072,6144,7680,8448,9216&quot;</span></span><br><span class="line"><span class="keyword">else</span></span><br><span class="line">    <span class="comment">#512M DDR</span></span><br><span class="line">    min_free_kbytes=10240</span><br><span class="line">    lowmemkiller=<span class="string">&quot;1536,2048,4096,5120,5632,6144&quot;</span></span><br><span class="line"><span class="keyword">fi</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">echo</span> <span class="variable">$min_free_kbytes</span> &gt; /proc/sys/vm/min_free_kbytes</span><br><span class="line"><span class="built_in">echo</span> <span class="variable">$lowmemkiller</span> &gt; /sys/module/lowmemorykiller/parameters/minfree</span><br><span class="line">min_free_kbytes=`cat /proc/sys/vm/min_free_kbytes`</span><br><span class="line">lowmemkiller=`cat /sys/module/lowmemorykiller/parameters/minfree`</span><br><span class="line">LOG <span class="string">&quot;new min_free_kbytes=<span class="variable">$min_free_kbytes</span> lowmemkiller=<span class="variable">$lowmemkiller</span>&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#isHeadless=`getprop ro.product.class`</span></span><br><span class="line"><span class="comment">#if [ &quot;$isHeadless&quot; == &quot;headless&quot; ]; then</span></span><br><span class="line"><span class="comment">#    curTimeoff=`sqlite3 /data/data/com.android.providers.settings/databases/settings.db \</span></span><br><span class="line"><span class="comment">#               &quot;select value from system where name=&#x27;screen_off_timeout&#x27;&quot;`</span></span><br><span class="line"><span class="comment">#    STANGE： sqlite will fail when system boot, but OK by cmd line!!!</span></span><br><span class="line"><span class="comment">#    if [ $curTimeoff -eq 30 ]; then</span></span><br><span class="line"><span class="comment">#        LOG &quot;screen off timeout is already $curTimeoff&quot;</span></span><br><span class="line"><span class="comment">#    else</span></span><br><span class="line"><span class="comment">#        LOG &quot;set screen off timeout to 30s&quot;</span></span><br><span class="line"><span class="comment">#        sqlite3 /data/data/com.android.providers.settings/databases/settings.db \</span></span><br><span class="line"><span class="comment">#        &quot;insert into system (name, value) values (&#x27;screen_off_timeout&#x27;, 30)&quot;</span></span><br><span class="line"><span class="comment">#    fi</span></span><br><span class="line"><span class="comment">#fi</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">local</span> cntFail=`getprop persist.bootup.fail`</span><br><span class="line"><span class="keyword">if</span> [ <span class="string">&quot;<span class="variable">$boot_ok</span>&quot;</span> == <span class="string">&quot;1&quot;</span> ]; <span class="keyword">then</span></span><br><span class="line">    filter_size_org=`<span class="built_in">stat</span> -c <span class="string">&quot;%s&quot;</span> /system/etc/xlog-filter-default`</span><br><span class="line">    filter_size_running=`<span class="built_in">stat</span> -c <span class="string">&quot;%s&quot;</span> /data/misc/xlog-filter`</span><br><span class="line">    size=`expr <span class="variable">$filter_size_org</span> - <span class="variable">$filter_size_running</span>`</span><br><span class="line">    abs_size=`<span class="built_in">echo</span> <span class="variable">$size</span> | tr -d -`</span><br><span class="line">    <span class="comment">#if [ $abs_size -gt 1000 ]; then</span></span><br><span class="line">    <span class="keyword">if</span> [ <span class="variable">$filter_size_running</span> -lt 1000 ]; <span class="keyword">then</span></span><br><span class="line">        LOG <span class="string">&quot;ERROR: xlog-filter size abnormal, try to filter-reset...&quot;</span></span><br><span class="line">        LOG <span class="string">&quot;org=<span class="variable">$filter_size_org</span> running=<span class="variable">$filter_size_running</span> abs=<span class="variable">$abs_size</span>&quot;</span></span><br><span class="line">        rm /data/misc/xlog-filter</span><br><span class="line">        /system/bin/xlog filter-reset</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">        LOG <span class="string">&quot;checking xlog-filter OK&quot;</span></span><br><span class="line">    <span class="keyword">fi</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> [ -n <span class="string">&quot;<span class="variable">$cntFail</span>&quot;</span> ]; <span class="keyword">then</span></span><br><span class="line">        LOG <span class="string">&quot;Bootup OK, reset cntFail(<span class="variable">$cntFail</span>)&quot;</span></span><br><span class="line">        setprop persist.bootup.fail 0</span><br><span class="line">    <span class="keyword">fi</span></span><br><span class="line"><span class="keyword">else</span></span><br><span class="line">    <span class="keyword">if</span> [ <span class="string">&quot;<span class="variable">$cntFail</span>&quot;</span> == <span class="string">&quot;&quot;</span> ]; <span class="keyword">then</span></span><br><span class="line">        cntFail=1</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">        <span class="built_in">let</span> <span class="string">&quot;cntFail = cntFail + 1&quot;</span></span><br><span class="line">    <span class="keyword">fi</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> [ <span class="variable">$cntFail</span> -gt 2 ]; <span class="keyword">then</span></span><br><span class="line">        LOG <span class="string">&quot;Bootup failed(<span class="variable">$cntFail</span>), remove all in /data/ and reboot system...&quot;</span></span><br><span class="line">        stop</span><br><span class="line">        rm -rf /data/*</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">        setprop persist.bootup.fail <span class="variable">$cntFail</span></span><br><span class="line">        LOG <span class="string">&quot;Bootup failed(<span class="variable">$cntFail</span>), reboot system...&quot;</span></span><br><span class="line">    <span class="keyword">fi</span></span><br><span class="line"></span><br><span class="line">    reboot -p</span><br><span class="line">    <span class="built_in">exit</span></span><br><span class="line"><span class="keyword">fi</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#PowerOn UsbCamara, need do it here?</span></span><br><span class="line"><span class="comment">#echo 1 &gt; /sys/devices/virtual/misc/gpio_ctl/usbcam</span></span><br><span class="line"></span><br><span class="line">LOG <span class="string">&quot;Sleeping a while to wait for T card being mounted&quot;</span></span><br><span class="line"><span class="built_in">local</span> delayT=15</span><br><span class="line"><span class="keyword">while</span> [ <span class="variable">$delayT</span> -gt 0 ]; <span class="keyword">do</span></span><br><span class="line">    <span class="built_in">local</span> T_ok=`df | grep sdcard | wc -l`</span><br><span class="line">    <span class="keyword">if</span> [ <span class="variable">$T_ok</span> -gt 0 ]; <span class="keyword">then</span></span><br><span class="line">        LOG <span class="string">&quot;T card is mounted(remain <span class="variable">$delayT</span> second)&quot;</span></span><br><span class="line">        <span class="built_in">break</span></span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">        sleep 1</span><br><span class="line">        <span class="built_in">let</span> <span class="string">&quot;delayT = delayT - 1&quot;</span></span><br><span class="line">    <span class="keyword">fi</span></span><br><span class="line"><span class="keyword">done</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
-    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/page/57/">57</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/page/56/">56</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
   </nav>
 
 
@@ -1128,14 +1164,14 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">570</span>
+          <span class="site-state-item-count">554</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-count">9</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
   </nav>
@@ -1162,7 +1198,7 @@
 <div class="copyright">
   
   &copy; 
-  <span itemprop="copyrightYear">2020</span>
+  <span itemprop="copyrightYear">2021</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>
